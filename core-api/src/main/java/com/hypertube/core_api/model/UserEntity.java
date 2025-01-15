@@ -3,6 +3,7 @@ package com.hypertube.core_api.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import lombok.Data;
 
 @Data
@@ -26,6 +27,10 @@ public class UserEntity {
 
 	@Column
 	private String lastName;
+
+	@Column
+	@Lob
+	private byte[] avatar;
 
 	@Column
 	private String preferredLanguage;
