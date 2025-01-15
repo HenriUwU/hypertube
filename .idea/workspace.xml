@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db77d478-5c2b-4ea6-90e2-6a326465c0fb" name="Changes" comment="added an avatar blob in the UserEntity">
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/UserEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/UserEntity.java" afterDir="false" />
+    <list default="true" id="db77d478-5c2b-4ea6-90e2-6a326465c0fb" name="Changes" comment="unversioned files">
+      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/MovieEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +45,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "Spring Boot.CoreApiApplication.executor": "Run",
     "Spring Boot.HypertubeApiApplication.executor": "Run",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
@@ -93,7 +96,7 @@
       <updated>1736932692474</updated>
       <workItem from="1736932693599" duration="2230000" />
       <workItem from="1736935727684" duration="2292000" />
-      <workItem from="1736938042150" duration="714000" />
+      <workItem from="1736938042150" duration="3951000" />
     </task>
     <task id="LOCAL-00001" summary="Initializing project. Basic Maven project using jdk21">
       <option name="closed" value="true" />
@@ -135,7 +138,23 @@
       <option name="project" value="LOCAL" />
       <updated>1736938415658</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="changed UserEntity, probably done.">
+      <option name="closed" value="true" />
+      <created>1736938847848</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1736938847848</updated>
+    </task>
+    <task id="LOCAL-00007" summary="unversioned files">
+      <option name="closed" value="true" />
+      <created>1736938865230</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1736938865230</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -147,6 +166,8 @@
     <MESSAGE value="init still" />
     <MESSAGE value="created a basic User entity" />
     <MESSAGE value="added an avatar blob in the UserEntity" />
-    <option name="LAST_COMMIT_MESSAGE" value="added an avatar blob in the UserEntity" />
+    <MESSAGE value="changed UserEntity, probably done." />
+    <MESSAGE value="unversioned files" />
+    <option name="LAST_COMMIT_MESSAGE" value="unversioned files" />
   </component>
 </project>
