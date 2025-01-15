@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db77d478-5c2b-4ea6-90e2-6a326465c0fb" name="Changes" comment="unversioned files">
-      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/MovieEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="db77d478-5c2b-4ea6-90e2-6a326465c0fb" name="Changes" comment="Ajout de MovieEntity">
+      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/CommentEntity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,6 +37,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Maven.core-api [clean,compile].executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
@@ -96,7 +96,7 @@
       <updated>1736932692474</updated>
       <workItem from="1736932693599" duration="2230000" />
       <workItem from="1736935727684" duration="2292000" />
-      <workItem from="1736938042150" duration="3951000" />
+      <workItem from="1736938042150" duration="6506000" />
     </task>
     <task id="LOCAL-00001" summary="Initializing project. Basic Maven project using jdk21">
       <option name="closed" value="true" />
@@ -154,7 +154,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736938865230</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Ajout de MovieEntity">
+      <option name="closed" value="true" />
+      <created>1736949294241</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1736949294241</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -168,6 +176,7 @@
     <MESSAGE value="added an avatar blob in the UserEntity" />
     <MESSAGE value="changed UserEntity, probably done." />
     <MESSAGE value="unversioned files" />
-    <option name="LAST_COMMIT_MESSAGE" value="unversioned files" />
+    <MESSAGE value="Ajout de MovieEntity" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajout de MovieEntity" />
   </component>
 </project>
