@@ -8,11 +8,11 @@
 		<version>3.4.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.42</groupId>
-	<artifactId>hypertube-api</artifactId>
+	<groupId>com.hypertube</groupId>
+	<artifactId>core-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>hypertube-api</name>
-	<description>project hypertube of school 42</description>
+	<name>core-api</name>
+	<description>hypertube project of school 42</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -55,10 +55,6 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.kafka</groupId>
-			<artifactId>spring-kafka</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
 		</dependency>
@@ -76,11 +72,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.kafka</groupId>
-			<artifactId>spring-kafka-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
