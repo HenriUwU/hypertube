@@ -17,3 +17,7 @@ G
 -.idea/sonarlint/securityhotspotstore/index.pb,8/8/88a9255124c95bdc913197c120a8d560edc59c8e
 S
 #.idea/sonarlint/issuestore/index.pb,9/f/9fe84ebb15faf917b7def6236dba604453cc61e0
+z
+Jcore-api/src/test/java/com/hypertube/core_api/CoreApiApplicationTests.java,5/3/5351556bd374d326c19d8885be1c3c3d5929d7fa
+s
+Ccore-api/src/main/java/com/hypertube/core_api/model/UserEntity.java,1/7/172bd55b1114fc83ab55be8702ba8199a26252d8
