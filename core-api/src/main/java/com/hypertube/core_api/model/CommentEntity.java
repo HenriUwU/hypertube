@@ -1,13 +1,6 @@
 package com.hypertube.core_api.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -18,6 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Table(name = "comment")
 public class CommentEntity {
 
 	@Id
@@ -26,10 +20,10 @@ public class CommentEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "movie_id")
-	private MovieEntity movie;
+	private VideoEntity movie;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "users_id")
 	private UserEntity user;
 
 	@Column(nullable = false)
@@ -42,3 +36,4 @@ public class CommentEntity {
 	private LocalDateTime updatedAt;
 
 }
+
