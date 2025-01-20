@@ -4,17 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db77d478-5c2b-4ea6-90e2-6a326465c0fb" name="Changes" comment="Ajout de commentEntity, ajout d'un UserRepository et jaout d'un docker pour postgreSQL">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core-api/Docker/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/repository/UserRepository.java" afterDir="false" />
+    <list default="true" id="db77d478-5c2b-4ea6-90e2-6a326465c0fb" name="Changes" comment="Ajout des repository pour les entités comment et video.">
+      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/dto/CommentDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/dto/UserDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/dto/VideoDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/mapper/CommentMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/mapper/UserMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/mapper/VideoMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/service/VideoService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/CommentEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/CommentEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/MovieEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/VideoEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/UserEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/UserEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +30,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
@@ -129,7 +131,7 @@
       <workItem from="1737310409542" duration="418000" />
       <workItem from="1737311700691" duration="772000" />
       <workItem from="1737312875439" duration="1783000" />
-      <workItem from="1737407929117" duration="1482000" />
+      <workItem from="1737407929117" duration="3022000" />
     </task>
     <task id="LOCAL-00001" summary="Initializing project. Basic Maven project using jdk21">
       <option name="closed" value="true" />
@@ -195,7 +197,23 @@
       <option name="project" value="LOCAL" />
       <updated>1736949294241</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Ajout de CommentEntity et ajout d'un docker pour postgresql">
+      <option name="closed" value="true" />
+      <created>1737409604248</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1737409604248</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Ajout des repository pour les entités comment et video.">
+      <option name="closed" value="true" />
+      <created>1737409832338</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1737409832338</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -211,6 +229,8 @@
     <MESSAGE value="unversioned files" />
     <MESSAGE value="Ajout de MovieEntity" />
     <MESSAGE value="Ajout de commentEntity, ajout d'un UserRepository et jaout d'un docker pour postgreSQL" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ajout de commentEntity, ajout d'un UserRepository et jaout d'un docker pour postgreSQL" />
+    <MESSAGE value="Ajout de CommentEntity et ajout d'un docker pour postgresql" />
+    <MESSAGE value="Ajout des repository pour les entités comment et video." />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajout des repository pour les entités comment et video." />
   </component>
 </project>
