@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="mydatabase@localhost" uuid="8d62545a-1dcc-4b2b-8179-7a0995cae534">
+    <data-source source="LOCAL" name="hypertube@localhost" uuid="cde3a2b3-65b5-4a22-8656-2d3111b4d095">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/mydatabase</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:5432/hypertube</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.host.port" />
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />

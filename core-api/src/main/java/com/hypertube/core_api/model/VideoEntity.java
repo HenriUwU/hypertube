@@ -8,7 +8,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Data
 @Entity
@@ -30,20 +29,12 @@ public class VideoEntity {
 	private String filePath;
 
 	@ElementCollection
-	@CollectionTable(name = "movie_subtitles", joinColumns = @JoinColumn(name = "movie_id"))
+	@CollectionTable(name = "video_subtitles", joinColumns = @JoinColumn(name = "movie_id"))
 	@Column(name = "subtitles")
 	private Map<String, String> subtitles;
 
-	@ManyToMany
-	@JoinTable(
-			name = "watched_by",
-			joinColumns = @JoinColumn(name = "movie_id"),
-			inverseJoinColumns = @JoinColumn(name = "users_id")
-	)
-	private Set<UserEntity> watchedBy;
-
 	@ElementCollection
-	@CollectionTable(name = "movie_cast", joinColumns = @JoinColumn(name = "movie_id"))
+	@CollectionTable(name = "video_cast", joinColumns = @JoinColumn(name = "movie_id"))
 	@Column(name = "cast_member")
 	private List<String> cast;
 
