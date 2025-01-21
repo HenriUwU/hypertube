@@ -4,31 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db77d478-5c2b-4ea6-90e2-6a326465c0fb" name="Changes" comment="Ajout des mappers et des dtos. A tester">
-      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/controller/AuthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/controller/VideoController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/security/JwtAuthenticationFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/security/JwtTokenUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/security/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8d62545a-1dcc-4b2b-8179-7a0995cae534.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/8d62545a-1dcc-4b2b-8179-7a0995cae534.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/Docker/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/Docker/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/dto/CommentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/dto/CommentDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/dto/UserDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/dto/VideoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/dto/VideoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/mapper/UserMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/mapper/VideoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/mapper/VideoMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/CommentEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/CommentEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/UserEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/UserEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/VideoEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/model/VideoEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/service/VideoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/service/VideoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/resources/application.properties" afterDir="false" />
+    <list default="true" id="db77d478-5c2b-4ea6-90e2-6a326465c0fb" name="Changes" comment="AuthController fonctionnel.">
+      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/security/SecurityConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +57,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "Spring Boot.CoreApiApplication.executor": "Debug",
+    "Spring Boot.CoreApiApplication.executor": "Run",
     "Spring Boot.HypertubeApiApplication.executor": "Run",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
@@ -160,7 +137,7 @@
       <workItem from="1737311700691" duration="772000" />
       <workItem from="1737312875439" duration="1783000" />
       <workItem from="1737407929117" duration="6587000" />
-      <workItem from="1737482564631" duration="15534000" />
+      <workItem from="1737482564631" duration="15844000" />
     </task>
     <task id="LOCAL-00001" summary="Initializing project. Basic Maven project using jdk21">
       <option name="closed" value="true" />
@@ -250,7 +227,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737411089446</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="AuthController fonctionnel.">
+      <option name="closed" value="true" />
+      <created>1737499352876</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1737499352876</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -269,22 +254,7 @@
     <MESSAGE value="Ajout de CommentEntity et ajout d'un docker pour postgresql" />
     <MESSAGE value="Ajout des repository pour les entités comment et video." />
     <MESSAGE value="Ajout des mappers et des dtos. A tester" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ajout des mappers et des dtos. A tester" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/controller/AuthController.java</url>
-          <line>22</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/service/UserService.java</url>
-          <line>41</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="AuthController fonctionnel." />
+    <option name="LAST_COMMIT_MESSAGE" value="AuthController fonctionnel." />
   </component>
 </project>
