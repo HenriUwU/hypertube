@@ -30,8 +30,8 @@ public class UserEntity {
 	private String lastName;
 	private String preferredLanguage;
 
-	@Lob
-	private byte[] avatar;
+//	@Lob
+//	private byte[] avatar;
 
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
@@ -89,12 +89,12 @@ public class UserEntity {
 		this.preferredLanguage = preferredLanguage;
 	}
 
-	public byte[] getAvatar() {
-		return avatar;
-	}
-
-	public void setAvatar(byte[] avatar) {
-		this.avatar = avatar;
-	}
+//	public byte[] getAvatar() {
+//		return avatar;
+//	}
+//
+//	public void setAvatar(byte[] avatar) {
+//		this.avatar = avatar;
+//	}
 
 }

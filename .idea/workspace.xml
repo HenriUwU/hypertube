@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db77d478-5c2b-4ea6-90e2-6a326465c0fb" name="Changes" comment="AuthController fonctionnel.">
-      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/security/SecurityConfig.java" afterDir="false" />
+    <list default="true" id="db77d478-5c2b-4ea6-90e2-6a326465c0fb" name="Changes" comment="modification de userEntity pour ajouter de nouveaux getters/setters">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/security/JwtTokenUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/core-api/src/main/java/com/hypertube/core_api/security/JwtTokenUtil.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,7 +139,7 @@
       <workItem from="1737311700691" duration="772000" />
       <workItem from="1737312875439" duration="1783000" />
       <workItem from="1737407929117" duration="6587000" />
-      <workItem from="1737482564631" duration="15844000" />
+      <workItem from="1737482564631" duration="16480000" />
     </task>
     <task id="LOCAL-00001" summary="Initializing project. Basic Maven project using jdk21">
       <option name="closed" value="true" />
@@ -235,7 +237,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737499352876</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="modification de userEntity pour ajouter de nouveaux getters/setters">
+      <option name="closed" value="true" />
+      <created>1737499723821</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1737499723821</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -255,6 +265,7 @@
     <MESSAGE value="Ajout des repository pour les entités comment et video." />
     <MESSAGE value="Ajout des mappers et des dtos. A tester" />
     <MESSAGE value="AuthController fonctionnel." />
-    <option name="LAST_COMMIT_MESSAGE" value="AuthController fonctionnel." />
+    <MESSAGE value="modification de userEntity pour ajouter de nouveaux getters/setters" />
+    <option name="LAST_COMMIT_MESSAGE" value="modification de userEntity pour ajouter de nouveaux getters/setters" />
   </component>
 </project>
