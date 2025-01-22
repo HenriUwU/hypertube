@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #131313; /* Remplace par la couleur de ton choix */
+  font-family: Arial, sans-serif; /* Ou la police que tu préfères */
+  min-height: 100vh;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
