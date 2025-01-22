@@ -2,39 +2,55 @@ package com.hypertube.core_api.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.function.Function;
 
 @Component
 public class JwtTokenUtil {
 
-    private final static String secretKey = "df4cf70049ee51d36bcc7f556c239e39868a6f1d4490e76dfc95da15cf2bc37b21eba80f073bdda28db3f3f8fba98f9b9a9edd6aaf7ddeb145d49a060f3179ae";
+    @Value("${jwt.secret-key}")
+    private String secretKey;
+
+    @Value("${jwt.expiration}")
+    private long expiration;
+
+    private SecretKey getKey() {
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
+    }
 
     public String generateToken(String username) {
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getKey())
                 .compact();
     }
 
     private Claims extractClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(secretKey)
+                .verifyWith(getKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    private <T>T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        return claimsResolver.apply(extractClaims(token));
     }
 
     public String extractUsername(String token) {
-        return extractClaims(token).getSubject();
+        return extractClaim(token, Claims::getSubject);
     }
 
     private Boolean isTokenExpired(String token) {
-        return extractClaims(token).getExpiration().before(new Date());
+        return extractClaim(token, Claims::getExpiration).before(new Date());
     }
 
     public Boolean validateToken(String token, String username) {
