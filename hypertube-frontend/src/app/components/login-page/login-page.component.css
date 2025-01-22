@@ -4,33 +4,56 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  color: white;
+  color: whitesmoke;
+  font-family: "Open Sans", serif;
 }
 
 .login-box {
   background-color: #313131;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgb(0, 0, 0, 100);
   width: 100%;
-  max-width: 400px;
+  max-width: 20%;
 }
 
 h2 {
   text-align: center;
+  margin-bottom: 10px;
+}
+
+.signup-text {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.2);
+  margin-bottom: 30px;
+}
+
+.signup-hyperlink {
+  font-weight: bold;
+  color: whitesmoke;
+  text-decoration: none;
+}
+
+.input-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding-left: 35px;
   margin-bottom: 20px;
 }
 
-.input-group {
-  margin-bottom: 15px;
+.input-field i {
+  position: absolute;
+  left: 10px;
+  font-size: 18px;
+  color: #aaa;
 }
 
-.input-group label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.input-group input {
+.input-field input {
+  background-color: black;
+  color: whitesmoke;
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
