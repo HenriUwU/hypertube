@@ -19,13 +19,22 @@
   transform: translateY(0);
   opacity: 1;
 }
+
 .global-message.success {
   font-size: 20px;
-  font-weight: bold;
-  background-color: rgba(50, 205, 50, 0.7);
+  background-color: rgba(72, 168, 72, 0.8);
+  color: #ffffff;
+  border: 1px solid rgba(60, 140, 60, 0.8);
+  border-radius: 5px;
+  padding: 10px;
 }
+
 .global-message.error {
   font-size: 20px;
-  font-weight: bold;
-  background-color: rgba(255, 0, 0, 0.7);
+  background-color: rgba(220, 53, 69, 0.8);
+  color: #ffffff;
+  border: 1px solid rgba(180, 40, 50, 0.8);
+  border-radius: 5px;
+  padding: 10px;
 }
+
