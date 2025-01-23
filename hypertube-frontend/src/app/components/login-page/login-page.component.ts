@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {AuthService} from "../../services/auth.service";
+import {GlobalMessageService} from "../../services/global.message.service";
 
 @Component({
   selector: 'app-login-page',
@@ -16,8 +18,10 @@ export class LoginPageComponent implements OnInit {
   loginForm!: FormGroup;
   passwordVisible: boolean = false;
 
-  constructor(private formBuilder: FormBuilder) {
-  }
+  constructor(private formBuilder: FormBuilder,
+              private authService: AuthService,
+              private router: Router,
+              private globalMessageService: GlobalMessageService) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -28,9 +32,14 @@ export class LoginPageComponent implements OnInit {
 
   login(): void {
     if (this.loginForm.valid) {
-      console.log("LE FORM DE LOGIN EST VALIDE MEC");
+      this.authService.login(this.loginForm.value).subscribe({
+        next: () => {
+          this.globalMessageService.showMessage("Login successful! Redirecting to the homepage...", true);
+          this.router.navigate(['']).then()
+        },
+      });
     } else {
-      console.log("LE FORM DE LOGIN EST INVALIDE IDIOT");
+      this.globalMessageService.showMessage('Error: Please fill out all required fields.', false);
     }
   }
 

@@ -1,0 +1,7 @@
+<div *ngIf="message" class="global-message" [class.success]="isSuccess" [class.error]="!isSuccess">
+  <div>
+    <i *ngIf="!isSuccess" class="fas fa-times"></i>
+    <i *ngIf="isSuccess" class="fas fa-check"></i>
+    {{ message }}
+  </div>
+</div>
