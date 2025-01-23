@@ -19,11 +19,19 @@ export class LoginPageComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
+  }
+
+  login(): void {
+    if (this.loginForm.valid) {
+      console.log("LE FORM DE LOGIN EST VALIDE MEC");
+    } else {
+      console.log("LE FORM DE LOGIN EST INVALIDE IDIOT");
+    }
   }
 
 }
