@@ -4,13 +4,15 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {AuthService} from "../../services/auth.service";
 import {GlobalMessageService} from "../../services/global.message.service";
 import {animate, style, transition, trigger} from "@angular/animations";
+import {NgOptimizedImage} from "@angular/common";
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
   imports: [
     RouterLink,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgOptimizedImage
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css',

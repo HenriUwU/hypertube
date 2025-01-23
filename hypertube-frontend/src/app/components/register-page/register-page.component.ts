@@ -4,6 +4,7 @@ import {Router, RouterLink} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
 import {GlobalMessageService} from "../../services/global.message.service";
 import {animate, style, transition, trigger} from "@angular/animations";
+import {NgOptimizedImage} from "@angular/common";
 
 @Component({
   selector: 'app-register-page',
@@ -12,6 +13,7 @@ import {animate, style, transition, trigger} from "@angular/animations";
     FormsModule,
     ReactiveFormsModule,
     RouterLink,
+    NgOptimizedImage,
   ],
   templateUrl: './register-page.component.html',
   styleUrl: './register-page.component.css',
