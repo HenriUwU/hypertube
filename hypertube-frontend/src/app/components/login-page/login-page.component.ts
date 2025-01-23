@@ -39,7 +39,7 @@ export class LoginPageComponent implements OnInit {
         },
       });
     } else {
-      this.globalMessageService.showMessage('Error: Please fill out all required fields.', false);
+      this.globalMessageService.showMessage('Error: Please fill out all required fields', false);
     }
   }
 
