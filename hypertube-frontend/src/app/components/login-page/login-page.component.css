@@ -63,8 +63,8 @@ h2 {
 }
 
 .input-field input {
-  background-color: black;
-  color: whitesmoke;
+  background-color: #d3d3d3;
+  color: #333333;
   flex: 1;
   padding: 8px;
   border: none;
