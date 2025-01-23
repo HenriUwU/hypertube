@@ -20,10 +20,12 @@
   opacity: 1;
 }
 .global-message.success {
-  font-size: 16px;
-  background-color: #28a745;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: rgba(50, 205, 50, 0.7);
 }
 .global-message.error {
-  font-size: 16px;
-  background-color: #dc3545;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: rgba(255, 0, 0, 0.7);
 }
