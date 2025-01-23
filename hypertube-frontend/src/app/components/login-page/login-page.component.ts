@@ -52,9 +52,12 @@ export class LoginPageComponent implements OnInit {
           this.globalMessageService.showMessage("Login successful! Redirecting to the homepage...", true);
           this.router.navigate(['']).then()
         },
+        error: () => {
+          this.globalMessageService.showMessage("Invalid username or password. Please try again.", false);
+        }
       });
     } else {
-      this.globalMessageService.showMessage('Error: Please fill out all required fields', false);
+      this.globalMessageService.showMessage('Please fill out all required fields.', false);
     }
   }
 

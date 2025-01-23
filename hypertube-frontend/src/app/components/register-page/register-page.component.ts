@@ -55,6 +55,9 @@ export class RegisterPageComponent implements OnInit {
         next: () => {
           this.globalMessageService.showMessage('You\'re registered successfully! Redirecting to login...', true);
           this.router.navigate(['auth/login']).then()
+        },
+        error: () => {
+          this.globalMessageService.showMessage('Registration failed: The username or password is already in use.', false);
         }
       });
     } else {
