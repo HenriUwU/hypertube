@@ -23,7 +23,7 @@ h2 {
 
 .signup-text {
   text-align: center;
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.5);
   margin-bottom: 30px;
 }
 
@@ -37,6 +37,7 @@ h2 {
   position: relative;
   display: flex;
   align-items: center;
+  background-color: rgba(255, 255, 255, 0.1);
   border: 1px solid #444;
   box-shadow: 0 4px 8px rgb(0, 0, 0, 100);
   border-radius: 5px;
@@ -62,11 +63,11 @@ h2 {
 }
 
 .input-field input {
-  background-color: #d3d3d3;
-  color: #333333;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: whitesmoke;
   flex: 1;
   padding: 8px;
-  border-color: #444;
+  border: none;
 }
 
 .input-field i {
