@@ -131,7 +131,7 @@ button:hover {
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 60%;
+  height: 55px;
   background-color: #252525;
   box-shadow: 0 4px 8px rgb(0, 0, 0, 100);
   border-radius: 5px;
@@ -144,8 +144,11 @@ button:hover {
 }
 
 .logo-box img {
-  padding: 5px;
-  max-height: 40px;
-  max-width: 80%;
+  display: block;
+  margin: auto;
+  padding: 0;
+  max-height: 30px;
+  max-width: 100%;
   object-fit: contain;
 }
+
