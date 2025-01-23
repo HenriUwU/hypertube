@@ -1,0 +1,77 @@
+<div class="login-container">
+  <div class="login-box">
+
+    <h2>Register now</h2>
+    <div class="signup-text">Already have an account? <a class="signup-hyperlink" routerLink="/auth/login">Sign in</a></div>
+
+    <form [formGroup]="registerForm">
+      <div class="input-field">
+        <i class="fas fa-user"></i>
+        <input formControlName="username" type="text"  id="username" name="username" placeholder="Username" required />
+      </div>
+      <div class="input-field">
+        <i class="fas fa-lock"></i>
+        <input
+          formControlName="password"
+          [type]="passwordVisible ? 'text' : 'password'"
+          id="password"
+          name="password"
+          placeholder="Password"
+          required />
+        <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
+          <i [class]="passwordVisible ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+        </button>
+      </div>
+
+      <div class="or-container">
+        <div class="line"></div>
+        <span>Personal information</span>
+        <div class="line"></div>
+      </div>
+
+      <div class="input-field">
+        <i class="fas fa-envelope"></i>
+        <input formControlName="email" type="email" id="email" name="email" placeholder="Email address">
+      </div>
+      <div class="input-field">
+        <i class="fas fa-user-alt"></i>
+        <input formControlName="lastName" type="text" id="lastName" name="lastName" placeholder="Last name">
+      </div>
+      <div class="input-field">
+        <i class="fas fa-user-alt"></i>
+        <input formControlName="firstName" type="text" id="firstName" name="firstName" placeholder="First name">
+      </div>
+
+      <button type="submit" (click)="register()">Register</button>
+    </form>
+
+    <div class="or-container">
+      <div class="line"></div>
+      <span>Or</span>
+      <div class="line"></div>
+    </div>
+
+    <div class="omniauth-buttons">
+      <a href="/auth/42"  class="omniauth-btn">
+        <div class="logo-box">
+          <img src="assets/logos/42-logo2.svg" alt="42 Logo"/>
+        </div>
+      </a>
+      <a href="/auth/42"  class="omniauth-btn">
+        <div class="logo-box">
+          <div class="logo-container">
+            <img src="assets/logos/google-logo.png" alt="Google Logo"/>
+          </div>
+        </div>
+      </a>
+      <a href="/auth/42"  class="omniauth-btn">
+        <div class="logo-box">
+          <div class="logo-container">
+            <img src="assets/logos/github-logo.svg" alt="github Logo"/>
+          </div>
+        </div>
+      </a>
+    </div>
+
+  </div>
+</div>

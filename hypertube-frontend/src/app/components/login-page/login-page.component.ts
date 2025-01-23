@@ -13,7 +13,6 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
   styleUrl: './login-page.component.css'
 })
 export class LoginPageComponent implements OnInit {
-
   loginForm!: FormGroup;
   passwordVisible: boolean = false;
 
@@ -38,5 +37,4 @@ export class LoginPageComponent implements OnInit {
   togglePasswordVisibility(): void {
     this.passwordVisible = !this.passwordVisible;
   }
-
 }
