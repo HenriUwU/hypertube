@@ -1,4 +1,4 @@
-.login-container {
+.register-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,7 +7,7 @@
   font-family: "Open Sans", serif;
 }
 
-.login-box {
+.register-box {
   background-color: rgba(0, 0, 0, 0.8);
   padding: 20px;
   border-radius: 8px;
