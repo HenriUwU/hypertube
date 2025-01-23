@@ -15,6 +15,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 export class LoginPageComponent implements OnInit {
 
   loginForm!: FormGroup;
+  passwordVisible: boolean = false;
 
   constructor(private formBuilder: FormBuilder) {
   }
@@ -32,6 +33,10 @@ export class LoginPageComponent implements OnInit {
     } else {
       console.log("LE FORM DE LOGIN EST INVALIDE IDIOT");
     }
+  }
+
+  togglePasswordVisibility(): void {
+    this.passwordVisible = !this.passwordVisible;
   }
 
 }

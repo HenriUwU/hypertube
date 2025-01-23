@@ -41,26 +41,38 @@ h2 {
   border: 1px solid #444;
   box-shadow: 0 4px 8px rgb(0, 0, 0, 100);
   border-radius: 5px;
-  padding-left: 35px;
   margin-bottom: 20px;
+  padding: 0 10px;
 }
 
-.input-field i {
-  position: absolute;
-  left: 10px;
+.input-field .toggle-password {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ccc;
   font-size: 18px;
-  border: 1px solid rgba(0,0,0,0);
-  color: #aaa;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  width: 50px;
+  height: 100%;
+  position: absolute;
+  right: 10px;
 }
 
 .input-field input {
   background-color: black;
   color: whitesmoke;
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid rgba(0,0,0,0);
-  border-radius: 4px;
-  outline: none;
+  flex: 1;
+  padding: 8px;
+  border: none;
+}
+
+.input-field i {
+  color: #aaa;
+  margin-right: 10px;
 }
 
 button {
