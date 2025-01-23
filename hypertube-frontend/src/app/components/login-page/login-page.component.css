@@ -46,23 +46,6 @@ h2 {
   padding: 0 10px;
 }
 
-.input-field .toggle-password {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #ccc;
-  font-size: 18px;
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 10px;
-  width: 50px;
-  height: 100%;
-  position: absolute;
-  right: 10px;
-}
-
 .input-field input {
   background-color: rgba(0, 0, 0, 0.2);
   color: whitesmoke;
@@ -74,6 +57,28 @@ h2 {
 .input-field i {
   color: #aaa;
   margin-right: 10px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ccc;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}
+
+.toggle-password i {
+  pointer-events: none;
 }
 
 button {
