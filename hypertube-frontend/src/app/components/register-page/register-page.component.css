@@ -5,6 +5,7 @@
   height: 100vh;
   color: whitesmoke;
   font-family: "Open Sans", serif;
+  background-image: url("../../../assets/images/auth-background.jpg");
 }
 
 .register-box {
