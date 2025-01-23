@@ -125,7 +125,7 @@ button:hover {
 }
 
 .logo-box:hover {
-  background-color: #f0f0f0;
+  background-color: grey;
   transform: translateY(-3px);
 }
 
