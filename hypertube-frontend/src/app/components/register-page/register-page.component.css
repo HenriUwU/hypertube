@@ -154,7 +154,7 @@ button:hover {
   display: block;
   margin: auto;
   padding: 0;
-  max-height: 30px;
+  max-height: 25px;
   max-width: 100%;
   object-fit: contain;
 }
