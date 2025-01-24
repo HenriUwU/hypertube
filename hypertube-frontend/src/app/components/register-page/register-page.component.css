@@ -9,7 +9,7 @@
 }
 
 .register-box {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.9);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgb(0, 0, 0, 100);
@@ -38,7 +38,7 @@ h2 {
   position: relative;
   display: flex;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.2);
   border: 1px solid #444;
   box-shadow: 0 4px 8px rgb(0, 0, 0, 100);
   border-radius: 5px;
@@ -47,7 +47,7 @@ h2 {
 }
 
 .input-field input {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.3);
   color: whitesmoke;
   flex: 1;
   padding: 8px;
