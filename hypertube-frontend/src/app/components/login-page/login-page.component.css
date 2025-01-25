@@ -38,6 +38,10 @@ h2 {
   text-decoration: none;
 }
 
+.signup-hyperlink:hover {
+  text-shadow: 0 4px 8px rgba(105, 240, 174, 0.5);
+}
+
 .login-form {
   display: flex;
   flex-direction: column;
@@ -51,12 +55,8 @@ h2 {
   color: #B8B8B8;
 }
 
-.custom-login-btn {
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
 .custom-login-btn:hover {
-  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(105, 240, 174, 0.5);
 }
 
 .or-container {
@@ -108,12 +108,11 @@ h2 {
   background-color: #333333;
   box-shadow: 0 4px 8px rgb(0, 0, 0, 100);
   border-radius: 5px;
-  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .logo-box:hover {
-  background-color: rgba(154, 205, 50, 0.4);
-  transform: translateY(-3px);
+  background-color: #69f0ae;
+  box-shadow: 0 4px 8px rgba(105, 240, 174, 0.5);
 }
 
 .logo-box img {
