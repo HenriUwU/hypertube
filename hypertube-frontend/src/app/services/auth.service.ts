@@ -27,6 +27,16 @@ export class AuthService {
       }));
   }
 
+  loginViaOmniAuth(code: String): Observable<any> {
+    return this.http.post<{ token: string }>(`${this.apiUrlAuth}/omniauth/42`, code).pipe(
+      map(response => {
+        sessionStorage.setItem(`token`, response.token);
+        this.currentUserSubject.next(response.token)
+        return response;
+      })
+    )
+  }
+
   isLoggedIn(): boolean {
     return !!sessionStorage.getItem(`token`);
   }
