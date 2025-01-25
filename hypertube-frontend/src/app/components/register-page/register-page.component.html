@@ -8,7 +8,6 @@
       <mat-form-field appearance="outline" class="register-field">
         <mat-label>Username</mat-label>
         <input matInput formControlName="username" type="text" required/>
-        <mat-error>sheesh</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="register-field">
         <mat-label>Password</mat-label>
@@ -34,7 +33,7 @@
         <input matInput formControlName="firstName" type="text" required/>
       </mat-form-field>
 
-      <button mat-flat-button class="custom-login-btn" color="warn" type="submit" (click)="register()">Register</button>
+      <button mat-flat-button class="custom-login-btn" color="accent" type="submit" (click)="register()">Register</button>
     </form>
 
     <div class="or-container">

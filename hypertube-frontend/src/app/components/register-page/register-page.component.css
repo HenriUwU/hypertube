@@ -33,7 +33,7 @@ h2 {
 
 .sign-in-hyperlink {
   font-weight: bold;
-  color: rgba(154, 205, 50, 0.8);
+  color: #69f0ae;
   text-decoration: none;
 }
 
@@ -55,7 +55,6 @@ h2 {
 }
 
 .custom-login-btn:hover {
-  background-color: rgba(154, 205, 50, 0.8);
   transform: translateY(-2px);
 }
 
