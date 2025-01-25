@@ -5,6 +5,10 @@ import {AuthService} from "../../services/auth.service";
 import {GlobalMessageService} from "../../services/global.message.service";
 import {animate, style, transition, trigger} from "@angular/animations";
 import {NgOptimizedImage} from "@angular/common";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatIconModule} from "@angular/material/icon";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-login-page',
@@ -12,7 +16,11 @@ import {NgOptimizedImage} from "@angular/common";
   imports: [
     RouterLink,
     ReactiveFormsModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css',
