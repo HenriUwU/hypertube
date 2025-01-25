@@ -5,6 +5,9 @@ import {AuthService} from "../../services/auth.service";
 import {GlobalMessageService} from "../../services/global.message.service";
 import {animate, style, transition, trigger} from "@angular/animations";
 import {NgOptimizedImage} from "@angular/common";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-register-page',
@@ -14,6 +17,9 @@ import {NgOptimizedImage} from "@angular/common";
     ReactiveFormsModule,
     RouterLink,
     NgOptimizedImage,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
   ],
   templateUrl: './register-page.component.html',
   styleUrl: './register-page.component.css',

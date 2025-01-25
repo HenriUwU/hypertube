@@ -2,26 +2,17 @@
   <div class="register-box" @slideInAnimation>
 
     <h2>Register now</h2>
-    <div class="signup-text">Already have an account? <a class="signup-hyperlink" routerLink="/auth/login">Sign in</a></div>
+    <div class="sign-in-text">Already have an account? <a class="signup-hyperlink" routerLink="/auth/login">Sign in</a></div>
 
-    <form [formGroup]="registerForm">
-      <div class="input-field">
-        <i class="fas fa-user"></i>
-        <input formControlName="username" type="text"  id="username" name="username" placeholder="Username" required />
-      </div>
-      <div class="input-field">
-        <i class="fas fa-lock"></i>
-        <input
-          formControlName="password"
-          [type]="passwordVisible ? 'text' : 'password'"
-          id="password"
-          name="password"
-          placeholder="Password"
-          required />
-        <div class="toggle-password" (click)="togglePasswordVisibility()">
-          <i [class]="passwordVisible ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
-        </div>
-      </div>
+    <form [formGroup]="registerForm" class="register-form">
+      <mat-form-field appearance="outline" class="register-field">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" type="text" required/>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="register-field">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" type="password" required/>
+      </mat-form-field>
 
       <div class="or-container">
         <div class="line"></div>
@@ -29,20 +20,20 @@
         <div class="line"></div>
       </div>
 
-      <div class="input-field">
-        <i class="fas fa-envelope"></i>
-        <input formControlName="email" type="email" id="email" name="email" placeholder="Email address">
-      </div>
-      <div class="input-field">
-        <i class="fas fa-user-alt"></i>
-        <input formControlName="lastName" type="text" id="lastName" name="lastName" placeholder="Last name">
-      </div>
-      <div class="input-field">
-        <i class="fas fa-user-alt"></i>
-        <input formControlName="firstName" type="text" id="firstName" name="firstName" placeholder="First name">
-      </div>
+      <mat-form-field appearance="outline" class="register-field">
+        <mat-label>email</mat-label>
+        <input matInput formControlName="email" type="email" required/>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="register-field">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" type="text" required/>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="register-field">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" type="text" required/>
+      </mat-form-field>
 
-      <button type="submit" (click)="register()">Register</button>
+      <button mat-flat-button class="custom-login-btn" color="warn" type="submit" (click)="register()">Register</button>
     </form>
 
     <div class="or-container">
