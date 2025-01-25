@@ -65,7 +65,7 @@ export class RegisterPageComponent implements OnInit {
           this.router.navigate(['auth/login']).then()
         },
         error: () => {
-          this.globalMessageService.showMessage('Registration failed: The username or password is already in use.', false);
+          this.globalMessageService.showMessage('Registration failed: The username or email is already in use.', false);
         }
       });
     } else {
