@@ -29,7 +29,7 @@ public class AuthController {
     }
 
     @PostMapping(path = "/omniauth/42")
-    public ResponseEntity<String> omniauth(@RequestBody String code) throws Exception {
+    public ResponseEntity<Map<String, String>> omniauth(@RequestBody String code) throws Exception {
         return userService.omniauth(code, "https://api.intra.42.fr/oauth/token");
     }
 

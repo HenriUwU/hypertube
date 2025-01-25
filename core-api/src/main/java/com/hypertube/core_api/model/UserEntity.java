@@ -1,7 +1,6 @@
 package com.hypertube.core_api.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -23,15 +22,12 @@ public class UserEntity {
 	@Column(nullable = false, unique = true)
 	private String email;
 
-	@Column(nullable = false)
 	private String password;
-
 	private String firstName;
 	private String lastName;
 	private String preferredLanguage;
-
-//	@Lob
-//	private byte[] avatar;
+	private String eid42;
+	private boolean loggedInViaOmniauth;
 
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
@@ -89,12 +85,20 @@ public class UserEntity {
 		this.preferredLanguage = preferredLanguage;
 	}
 
-//	public byte[] getAvatar() {
-//		return avatar;
-//	}
-//
-//	public void setAvatar(byte[] avatar) {
-//		this.avatar = avatar;
-//	}
+	public boolean isLoggedInViaOmniauth() {
+		return loggedInViaOmniauth;
+	}
+
+	public void setLoggedInViaOmniauth(boolean loggedInViaOmniauth) {
+		this.loggedInViaOmniauth = loggedInViaOmniauth;
+	}
+
+	public String getEid42() {
+		return this.eid42;
+	}
+
+	public void setEid42(String eid42) {
+		this.eid42 = eid42;
+	}
 
 }

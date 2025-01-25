@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -26,12 +27,14 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtil jwtTokenUtil;
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ObjectMapper objectMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
         this.restTemplate = new RestTemplate();
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -48,9 +51,6 @@ public class UserService implements UserDetailsService {
     public void register(UserEntity user) {
         if (user.getUsername() == null || user.getUsername().isEmpty()) {
             throw new UsernameNotFoundException("Username is empty");
-        }
-        if (user.getPassword() == null || user.getPassword().isEmpty()) {
-            throw new UsernameNotFoundException("Password is empty");
         }
         if (user.getEmail() == null || user.getEmail().isEmpty()) {
             throw new UsernameNotFoundException("Email is empty");
@@ -75,7 +75,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public ResponseEntity<String> omniauth(String code, String url) throws Exception {
+    public ResponseEntity<Map<String, String>> omniauth(String code, String url) throws Exception {
         Map<String, Object> map = new HashMap<>();
         map.put("grant_type", "authorization_code");
         map.put("client_id", "u-s4t2ud-3d0b78d85d1720e444f1354145f582882a28378ec38a8c07fedc6bad0323ad89");
@@ -88,7 +88,9 @@ public class UserService implements UserDetailsService {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = mapper.readTree(response.getBody());
 
-        return new ResponseEntity<>(generateJwtFromOauth(node.get("access_token").asText()), response.getStatusCode());
+        Map<String, String> jwt = new HashMap<>();
+        jwt.put("token", generateJwtFromOauth(node.get("access_token").asText()));
+        return ResponseEntity.ok(jwt);
     }
 
     private String generateJwtFromOauth(String token) {
@@ -100,7 +102,34 @@ public class UserService implements UserDetailsService {
                 .retrieve()
                 .body(String.class);
 
-        return null;
-    }
+        try {
+            JsonNode jsonNode = objectMapper.readTree(response);
+            String eid42 = jsonNode.get("id").asText();
 
+            Optional<UserEntity> optUser = userRepository.findByEid42(eid42);
+            if (optUser.isPresent()) {
+                return jwtTokenUtil.generateToken(optUser.get().getUsername());
+            }
+
+            UserEntity userEntity = new UserEntity();
+            String login = jsonNode.get("login").asText();
+            String email = jsonNode.get("email").asText();
+            String firstName = jsonNode.get("first_name").asText();
+            String lastName = jsonNode.get("last_name").asText();
+
+            userEntity.setUsername(login);
+            userEntity.setEmail(email);
+            userEntity.setFirstName(firstName);
+            userEntity.setLastName(lastName);
+            userEntity.setLoggedInViaOmniauth(true);
+            userEntity.setPassword(token);
+            userEntity.setEid42(eid42);
+
+            register(userEntity);
+
+            return jwtTokenUtil.generateToken(userEntity.getUsername());
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

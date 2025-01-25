@@ -10,7 +10,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
   imports: [
     MatProgressSpinnerModule
   ],
-  template: '<mat-spinner color="primary" class="spinner"></mat-spinner>',
+  template: '<mat-spinner color="accent" class="spinner"></mat-spinner>',
   styles: [
     `
       .spinner {
@@ -31,18 +31,19 @@ export class AuthCallbackComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-        const authCode = params['code'];
-        if (authCode) {
-          this.authService.loginViaOmniAuth(authCode).subscribe({
-            next: () =>  {
-              this.router.navigate(['']).then()
-              this.globalMessageService.showMessage("Login successful! Redirecting to the homepage...", true)
-            },
-            error: () => {
-              this.globalMessageService.showMessage("Error when trying to login", false)
-            }
-          });
-        }
+      const authCode = params['code'];
+      if (authCode) {
+        this.authService.loginViaOmniAuth(authCode).subscribe({
+          next: () => {
+            this.router.navigate(['']).then()
+            this.globalMessageService.showMessage("Login successful! Redirecting to the homepage...", true)
+          },
+          error: () => {
+            this.router.navigate(['auth/login']).then()
+            this.globalMessageService.showMessage("Error when trying to login via 42", false)
+          }
+        });
+      }
     });
   }
 }
