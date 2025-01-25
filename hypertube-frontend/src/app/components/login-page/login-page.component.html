@@ -5,17 +5,17 @@
     <div class="signup-text">Don't have an account yet? <a class="signup-hyperlink" routerLink="/auth/register">Sign up</a></div>
 
       <form [formGroup]="loginForm" class="login-form">
-        <mat-form-field appearance="outline" class="login-field">
+        <mat-form-field appearance="outline" class="login-form">
           <mat-label>Username</mat-label>
           <input matInput formControlName="username" type="text" required/>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="login-field">
+        <mat-form-field appearance="outline" class="login-form">
           <mat-label>Password</mat-label>
           <input matInput formControlName="password" type="password" required/>
         </mat-form-field>
 
-        <button mat-flat-button class="custom-login-btn" color="warn" type="submit" (click)="login()">Login</button>
+        <button mat-flat-button class="custom-login-btn" color="accent" type="submit" (click)="login()">Login</button>
       </form>
 
     <div class="or-container">

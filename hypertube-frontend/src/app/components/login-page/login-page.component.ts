@@ -41,7 +41,7 @@ import {MatButtonModule} from "@angular/material/button";
 })
 export class LoginPageComponent implements OnInit {
   loginForm!: FormGroup;
-  passwordVisible: boolean = false;
+  hide: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
@@ -69,9 +69,5 @@ export class LoginPageComponent implements OnInit {
     } else {
       this.globalMessageService.showMessage('Please fill out all required fields.', false);
     }
-  }
-
-  togglePasswordVisibility(): void {
-    this.passwordVisible = !this.passwordVisible;
   }
 }

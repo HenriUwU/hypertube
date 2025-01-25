@@ -10,8 +10,17 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
   imports: [
     MatProgressSpinnerModule
   ],
-  template: '<mat-spinner class="spinner"></mat-spinner>',
-  styles: ".spinner {  }"
+  template: '<mat-spinner color="primary" class="spinner"></mat-spinner>',
+  styles: [
+    `
+      .spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    `
+  ]
 })
 export class AuthCallbackComponent implements OnInit {
   constructor(private route: ActivatedRoute,
