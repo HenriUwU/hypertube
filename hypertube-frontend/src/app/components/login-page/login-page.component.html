@@ -8,11 +8,13 @@
       <mat-form-field appearance="outline" color="accent" class="login-form">
         <mat-label>Username</mat-label>
         <input matInput formControlName="username" type="text" required/>
+        <mat-icon matPrefix>person_icon</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="outline" color="accent" class="login-form">
         <mat-label>Password</mat-label>
         <input matInput formControlName="password" type="password" required/>
+        <mat-icon matPrefix>lock</mat-icon>
         <mat-hint class="forgot-password">Forgot password?</mat-hint>
       </mat-form-field>
       <button mat-flat-button class="login-btn" color="accent" type="submit" (click)="login()">
