@@ -52,14 +52,6 @@ h2 {
   color: #B8B8B8;
 }
 
-.custom-login-btn {
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.custom-login-btn:hover {
-  transform: translateY(-2px);
-}
-
 .register-btn:hover {
   box-shadow: 0 4px 8px rgba(105, 240, 174, 0.5);
 }

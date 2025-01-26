@@ -61,6 +61,10 @@ h2 {
   text-decoration: underline;
 }
 
+.custom-login-btn {
+  margin-top: 15px;
+}
+
 .custom-login-btn:hover {
   box-shadow: 0 4px 8px rgba(105, 240, 174, 0.5);
 }
