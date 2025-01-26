@@ -101,7 +101,7 @@ public class UserService implements UserDetailsService {
         return ResponseEntity.ok(jwt);
     }
 
-    public ResponseEntity<Map<String, String>> omniauth42(String code) throws Exception {
+    public ResponseEntity<Map<String, String>> omniauthFortyTwo(String code) throws Exception {
         Map<String, Object> map = new HashMap<>();
         map.put("grant_type", "authorization_code");
         map.put("client_id", fortyTwoClientId);
@@ -112,7 +112,7 @@ public class UserService implements UserDetailsService {
         ResponseEntity<String> response = restTemplate.postForEntity("https://api.intra.42.fr/oauth/token", map, String.class);
         JsonNode node = objectMapper.readTree(response.getBody());
         Map<String, String> jwt = new HashMap<>();
-        jwt.put("token", generateJwtFrom42(node.get("access_token").asText()));
+        jwt.put("token", generateJwtFromFortyTwo(node.get("access_token").asText()));
 
         return ResponseEntity.ok(jwt);
     }
@@ -128,7 +128,7 @@ public class UserService implements UserDetailsService {
             JsonNode jsonNode = objectMapper.readTree(response);
             String eidDiscord = jsonNode.get("id").asText();
 
-            Optional<UserEntity> optUser = userRepository.findByEidDiscord(eidDiscord);
+            Optional<UserEntity> optUser = userRepository.findByDiscordEid(eidDiscord);
             if (optUser.isPresent()) {
                 return jwtTokenUtil.generateToken(optUser.get().getUsername());
             }
@@ -144,7 +144,7 @@ public class UserService implements UserDetailsService {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setPassword(token);
-            user.setEidDiscord(eidDiscord);
+            user.setDiscordEid(eidDiscord);
             register(user);
 
             return jwtTokenUtil.generateToken(eidDiscord);
@@ -153,7 +153,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    private String generateJwtFrom42(String token) {
+    private String generateJwtFromFortyTwo(String token) {
         String response = restClient.get()
                 .uri("https://api.intra.42.fr/v2/me")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
@@ -164,7 +164,7 @@ public class UserService implements UserDetailsService {
             JsonNode jsonNode = objectMapper.readTree(response);
             String eid42 = jsonNode.get("id").asText();
 
-            Optional<UserEntity> optUser = userRepository.findByEid42(eid42);
+            Optional<UserEntity> optUser = userRepository.findByFortyTwoEid(eid42);
             if (optUser.isPresent()) {
                 return jwtTokenUtil.generateToken(optUser.get().getUsername());
             }
@@ -180,7 +180,7 @@ public class UserService implements UserDetailsService {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setPassword(token);
-            user.setEid42(eid42);
+            user.setFortyTwoEid(eid42);
             register(user);
 
             return jwtTokenUtil.generateToken(user.getUsername());

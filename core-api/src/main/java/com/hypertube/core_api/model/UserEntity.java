@@ -26,8 +26,8 @@ public class UserEntity {
 	private String firstName;
 	private String lastName;
 	private String preferredLanguage;
-	private String eid42;
-	private String eidDiscord;
+	private String fortyTwoEid;
+	private String discordEid;
 
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
@@ -85,20 +85,20 @@ public class UserEntity {
 		this.preferredLanguage = preferredLanguage;
 	}
 
-	public String getEid42() {
-		return this.eid42;
+	public String getFortyTwoEid() {
+		return this.fortyTwoEid;
 	}
 
-	public void setEid42(String eid42) {
-		this.eid42 = eid42;
+	public void setFortyTwoEid(String fortyTwoEid) {
+		this.fortyTwoEid = fortyTwoEid;
 	}
 
-	public String getEidDiscord() {
-		return this.eidDiscord;
+	public String getDiscordEid() {
+		return this.discordEid;
 	}
 
-	public void setEidDiscord(String eidDiscord) {
-		this.eidDiscord = eidDiscord;
+	public void setDiscordEid(String discordEid) {
+		this.discordEid = discordEid;
 	}
 
 }

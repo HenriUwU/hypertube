@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByUsername(String username);
-    Optional<UserEntity> findByEid42(String eid);
-    Optional<UserEntity> findByEidDiscord(String eidDiscord);
+    Optional<UserEntity> findByFortyTwoEid(String eid);
+    Optional<UserEntity> findByDiscordEid(String eidDiscord);
 
 }

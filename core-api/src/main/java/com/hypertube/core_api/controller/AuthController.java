@@ -30,7 +30,7 @@ public class AuthController {
 
     @PostMapping(path = "/omniauth/42")
     public ResponseEntity<Map<String, String>> omniauth(@RequestBody String code) throws Exception {
-        return userService.omniauth42(code);
+        return userService.omniauthFortyTwo(code);
     }
 
     @PostMapping(path = "/omniauth/discord")
