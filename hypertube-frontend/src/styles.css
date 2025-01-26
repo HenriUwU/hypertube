@@ -5,8 +5,7 @@
 }
 
 body {
-  background-color: #131313;
-  /*background-image: url("assets/images/auth-background.jpg");*/
+  background-color: black;
   font-family: "Open Sans", serif;
   min-height: 100vh;
 }
