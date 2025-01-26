@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hypertube.core_api.model.UserEntity;
 import com.hypertube.core_api.repository.UserRepository;
 import com.hypertube.core_api.security.JwtTokenUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -26,6 +27,16 @@ import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
+
+    @Value("${discord.client.id}")
+    private String discordClientId;
+    @Value("${discord.client.secret}")
+    private String discordClientSecret;
+
+    @Value("${42.client.id}")
+    private String fortyTwoClientId;
+    @Value("${42.client.secret}")
+    private String fortyTwoClientSecret;
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -55,13 +66,6 @@ public class UserService implements UserDetailsService {
     }
 
     public void register(UserEntity user) {
-        if (user.getUsername() == null || user.getUsername().isEmpty()) {
-            throw new UsernameNotFoundException("Username is empty");
-        }
-        if (user.getEmail() == null || user.getEmail().isEmpty()) {
-            throw new UsernameNotFoundException("Email is empty");
-        }
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
@@ -90,7 +94,7 @@ public class UserService implements UserDetailsService {
                 request,
                 String.class
         );
-        JsonNode node = this.objectMapper.readTree(response.getBody());
+        JsonNode node = objectMapper.readTree(response.getBody());
         Map<String, String> jwt = new HashMap<>();
         jwt.put("token", generateJwtFromDiscord(node.get("access_token").asText()));
 
@@ -100,13 +104,13 @@ public class UserService implements UserDetailsService {
     public ResponseEntity<Map<String, String>> omniauth42(String code) throws Exception {
         Map<String, Object> map = new HashMap<>();
         map.put("grant_type", "authorization_code");
-        map.put("client_id", "u-s4t2ud-3d0b78d85d1720e444f1354145f582882a28378ec38a8c07fedc6bad0323ad89");
-        map.put("client_secret", "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");
+        map.put("client_id", fortyTwoClientId);
+        map.put("client_secret", fortyTwoClientSecret);
         map.put("code", code);
         map.put("redirect_uri", "http://localhost:4200/auth/omniauth/42");
 
         ResponseEntity<String> response = restTemplate.postForEntity("https://api.intra.42.fr/oauth/token", map, String.class);
-        JsonNode node = this.objectMapper.readTree(response.getBody());
+        JsonNode node = objectMapper.readTree(response.getBody());
         Map<String, String> jwt = new HashMap<>();
         jwt.put("token", generateJwtFrom42(node.get("access_token").asText()));
 
@@ -114,19 +118,19 @@ public class UserService implements UserDetailsService {
     }
 
     private String generateJwtFromDiscord(String token) {
-        String response = this.restClient.get()
+        String response = restClient.get()
                 .uri("https://discord.com/api/users/@me")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .retrieve()
                 .body(String.class);
 
         try {
-            JsonNode jsonNode = this.objectMapper.readTree(response);
+            JsonNode jsonNode = objectMapper.readTree(response);
             String eidDiscord = jsonNode.get("id").asText();
 
-            Optional<UserEntity> optUser = this.userRepository.findByEidDiscord(eidDiscord);
+            Optional<UserEntity> optUser = userRepository.findByEidDiscord(eidDiscord);
             if (optUser.isPresent()) {
-                return this.jwtTokenUtil.generateToken(optUser.get().getUsername());
+                return jwtTokenUtil.generateToken(optUser.get().getUsername());
             }
 
             UserEntity user = new UserEntity();
@@ -143,26 +147,26 @@ public class UserService implements UserDetailsService {
             user.setEidDiscord(eidDiscord);
             register(user);
 
-            return this.jwtTokenUtil.generateToken(eidDiscord);
+            return jwtTokenUtil.generateToken(eidDiscord);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     private String generateJwtFrom42(String token) {
-        String response = this.restClient.get()
+        String response = restClient.get()
                 .uri("https://api.intra.42.fr/v2/me")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .retrieve()
                 .body(String.class);
 
         try {
-            JsonNode jsonNode = this.objectMapper.readTree(response);
+            JsonNode jsonNode = objectMapper.readTree(response);
             String eid42 = jsonNode.get("id").asText();
 
-            Optional<UserEntity> optUser = this.userRepository.findByEid42(eid42);
+            Optional<UserEntity> optUser = userRepository.findByEid42(eid42);
             if (optUser.isPresent()) {
-                return this.jwtTokenUtil.generateToken(optUser.get().getUsername());
+                return jwtTokenUtil.generateToken(optUser.get().getUsername());
             }
 
             UserEntity user = new UserEntity();
@@ -185,9 +189,9 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    private static HttpEntity<MultiValueMap<String, String>> getMultiValueMapHttpEntity(String code) {
+    private HttpEntity<MultiValueMap<String, String>> getMultiValueMapHttpEntity(String code) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBasicAuth("1332866171581632643", "Z2kMp3A4ljKfnIPEHLQyia61ug55DFrI");
+        headers.setBasicAuth(discordClientId, discordClientSecret);
         headers.set("Content-Type", "application/x-www-form-urlencoded");
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
