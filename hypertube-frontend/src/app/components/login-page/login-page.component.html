@@ -13,8 +13,11 @@
 
       <mat-form-field appearance="outline" color="accent" class="login-form">
         <mat-label>Password</mat-label>
-        <input matInput formControlName="password" type="password" required/>
+        <input matInput formControlName="password" type="password" [type]="hide ? 'password' : 'text' " required/>
         <mat-icon matPrefix>lock</mat-icon>
+        <button mat-icon-button matSuffix (click)="hide = !hide">
+          <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
         <mat-hint class="forgot-password">Forgot password?</mat-hint>
       </mat-form-field>
       <button mat-flat-button class="login-btn" color="accent" type="submit" (click)="login()">

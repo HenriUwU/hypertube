@@ -43,6 +43,7 @@ import {MatIconModule} from "@angular/material/icon";
 export class RegisterPageComponent implements OnInit {
   registerForm!: FormGroup;
   passwordVisible: boolean = false;
+  hide: boolean = true;
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,

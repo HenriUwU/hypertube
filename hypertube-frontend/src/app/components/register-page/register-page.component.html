@@ -14,6 +14,9 @@
         <mat-label>Password</mat-label>
         <input matInput formControlName="password" type="password" required/>
         <mat-icon matPrefix>lock</mat-icon>
+        <button mat-icon-button matSuffix (click)="hide = !hide">
+          <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
       </mat-form-field>
 
       <div class="or-container">

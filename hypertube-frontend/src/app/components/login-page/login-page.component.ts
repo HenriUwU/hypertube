@@ -41,7 +41,7 @@ import {MatButtonModule} from "@angular/material/button";
 })
 export class LoginPageComponent implements OnInit {
   loginForm!: FormGroup;
-  hide: boolean = false;
+  hide: boolean = true;
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
