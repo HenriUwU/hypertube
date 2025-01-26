@@ -1,11 +1,11 @@
 import {Component} from '@angular/core';
-import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
   imports: [
-    MatProgressBarModule
+    MatProgressSpinnerModule
   ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'
