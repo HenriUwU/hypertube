@@ -36,7 +36,6 @@ export class AuthCallback42Component implements OnInit {
         this.authService.loginViaOmniAuth(authCode, '/omniauth/42').subscribe({
           next: () => {
             this.router.navigate(['']).then()
-            this.globalMessageService.showMessage("Login successful! Redirecting to the homepage...", true)
           },
           error: () => {
             this.router.navigate(['auth/login']).then()

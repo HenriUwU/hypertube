@@ -1,0 +1,34 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="logo-search">
+      <a href="/" class="logo">Hypertube</a>
+
+      <div class="separator"></div>
+
+      <mat-form-field appearance="outline" color="accent" class="search-bar dense-field">
+        <mat-label>Search</mat-label>
+        <input matInput placeholder="Search movies or shows" (click)="search()">
+        <button mat-icon-button matSuffix (click)="search()">
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+      <button mat-icon-button>
+        <mat-icon>filter_list</mat-icon>
+      </button>
+    </div>
+
+    <div class="user-management">
+      <button mat-button color="accent">
+        <mat-icon>settings</mat-icon>
+        Settings
+      </button>
+      <div class="separator"></div>
+      <button mat-button color="warn" type="submit" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+    </div>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>

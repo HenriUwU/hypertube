@@ -26,7 +26,7 @@ h2 {
 .sign-in-text {
   text-align: center;
   color: rgba(160, 160, 160, 0.5);
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .sign-in-hyperlink {
@@ -50,6 +50,10 @@ h2 {
 
 .register-field input {
   color: #B8B8B8;
+}
+
+.register-btn {
+  margin-top: 15px;
 }
 
 .register-btn:hover {

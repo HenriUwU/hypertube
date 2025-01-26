@@ -5,11 +5,24 @@ import {HomePageComponent} from "./components/home-page/home-page.component";
 import {authGuard} from "./auth.guard";
 import {AuthCallback42Component} from "./components/auth-callback-components/auth.callback.42.component";
 import {AuthCallbackDiscordComponent} from "./components/auth-callback-components/auth.callback.discord.component";
+import {LayoutComponent} from "./components/layout/layout.component";
 
 export const routes: Routes = [
-  {path: 'auth/login', component: LoginPageComponent},
-  {path: 'auth/register', component: RegisterPageComponent},
-  {path: 'auth/omniauth/42', component: AuthCallback42Component},
-  {path: 'auth/omniauth/discord', component: AuthCallbackDiscordComponent},
-  {path: '', component: HomePageComponent, canActivate: [authGuard]}
+  {
+    path: 'auth',
+    children: [
+      {path: 'login', component: LoginPageComponent},
+      {path: 'register', component: RegisterPageComponent},
+      {path: 'omniauth/42', component: AuthCallback42Component},
+      {path: 'omniauth/discord', component: AuthCallbackDiscordComponent},
+    ]
+  },
+  {
+    path: '',
+    component: LayoutComponent,
+    children: [
+      {path: '', component: HomePageComponent, canActivate: [authGuard]}
+    ]
+  }
+
 ];

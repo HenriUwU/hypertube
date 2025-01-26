@@ -36,11 +36,10 @@ export class AuthCallbackDiscordComponent implements OnInit {
         this.authService.loginViaOmniAuth(authCode, '/omniauth/discord').subscribe({
           next: () => {
             this.router.navigate(['']).then()
-            this.globalMessageService.showMessage("Login successful! Redirecting to the homepage...", true)
           },
           error: () => {
             this.router.navigate(['auth/login']).then()
-            this.globalMessageService.showMessage("Error when trying to login via 42", false)
+            this.globalMessageService.showMessage("Error when trying to login via discord", false)
           }
         });
       }

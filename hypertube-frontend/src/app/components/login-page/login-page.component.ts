@@ -59,7 +59,6 @@ export class LoginPageComponent implements OnInit {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
-          this.globalMessageService.showMessage("Login successful! Redirecting to the homepage...", true);
           this.router.navigate(['']).then()
         },
         error: () => {
