@@ -27,8 +27,8 @@ export class AuthService {
       }));
   }
 
-  loginViaOmniAuth(code: String): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.apiUrlAuth}/omniauth/42`, code).pipe(
+  loginViaOmniAuth(code: String, path: String): Observable<any> {
+    return this.http.post<{ token: string }>(`${this.apiUrlAuth}${path}`, code).pipe(
       map(response => {
         sessionStorage.setItem(`token`, response.token);
         this.currentUserSubject.next(response.token)

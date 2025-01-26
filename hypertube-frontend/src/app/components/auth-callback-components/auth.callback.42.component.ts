@@ -5,7 +5,7 @@ import {GlobalMessageService} from "../../services/global.message.service";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @Component({
-  selector: 'app-auth-callback',
+  selector: 'app-auth-callback-42',
   standalone: true,
   imports: [
     MatProgressSpinnerModule
@@ -22,7 +22,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     `
   ]
 })
-export class AuthCallbackComponent implements OnInit {
+export class AuthCallback42Component implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private authService: AuthService,
@@ -33,7 +33,7 @@ export class AuthCallbackComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       const authCode = params['code'];
       if (authCode) {
-        this.authService.loginViaOmniAuth(authCode).subscribe({
+        this.authService.loginViaOmniAuth(authCode, '/omniauth/42').subscribe({
           next: () => {
             this.router.navigate(['']).then()
             this.globalMessageService.showMessage("Login successful! Redirecting to the homepage...", true)

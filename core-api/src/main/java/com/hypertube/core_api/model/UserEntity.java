@@ -27,7 +27,7 @@ public class UserEntity {
 	private String lastName;
 	private String preferredLanguage;
 	private String eid42;
-	private boolean loggedInViaOmniauth;
+	private String eidDiscord;
 
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
@@ -85,20 +85,20 @@ public class UserEntity {
 		this.preferredLanguage = preferredLanguage;
 	}
 
-	public boolean isLoggedInViaOmniauth() {
-		return loggedInViaOmniauth;
-	}
-
-	public void setLoggedInViaOmniauth(boolean loggedInViaOmniauth) {
-		this.loggedInViaOmniauth = loggedInViaOmniauth;
-	}
-
 	public String getEid42() {
 		return this.eid42;
 	}
 
 	public void setEid42(String eid42) {
 		this.eid42 = eid42;
+	}
+
+	public String getEidDiscord() {
+		return this.eidDiscord;
+	}
+
+	public void setEidDiscord(String eidDiscord) {
+		this.eidDiscord = eidDiscord;
 	}
 
 }
