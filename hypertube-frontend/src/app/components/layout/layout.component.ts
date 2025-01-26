@@ -56,4 +56,8 @@ export class LayoutComponent implements OnInit {
     this.authService.logout()
     this.router.navigate(["/auth/login"]).then();
   }
+
+  goToSettings(): void {
+    this.router.navigate(['/settings']).then();
+  }
 }

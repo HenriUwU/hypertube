@@ -6,4 +6,5 @@ export interface UserModel {
   firstName: string;
   lastName: string;
   preferredLanguage: string;
+  profilePicture: string;
 }

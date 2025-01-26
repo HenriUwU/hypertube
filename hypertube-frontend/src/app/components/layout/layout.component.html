@@ -22,7 +22,7 @@
     <button mat-button [matMenuTriggerFor]="userMenu" color="basic" class="menu-density">
       <mat-icon>account_circle</mat-icon> {{ currentUser.username }}
       <mat-menu #userMenu="matMenu">
-        <button mat-menu-item>
+        <button mat-menu-item (click)="goToSettings()">
           <mat-icon>settings</mat-icon>
           Settings
         </button>
