@@ -124,7 +124,7 @@ public class UserService implements UserDetailsService {
             JsonNode jsonNode = this.objectMapper.readTree(response);
             String eidDiscord = jsonNode.get("id").asText();
 
-            Optional<UserEntity> optUser = this.userRepository.findByEid42(eidDiscord);
+            Optional<UserEntity> optUser = this.userRepository.findByEidDiscord(eidDiscord);
             if (optUser.isPresent()) {
                 return this.jwtTokenUtil.generateToken(optUser.get().getUsername());
             }
