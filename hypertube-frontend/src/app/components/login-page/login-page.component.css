@@ -1,16 +1,15 @@
-/* Conteneur principal */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   font-family: "Open Sans", serif;
-  background-color: #121212;
+  background-color: black;
   color: #FFFFFF;
 }
 
 .login-box {
-  background-color: #1E1E1E;
+  background-color: #121212;
   color: #FFFFFF;
   box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
   padding: 20px;
@@ -53,6 +52,15 @@ h2 {
 
 .login-field input {
   color: #B8B8B8;
+}
+
+.forgot-password {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.forgot-password:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .custom-login-btn:hover {
@@ -105,6 +113,7 @@ h2 {
   align-items: center;
   width: 100%;
   height: 55px;
+  background-color: #373737;
   box-shadow: 0 4px 8px rgb(0, 0, 0, 100);
   border-radius: 5px;
 }
