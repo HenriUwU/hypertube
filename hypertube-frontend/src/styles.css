@@ -8,15 +8,12 @@ body {
   background-color: black;
   font-family: "Open Sans", serif;
   min-height: 100vh;
-}
-
-html {
+  display: flex;
+  flex-direction: column;
   height: 100%;
 }
 
-body {
-  display: flex;
-  flex-direction: column;
+html {
   height: 100%;
 }
 
