@@ -19,18 +19,22 @@ export class AuthService {
   }
 
   login(user: UserModel): Observable<any> {
-    return this.http.post<{ token: string}>(`${this.apiUrlAuth}/login`, user).pipe(
+    return this.http.post<{ token: string, id: string }>(`${this.apiUrlAuth}/login`, user).pipe(
       map(response => {
+        sessionStorage.setItem(`id`, response.id);
         sessionStorage.setItem(`token`, response.token);
+        this.currentUserSubject.next(response.id);
         this.currentUserSubject.next(response.token);
         return response;
       }));
   }
 
   loginViaOmniAuth(code: String, path: String): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.apiUrlAuth}${path}`, code).pipe(
+    return this.http.post<{ token: string, id: string }>(`${this.apiUrlAuth}${path}`, code).pipe(
       map(response => {
+        sessionStorage.setItem(`id`, response.id);
         sessionStorage.setItem(`token`, response.token);
+        this.currentUserSubject.next(response.id);
         this.currentUserSubject.next(response.token)
         return response;
       })
@@ -42,6 +46,7 @@ export class AuthService {
   }
 
   logout(): void {
+    sessionStorage.removeItem(`id`);
     sessionStorage.removeItem(`token`);
   }
 

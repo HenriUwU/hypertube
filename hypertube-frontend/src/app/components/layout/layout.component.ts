@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router, RouterOutlet} from "@angular/router";
 import {MatButtonModule} from "@angular/material/button";
 import {AuthService} from "../../services/auth.service";
@@ -9,6 +9,8 @@ import {MatExpansionModule} from "@angular/material/expansion";
 import {MatMenuModule, MatMenuTrigger} from "@angular/material/menu";
 import {NgStyle} from "@angular/common";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {UserModel} from "../../models/user.model";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-layout',
@@ -28,9 +30,22 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
-export class LayoutComponent {
+export class LayoutComponent implements OnInit {
+  currentUser!: UserModel;
+
   constructor(private authService: AuthService,
+              private userService: UserService,
               private router: Router) {
+  }
+
+  ngOnInit() {
+    const id = sessionStorage.getItem(`id`);
+    if (id != null) {
+      this.userService.getUser(id).subscribe((data) => {
+        this.currentUser = data;
+        console.log(data);
+      })
+    }
   }
 
   search(): void {

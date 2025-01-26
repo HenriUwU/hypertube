@@ -28,6 +28,7 @@ public class UserEntity {
 	private String preferredLanguage;
 	private String fortyTwoEid;
 	private String discordEid;
+	private String accessToken;
 
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
@@ -36,6 +37,14 @@ public class UserEntity {
 	@LastModifiedDate
 	@Column(nullable = false)
 	private LocalDateTime updatedAt;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getUsername() {
 		return username;
