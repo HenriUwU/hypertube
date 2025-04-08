@@ -1,0 +1,56 @@
+# version: "3.7"
+services:
+  frontend:
+    build: hypertube-frontend/
+    image: frontend
+    container_name: frontend
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./hypertube-frontend/:/angular-app
+    depends_on:
+      - backend
+    environment:
+      APP_NAME: 'hypertube'
+      ROUTING: true
+      # - STYLE=css
+    networks:
+      - docker-network
+    restart: always
+  postgres:
+    image: postgres
+    container_name: postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - docker-network
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+  backend:
+    build: core-api/
+    image: backend
+    container_name: backend
+    ports:
+      - 8080:8080
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      NODE_ENV: development
+    networks:
+      - docker-network
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+# select a path used to save db
+networks:
+  docker-network: 
