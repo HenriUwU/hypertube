@@ -10,9 +10,7 @@ public class SubtitlesEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false)
-    private VideoEntity videoId;
+    private Integer movieId;
 
     private String language;
     private String content;

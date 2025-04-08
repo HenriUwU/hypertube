@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.sql.Time;
 
 @Entity
-@Table(name = "watched_videos", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "video_id"}))
-public class WatchedVideosEntity {
+@Table(name = "watched_movies", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "movie_id"}))
+public class WatchedMoviesEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,10 +16,7 @@ public class WatchedVideosEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private UserEntity userId;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false)
-    private VideoEntity videoId;
-
+    private Integer movieId;
     private Time stoppedAt;
 
 }

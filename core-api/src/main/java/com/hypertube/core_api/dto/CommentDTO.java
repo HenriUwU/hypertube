@@ -7,7 +7,7 @@ import lombok.Data;
 public class CommentDTO {
 
     private Long id;
-    private Long videoId;
+    private Long movieId;
     private Long userId;
     private String content;
 

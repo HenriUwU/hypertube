@@ -18,9 +18,7 @@ public class CommentEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false)
-	private VideoEntity videoId;
+	private Integer movieId;
 
 	@OneToOne(optional = false)
 	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
