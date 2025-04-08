@@ -18,11 +18,13 @@ public class CommentEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
-	private Long videoId;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false)
+	private VideoEntity videoId;
 
-	@Column(nullable = false)
-	private Long userId;
+	@OneToOne(optional = false)
+	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+	private UserEntity userId;
 
 	@Column(nullable = false)
 	private String content;

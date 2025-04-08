@@ -1,14 +1,10 @@
 package com.hypertube.core_api.model;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.sql.Blob;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "users")
 public class UserEntity {
 
@@ -25,18 +21,19 @@ public class UserEntity {
 	private String password;
 	private String firstName;
 	private String lastName;
-	private String preferredLanguage;
+	private String language;
 	private String fortyTwoEid;
 	private String discordEid;
-	private String accessToken;
+	@Lob
+	private Blob profilePicture;
 
-	@CreatedDate
-	@Column(nullable = false, updatable = false)
-	private LocalDateTime createdAt;
+	public Blob getProfilePicture() {
+		return profilePicture;
+	}
 
-	@LastModifiedDate
-	@Column(nullable = false)
-	private LocalDateTime updatedAt;
+	public void setProfilePicture(Blob profilePicture) {
+		this.profilePicture = profilePicture;
+	}
 
 	public Long getId() {
 		return id;
@@ -86,12 +83,12 @@ public class UserEntity {
 		this.lastName = lastName;
 	}
 
-	public String getPreferredLanguage() {
-		return preferredLanguage;
+	public String getLanguage() {
+		return language;
 	}
 
-	public void setPreferredLanguage(String preferredLanguage) {
-		this.preferredLanguage = preferredLanguage;
+	public void language(String language) {
+		this.language = language;
 	}
 
 	public String getFortyTwoEid() {
