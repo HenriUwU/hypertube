@@ -8,7 +8,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "comment")
@@ -16,7 +15,7 @@ public class CommentEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 
 	private Integer movieId;
 
@@ -32,6 +31,38 @@ public class CommentEntity {
 
 	@LastModifiedDate
 	private LocalDateTime updatedAt;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public Integer getMovieId() {
+		return movieId;
+	}
+
+	public void setMovieId(Integer movieId) {
+		this.movieId = movieId;
+	}
+
+	public UserEntity getUserId() {
+		return userId;
+	}
+
+	public void setUserId(UserEntity userId) {
+		this.userId = userId;
+	}
 
 }
 

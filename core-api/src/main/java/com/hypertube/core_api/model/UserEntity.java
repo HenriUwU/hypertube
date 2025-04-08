@@ -10,7 +10,7 @@ public class UserEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 
 	@Column(nullable = false, unique = true)
 	private String username;
@@ -35,11 +35,11 @@ public class UserEntity {
 		this.profilePicture = profilePicture;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

@@ -10,7 +10,7 @@ public class WatchedMoviesEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)

@@ -13,7 +13,7 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDTO {
 
-    private Long id;
+    private Integer id;
     private String title;
     private String overview;
 

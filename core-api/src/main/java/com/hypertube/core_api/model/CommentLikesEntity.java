@@ -8,7 +8,7 @@ public class CommentLikesEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "comment_id", referencedColumnName = "id", nullable = false)

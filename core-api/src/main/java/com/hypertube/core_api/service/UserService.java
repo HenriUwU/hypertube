@@ -65,7 +65,7 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
-    public UserEntity getUser(Long id) {
+    public UserEntity getUser(Integer id) {
         if (id == null) return null;
         return this.userRepository.findById(id).orElse(null);
     }

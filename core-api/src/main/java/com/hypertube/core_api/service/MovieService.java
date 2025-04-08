@@ -4,7 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hypertube.core_api.dto.CommentDTO;
 import com.hypertube.core_api.dto.MovieDTO;
+import com.hypertube.core_api.mapper.CommentMapper;
+import com.hypertube.core_api.model.CommentEntity;
+import com.hypertube.core_api.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,16 +24,20 @@ public class MovieService {
 
     private final RestTemplate restTemplate;
     private final HttpHeaders headers;
+    private final CommentRepository commentRepository;
+    private final CommentMapper commentMapper;
 
     @Value("${tmdb.bearer-token}")
     private String tmdbToken;
 
-    public MovieService() {
+    public MovieService(CommentRepository commentRepository, CommentMapper commentMapper) {
+        this.commentRepository = commentRepository;
+        this.commentMapper = commentMapper;
         this.restTemplate = new RestTemplate();
         this.headers = new HttpHeaders();
     }
 
-    public MovieDTO getMovie(Long movieId) {
+    public MovieDTO getMovie(Integer movieId) {
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<MovieDTO> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + movieId + "?language=en-US&append_to_response=credits",
@@ -55,6 +63,10 @@ public class MovieService {
         movies = objectMapper.convertValue(resultsNode, new TypeReference<List<MovieDTO>>() {
         });
         return movies;
+    }
+
+    public List<CommentDTO> getComments(Integer movieId) {
+        return commentMapper.map(commentRepository.getCommentEntitiesByMovieId(movieId));
     }
 
 }

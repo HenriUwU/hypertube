@@ -1,6 +1,7 @@
 package com.hypertube.core_api.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.hypertube.core_api.dto.CommentDTO;
 import com.hypertube.core_api.dto.MovieDTO;
 import com.hypertube.core_api.service.MovieService;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +20,18 @@ public class MovieController {
     }
 
     @GetMapping(path = "/{id}")
-    public MovieDTO getMovie(@PathVariable Long id) {
+    public MovieDTO getMovie(@PathVariable Integer id) {
         return this.movieService.getMovie(id);
     }
 
     @GetMapping(path = "/popular")
     public List<MovieDTO> getPopularMovie() throws JsonProcessingException {
         return this.movieService.getPopularMovie();
+    }
+
+    @GetMapping(path = "/{id}/comments")
+    public List<CommentDTO> getComments(@PathVariable Integer id) {
+        return this.movieService.getComments(id);
     }
 
 }
