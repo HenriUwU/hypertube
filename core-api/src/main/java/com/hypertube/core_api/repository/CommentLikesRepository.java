@@ -5,7 +5,9 @@ import com.hypertube.core_api.model.CommentLikesEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CommentLikesRepository extends CrudRepository<CommentLikesEntity, Integer> {
-    void deleteAllByCommentId(CommentEntity commentId);
+    List<CommentLikesEntity> getCommentLikesEntitiesByCommentId(CommentEntity commentEntity);
 }

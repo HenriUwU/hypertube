@@ -27,8 +27,8 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    public void deleteComment(@PathVariable Integer commentId) {
-        this.commentService.deleteComment(commentId);
+    public void deleteComment(@PathVariable Integer commentId, @RequestHeader("Authorization") String token) {
+        this.commentService.deleteComment(commentId, token);
     }
 
     @PostMapping("/like")
