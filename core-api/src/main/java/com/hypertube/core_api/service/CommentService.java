@@ -2,7 +2,9 @@ package com.hypertube.core_api.service;
 
 import com.hypertube.core_api.dto.CommentDTO;
 import com.hypertube.core_api.mapper.CommentMapper;
+import com.hypertube.core_api.model.CommentEntity;
 import com.hypertube.core_api.repository.CommentRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +26,11 @@ public class CommentService {
         if (commentDTO.getId() == null) {
             throw new IllegalArgumentException("Comment id cannot be null");
         }
-        return commentMapper.map(this.commentRepository.save(commentMapper.map(commentDTO)));
+        CommentEntity existingComment = commentRepository.findById(commentDTO.getId()).
+                orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+
+        existingComment.setContent(commentDTO.getContent());
+        return commentMapper.map(commentRepository.save(existingComment));
     }
 
 }
