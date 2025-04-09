@@ -1,9 +1,17 @@
+.footer {
+    font-size: 0.8rem;
+    bottom: 0;
+    width: 100%;
+    position: sticky;
+    height: 0rem;
+    background-color: inherit;
+}
+
 .mat-divider {
     border-top-color: #AFBB80;
 }
 
 .footer-developer {
-    display: flex;
     color: white;
     align-items: center;
     padding: 1vw;
@@ -12,8 +20,7 @@
 .footer-developer-link {
     font-family: "Borel Regular", serif;
     border-color: #153F2F;
-    font-size: 0.8rem;
-    height: auto;
+    align-items: end;
 }
 
 .footer-copyright {
@@ -21,17 +28,9 @@
     padding: 1vw;
 }
 
-.footer {
-    font-size: 0.8rem;
-    bottom: 0;
-    width: 100%;
-
-    position: sticky;
-    margin-top: auto;
-}
-
 .footer-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
 }
