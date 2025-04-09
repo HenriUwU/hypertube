@@ -1,9 +1,8 @@
 .footer {
     font-size: 0.8rem;
-    bottom: 0;
     width: 100%;
     position: sticky;
-    height: 0rem;
+    height: 2rem;
     background-color: inherit;
 }
 
