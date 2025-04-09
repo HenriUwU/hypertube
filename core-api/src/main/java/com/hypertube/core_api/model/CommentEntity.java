@@ -25,6 +25,8 @@ public class CommentEntity {
 	@Column(nullable = false)
 	private String content;
 
+	private Integer likes = 0;
+
 	@CreatedDate
 	private LocalDateTime createdAt;
 
@@ -79,5 +81,12 @@ public class CommentEntity {
 		this.updatedAt = updatedAt;
 	}
 
+	public Integer getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Integer likes) {
+		this.likes = likes;
+	}
 }
 

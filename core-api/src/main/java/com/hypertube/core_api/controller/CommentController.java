@@ -1,6 +1,7 @@
 package com.hypertube.core_api.controller;
 
 import com.hypertube.core_api.dto.CommentDTO;
+import com.hypertube.core_api.dto.CommentLikesDTO;
 import com.hypertube.core_api.service.CommentService;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,4 +26,18 @@ public class CommentController {
         return this.commentService.updateComment(comment);
     }
 
+    @DeleteMapping("/{commentId}")
+    public void deleteComment(@PathVariable Integer commentId) {
+        this.commentService.deleteComment(commentId);
+    }
+
+    @PostMapping("/like")
+    public CommentDTO likeComment(@RequestBody CommentLikesDTO commentLike) {
+        return this.commentService.likeComment(commentLike);
+    }
+
+    @DeleteMapping("/unlike")
+    public CommentDTO unlikeComment(@RequestBody CommentLikesDTO commentUnlike) {
+        return this.commentService.unlikeComment(commentUnlike);
+    }
 }

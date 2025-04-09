@@ -71,8 +71,7 @@ public class MovieService {
         if (selectedGenreIds != null && !selectedGenreIds.isEmpty()) {
             return movies.stream()
                     .filter(movie -> movie.getGenreIds() != null &&
-                            !Collections.disjoint(movie.getGenreIds(), selectedGenreIds))
-                    .toList();
+                            !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)).toList();
         } else {
             return movies;
         }
@@ -99,8 +98,7 @@ public class MovieService {
         if (selectedGenreIds != null && !selectedGenreIds.isEmpty()) {
             return movies.stream()
                     .filter(movie -> movie.getGenreIds() != null &&
-                            !Collections.disjoint(movie.getGenreIds(), selectedGenreIds))
-                    .toList();
+                            !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)).toList();
         } else {
             return movies;
         }
