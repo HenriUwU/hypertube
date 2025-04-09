@@ -26,6 +26,9 @@ public class MovieDTO {
     @JsonProperty("poster_path")
     private String thumbnail;
 
+    @JsonProperty("genre_ids")
+    private List<Integer> genreIds;
+
     private Integer runtime;
     private List<GenreModel> genres;
     private Credits credits;
