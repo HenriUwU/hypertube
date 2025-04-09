@@ -7,8 +7,9 @@
 }
 
 body {
-  background-color: black;
-  font-family: "Open Sans", serif;
+  background-color: #153f2f;
+  /* font-family: "Open Sans", serif; */
+  font-family: "Borel Regular", serif;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -22,6 +23,13 @@ html {
 @font-face {
   font-family: Open Sans;
   src: url("assets/fonts/Open_Sans/static/OpenSans-Regular.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Borel Regular';
+  src: url("assets/fonts/Borel/Borel-Regular.ttf") format('truetype');
   font-weight: normal;
   font-style: normal;
 }

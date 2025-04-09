@@ -6,6 +6,7 @@ import {authGuard} from "./auth.guard";
 import {AuthCallback42Component} from "./components/auth-callback-components/auth.callback.42.component";
 import {AuthCallbackDiscordComponent} from "./components/auth-callback-components/auth.callback.discord.component";
 import {LayoutComponent} from "./components/layout/layout.component";
+import {FooterComponent} from "./components/footer/footer.component";
 
 export const routes: Routes = [
   {
@@ -23,6 +24,11 @@ export const routes: Routes = [
     children: [
       {path: '', component: HomePageComponent, canActivate: [authGuard]}
     ]
+  },
+  {
+    path: 'test',
+    children: [
+      {path: 'footer', component: FooterComponent},
+    ]
   }
-
 ];
