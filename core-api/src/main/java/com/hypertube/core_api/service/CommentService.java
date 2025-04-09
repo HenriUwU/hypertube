@@ -2,7 +2,6 @@ package com.hypertube.core_api.service;
 
 import com.hypertube.core_api.dto.CommentDTO;
 import com.hypertube.core_api.mapper.CommentMapper;
-import com.hypertube.core_api.model.CommentEntity;
 import com.hypertube.core_api.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +17,7 @@ public class CommentService {
     }
 
     public CommentDTO postComment(CommentDTO commentDTO) {
-        CommentEntity commentEntity = commentMapper.map(commentDTO);
-        this.commentRepository.save(commentMapper.map(commentDTO));
-        return null;
+        return commentMapper.map(commentRepository.save(commentMapper.map(commentDTO)));
     }
 
     public CommentDTO updateComment(CommentDTO commentDTO) {

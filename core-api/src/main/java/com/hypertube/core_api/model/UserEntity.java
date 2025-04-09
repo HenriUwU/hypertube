@@ -24,6 +24,7 @@ public class UserEntity {
 	private String language;
 	private String fortyTwoEid;
 	private String discordEid;
+
 	@Lob
 	private Blob profilePicture;
 
@@ -105,6 +106,10 @@ public class UserEntity {
 
 	public void setDiscordEid(String discordEid) {
 		this.discordEid = discordEid;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 }

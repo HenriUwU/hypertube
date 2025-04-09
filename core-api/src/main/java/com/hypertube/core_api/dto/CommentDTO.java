@@ -1,15 +1,12 @@
 package com.hypertube.core_api.dto;
 
-import com.hypertube.core_api.model.UserEntity;
-import lombok.Data;
-
 import java.time.LocalDateTime;
 
 public class CommentDTO {
 
     private Integer id;
     private Integer movieId;
-    private UserEntity userId;
+    private Integer userId;
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -38,12 +35,28 @@ public class CommentDTO {
         this.movieId = movieId;
     }
 
-    public UserEntity getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(UserEntity userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
 }
