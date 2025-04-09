@@ -23,7 +23,6 @@ import java.util.List;
 public class MovieService {
 
     private final RestTemplate restTemplate;
-    private final HttpHeaders headers;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 
@@ -34,10 +33,11 @@ public class MovieService {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.restTemplate = new RestTemplate();
-        this.headers = new HttpHeaders();
     }
 
     public MovieDTO getMovie(Integer movieId) {
+        HttpHeaders headers;
+        headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<MovieDTO> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + movieId + "?language=en-US&append_to_response=credits",
@@ -48,6 +48,9 @@ public class MovieService {
     }
 
     public List<MovieDTO> getPopularMovie() throws JsonProcessingException {
+        HttpHeaders headers;
+        headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
                 HttpMethod.GET,
