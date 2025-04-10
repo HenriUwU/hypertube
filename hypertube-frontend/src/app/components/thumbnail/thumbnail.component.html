@@ -1,6 +1,18 @@
-<div class="thumbnail-container"
-    (click)="onClick()">
-    
+<div class="thumbnail-container" (click)="onClick()">
+
+    <h1 class="thumbnail-title">
+        {{ getTitle() }}
+    </h1>
+
+    <div class="thumbnail-image">
+        <img [src]="getImage()" alt="{{ getTitle() }}" />
+    </div>
+    <!-- <div class="thumbnail-genres">
+        <span *ngFor="let genre of getGenres()">
+            {{ genre }}
+        </span>
+        <span *ngIf="getGenres().length > 3">...</span>
+    </div> -->
     <div ng-show="watched" class="progress-bar-container">
         <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
     </div>

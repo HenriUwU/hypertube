@@ -1,0 +1,36 @@
+/* .thumbnail-container {
+    width: 20vw;
+    height: 40vh;
+    min-width: 200px;
+    min-height: 400px;
+    background-image: url("/assets/images/thumnail_background.svg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat round;
+    background-position: center;
+} */
+.thumbnail-container {
+    width: 20vw;
+    height: 40vh;
+    min-width: 200px;
+    min-height: 400px;
+    border-bottom: 2vh solid #eac29f;
+    border-top: 2vh solid #eac29f;
+    border-left: 1vw solid #eac29f;
+    border-right: 1vw solid #eac29f;
+    border-radius: 5%;
+    background-color: #20242a;
+}
+
+.thumbnail-image {
+    object-fit: contain;
+    /* height: 100%; */
+    /* width: 100%; */
+    display: fixed;
+}
+
+.thumbnail-title {
+    white-space: nowrap;
+    font-size: 0.8rem;
+    text-align: center;
+    color: white;
+}
