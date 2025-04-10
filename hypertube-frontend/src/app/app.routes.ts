@@ -8,6 +8,7 @@ import {AuthCallbackDiscordComponent} from "./components/auth-callback-component
 import {LayoutComponent} from "./components/layout/layout.component";
 import {FooterComponent} from "./components/footer/footer.component";
 import { HeaderComponent } from './components/header/header.component';
+import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
 
 export const routes: Routes = [
   {
@@ -30,7 +31,8 @@ export const routes: Routes = [
     path: 'test',
     children: [
       {path: 'footer', component: FooterComponent},
-      {path: 'header', component: HeaderComponent}
+      {path: 'header', component: HeaderComponent},
+      {path: 'thumbnail', component: ThumbnailComponent},
     ]
   }
 ];
