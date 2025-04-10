@@ -84,7 +84,8 @@ export class ThumbnailComponent {
       watched: false,
       length: { hours: Math.floor(movieDTO.runtime / 60), minutes: movieDTO.runtime % 60 },
       visualizedTime: { hours: 0, minutes: 0 },
-      img: `https://image.tmdb.org/t/p/w500/${movieDTO.poster_path}`
+      // img: `https://image.tmdb.org/t/p/w500/${movieDTO.poster_path}`
+      img: `${movieDTO.poster_path}`
     };
   }
 
