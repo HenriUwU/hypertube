@@ -18,4 +18,27 @@ public class CommentLikesEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private UserEntity userId;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public CommentEntity getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(CommentEntity commentId) {
+        this.commentId = commentId;
+    }
+
+    public UserEntity getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UserEntity userId) {
+        this.userId = userId;
+    }
 }
