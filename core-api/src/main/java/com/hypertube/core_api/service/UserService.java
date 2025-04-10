@@ -243,18 +243,15 @@ public class UserService implements UserDetailsService {
     }
 
     public void verifyUser(Integer id, String token) {
-        String username = jwtTokenUtil.extractUsername(token.substring(7));
-        UserEntity userToken = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-        UserEntity userRequest = userRepository.findById(id).orElseThrow();
+        UserDTO userDTO = getUserByToken(token);
 
-        if (!userToken.getId().equals(userRequest.getId())) {
-            throw new AccessDeniedException("You are not allowed to delete this comment");
+        if (!id.equals(userDTO.getId())) {
+            throw new AccessDeniedException("You are not allowed to do this action");
         }
     }
 
-    public void deleteUser(Integer id, String token) {
-        verifyUser(id, token);
-        userRepository.deleteById(id);
+    public void deleteUser(Integer userId, String token) {
+        verifyUser(userId, token);
+        userRepository.deleteById(userId);
     }
 }
