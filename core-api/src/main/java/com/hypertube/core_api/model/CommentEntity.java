@@ -6,6 +6,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -26,6 +27,9 @@ public class CommentEntity {
 	private String content;
 
 	private Integer likes = 0;
+
+	@OneToMany(mappedBy = "commentId", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CommentLikesEntity> comments;
 
 	@CreatedDate
 	private LocalDateTime createdAt;

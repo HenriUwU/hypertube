@@ -28,11 +28,12 @@ public class CommentService {
     private final CommentLikesMapper commentLikesMapper;
     private final JwtTokenUtil jwtTokenUtil;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     public CommentService(CommentRepository commentRepository,
                           CommentMapper commentMapper,
                           CommentLikesRepository commentLikesRepository,
-                          CommentLikesMapper commentLikesMapper, JwtTokenUtil jwtTokenUtil, UserRepository userRepository) {
+                          CommentLikesMapper commentLikesMapper, JwtTokenUtil jwtTokenUtil, UserRepository userRepository, UserService userService) {
 
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
@@ -40,6 +41,7 @@ public class CommentService {
         this.commentLikesMapper = commentLikesMapper;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public CommentDTO postComment(CommentDTO commentDTO) {
@@ -61,16 +63,8 @@ public class CommentService {
         if (!commentRepository.existsById(commentId)) {
             throw new EntityNotFoundException("Comment not found");
         }
-        String username = jwtTokenUtil.extractUsername(token.replace("Bearer ", ""));
-        UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         CommentEntity comment = commentRepository.findById(commentId).orElseThrow();
-
-        if (!userEntity.getId().equals(comment.getUserId().getId())) {
-            throw new AccessDeniedException("You are not allowed to delete this comment");
-        }
-        List<CommentLikesEntity> commentLikes = commentLikesRepository.getCommentLikesEntitiesByCommentId(comment);
-        commentLikesRepository.deleteAll(commentLikes);
+        userService.verifyUser(comment.getUserId().getId(), token);
         commentRepository.deleteById(commentId);
     }
 

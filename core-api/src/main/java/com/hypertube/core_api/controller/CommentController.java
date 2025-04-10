@@ -5,6 +5,8 @@ import com.hypertube.core_api.dto.CommentLikesDTO;
 import com.hypertube.core_api.service.CommentService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(path = "/comment")

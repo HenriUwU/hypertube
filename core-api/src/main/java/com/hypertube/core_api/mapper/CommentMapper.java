@@ -6,7 +6,6 @@ import com.hypertube.core_api.repository.CommentRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class})

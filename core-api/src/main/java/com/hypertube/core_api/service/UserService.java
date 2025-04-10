@@ -2,6 +2,7 @@ package com.hypertube.core_api.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hypertube.core_api.model.CommentEntity;
 import com.hypertube.core_api.model.UserEntity;
 import com.hypertube.core_api.repository.UserRepository;
 import com.hypertube.core_api.security.JwtTokenUtil;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -213,4 +215,19 @@ public class UserService implements UserDetailsService {
         return new HttpEntity<>(body, headers);
     }
 
+    public void verifyUser(Integer id, String token) {
+        String username = jwtTokenUtil.extractUsername(token.replace("Bearer ", ""));
+        UserEntity userToken = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        UserEntity userRequest = userRepository.findById(id).orElseThrow();
+
+        if (!userToken.getId().equals(userRequest.getId())) {
+            throw new AccessDeniedException("You are not allowed to delete this comment");
+        }
+    }
+
+    public void deleteUser(Integer id, String token) {
+        verifyUser(id, token);
+        userRepository.deleteById(id);
+    }
 }

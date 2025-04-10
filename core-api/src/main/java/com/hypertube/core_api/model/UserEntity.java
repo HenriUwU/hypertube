@@ -3,6 +3,7 @@ package com.hypertube.core_api.model;
 import jakarta.persistence.*;
 
 import java.sql.Blob;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -17,6 +18,9 @@ public class UserEntity {
 
 	@Column(nullable = false, unique = true)
 	private String email;
+
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CommentEntity> comments;
 
 	private String password;
 	private String firstName;
@@ -112,4 +116,11 @@ public class UserEntity {
 		this.language = language;
 	}
 
+	public List<CommentEntity> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<CommentEntity> comments) {
+		this.comments = comments;
+	}
 }

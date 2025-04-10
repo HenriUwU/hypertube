@@ -20,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieService {
@@ -66,15 +67,13 @@ public class MovieService {
 
         List<MovieDTO> movies = objectMapper.convertValue(resultsNode, new TypeReference<List<MovieDTO>>() {});
 
-        List<Integer> selectedGenreIds = sortByDTO.getGenres_ids();
+        List<Integer> selectedGenreIds = sortByDTO.getGenresIds();
 
-        if (selectedGenreIds != null && !selectedGenreIds.isEmpty()) {
-            return movies.stream()
-                    .filter(movie -> movie.getGenreIds() != null &&
-                            !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)).toList();
-        } else {
-            return movies;
-        }
+        return movies.stream()
+                .filter(movie ->  selectedGenreIds.isEmpty()
+                        || (movie.getGenreIds() != null && !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)))
+                .peek(movie -> movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail()))
+                .collect(Collectors.toList());
     }
 
     public List<MovieDTO> searchMovies(SearchDTO searchDTO) throws JsonProcessingException {
@@ -95,13 +94,11 @@ public class MovieService {
         List<MovieDTO> movies = objectMapper.convertValue(resultsNode, new TypeReference<List<MovieDTO>>() {});
         List<Integer> selectedGenreIds = searchDTO.getGenres_ids();
 
-        if (selectedGenreIds != null && !selectedGenreIds.isEmpty()) {
-            return movies.stream()
-                    .filter(movie -> movie.getGenreIds() != null &&
-                            !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)).toList();
-        } else {
-            return movies;
-        }
+        return movies.stream()
+                .filter(movie ->  selectedGenreIds.isEmpty()
+                        || (movie.getGenreIds() != null && !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)))
+                .peek(movie -> movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail()))
+                .collect(Collectors.toList());
     }
 
     public List<CommentDTO> getComments(Integer movieId) {

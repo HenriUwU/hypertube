@@ -7,8 +7,7 @@ import java.util.List;
 
 @Data
 public class SortByDTO {
-    @JsonProperty("sort_by")
     private SortBy sortBy;
-    private List<Integer> genres_ids;
+    private List<Integer> genresIds;
     private Integer page;
 }
