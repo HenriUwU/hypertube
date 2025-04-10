@@ -8,15 +8,15 @@ import java.util.List;
 @Data
 public class SortByDTO {
 	private SortBy sortBy;
-	private List<Integer> genres_ids;
+	private List<Integer> genresIds;
 	private Integer page;
 
-	public List<Integer> getGenres_ids() {
-		return genres_ids;
+	public List<Integer> getGenresIds() {
+		return genresIds;
 	}
 
-	public void setGenres_ids(List<Integer> genres_ids) {
-		this.genres_ids = genres_ids;
+	public void setGenresIds(List<Integer> genres_ids) {
+		this.genresIds = genres_ids;
 	}
 
 	public Integer getPage() {
