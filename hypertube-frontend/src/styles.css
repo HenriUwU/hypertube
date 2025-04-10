@@ -14,18 +14,18 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
-} */
+}
 
 html {
   height: 100%;
 }
 
-@font-face {
+/* @font-face {
   font-family: Open Sans;
   src: url("assets/fonts/Open_Sans/static/OpenSans-Regular.ttf") format('truetype');
   font-weight: normal;
   font-style: normal;
-}
+} */
 
 @font-face {
   font-family: 'Borel Regular';
