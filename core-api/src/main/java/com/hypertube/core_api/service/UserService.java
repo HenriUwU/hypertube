@@ -6,6 +6,7 @@ import com.hypertube.core_api.model.CommentEntity;
 import com.hypertube.core_api.model.UserEntity;
 import com.hypertube.core_api.repository.UserRepository;
 import com.hypertube.core_api.security.JwtTokenUtil;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -91,6 +92,22 @@ public class UserService implements UserDetailsService {
         } else {
             throw new RuntimeException("Wrong password");
         }
+    }
+
+    public UserEntity updateUser(UserEntity user) {
+        if (user.getId() == null) {
+            throw new RuntimeException("Id can not be null");
+        }
+        UserEntity existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        existingUser.setUsername(user.getUsername());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setLanguage(user.getLanguage());
+        existingUser.setProfilePicture(user.getProfilePicture());
+
+        return userRepository.save(user);
     }
 
     public ResponseEntity<Map<String, String>> omniauthDiscord(String code) throws Exception {

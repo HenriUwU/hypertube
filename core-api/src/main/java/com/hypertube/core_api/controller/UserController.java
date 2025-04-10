@@ -21,6 +21,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getUser(id));
     }
 
+    @PutMapping()
+    public UserEntity updateUser(@RequestBody UserEntity user) {
+        return userService.updateUser(user);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Integer id, @RequestHeader("Authorization") String token) {
         this.userService.deleteUser(id, token);
