@@ -9,7 +9,11 @@ import com.hypertube.core_api.dto.MovieDTO;
 import com.hypertube.core_api.dto.SearchDTO;
 import com.hypertube.core_api.dto.SortByDTO;
 import com.hypertube.core_api.mapper.CommentMapper;
+import com.hypertube.core_api.model.UserEntity;
 import com.hypertube.core_api.repository.CommentRepository;
+import com.hypertube.core_api.repository.UserRepository;
+import com.hypertube.core_api.repository.WatchedMoviesRepository;
+import com.hypertube.core_api.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -28,14 +32,20 @@ public class MovieService {
     private final RestTemplate restTemplate;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
+    private final WatchedMoviesRepository watchedMoviesRepository;
+    private final UserRepository userRepository;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Value("${tmdb.bearer-token}")
     private String tmdbToken;
 
-    public MovieService(CommentRepository commentRepository, CommentMapper commentMapper) {
+    public MovieService(CommentRepository commentRepository, CommentMapper commentMapper, WatchedMoviesRepository watchedMoviesRepository, UserRepository userRepository, JwtTokenUtil jwtTokenUtil) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
+        this.watchedMoviesRepository = watchedMoviesRepository;
         this.restTemplate = new RestTemplate();
+        this.userRepository = userRepository;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     public MovieDTO getMovie(Integer movieId) {
@@ -50,7 +60,7 @@ public class MovieService {
         return response.getBody();
     }
 
-    public List<MovieDTO> sortByMovies(SortByDTO sortByDTO) throws JsonProcessingException {
+    public List<MovieDTO> sortByMovies(SortByDTO sortByDTO, String token) throws JsonProcessingException {
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
@@ -69,14 +79,16 @@ public class MovieService {
 
         List<Integer> selectedGenreIds = sortByDTO.getGenresIds();
 
+        UserEntity userEntity = userRepository.findByUsername(token.substring(7)).orElseThrow();
         return movies.stream()
                 .filter(movie ->  selectedGenreIds.isEmpty()
                         || (movie.getGenreIds() != null && !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)))
                 .peek(movie -> movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail()))
+                .peek(movie -> movie.setWatchedMoviesEntity(watchedMoviesRepository.getWatchedMoviesEntitiesByUserIdAndMovieId(userEntity, movie.getId())))
                 .collect(Collectors.toList());
     }
 
-    public List<MovieDTO> searchMovies(SearchDTO searchDTO) throws JsonProcessingException {
+    public List<MovieDTO> searchMovies(SearchDTO searchDTO, String token) throws JsonProcessingException {
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
@@ -92,12 +104,14 @@ public class MovieService {
         JsonNode resultsNode = rootNode.path("results");
 
         List<MovieDTO> movies = objectMapper.convertValue(resultsNode, new TypeReference<List<MovieDTO>>() {});
-        List<Integer> selectedGenreIds = searchDTO.getGenres_ids();
+        List<Integer> selectedGenreIds = searchDTO.getGenresIds();
 
+        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
         return movies.stream()
                 .filter(movie ->  selectedGenreIds.isEmpty()
                         || (movie.getGenreIds() != null && !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)))
                 .peek(movie -> movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail()))
+                .peek(movie -> movie.setWatchedMoviesEntity(watchedMoviesRepository.getWatchedMoviesEntitiesByUserIdAndMovieId(userEntity, movie.getId())))
                 .collect(Collectors.toList());
     }
 

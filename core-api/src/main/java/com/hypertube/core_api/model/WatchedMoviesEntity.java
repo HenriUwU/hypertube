@@ -19,4 +19,35 @@ public class WatchedMoviesEntity {
     private Integer movieId;
     private Time stoppedAt;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public UserEntity getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UserEntity userId) {
+        this.userId = userId;
+    }
+
+    public Integer getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(Integer movieId) {
+        this.movieId = movieId;
+    }
+
+    public Time getStoppedAt() {
+        return stoppedAt;
+    }
+
+    public void setStoppedAt(Time stoppedAt) {
+        this.stoppedAt = stoppedAt;
+    }
 }

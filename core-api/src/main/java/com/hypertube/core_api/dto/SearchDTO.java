@@ -4,15 +4,15 @@ import java.util.List;
 
 public class SearchDTO {
     private String query;
-    private List<Integer> genres_ids;
+    private List<Integer> genresIds;
     private Integer page;
 
-    public List<Integer> getGenres_ids() {
-        return genres_ids;
+    public List<Integer> getGenresIds() {
+        return genresIds;
     }
 
-    public void setGenres_ids(List<Integer> genres_ids) {
-        this.genres_ids = genres_ids;
+    public void setGenresIds(List<Integer> genresIds) {
+        this.genresIds = genresIds;
     }
 
     public Integer getPage() {

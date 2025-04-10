@@ -233,7 +233,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void verifyUser(Integer id, String token) {
-        String username = jwtTokenUtil.extractUsername(token.replace("Bearer ", ""));
+        String username = jwtTokenUtil.extractUsername(token.substring(7));
         UserEntity userToken = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         UserEntity userRequest = userRepository.findById(id).orElseThrow();

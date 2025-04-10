@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hypertube.core_api.model.GenreModel;
 import com.hypertube.core_api.model.PersonModel;
+import com.hypertube.core_api.model.WatchedMoviesEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,8 @@ public class MovieDTO {
     private List<GenreModel> genres;
     private Credits credits;
     private Map<String, String> subtitles;
+
+    private List<WatchedMoviesEntity> watchedMoviesEntity;
 
     public static class Credits {
         public List<PersonModel> cast;
@@ -123,5 +126,13 @@ public class MovieDTO {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public List<WatchedMoviesEntity> getWatchedMoviesEntity() {
+        return watchedMoviesEntity;
+    }
+
+    public void setWatchedMoviesEntity(List<WatchedMoviesEntity> watchedMoviesEntity) {
+        this.watchedMoviesEntity = watchedMoviesEntity;
     }
 }

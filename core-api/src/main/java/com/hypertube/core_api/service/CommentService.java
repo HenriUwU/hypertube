@@ -26,21 +26,17 @@ public class CommentService {
     private final CommentMapper commentMapper;
     private final CommentLikesRepository commentLikesRepository;
     private final CommentLikesMapper commentLikesMapper;
-    private final JwtTokenUtil jwtTokenUtil;
-    private final UserRepository userRepository;
     private final UserService userService;
 
     public CommentService(CommentRepository commentRepository,
                           CommentMapper commentMapper,
                           CommentLikesRepository commentLikesRepository,
-                          CommentLikesMapper commentLikesMapper, JwtTokenUtil jwtTokenUtil, UserRepository userRepository, UserService userService) {
+                          CommentLikesMapper commentLikesMapper, UserService userService) {
 
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.commentLikesRepository = commentLikesRepository;
         this.commentLikesMapper = commentLikesMapper;
-        this.jwtTokenUtil = jwtTokenUtil;
-        this.userRepository = userRepository;
         this.userService = userService;
     }
 

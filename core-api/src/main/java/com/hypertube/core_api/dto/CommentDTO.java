@@ -1,7 +1,5 @@
 package com.hypertube.core_api.dto;
 
-import com.hypertube.core_api.model.UserEntity;
-
 import java.time.LocalDateTime;
 
 public class CommentDTO {
