@@ -2,14 +2,19 @@ package com.hypertube.core_api.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hypertube.core_api.dto.UserDTO;
+import com.hypertube.core_api.mapper.UserMapper;
+import com.hypertube.core_api.model.CommentEntity;
 import com.hypertube.core_api.model.UserEntity;
 import com.hypertube.core_api.repository.UserRepository;
 import com.hypertube.core_api.security.JwtTokenUtil;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -44,11 +49,13 @@ public class UserService implements UserDetailsService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final RestClient restClient;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ObjectMapper objectMapper) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ObjectMapper objectMapper, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.userMapper = userMapper;
         this.restTemplate = new RestTemplate();
         this.objectMapper = objectMapper;
         this.restClient = RestClient.create();
@@ -65,9 +72,15 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
-    public UserEntity getUser(Integer id) {
+    public UserDTO getUserByToken(String token) {
+        String username = jwtTokenUtil.extractUsername(token.substring(7));
+        return userMapper.map(userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username)));
+    }
+
+    public UserDTO getUser(Integer id) {
         if (id == null) return null;
-        return this.userRepository.findById(id).orElse(null);
+        return userMapper.map(userRepository.findById(id).orElse(null));
     }
 
     public void register(UserEntity user) {
@@ -89,6 +102,22 @@ public class UserService implements UserDetailsService {
         } else {
             throw new RuntimeException("Wrong password");
         }
+    }
+
+    public UserDTO updateUser(UserDTO user) {
+        if (user.getId() == null) {
+            throw new RuntimeException("Id can not be null");
+        }
+        UserEntity existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        existingUser.setUsername(user.getUsername());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setLanguage(user.getLanguage());
+        existingUser.setProfilePicture(user.getProfilePicture());
+
+        return userMapper.map(userRepository.save(existingUser));
     }
 
     public ResponseEntity<Map<String, String>> omniauthDiscord(String code) throws Exception {
@@ -213,4 +242,19 @@ public class UserService implements UserDetailsService {
         return new HttpEntity<>(body, headers);
     }
 
+    public void verifyUser(Integer id, String token) {
+        String username = jwtTokenUtil.extractUsername(token.substring(7));
+        UserEntity userToken = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        UserEntity userRequest = userRepository.findById(id).orElseThrow();
+
+        if (!userToken.getId().equals(userRequest.getId())) {
+            throw new AccessDeniedException("You are not allowed to delete this comment");
+        }
+    }
+
+    public void deleteUser(Integer id, String token) {
+        verifyUser(id, token);
+        userRepository.deleteById(id);
+    }
 }
