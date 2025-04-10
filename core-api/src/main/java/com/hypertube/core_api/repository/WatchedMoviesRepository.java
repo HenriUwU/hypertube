@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface WatchedMoviesRepository extends CrudRepository<WatchedMoviesEntity, Integer>  {
-    List<WatchedMoviesEntity> getWatchedMoviesEntitiesByUserIdAndMovieId(UserEntity userId, Integer movieId);
+    WatchedMoviesEntity getWatchedMoviesEntityByUserAndMovieId(UserEntity user, Integer movieId);
 }

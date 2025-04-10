@@ -19,8 +19,8 @@ public class CommentController {
     }
 
     @PostMapping()
-    public CommentDTO addComment(@RequestBody CommentDTO comment) {
-        return this.commentService.postComment(comment);
+    public CommentDTO addComment(@RequestBody CommentDTO comment, @RequestHeader("Authorization") String token) {
+        return this.commentService.postComment(comment, token);
     }
 
     @PutMapping()

@@ -1,5 +1,6 @@
 package com.hypertube.core_api.controller;
 
+import com.hypertube.core_api.dto.UserDTO;
 import com.hypertube.core_api.model.UserEntity;
 import com.hypertube.core_api.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,12 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<UserEntity> getUser(@PathVariable Integer id) {
+    public ResponseEntity<UserDTO> getUser(@PathVariable Integer id) {
         return ResponseEntity.ok(userService.getUser(id));
     }
 
     @PutMapping()
-    public UserEntity updateUser(@RequestBody UserEntity user) {
+    public UserDTO updateUser(@RequestBody UserDTO user) {
         return userService.updateUser(user);
     }
 

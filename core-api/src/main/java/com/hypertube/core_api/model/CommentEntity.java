@@ -21,7 +21,7 @@ public class CommentEntity {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-	private UserEntity userId;
+	private UserEntity user;
 
 	@Column(nullable = false)
 	private String content;
@@ -61,12 +61,12 @@ public class CommentEntity {
 		this.movieId = movieId;
 	}
 
-	public UserEntity getUserId() {
-		return userId;
+	public UserEntity getUser() {
+		return user;
 	}
 
-	public void setUserId(UserEntity userId) {
-		this.userId = userId;
+	public void setUser(UserEntity user) {
+		this.user = user;
 	}
 
 	public LocalDateTime getCreatedAt() {

@@ -14,7 +14,7 @@ public class WatchedMoviesEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private UserEntity userId;
+    private UserEntity user;
 
     private Integer movieId;
     private Time stoppedAt;
@@ -27,12 +27,12 @@ public class WatchedMoviesEntity {
         this.id = id;
     }
 
-    public UserEntity getUserId() {
-        return userId;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setUserId(UserEntity userId) {
-        this.userId = userId;
+    public void setUser(UserEntity userId) {
+        this.user = userId;
     }
 
     public Integer getMovieId() {

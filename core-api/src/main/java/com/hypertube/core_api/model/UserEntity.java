@@ -19,7 +19,7 @@ public class UserEntity {
 	@Column(nullable = false, unique = true)
 	private String email;
 
-	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CommentEntity> comments;
 
 	private String password;

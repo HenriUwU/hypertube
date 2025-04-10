@@ -9,6 +9,7 @@ import com.hypertube.core_api.dto.MovieDTO;
 import com.hypertube.core_api.dto.SearchDTO;
 import com.hypertube.core_api.dto.SortByDTO;
 import com.hypertube.core_api.mapper.CommentMapper;
+import com.hypertube.core_api.mapper.WatchedMoviesMapper;
 import com.hypertube.core_api.model.UserEntity;
 import com.hypertube.core_api.repository.CommentRepository;
 import com.hypertube.core_api.repository.UserRepository;
@@ -35,14 +36,16 @@ public class MovieService {
     private final WatchedMoviesRepository watchedMoviesRepository;
     private final UserRepository userRepository;
     private final JwtTokenUtil jwtTokenUtil;
+    private final WatchedMoviesMapper watchedMoviesMapper;
 
     @Value("${tmdb.bearer-token}")
     private String tmdbToken;
 
-    public MovieService(CommentRepository commentRepository, CommentMapper commentMapper, WatchedMoviesRepository watchedMoviesRepository, UserRepository userRepository, JwtTokenUtil jwtTokenUtil) {
+    public MovieService(CommentRepository commentRepository, CommentMapper commentMapper, WatchedMoviesRepository watchedMoviesRepository, UserRepository userRepository, JwtTokenUtil jwtTokenUtil, WatchedMoviesMapper watchedMoviesMapper) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.watchedMoviesRepository = watchedMoviesRepository;
+        this.watchedMoviesMapper = watchedMoviesMapper;
         this.restTemplate = new RestTemplate();
         this.userRepository = userRepository;
         this.jwtTokenUtil = jwtTokenUtil;
@@ -79,12 +82,12 @@ public class MovieService {
 
         List<Integer> selectedGenreIds = sortByDTO.getGenresIds();
 
-        UserEntity userEntity = userRepository.findByUsername(token.substring(7)).orElseThrow();
+        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
         return movies.stream()
                 .filter(movie ->  selectedGenreIds.isEmpty()
                         || (movie.getGenreIds() != null && !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)))
                 .peek(movie -> movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail()))
-                .peek(movie -> movie.setWatchedMoviesEntity(watchedMoviesRepository.getWatchedMoviesEntitiesByUserIdAndMovieId(userEntity, movie.getId())))
+                .peek(movie -> movie.setWatchedMoviesDTO(watchedMoviesMapper.map(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))))
                 .collect(Collectors.toList());
     }
 
@@ -111,7 +114,7 @@ public class MovieService {
                 .filter(movie ->  selectedGenreIds.isEmpty()
                         || (movie.getGenreIds() != null && !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)))
                 .peek(movie -> movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail()))
-                .peek(movie -> movie.setWatchedMoviesEntity(watchedMoviesRepository.getWatchedMoviesEntitiesByUserIdAndMovieId(userEntity, movie.getId())))
+                .peek(movie -> movie.setWatchedMoviesDTO(watchedMoviesMapper.map(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))))
                 .collect(Collectors.toList());
     }
 

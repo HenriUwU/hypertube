@@ -1,12 +1,14 @@
 package com.hypertube.core_api.dto;
 
+import com.hypertube.core_api.model.UserEntity;
+
 import java.time.LocalDateTime;
 
 public class CommentDTO {
 
     private Integer id;
     private Integer movieId;
-    private Integer userId;
+    private UserDTO user;
     private String content;
     private Integer likes;
     private LocalDateTime createdAt;
@@ -60,11 +62,11 @@ public class CommentDTO {
         this.likes = likes;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public UserDTO getUser() {
+        return user;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUser(UserDTO user) {
+        this.user = user;
     }
 }

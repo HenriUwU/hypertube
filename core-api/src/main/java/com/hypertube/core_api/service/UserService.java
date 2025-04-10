@@ -2,6 +2,8 @@ package com.hypertube.core_api.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hypertube.core_api.dto.UserDTO;
+import com.hypertube.core_api.mapper.UserMapper;
 import com.hypertube.core_api.model.CommentEntity;
 import com.hypertube.core_api.model.UserEntity;
 import com.hypertube.core_api.repository.UserRepository;
@@ -47,11 +49,13 @@ public class UserService implements UserDetailsService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final RestClient restClient;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ObjectMapper objectMapper) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ObjectMapper objectMapper, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.userMapper = userMapper;
         this.restTemplate = new RestTemplate();
         this.objectMapper = objectMapper;
         this.restClient = RestClient.create();
@@ -68,9 +72,15 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
-    public UserEntity getUser(Integer id) {
+    public UserDTO getUserByToken(String token) {
+        String username = jwtTokenUtil.extractUsername(token.substring(7));
+        return userMapper.map(userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username)));
+    }
+
+    public UserDTO getUser(Integer id) {
         if (id == null) return null;
-        return this.userRepository.findById(id).orElse(null);
+        return userMapper.map(userRepository.findById(id).orElse(null));
     }
 
     public void register(UserEntity user) {
@@ -94,7 +104,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public UserEntity updateUser(UserEntity user) {
+    public UserDTO updateUser(UserDTO user) {
         if (user.getId() == null) {
             throw new RuntimeException("Id can not be null");
         }
@@ -107,7 +117,7 @@ public class UserService implements UserDetailsService {
         existingUser.setLanguage(user.getLanguage());
         existingUser.setProfilePicture(user.getProfilePicture());
 
-        return userRepository.save(user);
+        return userMapper.map(userRepository.save(existingUser));
     }
 
     public ResponseEntity<Map<String, String>> omniauthDiscord(String code) throws Exception {
