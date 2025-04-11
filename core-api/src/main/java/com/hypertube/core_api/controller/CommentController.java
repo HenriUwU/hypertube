@@ -33,13 +33,13 @@ public class CommentController {
         this.commentService.deleteComment(commentId, token);
     }
 
-    @PostMapping("/like")
-    public CommentDTO likeComment(@RequestBody CommentLikesDTO commentLike) {
-        return this.commentService.likeComment(commentLike);
+    @PostMapping("/like/{commentId}")
+    public CommentDTO likeComment(@PathVariable Integer commentId, @RequestHeader("Authorization") String token) {
+        return this.commentService.likeComment(commentId, token);
     }
 
-    @DeleteMapping("/unlike")
-    public CommentDTO unlikeComment(@RequestBody CommentLikesDTO commentUnlike) {
-        return this.commentService.unlikeComment(commentUnlike);
+    @DeleteMapping("/unlike/{commentId}")
+    public CommentDTO unlikeComment(@PathVariable Integer commentId, @RequestHeader("Authorization") String token) {
+        return this.commentService.unlikeComment(commentId, token);
     }
 }

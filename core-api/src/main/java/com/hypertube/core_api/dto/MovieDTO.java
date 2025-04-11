@@ -32,7 +32,7 @@ public class MovieDTO {
     private Credits credits;
     private Map<String, String> subtitles;
 
-    private WatchedMoviesDTO watchedMoviesDTO;
+    private WatchedMoviesDTO watchedMovies;
 
     public static class Credits {
         public List<PersonModel> cast;
@@ -127,11 +127,11 @@ public class MovieDTO {
         this.title = title;
     }
 
-    public WatchedMoviesDTO getWatchedMoviesDTO() {
-        return watchedMoviesDTO;
+    public WatchedMoviesDTO getWatchedMovies() {
+        return watchedMovies;
     }
 
-    public void setWatchedMoviesDTO(WatchedMoviesDTO watchedMoviesDTO) {
-        this.watchedMoviesDTO = watchedMoviesDTO;
+    public void setWatchedMovies(WatchedMoviesDTO watchedMovies) {
+        this.watchedMovies = watchedMovies;
     }
 }
