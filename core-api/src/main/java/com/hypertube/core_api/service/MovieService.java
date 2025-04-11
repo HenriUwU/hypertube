@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -74,6 +75,7 @@ public class MovieService {
     }
 
     public WatchedMoviesDTO addWatched(WatchedMoviesDTO watchedMoviesDTO, String token) {
+        checkWatchedMoviesDTO(watchedMoviesDTO);
         UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
         WatchedMoviesEntity entity = watchedMoviesMapper.map(watchedMoviesDTO);
         entity.setUser(userEntity);
@@ -81,6 +83,7 @@ public class MovieService {
     }
 
     public WatchedMoviesDTO modifyWatched(WatchedMoviesDTO watchedMoviesDTO, String token) {
+        checkWatchedMoviesDTO(watchedMoviesDTO);
         UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
         WatchedMoviesEntity watchedMoviesEntity = watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, watchedMoviesDTO.getMovieId());
         if (watchedMoviesEntity == null) {
@@ -91,6 +94,7 @@ public class MovieService {
     }
 
     public List<MovieDTO> sortByMovies(SortByDTO sortByDTO, String token) throws JsonProcessingException {
+        checkSortByDTO(sortByDTO);
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
@@ -106,6 +110,7 @@ public class MovieService {
     }
 
     public List<MovieDTO> searchMovies(SearchDTO searchDTO, String token) throws JsonProcessingException {
+        checkSearchDTO(searchDTO);
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
@@ -143,4 +148,32 @@ public class MovieService {
         return commentMapper.map(commentRepository.getCommentEntitiesByMovieId(movieId));
     }
 
+    private void checkSortByDTO(SortByDTO sortByDTO) {
+        if (sortByDTO.getSortBy() == null)
+            throw new IllegalArgumentException("sortBy cannot be null");
+        if (sortByDTO.getPage() == null)
+            throw new IllegalArgumentException("Page cannot be null");
+        if (sortByDTO.getPage() < 1)
+            throw new IllegalArgumentException("Page cannot be negative or zero");
+        if (sortByDTO.getGenresIds() == null)
+            throw new IllegalArgumentException("genresIds cannot be null");
+    }
+
+    private void checkSearchDTO(SearchDTO searchDTO) {
+        if (searchDTO.getQuery() == null)
+            throw new IllegalArgumentException("query cannot be null");
+        if (searchDTO.getPage() == null)
+            throw new IllegalArgumentException("Page cannot be null");
+        if (searchDTO.getPage() < 1)
+            throw new IllegalArgumentException("Page cannot be negative or zero");
+        if (searchDTO.getGenresIds() == null)
+            throw new IllegalArgumentException("genresIds cannot be null");
+    }
+
+    private void checkWatchedMoviesDTO(WatchedMoviesDTO watchedMoviesDTO) {
+        if (watchedMoviesDTO.getMovieId() == null)
+            throw new IllegalArgumentException("movie id cannot be null");
+        if (watchedMoviesDTO.getStoppedAt() == null)
+            throw new IllegalArgumentException("stoppedAt cannot be null");
+    }
 }
