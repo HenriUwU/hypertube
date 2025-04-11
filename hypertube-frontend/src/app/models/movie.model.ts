@@ -17,39 +17,30 @@ interface Credits {
   crew: PersonModel[];
 }
 
-
-interface WatchedMoviesDTO {
-  id : number;
-  movieId : number;
-  stoppedAt : Time;
-}
-
 export interface Movie {
   id: number;
   title: string;
   overview: string;
 
   vote_average: number;
-  release_year: string;
+  release_date: string;
   poster_path: string;
-
-  genre_ids: number[];
 
   runtime: number;
   genres: GenreModel[];
   credits: Credits;
   subtitles: Map<string, string>;
 
-  watchedMovies: WatchedMoviesDTO;
+  stoppedAt: Time;
 }
 
 export interface MovieThumbnail {
   id: number;
   title: string;
 
-  release_year: number;
+  release_date: number;
   poster_path: string;
-  runtime: Time;
-  watchedMovies: Time;
+  runtime: number;
+  stoppedAt: Time;
   genres: GenreModel[];
 }

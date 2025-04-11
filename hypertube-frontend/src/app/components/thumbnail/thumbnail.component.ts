@@ -1,14 +1,14 @@
 import { Component, Input } from '@angular/core';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { Router } from '@angular/router';
-import {HttpClient} from "@angular/common/http";
 import { MovieService } from '../../services/movie.service';
-import { Movie, MovieThumbnail } from '../../models/movie.model';
+import { MovieThumbnail } from '../../models/movie.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-thumbnail',
   standalone: true,
-  imports: [MatProgressBarModule],
+  imports: [MatProgressBarModule, CommonModule],
   templateUrl: './thumbnail.component.html',
   styleUrl: './thumbnail.component.css'
 })
@@ -18,10 +18,10 @@ export class ThumbnailComponent {
   movieThumbnail: MovieThumbnail = {
     id: 0,
     title: '',
-    release_year: 0,
+    release_date: 0,
     poster_path: '',
-    runtime: { hours: 0, minutes: 0 },
-    watchedMovies: { hours: 0, minutes: 0 },
+    runtime: 0,
+    stoppedAt: { hours: 0, minutes: 0 },
     genres: []
   };
   watchedMovie: boolean = false;
@@ -32,16 +32,15 @@ export class ThumbnailComponent {
   constructor(private router: Router,
     private movieService: MovieService){
       this.fillMovieThumbnail(this.movieId);
-      this.watchedMovie = this.movieThumbnail.watchedMovies == null;
   }
 
   fillMovieThumbnail(movieId: number): void {
     this.movieService.getMovieDataFromId(movieId).subscribe(
       {
         next: (data: MovieThumbnail) => {
-          console.log('Movie data:', data);
           this.movieThumbnail = data;
-          console.log('Movie data:', this.movieThumbnail);
+          // this.watchedMovie = this.movieThumbnail.stoppedAt !== null;
+          this.watchedMovie = true;
         },
         error: (e) => {
           console.error('Error fetching movie data:', e);
@@ -59,14 +58,18 @@ export class ThumbnailComponent {
   }
 
   getLength(): string {
-    const hours = this.movieThumbnail.runtime.hours;
-    const minutes = this.movieThumbnail.runtime.minutes;
+    const hours = Math.floor(this.movieThumbnail.runtime / 60);
+    const minutes = this.movieThumbnail.runtime % 60;
+    console.log('Movie length:', hours, 'h', minutes, 'm');
     return `${hours}h ${minutes}m`;
   }
 
   getVisualizedTimeAsPercent(): number {
-    const totalMinutes = this.movieThumbnail.runtime.hours * 60 + this.movieThumbnail.runtime.minutes;
-    const visualizedMinutes = this.movieThumbnail.watchedMovies.hours * 60 + this.movieThumbnail.watchedMovies.minutes;
+    if (!this.movieThumbnail.stoppedAt) {
+      return 0;
+    }
+    const totalMinutes = this.movieThumbnail.runtime;
+    const visualizedMinutes = this.movieThumbnail.stoppedAt.hours * 60 + this.movieThumbnail.stoppedAt.minutes;
     return (visualizedMinutes / totalMinutes) * 100;
   }
 

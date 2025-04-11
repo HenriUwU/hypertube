@@ -8,13 +8,14 @@
         <img [src]="movieThumbnail.poster_path" alt="{{ movieThumbnail.title }}" class="thumbnail-image" />
     </div>
 
-    <div ng-show="watchedMovie" class="thumbnail-watched">
+    <!-- <div ng-show="watchedMovie" class="thumbnail-watched"> -->
+    <div *ngIf="watchedMovie" class="thumbnail-watched">
         <mat-progress-bar mode="determinate" value="{{ getVisualizedTimeAsPercent() }}"></mat-progress-bar>
     </div>
 
     <div class=" thumbnail-quick-info">
         <span class="thumbnail-release-date">
-            {{ movieThumbnail.release_year }}
+            {{ movieThumbnail.release_date }}
         </span>
         ‧
         <span class="thumbnail-genre">
