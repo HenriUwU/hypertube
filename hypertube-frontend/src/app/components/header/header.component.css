@@ -15,6 +15,7 @@
 }
 
 .header-left {
+  background-color: purple;
   display: flex;
   gap: 1.5rem;
 }
@@ -44,6 +45,19 @@
 }
 
 .header-right {
+  /* background-color: pink; */
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5rem;
+}
+
+.not-log {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5rem;
+}
+
+.is-log {
   display: flex;
   align-items: flex-end;
   gap: 1.5rem;

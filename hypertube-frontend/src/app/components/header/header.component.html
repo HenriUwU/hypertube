@@ -9,7 +9,6 @@
 <body>
     <header class="header">
         <div class="header-left">
-
             <h1>Hypertube</h1>
             <li class="language">
                 <img src="../../../assets/images/language.svg">
@@ -20,16 +19,32 @@
                 <option value="fr">Français</option>
                 <option value="es">Español</option>
             </select> -->
+            <!-- profile if logged -->
         </div>
         <div class="header-right">
-            <form [formGroup]="searchForm">
+            <!-- <form [formGroup]="searchForm">
                 <div class="search">
                     <input type="text" placeholder="Search..." formControlName="query" (keydown.enter)="search()">
                 </div>
             </form>
-            <li class="login"><a href="#">log in</a></li>
+            <li class="login"><a href="#">log out</a></li> -->
+
+            <div *ngIf="isLog" class="is-log">
+                <form [formGroup]="searchForm">
+                    <div class="search">
+                        <input type="text" placeholder="Search..." formControlName="query" (keydown.enter)="search()">
+                    </div>
+                </form>
+                <li class="login"><a href="#">log out</a></li>
+            </div>
+            <div *ngIf="!isLog" class="not-log">
+                <form [formGroup]="searchForm">
+                    <div class="search">
+                        <input type="text" placeholder="Search..." formControlName="query" (keydown.enter)="search()">
+                    </div>
+                </form>
+                <li class="login"><a href="#">log in</a></li>
+            </div>
         </div>
-            <!-- put line -->
-            <!-- <mat-divider></mat-divider> -->
     </header>
 </body>
