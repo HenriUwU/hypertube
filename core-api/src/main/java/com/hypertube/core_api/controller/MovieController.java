@@ -22,8 +22,8 @@ public class MovieController {
     }
 
     @GetMapping(path = "/{id}")
-    public MovieDTO getMovie(@PathVariable Integer id) {
-        return this.movieService.getMovie(id);
+    public MovieDTO getMovie(@PathVariable Integer id, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+        return this.movieService.getMovie(id, token);
     }
 
     @PostMapping(path = "/sort-by")
