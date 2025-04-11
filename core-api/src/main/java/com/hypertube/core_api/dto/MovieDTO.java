@@ -20,7 +20,7 @@ public class MovieDTO {
     private Double rating;
 
     @JsonProperty("release_date")
-    private String releaseYear;
+    private String releaseDate;
 
     @JsonProperty("poster_path")
     private String thumbnail;
@@ -88,12 +88,12 @@ public class MovieDTO {
         this.rating = rating;
     }
 
-    public String getReleaseYear() {
-        return releaseYear;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setReleaseYear(String releaseYear) {
-        this.releaseYear = releaseYear;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public Integer getRuntime() {

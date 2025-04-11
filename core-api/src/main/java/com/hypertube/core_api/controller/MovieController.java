@@ -1,11 +1,9 @@
 package com.hypertube.core_api.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.hypertube.core_api.dto.CommentDTO;
-import com.hypertube.core_api.dto.MovieDTO;
-import com.hypertube.core_api.dto.SearchDTO;
-import com.hypertube.core_api.dto.SortByDTO;
+import com.hypertube.core_api.dto.*;
 import com.hypertube.core_api.service.MovieService;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +22,16 @@ public class MovieController {
     @GetMapping(path = "/{id}")
     public MovieDTO getMovie(@PathVariable Integer id, @RequestHeader("Authorization") String token) throws JsonProcessingException {
         return this.movieService.getMovie(id, token);
+    }
+
+    @PostMapping("/watched")
+    public WatchedMoviesDTO addWatched(@RequestBody WatchedMoviesDTO watchedMoviesDTO, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+        return this.movieService.addWatched(watchedMoviesDTO, token);
+    }
+
+    @PutMapping("/watched")
+    public WatchedMoviesDTO modifyWatched(@RequestBody WatchedMoviesDTO watchedMoviesDTO, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+        return this.movieService.modifyWatched(watchedMoviesDTO, token);
     }
 
     @PostMapping(path = "/sort-by")

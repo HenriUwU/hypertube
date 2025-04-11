@@ -88,9 +88,9 @@ http://localhost:8080/
         ]
     },
     "subtitles": null,
-    "watchedMovies": null, #Pour savoir si le client a vu le film (WatchedMoviesDTO)
+    "stoppedAt": "01:28:16", # null si jamais vu
     "vote_average": 7.231, # IMDb rating
-    "release_date": "1989-06-21",
+    "release_date": "1989",
     "poster_path": "/cij4dd21v2Rk2YtUQbV5kW69WB2.jpg",
     "genre_ids": null
 }
@@ -147,6 +147,25 @@ http://localhost:8080/
     "updatedAt": "2025-04-11T10:47:38.44801"
 }
 ```
+
+#### `POST /movies/watched`
+- **Description :** Sauvegarde le temps ou l'utilisateur s'est arreter de regarder le film
+- **Auth requise :** ✅ Oui
+- **Body WatchedMoviesDTO:**
+```json
+{
+    "movieId": 950387,
+    "stoppedAt": "02:38:16"
+}
+```
+- **Réponse WatchedMoviesDTO:**
+
+#### `PUT /movies/watched`
+- **Description :** Met a jour le temps ou l'utilisateur s'est arreter de regarder le film
+- **Auth requise :** ✅ Oui
+- **Body WatchedMoviesDTO:**
+- **Réponse WatchedMoviesDTO:**
+
 ### 👤 Commentaires: /comment
 #### `POST /comment`
 - **Description :** Ajoute un commentaire a un film et le renvoie
