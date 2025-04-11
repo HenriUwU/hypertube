@@ -6,5 +6,6 @@ export interface MovieThumbnail {
     watched: boolean;
     length: Time;
     visualizedTime: Time;
+    release_year: number;
     img: string;
 }

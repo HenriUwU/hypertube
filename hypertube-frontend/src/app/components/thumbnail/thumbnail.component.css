@@ -8,6 +8,7 @@
     background-repeat: no-repeat round;
     background-position: center;
 } */
+
 .thumbnail-container {
     position: relative;
 
@@ -22,29 +23,46 @@
     border-right: 1vw solid #eac29f;
     border-radius: 5%;
     background-color: #20242a;
+
+    justify-content: space-between;
 }
 
 .thumbnail-image {
-    /* object-fit: cover;
-    /* height: 100%; */
-    /* width: 100%; */
-    /* position: absolute; */
     width: 100%;
     height: 100%;
-    position: absolute;
     object-fit: cover;
 }
 
-.imgdepute {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    object-fit: cover;
+.thumbnail-image-container {
+    padding: 1%;
+    padding-bottom: 0;
+    height: 80%;
+    background-color: brown;
 }
 
 .thumbnail-title {
     white-space: nowrap;
+    font-size: 1.2rem;
+    text-align: center;
+    color: white;
+    background-color: yellow;
+    height: 10%;
+}
+
+.thumbnail-watched {
+    background-color: turquoise;
+}
+
+.mat-mdc-progress-bar {
+    --mdc-linear-progress-active-indicator-color: red;
+    --mdc-linear-progress-track-color: grey;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.thumbnail-quick-info {
     font-size: 0.8rem;
     text-align: center;
     color: white;
+    background-color: purple;
 }

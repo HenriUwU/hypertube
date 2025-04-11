@@ -4,17 +4,25 @@
         {{ getTitle() }}
     </h1>
 
-    <div class="thumbnail-image">
-        <img [src]="getImage()" alt="{{ getTitle() }}" class="imgdepute"/>
-    </div>
-    <!-- <div class="thumbnail-genres">
-        <span *ngFor="let genre of getGenres()">
-            {{ genre }}
-        </span>
-        <span *ngIf="getGenres().length > 3">...</span>
-    </div> -->
-    <div ng-show="watched" class="progress-bar-container">
-        <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
+    <div class="thumbnail-image-container">
+        <img [src]="getImage()" alt="{{ getTitle() }}" class="thumbnail-image" />
     </div>
 
+    <div ng-show="watched" class="thumbnail-watched">
+        <mat-progress-bar mode="determinate" value="{{ getVisualizedTimeAsPercent() }}"></mat-progress-bar>
+    </div>
+
+    <div class=" thumbnail-quick-info">
+        <span class="thumbnail-release-date">
+            {{ getReleaseYear() }}
+        </span>
+        ‧
+        <span class="thumbnail-genre">
+            {{ getGenreByIdx(0) }}/{{ getGenreByIdx(1) }}
+        </span>
+        <br />
+        <span class="thumbnail-duration">
+            {{ getLength() }}
+        </span>
+    </div>
 </div>

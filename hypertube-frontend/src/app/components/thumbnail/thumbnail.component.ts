@@ -36,6 +36,7 @@ export class ThumbnailComponent {
     watched: false,
     length: { hours: 0, minutes: 0 },
     visualizedTime: { hours: 0, minutes: 0 },
+    release_year: 0,
     img: ''
   }
 
@@ -84,8 +85,9 @@ export class ThumbnailComponent {
       watched: false,
       length: { hours: Math.floor(movieDTO.runtime / 60), minutes: movieDTO.runtime % 60 },
       visualizedTime: { hours: 0, minutes: 0 },
-      // img: `https://image.tmdb.org/t/p/w500/${movieDTO.poster_path}`
-      img: `${movieDTO.poster_path}`
+      img: `https://image.tmdb.org/t/p/w500/${movieDTO.poster_path}`,
+      release_year: parseInt(movieDTO.release_date.split('-')[0], 10),
+      // img: `${movieDTO.poster_path}`
     };
   }
 
@@ -110,4 +112,30 @@ export class ThumbnailComponent {
   getImage(): string {
     return this.movieThumbnail.img;
   }
+
+  getLength(): string {
+    const hours = this.movieThumbnail.length.hours;
+    const minutes = this.movieThumbnail.length.minutes;
+    return `${hours}h ${minutes}m`;
+  }
+
+  getVisualizedTimeAsPercent(): number {
+    const totalMinutes = this.movieThumbnail.length.hours * 60 + this.movieThumbnail.length.minutes;
+    const visualizedMinutes = this.movieThumbnail.visualizedTime.hours * 60 + this.movieThumbnail.visualizedTime.minutes;
+    console.log('getVisualizedTimeAsPercent',(visualizedMinutes / totalMinutes) * 100);
+    return (visualizedMinutes / totalMinutes) * 100;
+  }
+
+  getReleaseYear(): number {
+    return this.movieThumbnail.release_year;
+  }
+
+  getGenreByIdx(idx: number): string {
+    if (idx < this.movieDTO.genres.length) {
+      return this.movieDTO.genres[idx].name;
+    } else {
+      return '';
+    }
+  }
+
 }
