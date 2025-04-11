@@ -1,12 +1,12 @@
 package com.hypertube.core_api.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -19,12 +19,17 @@ public class CommentEntity {
 
 	private Integer movieId;
 
-	@OneToOne(optional = false)
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-	private UserEntity userId;
+	private UserEntity user;
 
 	@Column(nullable = false)
 	private String content;
+
+	private Integer likes = 0;
+
+	@OneToMany(mappedBy = "commentId", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CommentLikesEntity> comments;
 
 	@CreatedDate
 	private LocalDateTime createdAt;
@@ -56,13 +61,36 @@ public class CommentEntity {
 		this.movieId = movieId;
 	}
 
-	public UserEntity getUserId() {
-		return userId;
+	public UserEntity getUser() {
+		return user;
 	}
 
-	public void setUserId(UserEntity userId) {
-		this.userId = userId;
+	public void setUser(UserEntity user) {
+		this.user = user;
 	}
 
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Integer getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Integer likes) {
+		this.likes = likes;
+	}
 }
 
