@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hypertube.core_api.model.GenreModel;
 import com.hypertube.core_api.model.PersonModel;
 
+import java.sql.Time;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class MovieDTO {
     private Double rating;
 
     @JsonProperty("release_date")
-    private String releaseDate;
+    private String releaseYear;
 
     @JsonProperty("poster_path")
     private String thumbnail;
@@ -32,7 +33,7 @@ public class MovieDTO {
     private Credits credits;
     private Map<String, String> subtitles;
 
-    private WatchedMoviesDTO watchedMovies;
+    private Time stoppedAt;
 
     public static class Credits {
         public List<PersonModel> cast;
@@ -87,12 +88,12 @@ public class MovieDTO {
         this.rating = rating;
     }
 
-    public String getReleaseDate() {
-        return releaseDate;
+    public String getReleaseYear() {
+        return releaseYear;
     }
 
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
+    public void setReleaseYear(String releaseYear) {
+        this.releaseYear = releaseYear;
     }
 
     public Integer getRuntime() {
@@ -127,11 +128,11 @@ public class MovieDTO {
         this.title = title;
     }
 
-    public WatchedMoviesDTO getWatchedMovies() {
-        return watchedMovies;
+    public Time getStoppedAt() {
+        return stoppedAt;
     }
 
-    public void setWatchedMovies(WatchedMoviesDTO watchedMovies) {
-        this.watchedMovies = watchedMovies;
+    public void setStoppedAt(Time stoppedAt) {
+        this.stoppedAt = stoppedAt;
     }
 }
