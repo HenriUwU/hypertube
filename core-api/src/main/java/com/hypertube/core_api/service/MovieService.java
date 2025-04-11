@@ -11,6 +11,7 @@ import com.hypertube.core_api.dto.SortByDTO;
 import com.hypertube.core_api.mapper.CommentMapper;
 import com.hypertube.core_api.mapper.WatchedMoviesMapper;
 import com.hypertube.core_api.model.UserEntity;
+import com.hypertube.core_api.model.WatchedMoviesEntity;
 import com.hypertube.core_api.repository.CommentRepository;
 import com.hypertube.core_api.repository.UserRepository;
 import com.hypertube.core_api.repository.WatchedMoviesRepository;
@@ -25,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,7 +53,7 @@ public class MovieService {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    public MovieDTO getMovie(Integer movieId) {
+    public MovieDTO getMovie(Integer movieId, String token) throws JsonProcessingException {
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
@@ -60,7 +62,17 @@ public class MovieService {
                 HttpMethod.GET,
                 entity,
                 MovieDTO.class);
-        return response.getBody();
+
+        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+        MovieDTO movie = response.getBody();
+        if (movie != null) {
+            movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail());
+            movie.setReleaseYear(movie.getReleaseYear().substring(0, 4));
+            Optional.ofNullable(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))
+                    .map(WatchedMoviesEntity::getStoppedAt)
+                    .ifPresent(movie::setStoppedAt);
+        }
+        return movie;
     }
 
     public List<MovieDTO> sortByMovies(SortByDTO sortByDTO, String token) throws JsonProcessingException {
@@ -105,7 +117,10 @@ public class MovieService {
                 .filter(movie ->  selectedGenreIds.isEmpty()
                         || (movie.getGenreIds() != null && !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)))
                 .peek(movie -> movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail()))
-                .peek(movie -> movie.setWatchedMovies(watchedMoviesMapper.map(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))))
+                .peek(movie -> movie.setReleaseYear(movie.getReleaseYear().substring(0, 4)))
+                .peek(movie -> Optional.ofNullable(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))
+                        .map(WatchedMoviesEntity::getStoppedAt)
+                        .ifPresent(movie::setStoppedAt))
                 .collect(Collectors.toList());
     }
 
