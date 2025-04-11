@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { Router } from '@angular/router';
 import { MovieService } from '../../services/movie.service';
@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './thumbnail.component.css'
 })
 
-export class ThumbnailComponent {
+export class ThumbnailComponent implements OnInit {
 
   movieThumbnail: MovieThumbnail = {
     id: 0,
@@ -31,6 +31,9 @@ export class ThumbnailComponent {
 
   constructor(private router: Router,
     private movieService: MovieService){
+    }
+    
+  ngOnInit(): void {
       this.fillMovieThumbnail(this.movieId);
   }
 
@@ -39,14 +42,13 @@ export class ThumbnailComponent {
       {
         next: (data: MovieThumbnail) => {
           this.movieThumbnail = data;
-          // this.watchedMovie = this.movieThumbnail.stoppedAt !== null;
-          this.watchedMovie = true;
+          this.watchedMovie = this.movieThumbnail.stoppedAt !== null;
+          // this.watchedMovie = true;
         },
         error: (e) => {
           console.error('Error fetching movie data:', e);
         },
         complete: () => {
-          console.log('Movie data fetching completed');
         }
       }
     );
@@ -60,7 +62,6 @@ export class ThumbnailComponent {
   getLength(): string {
     const hours = Math.floor(this.movieThumbnail.runtime / 60);
     const minutes = this.movieThumbnail.runtime % 60;
-    console.log('Movie length:', hours, 'h', minutes, 'm');
     return `${hours}h ${minutes}m`;
   }
 

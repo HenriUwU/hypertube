@@ -1,3 +1,7 @@
 <div class="home-page">
-  <mat-spinner color="accent" class="size"></mat-spinner>
+  <div class="movie-list">
+    <div *ngFor="let movie of movies" class="movie-item">
+      <app-thumbnail [movieId]="movie.id"></app-thumbnail>
+    </div>
+  </div>
 </div>

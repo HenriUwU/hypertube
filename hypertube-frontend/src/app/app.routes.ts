@@ -33,6 +33,7 @@ export const routes: Routes = [
       {path: 'footer', component: FooterComponent},
       {path: 'header', component: HeaderComponent},
       {path: 'thumbnail', component: ThumbnailComponent},
+      {path: 'homepage', component: HomePageComponent},
     ]
   }
 ];
