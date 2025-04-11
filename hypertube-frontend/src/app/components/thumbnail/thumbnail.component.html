@@ -1,20 +1,20 @@
 <div class="thumbnail-container" (click)="onClick()">
 
     <h1 class="thumbnail-title">
-        {{ getTitle() }}
+        {{ movieThumbnail.title }}
     </h1>
 
     <div class="thumbnail-image-container">
-        <img [src]="getImage()" alt="{{ getTitle() }}" class="thumbnail-image" />
+        <img [src]="movieThumbnail.poster_path" alt="{{ movieThumbnail.title }}" class="thumbnail-image" />
     </div>
 
-    <div ng-show="watched" class="thumbnail-watched">
+    <div ng-show="watchedMovie" class="thumbnail-watched">
         <mat-progress-bar mode="determinate" value="{{ getVisualizedTimeAsPercent() }}"></mat-progress-bar>
     </div>
 
     <div class=" thumbnail-quick-info">
         <span class="thumbnail-release-date">
-            {{ getReleaseYear() }}
+            {{ movieThumbnail.release_year }}
         </span>
         ‧
         <span class="thumbnail-genre">

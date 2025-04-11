@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { MovieDTO } from '../models/movieDTO.model';
+import { Movie } from '../models/movie.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +15,8 @@ export class MovieService {
     return this.http.get(`${this.apiUrlAuth}/${id.toString()}`).pipe();  
   }
 
-  getMovieDataFromIdAsInterface(id: number): Observable<MovieDTO> {
-    return this.http.get<MovieDTO>(`${this.apiUrlAuth}/${id.toString()}`).pipe();
+  getMovieDataFromIdAsInterface(id: number): Observable<Movie> {
+    return this.http.get<Movie>(`${this.apiUrlAuth}/${id.toString()}`).pipe();
   }
 
 }
