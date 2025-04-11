@@ -82,4 +82,8 @@ export class ThumbnailComponent implements OnInit {
     }
   }
 
+  getGenreString(): string {
+    return this.movieThumbnail.genres.map(genre => genre.name).join('/');
+  }
+
 }

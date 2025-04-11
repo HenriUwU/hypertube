@@ -8,7 +8,6 @@
         <img [src]="movieThumbnail.poster_path" alt="{{ movieThumbnail.title }}" class="thumbnail-image" />
     </div>
 
-    <!-- <div ng-show="watchedMovie" class="thumbnail-watched"> -->
     <div *ngIf="watchedMovie" class="thumbnail-watched">
         <mat-progress-bar mode="determinate" value="{{ getVisualizedTimeAsPercent() }}"></mat-progress-bar>
     </div>
@@ -19,7 +18,8 @@
         </span>
         ‧
         <span class="thumbnail-genre">
-            {{ getGenreByIdx(0) }}/{{ getGenreByIdx(1) }}
+            <!-- {{ getGenreByIdx(0) }}/{{ getGenreByIdx(1) }} -->
+            {{ getGenreString() }}
         </span>
         <br />
         <span class="thumbnail-duration">
