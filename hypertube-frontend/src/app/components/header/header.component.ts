@@ -29,7 +29,8 @@ export class HeaderComponent {
     {name: 'Spanish', sound: 'Me gustas tus'},
   ];
   term: any;
+
+  
+
 }
-
-
 
