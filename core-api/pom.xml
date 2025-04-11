@@ -115,6 +115,11 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.12.3</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.atomashpolskiy</groupId>
+			<artifactId>bt-core</artifactId>
+			<version>1.10</version>
+		</dependency>
 	</dependencies>
 
 	<build>
