@@ -12,6 +12,7 @@ export class MoviesService {
   constructor(private http: HttpClient) { }
 
   search(research: SearchMovie): Observable<any> {
+    console.log(research);
     return this.http.post(`${this.apiUrlMovie}/search`, research).pipe();
   }
 }

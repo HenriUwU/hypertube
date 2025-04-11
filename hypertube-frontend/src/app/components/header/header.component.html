@@ -7,33 +7,28 @@
 </head>
 
 <body>
-    <header>
+    <header class="header">
+        <div class="header-left">
+
             <h1>Hypertube</h1>
-            <ul class="link">
-                    <li class="language"><a href="#">language</a>
-                        <img src="../../../assets/images/language.svg">
-                    </li>
-                    <select class="form-select form-select-sm">
-                        <option value="en">English</option>
-                        <option value="fr">Français</option>
-                        <option value="es">Español</option>
-                    </select>
-
-
-                    <div class="search">
-                        <input type="text" placeholder="Search..." [(ngModel)]="term">
-                    </div>
-                    <ul>
-                        <li> *ngFor="let term of term | filter:term"
-                            {{term.name}}
-                            {{term.color}}
-                        </li>
-                    </ul>
-
-
-
-                    <li class="login"><a href="#">log in</a></li>
-            </ul>
+            <li class="language">
+                <img src="../../../assets/images/language.svg">
+                <a href="#">language</a>
+            </li>
+            <!-- <select class="form-select form-select-sm">
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="es">Español</option>
+            </select> -->
+        </div>
+        <div class="header-right">
+            <form [formGroup]="searchForm">
+                <div class="search">
+                    <input type="text" placeholder="Search..." formControlName="query" (keydown.enter)="search()">
+                </div>
+            </form>
+            <li class="login"><a href="#">log in</a></li>
+        </div>
             <!-- put line -->
             <!-- <mat-divider></mat-divider> -->
     </header>
