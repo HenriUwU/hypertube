@@ -74,21 +74,8 @@ public class MovieService {
                 entity,
                 String.class);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode rootNode = objectMapper.readTree(response.getBody());
-        JsonNode resultsNode = rootNode.path("results");
-
-        List<MovieDTO> movies = objectMapper.convertValue(resultsNode, new TypeReference<List<MovieDTO>>() {});
-
         List<Integer> selectedGenreIds = sortByDTO.getGenresIds();
-
-        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
-        return movies.stream()
-                .filter(movie ->  selectedGenreIds.isEmpty()
-                        || (movie.getGenreIds() != null && !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)))
-                .peek(movie -> movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail()))
-                .peek(movie -> movie.setWatchedMoviesDTO(watchedMoviesMapper.map(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))))
-                .collect(Collectors.toList());
+        return sortMovieByGenre(response, selectedGenreIds, token);
     }
 
     public List<MovieDTO> searchMovies(SearchDTO searchDTO, String token) throws JsonProcessingException {
@@ -102,19 +89,23 @@ public class MovieService {
                 entity,
                 String.class);
 
+        List<Integer> selectedGenreIds = searchDTO.getGenresIds();
+        return sortMovieByGenre(response, selectedGenreIds, token);
+    }
+
+    private List<MovieDTO> sortMovieByGenre(ResponseEntity<String> response, List<Integer> selectedGenreIds, String token) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(response.getBody());
         JsonNode resultsNode = rootNode.path("results");
 
-        List<MovieDTO> movies = objectMapper.convertValue(resultsNode, new TypeReference<List<MovieDTO>>() {});
-        List<Integer> selectedGenreIds = searchDTO.getGenresIds();
+        List<MovieDTO> movies = objectMapper.convertValue(resultsNode, new TypeReference<>() {});
 
         UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
         return movies.stream()
                 .filter(movie ->  selectedGenreIds.isEmpty()
                         || (movie.getGenreIds() != null && !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)))
                 .peek(movie -> movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail()))
-                .peek(movie -> movie.setWatchedMoviesDTO(watchedMoviesMapper.map(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))))
+                .peek(movie -> movie.setWatchedMovies(watchedMoviesMapper.map(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))))
                 .collect(Collectors.toList());
     }
 
