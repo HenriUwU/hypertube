@@ -1,0 +1,42 @@
+.streaming-container {
+    bottom: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.movie-container {
+    position: relative;
+
+    /* height: 20vw; */
+    height: auto;
+    width: 40vh;
+    min-height: 200px;
+    min-width: 400px;
+
+    border-bottom: 2vh solid #eac29f;
+    border-top: 2vh solid #eac29f;
+    border-left: 1vw solid #eac29f;
+    border-right: 1vw solid #eac29f;
+    background-color: #20242a;
+
+    justify-content: space-between;
+    border-radius: 5%;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    margin-left: 2vw;
+    margin-right: 2vw;
+}
+
+.movie-title {
+    color: white;
+}
+
+.video-player {
+    width: 100%;
+    height: auto;
+    /* height: 90%; */
+    padding: 1vh;
+}

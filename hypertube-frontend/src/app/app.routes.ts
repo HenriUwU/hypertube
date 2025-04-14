@@ -9,6 +9,7 @@ import {LayoutComponent} from "./components/layout/layout.component";
 import {FooterComponent} from "./components/footer/footer.component";
 import { HeaderComponent } from './components/header/header.component';
 import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
+import { StreamingComponent } from './components/streaming/streaming.component';
 
 export const routes: Routes = [
   {
@@ -34,6 +35,7 @@ export const routes: Routes = [
       {path: 'header', component: HeaderComponent},
       {path: 'thumbnail', component: ThumbnailComponent},
       {path: 'homepage', component: HomePageComponent},
+      {path: 'stream', component: StreamingComponent},
     ]
   }
 ];
