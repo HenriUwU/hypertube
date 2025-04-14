@@ -1,7 +1,7 @@
 package com.hypertube.core_api.mapper;
 
 import com.hypertube.core_api.dto.CommentDTO;
-import com.hypertube.core_api.model.CommentEntity;
+import com.hypertube.core_api.entity.CommentEntity;
 import com.hypertube.core_api.repository.CommentRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,4 +1,4 @@
-package com.hypertube.core_api.model;
+package com.hypertube.core_api.entity;
 
 import jakarta.persistence.*;
 
@@ -25,7 +25,7 @@ public class UserEntity {
 	private String password;
 	private String firstName;
 	private String lastName;
-	private String language;
+    private String language = "en";
 	private String fortyTwoEid;
 	private String discordEid;
 

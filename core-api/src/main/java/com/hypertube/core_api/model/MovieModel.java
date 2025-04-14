@@ -1,16 +1,14 @@
-package com.hypertube.core_api.dto;
+package com.hypertube.core_api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hypertube.core_api.model.GenreModel;
-import com.hypertube.core_api.model.PersonModel;
 
 import java.sql.Time;
 import java.util.List;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MovieDTO {
+public class MovieModel {
 
     private Integer id;
     private String title;
