@@ -38,7 +38,7 @@ services:
     image: backend
     container_name: backend
     ports:
-      - 8080:8080
+      - "8080:8080"
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -48,6 +48,13 @@ services:
       - docker-network
     depends_on:
       - postgres
+  scraping:
+    build: core-api/Scraping/
+    container_name: scraping
+    ports:
+      - "3001:3001"
+    networks:
+      - docker-network
 
 volumes:
   postgres_data: # select a path used to save db

@@ -16,11 +16,13 @@ public class MovieDTO {
     private String title;
     private String overview;
 
-    @JsonProperty("vote_average")
-    private Double rating;
+    @JsonProperty("imdb_id")
+    private String imdbId;
+
+    private Double imdbRating;
 
     @JsonProperty("release_date")
-    private String releaseYear;
+    private String releaseDate;
 
     @JsonProperty("poster_path")
     private String thumbnail;
@@ -80,20 +82,20 @@ public class MovieDTO {
         this.overview = overview;
     }
 
-    public Double getRating() {
-        return rating;
+    public Double getImdbRating() {
+        return imdbRating;
     }
 
-    public void setRating(Double rating) {
-        this.rating = rating;
+    public void setImdbRating(Double imdbRating) {
+        this.imdbRating = imdbRating;
     }
 
-    public String getReleaseYear() {
-        return releaseYear;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setReleaseYear(String releaseYear) {
-        this.releaseYear = releaseYear;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public Integer getRuntime() {
@@ -134,5 +136,13 @@ public class MovieDTO {
 
     public void setStoppedAt(Time stoppedAt) {
         this.stoppedAt = stoppedAt;
+    }
+
+    public String getImdbId() {
+        return imdbId;
+    }
+
+    public void setImdbId(String imdbId) {
+        this.imdbId = imdbId;
     }
 }
