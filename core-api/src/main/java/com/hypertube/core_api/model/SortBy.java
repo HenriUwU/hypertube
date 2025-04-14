@@ -1,4 +1,4 @@
-package com.hypertube.core_api.dto;
+package com.hypertube.core_api.model;
 
 public enum SortBy {
     now_playing,

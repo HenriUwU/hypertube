@@ -1,14 +1,11 @@
 package com.hypertube.core_api.mapper;
 
-import com.hypertube.core_api.dto.CommentDTO;
 import com.hypertube.core_api.dto.UserDTO;
-import com.hypertube.core_api.model.CommentEntity;
-import com.hypertube.core_api.model.UserEntity;
+import com.hypertube.core_api.entity.UserEntity;
 import com.hypertube.core_api.repository.UserRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {

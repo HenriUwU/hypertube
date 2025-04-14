@@ -1,6 +1,28 @@
 # 📘 API Documentation
 
-Bienvenue dans la documentation de l’API **NomDuProjet**.
+Bienvenue dans la documentation de l’API **Hypertube**.
+
+- [📘 API Documentation](#-api-documentation)
+  - [🛠️ Base URL](#️-base-url)
+  - [📂 Endpoints](#-endpoints)
+    - [👤 Utilisateur: /user](#-utilisateur-user)
+      - [`GET /user/{id}`](#get-userid)
+      - [`PUT /user`](#put-user)
+      - [`DELETE /user/{id}`](#delete-userid)
+    - [👤 Movies: /movies](#-movies-movies)
+      - [`GET /movies/{movie_id}`](#get-moviesmovie_id)
+      - [`POST /movies/sort-by`](#post-moviessort-by)
+      - [`POST /movies/search`](#post-moviessearch)
+      - [`GET /movies/{movie_id}/comments`](#get-moviesmovie_idcomments)
+      - [`POST /movies/watched`](#post-movieswatched)
+      - [`PUT /movies/watched`](#put-movieswatched)
+      - [`GET /movies/{tmdb_id}/subtitles`](#get-moviestmdb_idsubtitles)
+    - [👤 Commentaires: /comment](#-commentaires-comment)
+      - [`POST /comment`](#post-comment)
+      - [`PUT /comment`](#put-comment)
+      - [`DELETE /comment/{comment_id}`](#delete-commentcomment_id)
+      - [`POST /comment/like/{comment_id}`](#post-commentlikecomment_id)
+      - [`DELETE /comment/unlike/{comment_id}`](#delete-commentunlikecomment_id)
 
 ## 🛠️ Base URL
 
@@ -100,7 +122,7 @@ http://localhost:8080/
 
 - **Description :** Renvoie une liste de film trier par les genres et le sortBy (now_playing, popular, top_rating, upcoming)
 - **Auth requise :** ✅ Oui
-- **Body SortByDTO:**
+- **Body SortByModel:**
 ```json
 {
     "sortBy": "popular",
@@ -114,7 +136,7 @@ http://localhost:8080/
 
 - **Description :** Renvoie une liste de film trier par la recherche et les genres
 - **Auth requise :** ✅ Oui
-- **Body SearchDTO:**
+- **Body SearchModel:**
 ```json
 {
     "query": "Batman",
@@ -165,6 +187,26 @@ http://localhost:8080/
 - **Auth requise :** ✅ Oui
 - **Body WatchedMoviesDTO:**
 - **Réponse WatchedMoviesDTO:**
+
+
+#### `GET /movies/{tmdb_id}/subtitles`
+- **Description :** Recupere les sous-titres associe au tmdb_id
+- **Auth requise :** ✅ Oui
+- **Réponse List<SubtitlesDTO>:**
+```json
+[
+    {
+        "title": "A.Minecraft.Movie.2025.1080p.HD-CAM.DDP2.0.H.264-MEOO",
+        "language": "Romanian",
+        "url": "https://www.opensubtitles.org/en/subtitleserve/sub/13058108"
+    },
+    {
+        "title": "A.Minecraft.Movie.2025.1080p.TeleSync.Brighter.Version.X_cs",
+        "language": "Czech",
+        "url": "https://www.opensubtitles.org/en/subtitleserve/sub/13057116"
+    },
+]
+```
 
 ### 👤 Commentaires: /comment
 #### `POST /comment`
