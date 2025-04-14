@@ -9,7 +9,7 @@ public class TorrentModel {
 	@JsonProperty("Name")
 	private String name;
 
-	@JsonProperty("Same")
+	@JsonProperty("Size")
 	private String size;
 
 	@JsonProperty("Category")
@@ -26,6 +26,8 @@ public class TorrentModel {
 
 	@JsonProperty("Magnet")
 	private String magnet;
+
+	private String hash;
 
 	public String getCategory() {
 		return category;
@@ -83,4 +85,11 @@ public class TorrentModel {
 		this.url = url;
 	}
 
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
 }

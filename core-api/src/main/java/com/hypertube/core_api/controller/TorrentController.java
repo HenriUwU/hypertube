@@ -2,6 +2,8 @@ package com.hypertube.core_api.controller;
 
 import com.hypertube.core_api.model.TorrentModel;
 import com.hypertube.core_api.service.TorrentService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,9 +25,17 @@ public class TorrentController {
 		return torrentService.searchTorrent(query);
 	}
 
-//	@PostMapping(path = "/start")
-//	public ResponseEntity<TorrentModel> startTorrent(@RequestBody TorrentModel torrentModel) {
-//		return torrentService.start
-//	}
+	@PostMapping(path = "/start")
+	public String startTorrent(@RequestBody TorrentModel torrentModel) {
+		return torrentService.start(torrentModel);
+	}
+
+	@GetMapping(path = "/stream/{hash}")
+	public void streamTorrent(@PathVariable String hash,
+	                          @RequestHeader(value = "range", required = false) String range,
+							  HttpServletRequest request,
+	                          HttpServletResponse response) {
+
+	}
 
 }
