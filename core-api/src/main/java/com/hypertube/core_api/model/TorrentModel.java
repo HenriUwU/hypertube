@@ -27,6 +27,8 @@ public class TorrentModel {
 	@JsonProperty("Magnet")
 	private String magnet;
 
+	private String hash;
+
 	public String getCategory() {
 		return category;
 	}
@@ -82,5 +84,12 @@ public class TorrentModel {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
+
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
 }

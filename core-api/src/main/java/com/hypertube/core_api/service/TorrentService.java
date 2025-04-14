@@ -1,12 +1,9 @@
 package com.hypertube.core_api.service;
 
 import bt.Bt;
-import bt.data.Storage;
-import bt.data.StorageUnit;
 import bt.data.file.FileSystemStorage;
 import bt.runtime.BtClient;
 import com.hypertube.core_api.model.TorrentModel;
-import org.hibernate.cache.spi.support.StorageAccess;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -60,11 +57,16 @@ public class TorrentService {
 				System.out.println("Progress: " + (state.getPiecesComplete() * 100 / state.getPiecesTotal()) + "%");
 			}, 1000);
 
+			torrentModel.setHash(infoHash);
 			return torrentModel;
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public void stream(String hash) {
+
 	}
 
 	private String extractInfoHash(String magnetUri) {
