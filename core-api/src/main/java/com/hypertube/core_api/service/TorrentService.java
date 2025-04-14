@@ -1,12 +1,9 @@
 package com.hypertube.core_api.service;
 
 import bt.Bt;
-import bt.data.Storage;
-import bt.data.StorageUnit;
 import bt.data.file.FileSystemStorage;
 import bt.runtime.BtClient;
 import com.hypertube.core_api.model.TorrentModel;
-import org.hibernate.cache.spi.support.StorageAccess;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -40,7 +37,7 @@ public class TorrentService {
 		return responseEntity.getBody();
 	}
 
-	public TorrentModel start(TorrentModel torrentModel) {
+	public String start(TorrentModel torrentModel) {
 		try {
 			String infoHash = extractInfoHash(torrentModel.getMagnet());
 			Path downloadDir = Paths.get(System.getProperty("user.dir"), "movies", infoHash);
@@ -60,11 +57,14 @@ public class TorrentService {
 				System.out.println("Progress: " + (state.getPiecesComplete() * 100 / state.getPiecesTotal()) + "%");
 			}, 1000);
 
-			return torrentModel;
-
+			return infoHash;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public void stream(String hash) {
+
 	}
 
 	private String extractInfoHash(String magnetUri) {

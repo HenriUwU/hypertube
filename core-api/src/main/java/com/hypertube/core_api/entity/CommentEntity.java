@@ -1,4 +1,4 @@
-package com.hypertube.core_api.model;
+package com.hypertube.core_api.entity;
 
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;

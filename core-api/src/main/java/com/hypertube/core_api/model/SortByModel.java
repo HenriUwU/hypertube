@@ -1,12 +1,11 @@
-package com.hypertube.core_api.dto;
+package com.hypertube.core_api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class SortByDTO {
+public class SortByModel {
 	private SortBy sortBy;
 	private List<Integer> genresIds;
 	private Integer page;

@@ -6,18 +6,12 @@ import com.hypertube.core_api.dto.UserDTO;
 import com.hypertube.core_api.mapper.CommentLikesMapper;
 import com.hypertube.core_api.mapper.CommentMapper;
 import com.hypertube.core_api.mapper.UserMapper;
-import com.hypertube.core_api.model.CommentEntity;
-import com.hypertube.core_api.model.CommentLikesEntity;
-import com.hypertube.core_api.model.UserEntity;
+import com.hypertube.core_api.entity.CommentEntity;
+import com.hypertube.core_api.entity.CommentLikesEntity;
 import com.hypertube.core_api.repository.CommentLikesRepository;
 import com.hypertube.core_api.repository.CommentRepository;
-import com.hypertube.core_api.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CommentService {

@@ -1,7 +1,6 @@
 package com.hypertube.core_api.controller;
 
 import com.hypertube.core_api.dto.UserDTO;
-import com.hypertube.core_api.model.UserEntity;
 import com.hypertube.core_api.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

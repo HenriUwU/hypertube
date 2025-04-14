@@ -1,8 +1,8 @@
-package com.hypertube.core_api.dto;
+package com.hypertube.core_api.model;
 
 import java.util.List;
 
-public class SearchDTO {
+public class SearchModel {
     private String query;
     private List<Integer> genresIds;
     private Integer page;

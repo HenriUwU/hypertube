@@ -1,7 +1,7 @@
 package com.hypertube.core_api.mapper;
 
 import com.hypertube.core_api.dto.WatchedMoviesDTO;
-import com.hypertube.core_api.model.WatchedMoviesEntity;
+import com.hypertube.core_api.entity.WatchedMoviesEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
