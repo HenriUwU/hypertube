@@ -32,7 +32,8 @@ public class TorrentService {
 
 	public List<TorrentModel> searchTorrent(String searchTerm) {
 		ResponseEntity<List<TorrentModel>> responseEntity = restTemplate.exchange(
-				"http://localhost:3001/api/piratebay/" + searchTerm,
+				// "http://localhost:3001/api/piratebay/" + searchTerm,
+				"http://scraping:3001/api/piratebay/" + searchTerm,
 				HttpMethod.GET,
 				HttpEntity.EMPTY,
 				new ParameterizedTypeReference<List<TorrentModel>>() {}

@@ -1,3 +1,13 @@
+<div class="streaming-select">
+    <select class="form-select" aria-label="Default select example" (change)="onSortChange($event)">
+        @for (opt of torrentOptions; track torrentOptions) {
+        <option value="{{opt}}">{{opt.Name}}</option>
+        }
+    </select>
+</div>
+
+<mat-divider></mat-divider>
+
 <div class="streaming-container">
     <h1 class="movie-title">{{videoTitle}}</h1>
     <div class="movie-container">

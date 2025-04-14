@@ -1,22 +1,54 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Movie } from '../../models/movie.model';
+import { MovieService } from '../../services/movie.service';
+import { TorrentService } from '../../services/torrent.service';
+import { MatDivider } from '@angular/material/divider';
+import { Torrent } from '../../models/torrent.models';
 
 @Component({
   selector: 'app-streaming',
-  imports: [],
+  imports: [MatDivider],
   standalone: true,
   templateUrl: './streaming.component.html',
   styleUrl: './streaming.component.css'
 })
 export class StreamingComponent {
   @ViewChild('videoPlayer', {static: false}) videoPlayer!: ElementRef;
-  @Input() videoUrl: string = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
-  @Input() videoTitle: string = 'Big Buck Bunny';
 
-  constructor() {
+  @Input() movideId: number = 950387;
+  // videoUrl: string = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+  videoUrl: string = '';
+  videoTitle: string = '';
+  pickedTorrent: string = '';
+
+  torrentOptions:any[] = [];
+
+  constructor(private movieService: MovieService, private torrentService: TorrentService) {
   }
 
-  // toggleVideo() {
-  //   const video: HTMLVideoElement = this.videoPlayer.nativeElement;
-  //   video.paused ? video.play() : video.pause();
-  // }
+  ngOnInit() {
+    this.movieService.getMovieDataFromId(this.movideId).subscribe((movie: Movie) => {
+      this.videoTitle = movie.title;
+
+      this.torrentService.searchTorrent(this.videoTitle).subscribe((response: Torrent[]) => {
+        this.torrentOptions = response;
+      }
+      );
+    });
+
+  }
+
+  onSortChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    if (!selectElement) {
+      return;
+    }
+    const selectedOption = selectElement.value;
+    if (!selectedOption) {
+      return;
+    }
+    this.pickedTorrent = selectedOption;
+
+    
+  }
 }
