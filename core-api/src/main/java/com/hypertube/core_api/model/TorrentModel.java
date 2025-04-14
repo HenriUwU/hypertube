@@ -9,7 +9,7 @@ public class TorrentModel {
 	@JsonProperty("Name")
 	private String name;
 
-	@JsonProperty("Same")
+	@JsonProperty("Size")
 	private String size;
 
 	@JsonProperty("Category")
@@ -82,5 +82,5 @@ public class TorrentModel {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-
+	
 }

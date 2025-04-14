@@ -23,9 +23,9 @@ public class TorrentController {
 		return torrentService.searchTorrent(query);
 	}
 
-//	@PostMapping(path = "/start")
-//	public ResponseEntity<TorrentModel> startTorrent(@RequestBody TorrentModel torrentModel) {
-//		return torrentService.start
-//	}
+	@PostMapping(path = "/start")
+	public TorrentModel startTorrent(@RequestBody TorrentModel torrentModel) {
+		return torrentService.start(torrentModel);
+	}
 
 }
