@@ -17,7 +17,9 @@ export class TorrentService {
   }
 
   sendMagnet(magnet: string): Observable<string> {
-    const params = {'magnet': magnet}
-    return this.http.post<string>(`${this.apiUrlAuth}/start`, params).pipe();
+    const params = {'Magnet': magnet}
+    return this.http.post<string>(`${this.apiUrlAuth}/start`, params, {
+      responseType: 'text' as 'json'
+    }).pipe();
   }
 }

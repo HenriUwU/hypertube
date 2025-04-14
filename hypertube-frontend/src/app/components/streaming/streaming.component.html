@@ -1,7 +1,7 @@
 <div class="streaming-select">
     <select class="form-select" aria-label="Default select example" (change)="onSortChange($event)">
         @for (opt of torrentOptions; track torrentOptions) {
-        <option value="{{opt}}">{{opt.Name}}</option>
+        <option value="{{opt.Magnet}}">{{opt.Name}}</option>
         }
     </select>
 </div>

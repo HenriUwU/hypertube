@@ -16,12 +16,13 @@ export class StreamingComponent {
   @ViewChild('videoPlayer', {static: false}) videoPlayer!: ElementRef;
 
   @Input() movideId: number = 950387;
-  // videoUrl: string = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
   videoUrl: string = '';
   videoTitle: string = '';
-  pickedTorrent: string = '';
+
 
   torrentOptions:any[] = [];
+  private hash: string = '';
+  private magnet: string = '';
 
   constructor(private movieService: MovieService, private torrentService: TorrentService) {
   }
@@ -47,8 +48,9 @@ export class StreamingComponent {
     if (!selectedOption) {
       return;
     }
-    this.pickedTorrent = selectedOption;
-
-    
+    this.magnet = selectedOption;
+    this.torrentService.sendMagnet(this.magnet).subscribe((response: string) => {
+      this.hash = response;
+    });
   }
 }
