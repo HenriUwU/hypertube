@@ -14,6 +14,9 @@ import com.hypertube.core_api.repository.UserRepository;
 import com.hypertube.core_api.repository.WatchedMoviesRepository;
 import com.hypertube.core_api.security.JwtTokenUtil;
 import jakarta.persistence.EntityNotFoundException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.format.DateTimeFormatter;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -42,17 +45,17 @@ public class MovieService {
     @Value("${tmdb.bearer-token}")
     private String tmdbToken;
 
-    public MovieService(CommentRepository commentRepository, CommentMapper commentMapper, WatchedMoviesRepository watchedMoviesRepository, UserRepository userRepository, JwtTokenUtil jwtTokenUtil, WatchedMoviesMapper watchedMoviesMapper, WatchedMoviesMapper watchedMoviesMapper1) {
+    public MovieService(CommentRepository commentRepository, CommentMapper commentMapper, WatchedMoviesRepository watchedMoviesRepository, UserRepository userRepository, JwtTokenUtil jwtTokenUtil, WatchedMoviesMapper watchedMoviesMapper) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.watchedMoviesRepository = watchedMoviesRepository;
-        this.watchedMoviesMapper = watchedMoviesMapper1;
+        this.watchedMoviesMapper = watchedMoviesMapper;
         this.restTemplate = new RestTemplate();
         this.userRepository = userRepository;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    public MovieDTO getMovie(Integer movieId, String token) throws JsonProcessingException {
+    public MovieDTO getMovie(Integer movieId, String token) throws IOException {
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
@@ -67,6 +70,7 @@ public class MovieService {
         if (movie != null) {
             movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail());
             movie.setReleaseDate(movie.getReleaseDate().substring(0, 4));
+            movie.setImdbRating(scrappeImdbRating(movie.getImdbId()));
             Optional.ofNullable(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))
                     .map(WatchedMoviesEntity::getStoppedAt)
                     .ifPresent(movie::setStoppedAt);
@@ -148,6 +152,13 @@ public class MovieService {
         return commentMapper.map(commentRepository.getCommentEntitiesByMovieId(movieId));
     }
 
+    private Double scrappeImdbRating(String imdb_id) throws IOException {
+        Document doc = Jsoup.connect("https://www.imdb.com/title/" + imdb_id).get();
+        Element ratingElement = doc.selectFirst("span.sc-d541859f-1.imUuxf");
+        if (ratingElement != null)
+            return Double.parseDouble(ratingElement.text().replace(',', '.'));
+        return null;
+    }
     private void checkSortByDTO(SortByDTO sortByDTO) {
         if (sortByDTO.getSortBy() == null)
             throw new IllegalArgumentException("sortBy cannot be null");
