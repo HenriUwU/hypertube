@@ -16,8 +16,10 @@ public class MovieDTO {
     private String title;
     private String overview;
 
-    @JsonProperty("vote_average")
-    private Double rating;
+    @JsonProperty("imdb_id")
+    private String imdbId;
+
+    private Double imdbRating;
 
     @JsonProperty("release_date")
     private String releaseDate;
@@ -80,12 +82,12 @@ public class MovieDTO {
         this.overview = overview;
     }
 
-    public Double getRating() {
-        return rating;
+    public Double getImdbRating() {
+        return imdbRating;
     }
 
-    public void setRating(Double rating) {
-        this.rating = rating;
+    public void setImdbRating(Double imdbRating) {
+        this.imdbRating = imdbRating;
     }
 
     public String getReleaseDate() {
@@ -134,5 +136,13 @@ public class MovieDTO {
 
     public void setStoppedAt(Time stoppedAt) {
         this.stoppedAt = stoppedAt;
+    }
+
+    public String getImdbId() {
+        return imdbId;
+    }
+
+    public void setImdbId(String imdbId) {
+        this.imdbId = imdbId;
     }
 }
