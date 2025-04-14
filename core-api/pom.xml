@@ -115,6 +115,16 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.12.3</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.18.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.atomashpolskiy</groupId>
+			<artifactId>bt-core</artifactId>
+			<version>1.10</version>
+		</dependency>
 	</dependencies>
 
 	<build>

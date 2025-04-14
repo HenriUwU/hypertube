@@ -3,6 +3,7 @@ package com.hypertube.core_api.controller;
 import com.hypertube.core_api.dto.CommentDTO;
 import com.hypertube.core_api.dto.CommentLikesDTO;
 import com.hypertube.core_api.service.CommentService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -13,6 +13,8 @@ import com.hypertube.core_api.repository.CommentLikesRepository;
 import com.hypertube.core_api.repository.CommentRepository;
 import com.hypertube.core_api.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,15 +43,14 @@ public class CommentService {
     }
 
     public CommentDTO postComment(CommentDTO commentDTO, String token) {
+        checkCommentDTO(commentDTO);
         commentDTO.setUser(userService.getUserByToken(token));
         CommentEntity test = commentMapper.map(commentDTO);
         return commentMapper.map(commentRepository.save(test));
     }
 
     public CommentDTO updateComment(CommentDTO commentDTO) {
-        if (commentDTO.getId() == null) {
-            throw new IllegalArgumentException("Comment id cannot be null");
-        }
+        checkCommentDTO(commentDTO);
         CommentEntity existingComment = commentRepository.findById(commentDTO.getId()).
                 orElseThrow(() -> new EntityNotFoundException("Comment not found"));
 
@@ -58,9 +59,9 @@ public class CommentService {
     }
 
     public void deleteComment(Integer commentId, String token) {
-        if (!commentRepository.existsById(commentId)) {
+        if (!commentRepository.existsById(commentId))
             throw new EntityNotFoundException("Comment not found");
-        }
+
         CommentEntity comment = commentRepository.findById(commentId).orElseThrow();
         userService.verifyUser(comment.getUser().getId(), token);
         commentRepository.deleteById(commentId);
@@ -69,7 +70,7 @@ public class CommentService {
     public CommentDTO likeComment(Integer commentId, String token) {
         UserDTO user =  userService.getUserByToken(token);
         CommentEntity comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
         userService.verifyUser(comment.getUser().getId(), token);
 
         CommentLikesDTO commentLikesDTO = new CommentLikesDTO();
@@ -84,7 +85,7 @@ public class CommentService {
 
     public CommentDTO unlikeComment(Integer commentId, String token) {
         CommentEntity comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
         UserDTO user = userService.getUserByToken(token);
         userService.verifyUser(comment.getUser().getId(), token);
 
@@ -92,5 +93,12 @@ public class CommentService {
         commentLikesRepository.delete(commentLike);
         comment.setLikes(comment.getLikes() - 1);
         return commentMapper.map(commentRepository.save(comment));
+    }
+
+    private void checkCommentDTO(CommentDTO commentDTO) {
+        if (commentDTO.getMovieId() == null)
+            throw new IllegalArgumentException("Movie id cannot be null");
+        if (commentDTO.getContent() == null)
+            throw new IllegalArgumentException("Content cannot be null");
     }
 }
