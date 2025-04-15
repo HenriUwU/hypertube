@@ -17,7 +17,8 @@ public class MovieModel {
     @JsonProperty("imdb_id")
     private String imdbId;
 
-    private Double imdbRating;
+    @JsonProperty("vote_average")
+    private Double voteAverage;
 
     @JsonProperty("release_date")
     private String releaseDate;
@@ -80,12 +81,12 @@ public class MovieModel {
         this.overview = overview;
     }
 
-    public Double getImdbRating() {
-        return imdbRating;
+    public Double getVoteAverage() {
+        return voteAverage;
     }
 
-    public void setImdbRating(Double imdbRating) {
-        this.imdbRating = imdbRating;
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
     }
 
     public String getReleaseDate() {
