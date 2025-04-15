@@ -10,11 +10,8 @@
 .movie-container {
     position: relative;
 
-    /* height: 20vw; */
     height: auto;
-    width: 40vh;
-    min-height: 200px;
-    min-width: 400px;
+    width: 45vw;
 
     border-bottom: 2vh solid #eac29f;
     border-top: 2vh solid #eac29f;
@@ -54,6 +51,9 @@
     border-radius: 5%;
     border-color: #AFBB80;
     margin: 2%;
+
+    font-size: 0.5em;
+    overflow: scroll;
 }
 
 .streaming-select {
@@ -61,4 +61,16 @@
     width: 100%;
     display: flex;
     justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+    .movie-container {
+        width: 90vw;
+        height: auto;
+    }
+
+    .video-player {
+        width: 100%;
+        height: auto;
+    }
 }

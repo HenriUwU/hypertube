@@ -33,3 +33,12 @@
     align-items: center;
     flex-wrap: wrap;
 }
+
+@media (max-width: 768px) {
+
+    .footer,
+    a {
+        font-size: 0.6rem;
+        height: 10%;
+    }
+}

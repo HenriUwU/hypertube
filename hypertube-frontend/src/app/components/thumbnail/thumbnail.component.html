@@ -18,15 +18,11 @@
         </span>
         ‧
         <span class="thumbnail-genre">
-            <!-- {{ getGenreByIdx(0) }}/{{ getGenreByIdx(1) }} -->
             {{ getGenreString() }}
         </span>
         <br />
         <span class="thumbnail-duration">
             {{ getLength() }} ‧
-            <!-- </span>
-        <span class="thumbnail-rating"> -->
-            <!-- <mat-icon class="thumbnail-rating-icon">star</mat-icon> -->
             {{ movieThumbnail.vote_average.toPrecision(2) }}/10★
         </span>
     </div>

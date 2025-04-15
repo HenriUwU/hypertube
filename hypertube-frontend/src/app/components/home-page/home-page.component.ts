@@ -25,6 +25,8 @@ export class HomePageComponent implements OnInit {
   sortingOptions: string[] = ['popular', 'top_rated', 'upcoming', 'now_playing'];
   currentPage: number = 1;
   isLoading: boolean = false;
+  selectSortingOpt: string = 'popular';
+
   constructor(private movieService: MovieService) {
 
   }
@@ -70,16 +72,17 @@ export class HomePageComponent implements OnInit {
       return;
     }
     this.movies = [];
+    this.selectSortingOpt = selectedOption;
     this.currentPage = 1;
-    this.loadMovies(selectedOption);
+    this.loadMovies(this.selectSortingOpt);
   }
 
   @HostListener('window:scroll', [])
   async onScroll(): Promise<void> {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100 && !this.isLoading) {
       this.currentPage++;
-      if (this.currentPage % 20 === 0) {
-        await this.loadMovies(this.sortingOptions[0]); // Default to the first sorting option
+      if (this.currentPage % 20 === 0) { // load a batch each 20 y offset scroll
+        await this.loadMovies(this.selectSortingOpt);
       }
     }
   }

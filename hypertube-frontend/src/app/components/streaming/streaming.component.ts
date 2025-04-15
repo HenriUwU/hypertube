@@ -15,28 +15,22 @@ import { Torrent } from '../../models/torrent.models';
 export class StreamingComponent {
   @ViewChild('videoPlayer', {static: false}) videoPlayer!: ElementRef;
 
-  @Input() movideId: number = 950387;
   videoUrl: string = '';
-  videoTitle: string = '';
+  @Input() videoTitle: string = 'A minecraft movie';
 
 
   torrentOptions:any[] = [];
   private hash: string = '';
   private magnet: string = '';
 
-  constructor(private movieService: MovieService, private torrentService: TorrentService) {
+  constructor(private torrentService: TorrentService) {
   }
 
   ngOnInit() {
-    this.movieService.getMovieDataFromId(this.movideId).subscribe((movie: Movie) => {
-      this.videoTitle = movie.title;
-
-      this.torrentService.searchTorrent(this.videoTitle).subscribe((response: Torrent[]) => {
-        this.torrentOptions = response;
-      }
-      );
-    });
-
+    this.torrentService.searchTorrent(this.videoTitle).subscribe((response: Torrent[]) => {
+      this.torrentOptions = response;
+    }
+    );
   }
 
   onSortChange(event: Event) {
@@ -49,8 +43,8 @@ export class StreamingComponent {
       return;
     }
     this.magnet = selectedOption;
-    this.torrentService.sendMagnet(this.magnet).subscribe((response: string) => {
-      this.hash = response;
-    });
+    // this.torrentService.sendMagnet(this.magnet).subscribe((response: string) => {
+    //   this.hash = response;
+    // });
   }
 }

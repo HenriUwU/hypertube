@@ -45,10 +45,7 @@ export class ThumbnailComponent implements OnInit {
       {
         next: (data: MovieThumbnail) => {
           this.movieThumbnail = data;
-          console.log(data);
           this.watchedMovie = this.movieThumbnail.stoppedAt !== null;
-          // this.watchedMovie = true;
-          console.log('Avg note:', this.movieThumbnail.vote_average);
         },
         error: (e) => {
           console.error('Error fetching movie data:', e);

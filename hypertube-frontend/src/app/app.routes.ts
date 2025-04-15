@@ -10,6 +10,7 @@ import {FooterComponent} from "./components/footer/footer.component";
 import { HeaderComponent } from './components/header/header.component';
 import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
 import { StreamingComponent } from './components/streaming/streaming.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 export const routes: Routes = [
   {
@@ -36,6 +37,7 @@ export const routes: Routes = [
       {path: 'thumbnail', component: ThumbnailComponent},
       {path: 'homepage', component: HomePageComponent},
       {path: 'stream', component: StreamingComponent},
+      {path: 'profile', component: ProfileComponent},
     ]
   }
 ];
