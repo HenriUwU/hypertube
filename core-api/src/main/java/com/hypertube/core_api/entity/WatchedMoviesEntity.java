@@ -3,6 +3,7 @@ package com.hypertube.core_api.entity;
 import jakarta.persistence.*;
 
 import java.sql.Time;
+import java.util.List;
 
 @Entity
 @Table(name = "watched_movies", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "movie_id"}))

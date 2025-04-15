@@ -221,7 +221,6 @@ public class MovieService {
 
         try (InputStream in = new URL(downloadUrl).openStream()) {
             Files.copy(in, zipPath, StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("Downloaded to: " + zipPath);
         }
 
         List<Path> extractedFiles = new ArrayList<>();
