@@ -23,11 +23,11 @@
         </span>
         <br />
         <span class="thumbnail-duration">
-            {{ getLength() }}
+            {{ getLength() }} ‧
             <!-- </span>
         <span class="thumbnail-rating"> -->
             <!-- <mat-icon class="thumbnail-rating-icon">star</mat-icon> -->
-            {{ movieThumbnail.imdbRating }}
+            {{ movieThumbnail.vote_average.toPrecision(2) }}/10★
         </span>
     </div>
 </div>

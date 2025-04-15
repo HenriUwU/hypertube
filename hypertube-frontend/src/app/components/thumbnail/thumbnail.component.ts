@@ -24,7 +24,7 @@ export class ThumbnailComponent implements OnInit {
     runtime: 0,
     stoppedAt: { hours: 0, minutes: 0 },
     genres: [],
-    imdbRating: 0
+    vote_average: 0
   };
   // movieThumbnail!: MovieThumbnail;
   watchedMovie: boolean = false;
@@ -48,7 +48,7 @@ export class ThumbnailComponent implements OnInit {
           console.log(data);
           this.watchedMovie = this.movieThumbnail.stoppedAt !== null;
           // this.watchedMovie = true;
-          console.log('Avg note:', this.movieThumbnail.imdbRating);
+          console.log('Avg note:', this.movieThumbnail.vote_average);
         },
         error: (e) => {
           console.error('Error fetching movie data:', e);
