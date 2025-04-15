@@ -31,10 +31,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -159,32 +157,44 @@ public class MovieService {
 
     public List<SubtitleModel> getSubtitles(String imdb_id) throws IOException {
         List<SubtitleModel> subtitles = new ArrayList<>();
-        Document doc = Jsoup.connect("https://www.opensubtitles.org/en/search/sublanguageid-all/imdbid-" + imdb_id)
+        String baseUrl = "https://yts-subs.com";
+        String url = baseUrl + "/movie-imdb/" + imdb_id;
+
+        // Load the main subtitle page
+        Document doc = Jsoup.connect(url)
                 .timeout(10000)
+                .userAgent("Mozilla/5.0")
                 .get();
 
-        Element subtitleTable = doc.getElementById("search_results");
+        Elements rows = doc.select("table.other-subs tbody tr");
 
-        if (subtitleTable != null) {
-            Elements rows = subtitleTable.select("tr");
+        for (Element row : rows) {
+            Element langCell = row.selectFirst(".sub-lang");
+            if (langCell == null) continue;
 
-            for (Element row : rows) {
-                Elements tds = row.select("td");
+            String language = langCell.text().trim().toLowerCase();
+            if (!language.equals("french") && !language.equals("english")) continue;
 
-                if (tds.size() >= 5) {
-                    Element spanWithTitle = tds.get(0).selectFirst("span[title]");
-                    String title = (spanWithTitle != null) ? spanWithTitle.attr("title") : null;
+            Element linkElement = row.selectFirst("a[href^=/subtitles/]");
+            if (linkElement == null) continue;
 
-                    Element langAnchor = tds.get(1).selectFirst("a[title]");
-                    String language = (langAnchor != null) ? langAnchor.attr("title") : null;
+            String detailHref = linkElement.attr("href");
+            String detailUrl = baseUrl + detailHref;
 
-                    String href = tds.get(4).select("a").attr("href");
-                    if (!href.isEmpty()) {
-                        String fullUrl = "https://www.opensubtitles.org" + href;
-                        subtitles.add(new SubtitleModel(title, language, fullUrl));
-                    }
-                }
-            }
+            Document detailDoc = Jsoup.connect(detailUrl)
+                    .timeout(10000)
+                    .userAgent("Mozilla/5.0")
+                    .get();
+
+            Element downloadButton = detailDoc.selectFirst("#btn-download-subtitle");
+            if (downloadButton == null) continue;
+
+            String encodedLink = downloadButton.attr("data-link");
+            String downloadUrl = new String(Base64.getDecoder().decode(encodedLink), StandardCharsets.UTF_8);
+
+            String title = downloadButton.text();
+
+            subtitles.add(new SubtitleModel(title, language, downloadUrl));
         }
 
         return subtitles;
