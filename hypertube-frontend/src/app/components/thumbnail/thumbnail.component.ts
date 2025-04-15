@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { MovieService } from '../../services/movie.service';
 import { MovieThumbnail } from '../../models/movie.model';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-thumbnail',
   standalone: true,
-  imports: [MatProgressBarModule, CommonModule],
+  imports: [MatProgressBarModule, CommonModule, MatIconModule],
   templateUrl: './thumbnail.component.html',
   styleUrl: './thumbnail.component.css'
 })
@@ -22,8 +23,10 @@ export class ThumbnailComponent implements OnInit {
     poster_path: '',
     runtime: 0,
     stoppedAt: { hours: 0, minutes: 0 },
-    genres: []
+    genres: [],
+    imdbRating: 0
   };
+  // movieThumbnail!: MovieThumbnail;
   watchedMovie: boolean = false;
 
   // @Input() movieId! : number;
@@ -42,8 +45,10 @@ export class ThumbnailComponent implements OnInit {
       {
         next: (data: MovieThumbnail) => {
           this.movieThumbnail = data;
+          console.log(data);
           this.watchedMovie = this.movieThumbnail.stoppedAt !== null;
           // this.watchedMovie = true;
+          console.log('Avg note:', this.movieThumbnail.imdbRating);
         },
         error: (e) => {
           console.error('Error fetching movie data:', e);

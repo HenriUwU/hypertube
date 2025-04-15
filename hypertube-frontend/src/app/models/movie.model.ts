@@ -22,7 +22,7 @@ export interface Movie {
   title: string;
   overview: string;
 
-  vote_average: number;
+  imdbRating: number;
   release_date: string;
   poster_path: string;
 
@@ -43,4 +43,5 @@ export interface MovieThumbnail {
   runtime: number;
   stoppedAt: Time;
   genres: GenreModel[];
+  imdbRating: number;
 }
