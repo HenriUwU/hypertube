@@ -4,11 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hypertube.core_api.dto.*;
-import com.hypertube.core_api.mapper.CommentMapper;
-import com.hypertube.core_api.mapper.WatchedMoviesMapper;
+import com.hypertube.core_api.dto.CommentDTO;
+import com.hypertube.core_api.dto.WatchedMoviesDTO;
 import com.hypertube.core_api.entity.UserEntity;
 import com.hypertube.core_api.entity.WatchedMoviesEntity;
+import com.hypertube.core_api.mapper.CommentMapper;
+import com.hypertube.core_api.mapper.WatchedMoviesMapper;
 import com.hypertube.core_api.model.MovieModel;
 import com.hypertube.core_api.model.SearchModel;
 import com.hypertube.core_api.model.SortByModel;
@@ -31,9 +32,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 @Service
 public class MovieService {
@@ -155,49 +164,84 @@ public class MovieService {
         return commentMapper.map(commentRepository.getCommentEntitiesByMovieId(movieId));
     }
 
-    public List<SubtitleModel> getSubtitles(String imdb_id) throws IOException {
-        List<SubtitleModel> subtitles = new ArrayList<>();
-        String baseUrl = "https://yts-subs.com";
-        String url = baseUrl + "/movie-imdb/" + imdb_id;
+            public List<SubtitleModel> getSubtitles(String imdb_id) throws IOException {
+                List<SubtitleModel> subtitles = new ArrayList<>();
+                String baseUrl = "https://yts-subs.com";
+                String url = baseUrl + "/movie-imdb/" + imdb_id;
 
-        // Load the main subtitle page
-        Document doc = Jsoup.connect(url)
-                .timeout(10000)
-                .userAgent("Mozilla/5.0")
-                .get();
+                // Load the main subtitle page
+                Document doc = Jsoup.connect(url)
+                        .timeout(10000)
+                        .userAgent("Mozilla/5.0")
+                        .get();
 
-        Elements rows = doc.select("table.other-subs tbody tr");
+                Elements rows = doc.select("table.other-subs tbody tr");
 
-        for (Element row : rows) {
-            Element langCell = row.selectFirst(".sub-lang");
-            if (langCell == null) continue;
+                int subtitles_cnt = 1;
+                for (Element row : rows) {
+                    Element langCell = row.selectFirst(".sub-lang");
+                    if (langCell == null) continue;
 
-            String language = langCell.text().trim().toLowerCase();
-            if (!language.equals("french") && !language.equals("english")) continue;
+                    String language = langCell.text().trim().toLowerCase();
+                    if (!language.equals("french") && !language.equals("english")) continue;
 
-            Element linkElement = row.selectFirst("a[href^=/subtitles/]");
-            if (linkElement == null) continue;
+                    Element linkElement = row.selectFirst("a[href^=/subtitles/]");
+                    if (linkElement == null) continue;
 
-            String detailHref = linkElement.attr("href");
-            String detailUrl = baseUrl + detailHref;
+                    String detailHref = linkElement.attr("href");
+                    String detailUrl = baseUrl + detailHref;
 
-            Document detailDoc = Jsoup.connect(detailUrl)
-                    .timeout(10000)
-                    .userAgent("Mozilla/5.0")
-                    .get();
+                    Document detailDoc = Jsoup.connect(detailUrl)
+                            .timeout(10000)
+                            .userAgent("Mozilla/5.0")
+                            .get();
 
-            Element downloadButton = detailDoc.selectFirst("#btn-download-subtitle");
-            if (downloadButton == null) continue;
+                    Element downloadButton = detailDoc.selectFirst("#btn-download-subtitle");
+                    if (downloadButton == null) continue;
 
-            String encodedLink = downloadButton.attr("data-link");
-            String downloadUrl = new String(Base64.getDecoder().decode(encodedLink), StandardCharsets.UTF_8);
+                    String encodedLink = downloadButton.attr("data-link");
 
-            String title = downloadButton.text();
+                    List<Path> subtitleFiles = downloadSubtitle(encodedLink, imdb_id);
 
-            subtitles.add(new SubtitleModel(title, language, downloadUrl));
+                    for (Path filePath : subtitleFiles) {
+                        String title = "sub-" + subtitles_cnt + "-" + language;
+                        subtitles.add(new SubtitleModel(title, language, filePath.toString()));
+                        subtitles_cnt++;
+                    }
+                }
+                return subtitles;
+            }
+
+    private List<Path> downloadSubtitle(String encodedLink, String imdb_id) throws IOException {
+        String downloadUrl = new String(Base64.getDecoder().decode(encodedLink), StandardCharsets.UTF_8);
+        String fileName = Paths.get(new URL(downloadUrl).getPath()).getFileName().toString();
+        Path outputDir = Paths.get("").toAbsolutePath().resolve("movies/subs/" + imdb_id);
+        Files.createDirectories(outputDir);
+        Path zipPath = outputDir.resolve(fileName);
+
+        try (InputStream in = new URL(downloadUrl).openStream()) {
+            Files.copy(in, zipPath, StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("Downloaded to: " + zipPath);
         }
 
-        return subtitles;
+        List<Path> extractedFiles = new ArrayList<>();
+        try (ZipInputStream zis = new ZipInputStream(Files.newInputStream(zipPath))) {
+            ZipEntry entry;
+            while ((entry = zis.getNextEntry()) != null) {
+                Path extractedPath = outputDir.resolve(entry.getName());
+
+                if (entry.isDirectory()) {
+                    Files.createDirectories(extractedPath);
+                } else {
+                    Files.createDirectories(extractedPath.getParent());
+                    Files.copy(zis, extractedPath, StandardCopyOption.REPLACE_EXISTING);
+                    extractedFiles.add(extractedPath);
+                }
+                zis.closeEntry();
+            }
+        }
+        Files.deleteIfExists(zipPath);
+        return extractedFiles;
     }
 
     private void checkSortByDTO(SortByModel sortByDTO) {
