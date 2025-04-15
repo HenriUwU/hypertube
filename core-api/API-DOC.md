@@ -111,7 +111,7 @@ http://localhost:8080/
     },
     "subtitles": null,
     "stoppedAt": "01:28:16", # null si jamais vu
-    "imdbRating": 7.231,
+    "vote_average": 7.231,
     "release_date": "1989",
     "poster_path": "/cij4dd21v2Rk2YtUQbV5kW69WB2.jpg",
     "genre_ids": null
