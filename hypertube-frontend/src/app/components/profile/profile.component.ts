@@ -50,6 +50,8 @@ export class ProfileComponent {
         profilePicture: user.profilePicture ? user.profilePicture : this.defaultProfilePicture,
         language: user.language
       });
+
+      // this.profileForm.get('profilePicture')?.setValue('data:image/png;base64' user.profilePicture?);
       
       if (sessionStorage.getItem('id') !== this.userId) {
         this.isReadOnly = true;
@@ -66,7 +68,10 @@ export class ProfileComponent {
     
     // if it the default pp send null to the backend
     // else send the base64 string
-    console.log(this.profileForm.value.profilePicture?.substring(this.profileForm.value.profilePicture.indexOf(',') + 1))
+    // console.log(this.profileForm.value.profilePicture);
+
+    // print header string
+    console.log(this.profileForm.value.profilePicture?.substring(0, this.profileForm.value.profilePicture.indexOf(',')));
     
     const pp_base64 = this.profileForm.value.profilePicture === this.defaultProfilePicture 
       ? null 
