@@ -5,5 +5,5 @@ export interface UserModel {
   firstName: string;
   lastName: string;
   language: string;
-  profilePicture: string;
+  profilePicture: string | null;
 }

@@ -60,6 +60,16 @@ export class ProfileComponent {
   }
       
   onSubmit() {
+    if (this.profileForm.invalid) {
+      return;
+    }
+    
+    // if it the default pp send null to the backend
+    // else send the base64 string
+    const pp_base64 = this.profileForm.value.profilePicture === this.defaultProfilePicture 
+      ? null 
+      : this.profileForm.value.profilePicture?.substring(this.profileForm.value.profilePicture.indexOf(',') + 1) ?? null;
+
     const updatedUser: UserModel = {
       id: parseInt(this.userId),
       username: this.profileForm.value.username!,
@@ -67,7 +77,7 @@ export class ProfileComponent {
       firstName: this.profileForm.value.firstname!,
       lastName: this.profileForm.value.lastname!,
       language: this.profileForm.value.language!,
-      profilePicture: this.profileForm.value.profilePicture!
+      profilePicture: pp_base64
     };
       
     this.userService.updateUser(updatedUser).pipe().subscribe((response) => {
