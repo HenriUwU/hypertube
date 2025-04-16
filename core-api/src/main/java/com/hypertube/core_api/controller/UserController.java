@@ -5,6 +5,8 @@ import com.hypertube.core_api.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/user")
@@ -22,7 +24,7 @@ public class UserController {
     }
 
     @PutMapping()
-    public UserDTO updateUser(@RequestBody UserDTO user) {
+    public UserDTO updateUser(@RequestBody UserDTO user) throws SQLException {
         return userService.updateUser(user);
     }
 

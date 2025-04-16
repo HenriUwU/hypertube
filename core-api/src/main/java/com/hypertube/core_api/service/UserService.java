@@ -31,6 +31,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -126,7 +128,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public UserDTO updateUser(UserDTO user) {
+    public UserDTO updateUser(UserDTO user) throws SQLException {
         if (user.getId() == null) {
             throw new RuntimeException("Id can not be null");
         }
@@ -137,7 +139,9 @@ public class UserService implements UserDetailsService {
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setLanguage(user.getLanguage());
-        existingUser.setProfilePicture(user.getProfilePicture());
+        existingUser.setProfilePicture(user.getProfilePicture() != null
+                ? new SerialBlob(user.getProfilePicture())
+                : null);
 
         return userMapper.map(userRepository.save(existingUser));
     }
