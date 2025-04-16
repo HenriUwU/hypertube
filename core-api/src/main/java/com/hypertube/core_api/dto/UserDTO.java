@@ -2,8 +2,6 @@ package com.hypertube.core_api.dto;
 
 import jakarta.persistence.Lob;
 
-import java.sql.Blob;
-
 public class UserDTO {
     private Integer id;
     private String username;
@@ -11,8 +9,7 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String language;
-    @Lob
-    private Blob profilePicture;
+    private byte[] profilePicture;
 
     public Integer getId() {
         return id;
@@ -62,11 +59,11 @@ public class UserDTO {
         this.language = language;
     }
 
-    public Blob getProfilePicture() {
+    public byte[] getProfilePicture() {
         return profilePicture;
     }
 
-    public void setProfilePicture(Blob profilePicture) {
+    public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
     }
 }
