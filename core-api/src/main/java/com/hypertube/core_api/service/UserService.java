@@ -106,15 +106,15 @@ public class UserService implements UserDetailsService {
         emailTokenEntity.setUser(user);
         emailTokenEntity.setExpiryDate(LocalDateTime.now().plusDays(1));
         emailTokenRepository.save(emailTokenEntity);
-        sendVerificationEmail(user.getEmail(), token);
+//        sendVerificationEmail(user.getEmail(), token);
     }
 
     public ResponseEntity<Map<String, String>> login(UserEntity user) {
         UserEntity dbUser = userRepository.findByUsername(user.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
 
-        if (!dbUser.isEmailVerify())
-            throw new RuntimeException("Email verify failed");
+//        if (!dbUser.isEmailVerify())
+//            throw new RuntimeException("Email verify failed");
 
         if (passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
             String token = jwtTokenUtil.generateToken(user.getUsername());
