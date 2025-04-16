@@ -66,11 +66,6 @@ export class ProfileComponent {
       return;
     }
     
-    // if it the default pp send null to the backend
-    // else send the base64 string
-    // console.log(this.profileForm.value.profilePicture);
-
-    // print header string
     console.log(this.profileForm.value.profilePicture?.substring(0, this.profileForm.value.profilePicture.indexOf(',')));
     
     const pp_base64 = this.profileForm.value.profilePicture === this.defaultProfilePicture 
