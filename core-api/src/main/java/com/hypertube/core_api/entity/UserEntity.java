@@ -18,9 +18,16 @@ public class UserEntity {
 
 	@Column(nullable = false, unique = true)
 	private String email;
+	private boolean emailVerify;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CommentEntity> comments;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<WatchedMoviesEntity> user;
+
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private EmailTokenEntity emailTokenEntity;
 
 	private String password;
 	private String firstName;
@@ -122,5 +129,29 @@ public class UserEntity {
 
 	public void setComments(List<CommentEntity> comments) {
 		this.comments = comments;
+	}
+
+	public List<WatchedMoviesEntity> getUser() {
+		return user;
+	}
+
+	public void setUser(List<WatchedMoviesEntity> user) {
+		this.user = user;
+	}
+
+	public boolean isEmailVerify() {
+		return emailVerify;
+	}
+
+	public void setEmailVerify(boolean emailVerify) {
+		this.emailVerify = emailVerify;
+	}
+
+	public EmailTokenEntity getEmailTokenEntity() {
+		return emailTokenEntity;
+	}
+
+	public void setEmailTokenEntity(EmailTokenEntity emailTokenEntity) {
+		this.emailTokenEntity = emailTokenEntity;
 	}
 }

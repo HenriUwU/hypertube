@@ -53,4 +53,8 @@ export class AuthService {
   getToken(): string | null {
     return sessionStorage.getItem(`token`)
   }
+
+  verifyEmail(token: string): Observable<string> {
+    return this.http.get<string>(`${this.apiUrlAuth}/verify-email?token=${token}`).pipe();
+  }
 }

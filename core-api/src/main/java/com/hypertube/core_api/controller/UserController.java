@@ -30,5 +30,4 @@ public class UserController {
     public void deleteUser(@PathVariable Integer id, @RequestHeader("Authorization") String token) {
         this.userService.deleteUser(id, token);
     }
-
 }
