@@ -26,8 +26,8 @@ public class UserEntity {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<WatchedMoviesEntity> user;
 
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	private EmailTokenEntity emailTokenEntity;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<TokenEntity> tokenEntity;
 
 	private String password;
 	private String firstName;
@@ -148,11 +148,11 @@ public class UserEntity {
 		this.emailVerify = emailVerify;
 	}
 
-	public EmailTokenEntity getEmailTokenEntity() {
-		return emailTokenEntity;
+	public List<TokenEntity> getTokenEntity() {
+		return tokenEntity;
 	}
 
-	public void setEmailTokenEntity(EmailTokenEntity emailTokenEntity) {
-		this.emailTokenEntity = emailTokenEntity;
+	public void setTokenEntity(List<TokenEntity> tokenEntity) {
+		this.tokenEntity = tokenEntity;
 	}
 }
