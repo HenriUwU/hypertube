@@ -5,11 +5,17 @@ Bienvenue dans la documentation de l’API **Hypertube**.
 - [📘 API Documentation](#-api-documentation)
   - [🛠️ Base URL](#️-base-url)
   - [📂 Endpoints](#-endpoints)
-    - [👤 Utilisateur: /user](#-utilisateur-user)
+    - [Authentification: /auth](#authentification-auth)
+      - [`POST /auth/register`](#post-authregister)
+      - [`POST /auth/login`](#post-authlogin)
+      - [`GET /auth/verify-email?token={token}`](#get-authverify-emailtokentoken)
+      - [`GET /auth/forgot-password?email={email}`](#get-authforgot-passwordemailemail)
+      - [`GET /auth/reset-password?token={token}`](#get-authreset-passwordtokentoken)
+    - [Utilisateur: /user](#utilisateur-user)
       - [`GET /user/{id}`](#get-userid)
       - [`PUT /user`](#put-user)
       - [`DELETE /user/{id}`](#delete-userid)
-    - [👤 Movies: /movies](#-movies-movies)
+    - [Movies: /movies](#movies-movies)
       - [`GET /movies/{movie_id}`](#get-moviesmovie_id)
       - [`POST /movies/sort-by`](#post-moviessort-by)
       - [`POST /movies/search`](#post-moviessearch)
@@ -17,7 +23,7 @@ Bienvenue dans la documentation de l’API **Hypertube**.
       - [`POST /movies/watched`](#post-movieswatched)
       - [`PUT /movies/watched`](#put-movieswatched)
       - [`GET /movies/{tmdb_id}/subtitles`](#get-moviestmdb_idsubtitles)
-    - [👤 Commentaires: /comment](#-commentaires-comment)
+    - [Commentaires: /comment](#commentaires-comment)
       - [`POST /comment`](#post-comment)
       - [`PUT /comment`](#put-comment)
       - [`DELETE /comment/{comment_id}`](#delete-commentcomment_id)
@@ -30,7 +36,39 @@ http://localhost:8080/
 
 ## 📂 Endpoints
 
-### 👤 Utilisateur: /user
+### Authentification: /auth
+
+#### `POST /auth/register`
+
+- **Description :** Enregistre un nouveau utilisateur
+- **Auth requise :** ❌​ Non
+- **Body UserEntity:**
+
+
+#### `POST /auth/login`
+
+- **Description :** Connecte un utilisateur
+- **Auth requise :** ❌​ Non
+- **Body UserEntity:**
+
+
+#### `GET /auth/verify-email?token={token}`
+
+- **Description :** Route pour mettre l'email en tant que verifier
+- **Auth requise :** ❌​ Non
+
+
+#### `GET /auth/forgot-password?email={email}`
+
+- **Description :** Route pour envoyer un mail pour reset le mdp
+- **Auth requise :** ❌​ Non
+
+#### `GET /auth/reset-password?token={token}`
+
+- **Description :** Route pour dire que le mdp a etait reset
+- **Auth requise :** ❌​ Non
+
+### Utilisateur: /user
 
 #### `GET /user/{id}`
 
@@ -69,7 +107,7 @@ http://localhost:8080/
 - **Description :** Supprime un utilisateur par son ID
 - **Auth requise :** ✅ Oui
 
-### 👤 Movies: /movies
+### Movies: /movies
 
 #### `GET /movies/{movie_id}`
 
@@ -208,7 +246,7 @@ http://localhost:8080/
 ]
 ```
 
-### 👤 Commentaires: /comment
+### Commentaires: /comment
 #### `POST /comment`
 - **Description :** Ajoute un commentaire a un film et le renvoie
 - **Auth requise :** ✅ Oui
