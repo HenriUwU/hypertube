@@ -1,3 +1,18 @@
+<div class="homepage-select">
+  <select class="form-select" aria-label="Default select example" (change)="onSortChange($event)">
+    @for (opt of sortingOptions; track sortingOptions) {
+    <option value="{{opt}}">{{opt}}</option>
+    }
+  </select>
+</div>
+
+<mat-divider></mat-divider>
+
+
 <div class="home-page">
-  <mat-spinner color="accent" class="size"></mat-spinner>
+  <div class="movie-list">
+    <div *ngFor="let movie of movies" class="movie-item">
+      <app-thumbnail [movieId]="movie.id"></app-thumbnail>
+    </div>
+  </div>
 </div>

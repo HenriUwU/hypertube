@@ -7,6 +7,11 @@ import {AuthCallback42Component} from "./components/auth-callback-components/aut
 import {AuthCallbackDiscordComponent} from "./components/auth-callback-components/auth.callback.discord.component";
 import {LayoutComponent} from "./components/layout/layout.component";
 import {VerifyEmailComponent} from "./components/verify-email/verify.email.component";
+import {FooterComponent} from "./components/footer/footer.component";
+import { HeaderComponent } from './components/header/header.component';
+import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
+import { StreamingComponent } from './components/streaming/streaming.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 export const routes: Routes = [
   {
@@ -25,6 +30,16 @@ export const routes: Routes = [
     children: [
       {path: '', component: HomePageComponent, canActivate: [authGuard]}
     ]
+  },
+  {
+    path: 'test',
+    children: [
+      {path: 'footer', component: FooterComponent},
+      {path: 'header', component: HeaderComponent},
+      {path: 'thumbnail', component: ThumbnailComponent},
+      {path: 'homepage', component: HomePageComponent},
+      {path: 'stream', component: StreamingComponent},
+      {path: 'profile', component: ProfileComponent},
+    ]
   }
-
 ];

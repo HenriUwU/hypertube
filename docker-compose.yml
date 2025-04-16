@@ -7,7 +7,7 @@ services:
     ports:
       - "4200:4200"
     volumes:
-      - ./hypertube-frontend/:/angular-app
+      - ./hypertube-frontend/:/app
     depends_on:
       - backend
     environment:
@@ -57,7 +57,6 @@ services:
       - docker-network
 
 volumes:
-  postgres_data:
-# select a path used to save db
+  postgres_data: # select a path used to save db
 networks:
-  docker-network: 
+  docker-network:

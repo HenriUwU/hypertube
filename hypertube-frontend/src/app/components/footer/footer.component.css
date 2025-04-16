@@ -1,0 +1,44 @@
+.footer {
+    font-size: 0.8rem;
+    width: 100%;
+    position: sticky;
+    height: 2rem;
+    background-color: inherit;
+}
+
+.mat-divider {
+    border-top-color: #AFBB80;
+}
+
+.footer-developer {
+    color: white;
+    align-items: center;
+    padding: 1vw;
+}
+
+.footer-developer-link {
+    font-family: "Borel Regular", serif;
+    border-color: #153F2F;
+    align-items: end;
+}
+
+.footer-copyright {
+    color: white;
+    padding: 1vw;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+
+    .footer,
+    a {
+        font-size: 0.6rem;
+        height: 10%;
+    }
+}
