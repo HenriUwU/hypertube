@@ -12,6 +12,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
 import { StreamingComponent } from './components/streaming/streaming.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { PasswordComponent } from './components/password/password.component';
 
 export const routes: Routes = [
   {
@@ -40,6 +41,7 @@ export const routes: Routes = [
       {path: 'homepage', component: HomePageComponent},
       {path: 'stream', component: StreamingComponent},
       {path: 'profile', component: ProfileComponent},
+      {path: 'passwd', component: PasswordComponent},
     ]
   }
 ];
