@@ -1,4 +1,4 @@
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
@@ -6,7 +6,7 @@ import { UserModel } from '../../models/user.model';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule, NgFor],
+  imports: [ReactiveFormsModule, NgFor, NgIf],
   standalone: true,
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
@@ -24,6 +24,7 @@ export class ProfileComponent {
   });
 
   @Input () userId: string = sessionStorage.getItem('id') ? sessionStorage.getItem('id')! : '0';
+  isReadOnly: boolean = true;
 
 
   private defaultProfilePicture = '../../../../assets/images/default_pp.svg' ;
@@ -34,14 +35,12 @@ export class ProfileComponent {
     { value: 'es', viewValue: 'Español' },
     { value: 'ch', viewValue: 'Chibraxo' },
   ];
-
+  
   constructor(private userService: UserService) {
   }
-
+  
   ngOnInit() {
     this.userService.getUser(this.userId).subscribe((user) => {
-      console.log(user);
-      console.log(user.language)
       this.profileForm.patchValue({
         email: user.email,
         username: user.username,
@@ -51,11 +50,15 @@ export class ProfileComponent {
         profilePicture: user.profilePicture ? user.profilePicture : this.defaultProfilePicture,
         language: user.language
       });
-      console.log(this.profileForm.value);
+      
+      if (sessionStorage.getItem('id') !== this.userId) {
+        this.isReadOnly = true;
+      } else {
+        this.isReadOnly = false;
+      }
     });
-
   }
-
+      
   onSubmit() {
     const updatedUser: UserModel = {
       id: parseInt(this.userId),
@@ -66,7 +69,7 @@ export class ProfileComponent {
       language: this.profileForm.value.language!,
       profilePicture: this.profileForm.value.profilePicture!
     };
-
+      
     this.userService.updateUser(updatedUser).pipe().subscribe((response) => {
       this.profileForm.patchValue({
         email: response.email,
@@ -82,9 +85,8 @@ export class ProfileComponent {
       console.error('Error updating user:', error);
     }
     );
-
   }
-
+    
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -97,4 +99,14 @@ export class ProfileComponent {
       reader.readAsDataURL(file);
     }
   }
+
+  getCurrentLanguage(): string {
+    const language = this.profileForm.get('language')?.value;
+    if (language) {
+
+      return this.languages.find(lang => lang.value === language)?.viewValue || 'English';
+    }
+    return 'English';
+  }
 }
+  
