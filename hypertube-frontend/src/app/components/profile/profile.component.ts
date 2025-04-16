@@ -35,10 +35,10 @@ export class ProfileComponent {
     { value: 'es', viewValue: 'Español' },
     { value: 'ch', viewValue: 'Chibraxo' },
   ];
-  
+
   constructor(private userService: UserService) {
   }
-  
+
   ngOnInit() {
     this.userService.getUser(this.userId).subscribe((user) => {
       this.profileForm.patchValue({
@@ -50,7 +50,7 @@ export class ProfileComponent {
         profilePicture: user.profilePicture ? user.profilePicture : this.defaultProfilePicture,
         language: user.language
       });
-      
+
       if (sessionStorage.getItem('id') !== this.userId) {
         this.isReadOnly = true;
       } else {
@@ -58,7 +58,7 @@ export class ProfileComponent {
       }
     });
   }
-      
+
   onSubmit() {
     const updatedUser: UserModel = {
       id: parseInt(this.userId),
@@ -69,7 +69,7 @@ export class ProfileComponent {
       language: this.profileForm.value.language!,
       profilePicture: this.profileForm.value.profilePicture!
     };
-      
+
     this.userService.updateUser(updatedUser).pipe().subscribe((response) => {
       this.profileForm.patchValue({
         email: response.email,
@@ -86,7 +86,7 @@ export class ProfileComponent {
     }
     );
   }
-    
+
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -109,4 +109,3 @@ export class ProfileComponent {
     return 'English';
   }
 }
-  

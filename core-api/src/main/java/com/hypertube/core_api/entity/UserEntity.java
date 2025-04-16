@@ -143,6 +143,7 @@ public class UserEntity {
 		return emailVerify;
 	}
 
+
 	public void setEmailVerify(boolean emailVerify) {
 		this.emailVerify = emailVerify;
 	}
