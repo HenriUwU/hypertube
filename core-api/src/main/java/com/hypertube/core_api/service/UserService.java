@@ -11,6 +11,7 @@ import com.hypertube.core_api.repository.UserRepository;
 import com.hypertube.core_api.security.JwtTokenUtil;
 import com.nimbusds.oauth2.sdk.http.HTTPRequest;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -139,9 +140,11 @@ public class UserService implements UserDetailsService {
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setLanguage(user.getLanguage());
-        existingUser.setProfilePicture(user.getProfilePicture() != null
-                ? new SerialBlob(user.getProfilePicture())
-                : null);
+        if (user.getProfilePicture() != null && !user.getProfilePicture().isEmpty()) {
+            existingUser.setProfilePicture(userMapper.base64ToBlob(user.getProfilePicture()));
+        } else {
+            existingUser.setProfilePicture(null);
+        }
 
         return userMapper.map(userRepository.save(existingUser));
     }
