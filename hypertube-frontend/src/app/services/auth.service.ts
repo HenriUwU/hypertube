@@ -57,4 +57,12 @@ export class AuthService {
   verifyEmail(token: string): Observable<string> {
     return this.http.get<string>(`${this.apiUrlAuth}/verify-email?token=${token}`).pipe();
   }
+
+  forgotPassword(email: string): Observable<any> {
+    return this.http.get(`${this.apiUrlAuth}/forgot-password?email=${email}`);
+  }
+
+  verifyPasswordToken(token: string): Observable<any> {
+    return this.http.get(`${this.apiUrlAuth}/reset-password?token=${token}`);
+  }
 }

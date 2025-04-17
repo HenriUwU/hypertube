@@ -1,16 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors, FormsModule, ReactiveFormsModule } from '@angular/forms';
 // import { BrowserModule } from '@angular/platform-browser'
 import { CommonModule } from '@angular/common';;
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-// export const confirmPasswordValidator: ValidatorFn = (
-//   control: AbstractControl
-// ): ValidationErrors | null => {
-//   return control.value.password1 === control.value.password2
-//     ? null
-//     : { PasswordNoMatch: true };
-// };
 
 @Component({
   selector: 'app-password',
@@ -20,20 +11,20 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
     FormsModule
    ],
   standalone: true,
-  templateUrl: './password.component.html',
-  styleUrl: './password.component.css'
+  templateUrl: './modify-password.component.html',
+  styleUrl: './modify-password.component.css'
 })
-export class PasswordComponent {
+export class ModifyPasswordComponent {
 
   @Input() resetPassword: boolean = false;
 
   passwordForm = new FormGroup({
-    // initalPassword: new FormControl<string>('', [Validators.required, Validators.minLength(6), Validators.maxLength(40)]),
-    // password: new FormControl<string>('', [Validators.required, Validators.minLength(6), Validators.maxLength(40), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/)]),
-    // initalPassword: new FormControl<string>('', [Validators.required]),
-    password: new FormControl<string>('', [Validators.required]),
+    currentPassword: new FormControl<string>(''),
+    password: new FormControl<string>('', [Validators.required, ]),
     confirmPassword: new FormControl<string>('', [Validators.required]),
   }, { validators: this.confirmPasswordValidator });
+
+  successMessage: boolean = false;
 
   constructor() { }
 
@@ -69,7 +60,6 @@ export class PasswordComponent {
     else if (!/[!@#$%^&*]/.test(password)) {
       return { PasswordNoSpecialChar: true };
     }
-    console.log('Password is valid');
     return null;
   }
 
@@ -77,6 +67,7 @@ export class PasswordComponent {
     console.log(this.passwordForm.value);
     if (this.passwordForm.valid) {
       console.log('Form submitted successfully!');
+      this.successMessage = true;
     }
     else {
       console.log('Form is invalid!');
