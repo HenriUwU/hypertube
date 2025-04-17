@@ -89,7 +89,7 @@ public class TorrentService {
 							hlsStarted.set(true);
 							System.out.println("[FFMPEG] CONVERSION STARTED, GENERATING HLS");
 						} else {
-							System.out.println("[FFMPEG] FILE NOT READY, RETRY IN 10s");
+							System.out.println("[FFMPEG] FILE NOT READY FOR CONVERSION, RETRYING IN 10s");
 						}
 					}
 				}
