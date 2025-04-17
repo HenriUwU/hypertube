@@ -70,26 +70,26 @@ public class TorrentService {
 
 			client.startAsync(state -> {
 				int progress = state.getPiecesComplete() * 100 / state.getPiecesTotal();
-				Path videoFilePath;
-
-				try {
-					videoFilePath = findVideoFile(downloadDir);
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-
-				System.out.println(videoFilePath.toString() + "Download Progress: " + progress + "%");
+				System.out.println("Download Progress: " + progress + "%");
 
 				if (progress > 10 && !hlsStarted.get()) {
 					long now = System.currentTimeMillis();
+					Path videoFilePath;
+
+					try {
+						videoFilePath = findVideoFile(downloadDir);
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+
 					if (now - lastAttempt.get() > 10_000) {
 						lastAttempt.set(now);
 
 						if (generateHlsStream(videoFilePath, downloadDir.resolve("hls"))) {
 							hlsStarted.set(true);
-							System.out.println("[FFMPEG] CONVERSION STARTED, GENERATING HLS FOR: " + videoFilePath.toString());
+							System.out.println("[FFMPEG] CONVERSION STARTED, GENERATING HLS");
 						} else {
-							System.out.println("[FFMPEG] FILE " + videoFilePath.toString() + ", RETRY IN 10s");
+							System.out.println("[FFMPEG] FILE NOT READY, RETRY IN 10s");
 						}
 					}
 				}
@@ -102,13 +102,16 @@ public class TorrentService {
 	}
 
 	public String stream(String hash) {
-		Path playlistPath = Paths.get(System.getProperty("user.dir"),"torrents", hash, "hls", "playlist.m3u8");
+		Path playlistPath = Paths.get(System.getProperty("user.dir"), "torrents", hash, "hls", "playlist.m3u8");
 
 		if (!Files.exists(playlistPath)) {
 			throw new RuntimeException("Playlist not ready yet");
 		}
-		return "http://localhost:8080/" + playlistPath.toFile().toString();
+		String urlPath = "/torrents/" + hash + "/hls/playlist.m3u8";
+
+		return "http://localhost:8080" + urlPath;
 	}
+
 
 	private String extractInfoHash(String magnetUri) {
 		Pattern pattern = Pattern.compile("xt=urn:btih:([A-Z0-9]+)");
@@ -143,7 +146,6 @@ public class TorrentService {
 			new Thread(() -> {
 				try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
 					while ((reader.readLine()) != null) {
-						System.out.println();
 					}
 				} catch (IOException e) {
 					throw new RuntimeException(e);
