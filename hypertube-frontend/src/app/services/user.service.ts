@@ -16,4 +16,8 @@ export class UserService {
     return this.httpClient.get<UserModel>(`${this.apiUrlUser}/${id}`);
   }
 
+  updateUser(user: UserModel): Observable<UserModel> {
+
+    return this.httpClient.put<UserModel>(`${this.apiUrlUser}`, user);
+  }
 }

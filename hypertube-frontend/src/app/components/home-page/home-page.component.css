@@ -1,5 +1,27 @@
-.size {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+.movie-list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: line;
+
+}
+
+.mat-divider {
+  border-top-color: #AFBB80;
+  height: 2vh;
+}
+
+
+.form-select {
+  background: #153f2f;
+  color: white;
+  border-radius: 5%;
+  border-color: #AFBB80;
+  margin: 2%;
+}
+
+.homepage-select {
+  place-content: end;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }

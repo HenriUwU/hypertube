@@ -3,16 +3,22 @@ package com.hypertube.core_api.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hypertube.core_api.dto.UserDTO;
+import com.hypertube.core_api.entity.TokenEntity;
 import com.hypertube.core_api.mapper.UserMapper;
 import com.hypertube.core_api.entity.UserEntity;
+import com.hypertube.core_api.model.TokenType;
+import com.hypertube.core_api.repository.TokenRepository;
 import com.hypertube.core_api.repository.UserRepository;
 import com.hypertube.core_api.security.JwtTokenUtil;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,12 +31,18 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     @Value("${discord.client.id}")
     private String discordClientId;
@@ -49,12 +61,14 @@ public class UserService implements UserDetailsService {
     private final ObjectMapper objectMapper;
     private final RestClient restClient;
     private final UserMapper userMapper;
+    private final TokenRepository tokenRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ObjectMapper objectMapper, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil, ObjectMapper objectMapper, UserMapper userMapper, TokenRepository tokenRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userMapper = userMapper;
+        this.tokenRepository = tokenRepository;
         this.restTemplate = new RestTemplate();
         this.objectMapper = objectMapper;
         this.restClient = RestClient.create();
@@ -85,11 +99,22 @@ public class UserService implements UserDetailsService {
     public void register(UserEntity user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+        String token = UUID.randomUUID().toString();
+        TokenEntity tokenEntity = new TokenEntity();
+        tokenEntity.setToken(token);
+        tokenEntity.setUser(user);
+        tokenEntity.setExpiryDate(LocalDateTime.now().plusDays(1));
+        tokenEntity.setType(TokenType.EMAIL_VERIFICATION);
+        tokenRepository.save(tokenEntity);
+//        sendVerificationEmail(user.getEmail(), token);
     }
 
     public ResponseEntity<Map<String, String>> login(UserEntity user) {
         UserEntity dbUser = userRepository.findByUsername(user.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
+
+//        if (!dbUser.isEmailVerify())
+//            throw new RuntimeException("Email verify failed");
 
         if (passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
             String token = jwtTokenUtil.generateToken(user.getUsername());
@@ -103,7 +128,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public UserDTO updateUser(UserDTO user) {
+    public UserDTO updateUser(UserDTO user) throws SQLException {
         if (user.getId() == null) {
             throw new RuntimeException("Id can not be null");
         }
@@ -114,7 +139,11 @@ public class UserService implements UserDetailsService {
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setLanguage(user.getLanguage());
-        existingUser.setProfilePicture(user.getProfilePicture());
+        if (user.getProfilePicture() != null && !user.getProfilePicture().isEmpty()) {
+            existingUser.setProfilePicture(userMapper.base64ToBlob(user.getProfilePicture()));
+        } else {
+            existingUser.setProfilePicture(null);
+        }
 
         return userMapper.map(userRepository.save(existingUser));
     }
@@ -252,5 +281,77 @@ public class UserService implements UserDetailsService {
     public void deleteUser(Integer userId, String token) {
         verifyUser(userId, token);
         userRepository.deleteById(userId);
+    }
+
+    public ResponseEntity<String> verifyEmail(String token) {
+        TokenEntity tokenEntity = tokenRepository.findByToken(token);
+        if (tokenEntity == null || tokenEntity.getExpiryDate().isBefore(LocalDateTime.now())) {
+            return ResponseEntity.badRequest().body("Invalid or expired token");
+        }
+
+        UserEntity user = tokenEntity.getUser();
+        user.setEmailVerify(true);
+        userRepository.save(user);
+        tokenRepository.delete(tokenEntity);
+        return ResponseEntity.ok("Email verified successfully");
+    }
+
+    private void sendVerificationEmail(String toEmail, String verificationToken) {
+        String subject = "Vérification de votre adresse email";
+        String verificationUrl = "http://localhost:4200/auth/verify-email?token=" + verificationToken;
+        String body = "Bonjour,\n\n" +
+                "Merci de vous être inscrit. Veuillez cliquer sur le lien suivant pour vérifier votre adresse email :\n" +
+                verificationUrl + "\n\n" +
+                "Ce lien expirera dans 24 heures.\n\n" +
+                "L'équipe Hypertubedigestif";
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject(subject);
+        message.setText(body);
+        message.setFrom("noreply-hypertubedigestif@gmail.com");
+
+        mailSender.send(message);
+    }
+
+    public ResponseEntity<String> forgotPassword(String email) {
+        UserEntity user = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("No account with this email: " + email));
+        String token = UUID.randomUUID().toString();
+        TokenEntity tokenEntity = new TokenEntity();
+        tokenEntity.setToken(token);
+        tokenEntity.setUser(user);
+        tokenEntity.setExpiryDate(LocalDateTime.now().plusMinutes(30));
+        tokenEntity.setType(TokenType.PASSWORD_RESET);
+        tokenRepository.save(tokenEntity);
+
+        sendResetPasswordEmail(email, token);
+        return ResponseEntity.ok("Si ce compte existe, un email de réinitialisation a été envoyé.");
+    }
+
+    private void sendResetPasswordEmail(String toEmail, String resetToken) {
+        String subject = "Réinitialisation de votre mot de passe";
+        String resetUrl = "http://localhost:4200/auth/reset-password?token=" + resetToken;
+
+        String body = "Bonjour,\n\n" +
+                "Vous avez demandé une réinitialisation de votre mot de passe.\n" +
+                "Veuillez cliquer sur le lien suivant pour définir un nouveau mot de passe :\n" +
+                resetUrl + "\n\n" +
+                "Ce lien expirera dans 30 minutes. Si vous n'avez pas fait cette demande, vous pouvez ignorer cet e-mail.\n\n" +
+                "L'équipe Hypertubedigestif";
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject(subject);
+        message.setText(body);
+        message.setFrom("noreply-hypertubedigestif@gmail.com");
+        mailSender.send(message);
+    }
+
+    public ResponseEntity<String> resetPassword(String token) {
+        TokenEntity tokenEntity = tokenRepository.findByToken(token);
+        if (tokenEntity == null || tokenEntity.getExpiryDate().isBefore(LocalDateTime.now())) {
+            return ResponseEntity.badRequest().body("Invalid or expired token");
+        }
+        tokenRepository.delete(tokenEntity);
+        return ResponseEntity.ok("Password can be reset");
     }
 }

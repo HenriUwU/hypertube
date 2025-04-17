@@ -1,0 +1,19 @@
+<div class="streaming-select">
+    <select class="form-select" aria-label="Default select example" (change)="onSortChange($event)">
+        @for (opt of torrentOptions; track torrentOptions) {
+        <option value="{{opt.Magnet}}">{{opt.Name}}</option>
+        }
+    </select>
+</div>
+
+<mat-divider></mat-divider>
+
+<div class="streaming-container">
+    <h1 class="movie-title">{{videoTitle}}</h1>
+    <div class="movie-container">
+        <video width="320" height="180" class="video-player" #videoPlayer autoplay muted controls>
+            <source src="{{videoUrl}}" type=" video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+</div>

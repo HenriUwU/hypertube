@@ -1,0 +1,4 @@
+<div class="message-box">
+  <h2 [ngClass]="isSuccess ? 'success' : 'error'">{{ message }}</h2>
+  <p class="message" *ngIf="message">{{ isSuccess ? 'Votre email a été vérifié avec succès !' : 'Veuillez vérifier votre lien d\'email ou réessayez plus tard.' }}</p>
+</div>

@@ -1,0 +1,76 @@
+.streaming-container {
+    bottom: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.movie-container {
+    position: relative;
+
+    height: auto;
+    width: 45vw;
+
+    border-bottom: 2vh solid #eac29f;
+    border-top: 2vh solid #eac29f;
+    border-left: 1vw solid #eac29f;
+    border-right: 1vw solid #eac29f;
+    background-color: #20242a;
+
+    justify-content: space-between;
+    border-radius: 5%;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    margin-left: 2vw;
+    margin-right: 2vw;
+}
+
+.movie-title {
+    color: white;
+}
+
+.video-player {
+    width: 100%;
+    height: auto;
+    /* height: 90%; */
+    padding: 1vh;
+}
+
+
+.mat-divider {
+    border-top-color: #AFBB80;
+    height: 2vh;
+}
+
+
+.form-select {
+    background: #153f2f;
+    color: white;
+    border-radius: 5%;
+    border-color: #AFBB80;
+    margin: 2%;
+
+    font-size: 0.5em;
+    overflow: scroll;
+}
+
+.streaming-select {
+    place-content: end;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+    .movie-container {
+        width: 90vw;
+        height: auto;
+    }
+
+    .video-player {
+        width: 100%;
+        height: auto;
+    }
+}

@@ -1,0 +1,61 @@
+<div class="profile-container">
+    <div class="profile-title">
+        <h1>profile</h1>
+    </div>
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <div class="form-container">
+            <div class="form-boxes">
+                <div class="left-column">
+                    <label for="email">Email address: </label>
+                    <input id="email" type="email" formControlName="email" [readonly]="this.isReadOnly" />
+                    <br />
+
+                    <label for="username">Username: </label>
+                    <input id="username" type="text" formControlName="username" [readonly]="this.isReadOnly" />
+                    <br />
+
+                    <label for="lastname">Last Name: </label>
+                    <input id="lastname" type="text" formControlName="lastname" [readonly]="this.isReadOnly" />
+                    <br />
+
+                    <label for="firstname">First Name: </label>
+                    <input id="firstname" type="text" formControlName="firstname" [readonly]="this.isReadOnly" />
+                    <br />
+                    <!-- 
+                    <label for="password">Password: </label>
+                    <input id="password" type="password" formControlName="password" /> -->
+                </div>
+
+                <div class="right-column">
+                    <div class="pp-container">
+                        <div class="profile-picture-container">
+                            <img [src]="this.profileForm.value.profilePicture" alt="Profile Picture"
+                                id="profile-picture" />
+                        </div>
+                        <div class="profile-picture-input" *ngIf="!isReadOnly">
+                            <input id="profile-picture-input-id" type="file" (change)="onFileSelected($event)"
+                                [disabled]="this.isReadOnly" />
+                        </div>
+                    </div>
+                    <div class="language-container">
+                        <label for="language">Language:</label>
+                        <br />
+                        <ng-container *ngIf="isReadOnly; else editableSelect">
+                            <span id="language">{{ getCurrentLanguage() }}</span>
+                        </ng-container>
+                        <ng-template #editableSelect>
+                            <select id="language" formControlName="language">
+                                <option *ngFor="let lang of languages" [value]="lang.value">{{ lang.viewValue }}
+                                </option>
+                            </select>
+                        </ng-template>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-button" *ngIf="!isReadOnly">
+                <button type="submit" [disabled]="!profileForm.valid" id="submitButton">Modify</button>
+            </div>
+        </div>
+    </form>
+</div>
