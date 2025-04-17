@@ -103,7 +103,7 @@ public class TorrentService {
 		if (!Files.exists(playlistPath)) {
 			throw new RuntimeException("Playlist not ready yet");
 		}
-		return "http://localhost:8080/" + playlistPath.toFile().toString();
+		return "http://localhost:8080/" + playlistPath.toFile().toString().substring(5);
 	}
 
 	private String extractInfoHash(String magnetUri) {

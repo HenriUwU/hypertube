@@ -4,6 +4,7 @@ import { MovieService } from '../../services/movie.service';
 import { TorrentService } from '../../services/torrent.service';
 import { MatDivider } from '@angular/material/divider';
 import { Torrent } from '../../models/torrent.models';
+import Hls from "hls.js";
 
 @Component({
   selector: 'app-streaming',
@@ -18,7 +19,8 @@ export class StreamingComponent {
   videoUrl: string = '';
   tracksUrl: string = '';
   // @Input() videoTitle: string = 'A minecraft movie';
-  @Input() videoTitle: string = 'Deadpool 2';
+  // @Input() videoTitle: string = 'The Sorcerer s Apprentice';
+  @Input() videoTitle: string = 'The lion king';
 
 
   torrentOptions:any[] = [];
@@ -58,6 +60,8 @@ export class StreamingComponent {
             console.log(this.videoUrl);
             // stop the interval if the video is loaded
             if (this.videoUrl) {
+              const video = this.videoPlayer.nativeElement;
+              this.hlsConversion(this.videoUrl, video);
               clearInterval(interId);
             }
           }, (error) => {
@@ -69,5 +73,20 @@ export class StreamingComponent {
     });
   }
 
+  hlsConversion(videoUrl: string, video: HTMLVideoElement) {
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(videoUrl);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().then();
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = videoUrl;
+      video.addEventListener('loadedmetadata', () => {
+        video.play().then();
+      });
+    }
+  }
 
 }

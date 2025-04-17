@@ -1,5 +1,6 @@
 <div class="streaming-select">
     <select class="form-select" aria-label="Default select example" (change)="onTorrentChange($event)">
+        <option value="" disabled selected>Choose a torrent</option>
         @for (opt of torrentOptions; track torrentOptions) {
         <option value="{{opt.Magnet}}">{{opt.Name}}</option>
         }
@@ -15,7 +16,7 @@
             <source src="{{videoUrl}}" type=" video/mp4">
             Your browser does not support the video tag.
         </video>
-        <track label="Français" kind="subtitles" srclang="fr" default
-            src="{{tracksUrl}}" />
+        <!-- <track label="Français" kind="subtitles" srclang="fr" default
+            src="{{tracksUrl}}" /> -->
     </div>
 </div>
