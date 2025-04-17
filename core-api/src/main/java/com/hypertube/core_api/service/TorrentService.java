@@ -70,22 +70,26 @@ public class TorrentService {
 
 			client.startAsync(state -> {
 				int progress = state.getPiecesComplete() * 100 / state.getPiecesTotal();
-				System.out.println("Download Progress: " + progress + "%");
+				Path videoFilePath;
+
+				try {
+					videoFilePath = findVideoFile(downloadDir);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+
+				System.out.println(videoFilePath.toString() + "Download Progress: " + progress + "%");
 
 				if (progress > 10 && !hlsStarted.get()) {
 					long now = System.currentTimeMillis();
 					if (now - lastAttempt.get() > 10_000) {
 						lastAttempt.set(now);
 
-						try {
-							if (generateHlsStream(findVideoFile(downloadDir), downloadDir.resolve("hls"))) {
-								hlsStarted.set(true);
-								System.out.println("[HLS] File ready, generating HLS");
-							} else {
-								System.out.println("[HLS] File not ready, retry in 10s");
-							}
-						} catch (IOException e) {
-							throw new RuntimeException(e);
+						if (generateHlsStream(videoFilePath, downloadDir.resolve("hls"))) {
+							hlsStarted.set(true);
+							System.out.println("[FFMPEG] CONVERSION STARTED, GENERATING HLS FOR: " + videoFilePath.toString());
+						} else {
+							System.out.println("[FFMPEG] FILE " + videoFilePath.toString() + ", RETRY IN 10s");
 						}
 					}
 				}
@@ -138,9 +142,8 @@ public class TorrentService {
 
 			new Thread(() -> {
 				try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-					String line;
-					while ((line = reader.readLine()) != null) {
-						System.out.println("[FFMPEG] " + line);
+					while ((reader.readLine()) != null) {
+						System.out.println();
 					}
 				} catch (IOException e) {
 					throw new RuntimeException(e);
@@ -182,5 +185,13 @@ public class TorrentService {
 		return process;
 	}
 
+	public String isDownloadStarted(String magnet) {
+		String hash = extractInfoHash(magnet);
+		Path downloadDir = Paths.get(System.getProperty("user.dir"),"torrents", hash);
 
+		if (Files.exists(downloadDir)) {
+			return hash;
+		}
+		return null;
+	}
 }

@@ -29,10 +29,14 @@ public class TorrentController {
 		return torrentService.start(torrentModel);
 	}
 
+	@GetMapping(path = "/is-started/{magnet}")
+	public String isTorrentStarted(@PathVariable String magnet) {
+		return torrentService.isDownloadStarted(magnet);
+	}
+
 	@GetMapping(path = "/stream/{hash}")
 	public String streamTorrent(@PathVariable String hash) {
 		return torrentService.stream(hash);
 	}
-
 
 }
