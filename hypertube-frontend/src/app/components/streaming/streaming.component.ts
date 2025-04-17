@@ -16,7 +16,9 @@ export class StreamingComponent {
   @ViewChild('videoPlayer', {static: false}) videoPlayer!: ElementRef;
 
   videoUrl: string = '';
-  @Input() videoTitle: string = 'A minecraft movie';
+  tracksUrl: string = '';
+  // @Input() videoTitle: string = 'A minecraft movie';
+  @Input() videoTitle: string = 'Deadpool 2';
 
 
   torrentOptions:any[] = [];
@@ -33,7 +35,7 @@ export class StreamingComponent {
     );
   }
 
-  onSortChange(event: Event) {
+  onTorrentChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     if (!selectElement) {
       return;
@@ -43,8 +45,29 @@ export class StreamingComponent {
       return;
     }
     this.magnet = selectedOption;
-    // this.torrentService.sendMagnet(this.magnet).subscribe((response: string) => {
-    //   this.hash = response;
-    // });
+    this.torrentService.sendMagnet(this.magnet).subscribe((response: string) => {
+      this.hash = response;
+      // this.torrentService.getTorrentPath(this.hash).subscribe((response: string) => {
+      //   this.videoUrl = response;
+      //   console.log(this.videoUrl);
+
+      var interId = setInterval(() => {
+        if (this.hash) {
+          this.torrentService.getTorrentPath(this.hash).subscribe((response: string) => {
+            this.videoUrl = response;
+            console.log(this.videoUrl);
+            // stop the interval if the video is loaded
+            if (this.videoUrl) {
+              clearInterval(interId);
+            }
+          }, (error) => {
+            console.error('Error fetching torrent path:', error);
+          });
+        }
+      }, 5000);
+
+    });
   }
+
+
 }

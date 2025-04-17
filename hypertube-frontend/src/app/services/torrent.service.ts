@@ -22,4 +22,8 @@ export class TorrentService {
       responseType: 'text' as 'json'
     }).pipe();
   }
+
+  getTorrentPath(hash: string): Observable<string> {
+    return this.http.get<string>(`${this.apiUrlAuth}/stream/${hash}`).pipe();
+  }
 }
