@@ -30,9 +30,8 @@ public class TorrentController {
 	}
 
 	@GetMapping(path = "/stream/{hash}")
-	public void streamTorrent(@PathVariable String hash,
-	                          HttpServletResponse response) throws IOException {
-		torrentService.stream(hash, response);
+	public String streamTorrent(@PathVariable String hash) {
+		return torrentService.stream(hash);
 	}
 
 

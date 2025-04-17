@@ -97,16 +97,13 @@ public class TorrentService {
 		}
 	}
 
-	public void stream(String hash, HttpServletResponse response) throws IOException {
+	public String stream(String hash) {
 		Path playlistPath = Paths.get(System.getProperty("user.dir"),"torrents", hash, "hls", "playlist.m3u8");
 
 		if (!Files.exists(playlistPath)) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, "HLS playlist not ready yet");
-			return;
+			throw new RuntimeException("Playlist not ready yet");
 		}
-
-		response.setContentType("application/vnd.apple.mpegurl");
-		Files.copy(playlistPath, response.getOutputStream());
+		return "http://localhost:8080/" + playlistPath.toFile().toString();
 	}
 
 	private String extractInfoHash(String magnetUri) {
