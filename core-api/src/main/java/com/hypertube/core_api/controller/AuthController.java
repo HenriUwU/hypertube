@@ -43,7 +43,7 @@ public class AuthController {
         return this.userService.verifyEmail(token);
     }
 
-        @GetMapping("/forgot-password")
+    @GetMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
         return this.userService.forgotPassword(email);
     }

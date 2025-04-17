@@ -23,6 +23,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.mozilla.universalchardet.UniversalDetector;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -31,8 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -164,53 +164,60 @@ public class MovieService {
         return commentMapper.map(commentRepository.getCommentEntitiesByMovieId(movieId));
     }
 
-            public List<SubtitleModel> getSubtitles(String imdb_id) throws IOException {
-                List<SubtitleModel> subtitles = new ArrayList<>();
-                String baseUrl = "https://yts-subs.com";
-                String url = baseUrl + "/movie-imdb/" + imdb_id;
+    public List<SubtitleModel> getSubtitles(String imdb_id) throws IOException {
+        List<SubtitleModel> subtitles = new ArrayList<>();
+        String baseUrl = "https://yts-subs.com";
+        String url = baseUrl + "/movie-imdb/" + imdb_id;
 
-                // Load the main subtitle page
-                Document doc = Jsoup.connect(url)
-                        .timeout(10000)
-                        .userAgent("Mozilla/5.0")
-                        .get();
+        // Load the main subtitle page
+        Document doc = Jsoup.connect(url)
+                .timeout(10000)
+                .userAgent("Mozilla/5.0")
+                .get();
 
-                Elements rows = doc.select("table.other-subs tbody tr");
+        Elements rows = doc.select("table.other-subs tbody tr");
 
-                int subtitles_cnt = 1;
-                for (Element row : rows) {
-                    Element langCell = row.selectFirst(".sub-lang");
-                    if (langCell == null) continue;
+        int subtitles_cnt = 1;
+        for (Element row : rows) {
+            Element langCell = row.selectFirst(".sub-lang");
+            if (langCell == null) continue;
 
-                    String language = langCell.text().trim().toLowerCase();
-                    if (!language.equals("french") && !language.equals("english")) continue;
+            String language = langCell.text().trim().toLowerCase();
+            if (!language.equals("french") && !language.equals("english")) continue;
+//&& !language.equals("english")
+            Element linkElement = row.selectFirst("a[href^=/subtitles/]");
+            if (linkElement == null) continue;
 
-                    Element linkElement = row.selectFirst("a[href^=/subtitles/]");
-                    if (linkElement == null) continue;
+            String detailHref = linkElement.attr("href");
+            String detailUrl = baseUrl + detailHref;
 
-                    String detailHref = linkElement.attr("href");
-                    String detailUrl = baseUrl + detailHref;
+            Document detailDoc = Jsoup.connect(detailUrl)
+                    .timeout(10000)
+                    .userAgent("Mozilla/5.0")
+                    .get();
 
-                    Document detailDoc = Jsoup.connect(detailUrl)
-                            .timeout(10000)
-                            .userAgent("Mozilla/5.0")
-                            .get();
+            Element downloadButton = detailDoc.selectFirst("#btn-download-subtitle");
+            if (downloadButton == null) continue;
 
-                    Element downloadButton = detailDoc.selectFirst("#btn-download-subtitle");
-                    if (downloadButton == null) continue;
+            String encodedLink = downloadButton.attr("data-link");
 
-                    String encodedLink = downloadButton.attr("data-link");
+            List<Path> subtitleFiles = downloadSubtitle(encodedLink, imdb_id);
 
-                    List<Path> subtitleFiles = downloadSubtitle(encodedLink, imdb_id);
+            for (Path filePath : subtitleFiles) {
+                if (!Files.exists(filePath))
+                    continue;
 
-                    for (Path filePath : subtitleFiles) {
-                        String title = "sub-" + subtitles_cnt + "-" + language;
-                        subtitles.add(new SubtitleModel(title, language, filePath.toString()));
-                        subtitles_cnt++;
-                    }
-                }
-                return subtitles;
+                String fileUrl = filePath.toString();
+                if (subtitles.stream().anyMatch(subtitle -> subtitle.getUrl().equals(fileUrl)))
+                    continue;
+
+                String title = "sub-" + subtitles_cnt + "-" + language;
+                subtitles.add(new SubtitleModel(title, language, filePath.toString()));
+                subtitles_cnt++;
             }
+        }
+        return subtitles;
+    }
 
     private List<Path> downloadSubtitle(String encodedLink, String imdb_id) throws IOException {
         String downloadUrl = new String(Base64.getDecoder().decode(encodedLink), StandardCharsets.UTF_8);
@@ -234,13 +241,111 @@ public class MovieService {
                 } else {
                     Files.createDirectories(extractedPath.getParent());
                     Files.copy(zis, extractedPath, StandardCopyOption.REPLACE_EXISTING);
-                    extractedFiles.add(extractedPath);
+
+                    if (extractedPath.toString().toLowerCase().endsWith(".srt")) {
+                        Path vttPath = replaceExtension(extractedPath, ".vtt");
+                        if (convertSrtToVtt(extractedPath, vttPath))
+                            extractedFiles.add(vttPath);
+                    } else if (extractedPath.toString().toLowerCase().endsWith(".txt")) {
+                        Path vttPath = replaceExtension(extractedPath, ".vtt");
+                        if (convertTxtToVtt(extractedPath, vttPath, 25.0))
+                            extractedFiles.add(vttPath);
+                    }
                 }
                 zis.closeEntry();
             }
         }
         Files.deleteIfExists(zipPath);
         return extractedFiles;
+    }
+
+    public boolean convertSrtToVtt(Path srtPath, Path vttPath) throws IOException {
+        String encoding = detectEncoding(srtPath.toString());
+
+        ProcessBuilder processBuilder = new ProcessBuilder(
+                "ffmpeg",
+                "-y",
+                "-sub_charenc", encoding,
+                "-i", srtPath.toString(),
+                "-c", "webvtt",
+                vttPath.toString()
+        );
+
+        return launchFfmpegSubtitle(processBuilder, srtPath, vttPath);
+    }
+
+    public boolean convertTxtToVtt(Path txtPath, Path vttPath, Double frameRate) throws IOException {
+        String encoding = detectEncoding(txtPath.toString());
+
+        ProcessBuilder processBuilder = new ProcessBuilder(
+                "ffmpeg",
+                "-y",
+                "-subfps", frameRate.toString(),
+                "-sub_charenc", encoding,
+                "-f", "microdvd",
+                "-i", txtPath.toString(),
+                "-c", "webvtt",
+                vttPath.toString()
+        );
+
+        return launchFfmpegSubtitle(processBuilder, txtPath, vttPath);
+    }
+
+    private boolean launchFfmpegSubtitle(ProcessBuilder processBuilder, Path inputPath, Path outputPath) throws IOException {
+        processBuilder.redirectErrorStream(true);
+
+        try {
+            Process process = processBuilder.start();
+
+            Thread outputConsumer = new Thread(() -> {
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(process.getInputStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            outputConsumer.start();
+
+            int exitCode = process.waitFor();
+            Files.deleteIfExists(inputPath);
+            if (exitCode != 0)
+                Files.deleteIfExists(outputPath);
+            return exitCode == 0;
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            Files.deleteIfExists(inputPath);
+            Files.deleteIfExists(outputPath);
+            return false;
+        }
+    }
+    private Path replaceExtension(Path originalPath, String newExtension) {
+        String fileName = originalPath.getFileName().toString();
+        int dotIndex = fileName.lastIndexOf('.');
+        String newName = (dotIndex != -1 ? fileName.substring(0, dotIndex) : fileName) + newExtension;
+        return originalPath.getParent().resolve(newName);
+    }
+
+    public static String detectEncoding(String filePath) {
+        byte[] buf = new byte[4096];
+        try (FileInputStream fis = new FileInputStream(filePath)) {
+            UniversalDetector detector = new UniversalDetector(null);
+
+            int nread;
+            while ((nread = fis.read(buf)) > 0 && !detector.isDone()) {
+                detector.handleData(buf, 0, nread);
+            }
+
+            detector.dataEnd();
+            String encoding = detector.getDetectedCharset();
+            detector.reset();
+            return encoding != null ? encoding : "UTF-8"; // fallback to UTF-8
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "UTF-8";
+        }
     }
 
     private void checkSortByDTO(SortByModel sortByDTO) {
