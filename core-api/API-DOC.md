@@ -11,6 +11,8 @@ Bienvenue dans la documentation de l’API **Hypertube**.
       - [`GET /auth/verify-email?token={token}`](#get-authverify-emailtokentoken)
       - [`GET /auth/forgot-password?email={email}`](#get-authforgot-passwordemailemail)
       - [`GET /auth/reset-password?token={token}`](#get-authreset-passwordtokentoken)
+      - [`POST /auth/update-password?token={token}`](#post-authupdate-passwordtokentoken)
+      - [`POST /auth/old-password-verify`](#post-authold-password-verify)
     - [Utilisateur: /user](#utilisateur-user)
       - [`GET /user/{id}`](#get-userid)
       - [`PUT /user`](#put-user)
@@ -67,6 +69,16 @@ http://localhost:8080/
 
 - **Description :** Route pour dire que le mdp a etait reset
 - **Auth requise :** ❌​ Non
+
+#### `POST /auth/update-password?token={token}`
+- **Description :** met a jour le mot de passe
+- **Auth requise :** ✅ Oui et Si Non ❌ : envoyer le token en query param sinon ne pas l'envoyer
+- **Body String (new pwd):**
+
+#### `POST /auth/old-password-verify`
+- **Description :** renvoie ok si le mot de passe dans le body est le meme que celui de l'utilisateur
+- **Auth requise :** ✅ Oui
+- **Body String (old pwd):**
 
 ### Utilisateur: /user
 
