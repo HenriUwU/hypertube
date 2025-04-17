@@ -354,4 +354,13 @@ public class UserService implements UserDetailsService {
         tokenRepository.delete(tokenEntity);
         return ResponseEntity.ok("Password can be reset");
     }
+
+    public ResponseEntity<String> oldPasswordVerify(String oldPassword, String token) {
+        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+
+        if (passwordEncoder.matches(oldPassword, userEntity.getPassword()))
+            return ResponseEntity.ok("Old password are the same");
+        else
+            return ResponseEntity.badRequest().body("Old password does not match");
+    }
 }

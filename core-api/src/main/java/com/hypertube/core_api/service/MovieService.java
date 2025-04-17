@@ -287,11 +287,11 @@ public class MovieService {
                 "-c", "webvtt",
                 vttPath.toString()
         );
-
         return launchFfmpegSubtitle(processBuilder, txtPath, vttPath);
     }
 
     private boolean launchFfmpegSubtitle(ProcessBuilder processBuilder, Path inputPath, Path outputPath) throws IOException {
+        System.out.println(processBuilder.command());
         processBuilder.redirectErrorStream(true);
 
         try {
@@ -310,7 +310,7 @@ public class MovieService {
             outputConsumer.start();
 
             int exitCode = process.waitFor();
-            Files.deleteIfExists(inputPath);
+//            Files.deleteIfExists(inputPath);
             if (exitCode != 0)
                 Files.deleteIfExists(outputPath);
             return exitCode == 0;

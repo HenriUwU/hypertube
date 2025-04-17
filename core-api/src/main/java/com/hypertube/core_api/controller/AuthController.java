@@ -52,4 +52,9 @@ public class AuthController {
     public ResponseEntity<String> resetPassword(@RequestParam String token) {
         return this.userService.resetPassword(token);
     }
+
+    @PostMapping("/old-password-verify")
+    public ResponseEntity<String> oldPasswordVerify(@RequestBody String oldPassword, @RequestHeader("Authorization") String token) {
+        return this.userService.oldPasswordVerify(oldPassword, token);
+    }
 }
