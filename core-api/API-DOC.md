@@ -69,17 +69,32 @@ http://localhost:8080/
 
 - **Description :** Route pour dire que le mdp a etait reset
 - **Auth requise :** ❌​ Non
-
+- **Response:**
+```json
+{
+    "response": "Password changed"
+}
+```
 #### `POST /auth/update-password?token={token}`
 - **Description :** met a jour le mot de passe
 - **Auth requise :** ✅ Oui et Si Non ❌ : envoyer le token en query param sinon ne pas l'envoyer
 - **Body String (new pwd):**
-
+- **Response:**
+```json
+{
+    "response": "Password changed"
+}
+```
 #### `POST /auth/old-password-verify`
 - **Description :** renvoie ok si le mot de passe dans le body est le meme que celui de l'utilisateur
 - **Auth requise :** ✅ Oui
 - **Body String (old pwd):**
-
+- **Response:**
+```json
+{
+    "response": "true"
+}
+```
 ### Utilisateur: /user
 
 #### `GET /user/{id}`
