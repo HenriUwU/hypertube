@@ -28,4 +28,11 @@ export class TorrentService {
       responseType: 'text' as 'json'
     }).pipe();
   }
+
+  isTorrentStarted(magnet: string): Observable<string> {
+    return this.http.get<string>(`${this.apiUrlAuth}/is-started/${magnet}`, {
+      responseType: 'text' as 'json'
+    }).pipe();
+  }
+
 }

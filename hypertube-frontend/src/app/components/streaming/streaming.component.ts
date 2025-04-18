@@ -1,10 +1,9 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { Movie } from '../../models/movie.model';
-import { MovieService } from '../../services/movie.service';
 import { TorrentService } from '../../services/torrent.service';
 import { MatDivider } from '@angular/material/divider';
 import { Torrent } from '../../models/torrent.models';
 import Hls from "hls.js";
+
 
 @Component({
   selector: 'app-streaming',
@@ -47,29 +46,59 @@ export class StreamingComponent {
       return;
     }
     this.magnet = selectedOption;
+
+    console.log('Selected torrent magnet:', this.magnet);
+    this.torrentService.isTorrentStarted(this.magnet).subscribe(
+      (response: string) => {
+        this.hash = response;
+        console.log('Torrent hash:', this.hash);
+        if (this.hash) {
+          this.launchStreaming(null);
+        } else {
+          this.startTorrent();
+        }
+      },
+      (error) => {
+        if (error.status === 403 || error.error === null) {
+          console.log('Torrent not started, starting torrent...');
+          this.startTorrent();
+        } else {
+          console.warn('Handled error while checking if torrent is started:', error.message || error);
+        }
+      }
+    );
+  }
+
+  startTorrent() {
     this.torrentService.sendMagnet(this.magnet).subscribe((response: string) => {
       this.hash = response;
-      // this.torrentService.getTorrentPath(this.hash).subscribe((response: string) => {
-      //   this.videoUrl = response;
-      //   console.log(this.videoUrl);
-
       var interId = setInterval(() => {
-        if (this.hash) {
-          this.torrentService.getTorrentPath(this.hash).subscribe((response: string) => {
-            this.videoUrl = response;
-            console.log(this.videoUrl);
-            // stop the interval if the video is loaded
-            if (this.videoUrl) {
-              const video = this.videoPlayer.nativeElement;
-              this.hlsConversion(this.videoUrl, video);
-              clearInterval(interId);
-            }
-          }, (error) => {
-            console.error('Error fetching torrent path:', error);
-          });
-        }
+        this.launchStreaming(interId as unknown as number);
       }, 5000);
+    }, (error) => {
+      console.error('Error starting torrent:', error);
+    });
+  }
 
+  launchStreaming(intervalId: number | null) {
+    if (!this.hash) {
+      return;
+    }
+
+    this.torrentService.getTorrentPath(this.hash).subscribe((response: string) => {
+      this.videoUrl = response;
+      console.log(this.videoUrl);
+      if (this.videoUrl) {
+        const video = this.videoPlayer.nativeElement;
+        this.hlsConversion(this.videoUrl, video);
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
+      } else {
+        console.error('Error: videoUrl is empty');
+      }
+    }, (error) => {
+      console.error('Error fetching torrent path:', error);
     });
   }
 
