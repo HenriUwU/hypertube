@@ -346,38 +346,48 @@ public class UserService implements UserDetailsService {
         mailSender.send(message);
     }
 
-    public ResponseEntity<String> resetPassword(String token) {
+    public ResponseEntity<Map<String, String>> resetPassword(String token) {
         TokenEntity tokenEntity = tokenRepository.findByToken(token);
-        if (tokenEntity == null || tokenEntity.getExpiryDate().isBefore(LocalDateTime.now())) {
-            return ResponseEntity.badRequest().body("Invalid or expired token");
-        }
-        return ResponseEntity.ok("Password can be reset");
+        if (tokenEntity == null || tokenEntity.getExpiryDate().isBefore(LocalDateTime.now()))
+            throw new EntityNotFoundException("No account with this token or expired token");
+        Map<String, String> map = new HashMap<>();
+        map.put("response", "Password can be reset");
+        return ResponseEntity.ok(map);
     }
 
-    public ResponseEntity<String> oldPasswordVerify(String oldPassword, String token) {
+    public ResponseEntity<Map<String, String>> oldPasswordVerify(String oldPassword, String token) {
         UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
 
-        if (passwordEncoder.matches(oldPassword, userEntity.getPassword()))
-            return ResponseEntity.ok("Old password are the same");
-        else
-            return ResponseEntity.badRequest().body("Old password does not match");
+        Map<String, String> map = new HashMap<>();
+        if (passwordEncoder.matches(oldPassword, userEntity.getPassword())) {
+            map.put("response", "true");
+            return ResponseEntity.ok(map);
+        } else {
+            map.put("response", "false");
+            return ResponseEntity.ok(map);
+        }
     }
 
-    public ResponseEntity<String> updatePasswordAuth(String newPassword, String token) {
+    public ResponseEntity<Map<String, String>> updatePasswordAuth(String newPassword, String token) {
         UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
         userEntity.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(userEntity);
-        return ResponseEntity.ok("Password changed");
+        Map<String, String> map = new HashMap<>();
+        map.put("response", "Password changed");
+        return ResponseEntity.ok(map);
     }
 
-    public ResponseEntity<String> updatePasswordNoAuth(String newPassword, String token) {
+    public ResponseEntity<Map<String, String>> updatePasswordNoAuth(String newPassword, String token) {
         TokenEntity tokenEntity = tokenRepository.findByToken(token);
         if (tokenEntity == null || tokenEntity.getExpiryDate().isBefore(LocalDateTime.now()))
-            return ResponseEntity.badRequest().body("Invalid or expired token");
+            throw new EntityNotFoundException("No account with this token or expired token");
+
         UserEntity userEntity = tokenEntity.getUser();
         userEntity.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(userEntity);
         tokenRepository.delete(tokenEntity);
-        return ResponseEntity.ok("Password changed");
+        Map<String, String> map = new HashMap<>();
+        map.put("response", "Password changed");
+        return ResponseEntity.ok(map);
     }
 }
