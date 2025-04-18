@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -36,7 +37,7 @@ public class TorrentController {
 
 	@GetMapping(path = "/stream/{hash}")
 	public String streamTorrent(@PathVariable String hash) {
-		return torrentService.stream(hash);
+		return torrentService.waitForPlaylist(hash, Duration.ofSeconds(1000));
 	}
 
 }
