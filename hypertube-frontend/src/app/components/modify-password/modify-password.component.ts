@@ -73,21 +73,27 @@ export class ModifyPasswordComponent {
       return { PasswordNoSpecialChar: true };
     }
 
-    console.log("Current password: ", currentPassword);
-    const verifCurrent = this.authService.verifyCurrentPassword(currentPassword).subscribe({
-      next: (response: any) => {
-        if (response && response.value == false){
-          return { PasswordVerificationError: true };
-        }
-        return null;
-      },
-      error: (error: any) => {
-        this.errorMessage = "An error occurred while verifying the current password.";
-        return { PasswordVerificationError: true };
-      }
-    });
+    if (!currentPassword) {
+      this.errorMessage = "Current password is required.";
+      return { PasswordVerificationError: true };
+    }
+    // const verifCurrent = this.authService.verifyCurrentPassword(currentPassword).subscribe({
+    //   next: (response: any) => {
+    //     console.log("Response: ", response);
+    //     console.log("Response: ", response.response);
+    //     if (response.status === 200 && response.data === true) {
+    //       this.errorMessage = "Current password is incorrect.";
+    //       return { PasswordVerificationError: true };
+    //     }
+    //     return null;
+    //   },
+    //   error: (error: any) => {
+    //     this.errorMessage = "An error occurred while verifying the current password.";
+    //     return { PasswordVerificationError: true };
+    //   }
+    // });
 
-    return verifCurrent;    
+    // return verifCurrent;    
     return null;    
   }
 
