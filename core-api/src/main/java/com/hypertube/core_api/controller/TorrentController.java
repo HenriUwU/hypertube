@@ -29,8 +29,8 @@ public class TorrentController {
 		return torrentService.start(torrentModel);
 	}
 
-	@GetMapping(path = "/is-started/{magnet}")
-	public String isTorrentStarted(@PathVariable String magnet) {
+	@PostMapping(path = "/is-started")
+	public String isTorrentStarted(@RequestBody String magnet) {
 		return torrentService.isDownloadStarted(magnet);
 	}
 
