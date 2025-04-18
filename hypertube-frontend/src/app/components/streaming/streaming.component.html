@@ -12,10 +12,20 @@
 <div class="streaming-container">
     <h1 class="movie-title">{{videoTitle}}</h1>
     <div class="movie-container">
-        <video width="320" height="180" class="video-player" #videoPlayer controls type="application/x-mpegURL">
-            <source src="{{videoUrl}}">
-            Your browser does not support the video tag.
-        </video>
+      <video
+        width="320"
+        height="180"
+        class="video-player"
+        #videoPlayer
+        controls
+        preload="auto"
+        autoplay
+        muted
+      >
+        <source [src]="videoUrl" type="application/vnd.apple.mpegurl">
+        Your browser does not support the video tag.
+      </video>
+
         <!-- <track label="Français" kind="subtitles" srclang="fr" default
             src="{{tracksUrl}}" /> -->
     </div>
