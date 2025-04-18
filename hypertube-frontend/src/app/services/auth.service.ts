@@ -65,4 +65,17 @@ export class AuthService {
   verifyPasswordToken(token: string): Observable<any> {
     return this.http.get(`${this.apiUrlAuth}/reset-password?token=${token}`);
   }
+
+  verifyCurrentPassword(password: string): Observable<any> {
+    const token = this.getToken();
+    // get the reponse as text
+    const headers = { Authorization: `Bearer ${token}`, responseType: 'text' };
+    return this.http.post(`${this.apiUrlAuth}/old-password-verify`, password, { headers });
+  }
+
+  updatePassword(token: string, password: string): Observable<any> {
+    const tokenBearer = this.getToken();
+    const headers = { Authorization: `Bearer ${tokenBearer}`, responseType: 'text' };
+    return this.http.post(`${this.apiUrlAuth}/update-password?token=${token}`, password, { headers });
+  }
 }
