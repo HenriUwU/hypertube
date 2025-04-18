@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @CrossOrigin(origins = "*")
@@ -50,17 +51,17 @@ public class AuthController {
     }
 
     @GetMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestParam String token) {
+    public ResponseEntity<Map<String, String>> resetPassword(@RequestParam String token) {
         return this.userService.resetPassword(token);
     }
 
     @PostMapping("/old-password-verify")
-    public ResponseEntity<String> oldPasswordVerify(@RequestBody String oldPassword, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Map<String, String>> oldPasswordVerify(@RequestBody String oldPassword, @RequestHeader("Authorization") String token) {
         return this.userService.oldPasswordVerify(oldPassword, token);
     }
 
     @PostMapping("/update-password")
-    public ResponseEntity<String> updatePassword(
+    public ResponseEntity<Map<String, String>> updatePassword(
             @RequestBody String password,
             @RequestHeader(value = "Authorization", required = false) String headerToken,
             @RequestParam(value = "token", required = false) String queryToken) {
@@ -72,8 +73,9 @@ public class AuthController {
             return this.userService.updatePasswordAuth(password, token);
         else if (queryToken != null && !queryToken.isEmpty())
             return this.userService.updatePasswordNoAuth(password, token);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing token");
-
+        Map<String, String> map = new HashMap<>();
+        map.put("response", "Missing token");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
     }
 
 }
