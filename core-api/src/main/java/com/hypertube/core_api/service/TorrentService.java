@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -100,14 +101,25 @@ public class TorrentService {
 		}
 	}
 
-	public String stream(String hash) {
+	public String waitForPlaylist(String hash, Duration timeout) {
 		Path playlistPath = Paths.get(System.getProperty("user.dir"), "torrents", hash, "hls", "playlist.m3u8");
+		long startTime = System.currentTimeMillis();
+		long timeoutMs = timeout.toMillis();
 
-		if (!Files.exists(playlistPath)) {
-			throw new RuntimeException("Playlist not ready yet");
+		while (!Files.exists(playlistPath)) {
+			if (System.currentTimeMillis() - startTime > timeoutMs) {
+				throw new RuntimeException("Timeout waiting for playlist");
+			}
+
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				throw new RuntimeException("Interrupted while waiting for playlist", e);
+			}
 		}
-		String urlPath = "/torrents/" + hash + "/hls/playlist.m3u8";
 
+		String urlPath = "/torrents/" + hash + "/hls/playlist.m3u8";
 		return "http://localhost:8080" + urlPath;
 	}
 
