@@ -53,7 +53,7 @@ export class StreamingComponent {
         this.hash = response;
         console.log('Torrent hash:', this.hash);
         if (this.hash) {
-          this.launchStreaming(null);
+          this.launchStreaming();
         } else {
           this.startTorrent();
         }
@@ -70,17 +70,22 @@ export class StreamingComponent {
   }
 
   startTorrent() {
+    // this.torrentService.sendMagnet(this.magnet).subscribe((response: string) => {
+    //   this.hash = response;
+    //   var interId = setInterval(() => {
+    //     this.launchStreaming(interId as unknown as number);
+    //   }, 5000);
+    // }, (error) => {
+    //   console.error('Error starting torrent:', error);
+    // });
     this.torrentService.sendMagnet(this.magnet).subscribe((response: string) => {
       this.hash = response;
-      var interId = setInterval(() => {
-        this.launchStreaming(interId as unknown as number);
-      }, 5000);
-    }, (error) => {
-      console.error('Error starting torrent:', error);
+      this.launchStreaming();
     });
   }
 
-  launchStreaming(intervalId: number | null) {
+  // launchStreaming(intervalId: number | null) {
+  launchStreaming() {
     if (!this.hash) {
       return;
     }
@@ -91,9 +96,9 @@ export class StreamingComponent {
       if (this.videoUrl) {
         const video = this.videoPlayer.nativeElement;
         this.hlsConversion(this.videoUrl, video);
-        if (intervalId) {
-          clearInterval(intervalId);
-        }
+        // if (intervalId) {
+          // clearInterval(intervalId);
+        // }
       } else {
         console.error('Error: videoUrl is empty');
       }
