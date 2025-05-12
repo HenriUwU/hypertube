@@ -12,6 +12,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
 import { StreamingComponent } from './components/streaming/streaming.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import {AuthCallbackGoogleComponent} from "./components/auth-callback-components/auth.callback.google.component";
 
 export const routes: Routes = [
   {
@@ -21,6 +22,7 @@ export const routes: Routes = [
       {path: 'register', component: RegisterPageComponent},
       {path: 'omniauth/42', component: AuthCallback42Component},
       {path: 'omniauth/discord', component: AuthCallbackDiscordComponent},
+      {path: 'omniauth/google', component: AuthCallbackGoogleComponent},
       {path: 'verify-email', component: VerifyEmailComponent}
     ]
   },
