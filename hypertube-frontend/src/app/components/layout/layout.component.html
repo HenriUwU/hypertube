@@ -20,7 +20,8 @@
     </div>
 
     <button mat-button [matMenuTriggerFor]="userMenu" color="basic" class="menu-density">
-      <mat-icon>account_circle</mat-icon> {{ currentUser.username }}
+      <mat-icon>account_circle</mat-icon> 
+      <div *ngIf="currentUser!==null">{{ currentUser.username }}</div>
       <mat-menu #userMenu="matMenu">
         <button mat-menu-item (click)="goToSettings()">
           <mat-icon>settings</mat-icon>
