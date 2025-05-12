@@ -38,8 +38,8 @@ public class TorrentService {
 
 	public List<TorrentModel> searchTorrent(String searchTerm) {
 		ResponseEntity<List<TorrentModel>> responseEntity = restTemplate.exchange(
-				// "http://localhost:3001/api/piratebay/" + searchTerm,
-				"http://scraping:3001/api/piratebay/" + searchTerm,
+				 "http://localhost:3001/api/piratebay/" + searchTerm,
+//				"http://scraping:3001/api/piratebay/" + searchTerm,
 				HttpMethod.GET,
 				HttpEntity.EMPTY,
 				new ParameterizedTypeReference<List<TorrentModel>>() {}
@@ -47,7 +47,7 @@ public class TorrentService {
 		return responseEntity.getBody();
 	}
 
-	public String start(TorrentModel torrentModel) {
+	public String startDownload(TorrentModel torrentModel) {
 		try {
 			String infoHash = extractInfoHash(torrentModel.getMagnet());
 			Path downloadDir = Paths.get(System.getProperty("user.dir"),"torrents", infoHash);
@@ -66,39 +66,76 @@ public class TorrentService {
 					.stopWhenDownloaded()
 					.build();
 
-			AtomicBoolean hlsStarted = new AtomicBoolean(false);
-			AtomicLong lastAttempt = new AtomicLong(0);
-
 			client.startAsync(state -> {
 				int progress = state.getPiecesComplete() * 100 / state.getPiecesTotal();
-				System.out.println("Download Progress: " + progress + "%");
-
-				if (progress > 1 && !hlsStarted.get()) {
-					long now = System.currentTimeMillis();
-					Path videoFilePath;
-
-					try {
-						videoFilePath = findVideoFile(downloadDir);
-					} catch (IOException e) {
-						throw new RuntimeException(e);
-					}
-
-					if (now - lastAttempt.get() > 10_000) {
-						lastAttempt.set(now);
-
-						if (isVideoFileReady(videoFilePath)) {
-							generateHlsStream(videoFilePath, downloadDir.resolve("hls"));
-						} else {
-							System.out.println("[FFMPEG] FILE NOT PARSABLE YET, RETRYING IN 10s");
-						}
-					}
-				}
+				System.out.println("Download Progresss: " + progress + "%");
 			}, 1000);
+
+			startConversion(downloadDir);
 
 			return infoHash;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public void startConversion(Path downloadDir) {
+		AtomicBoolean hlsStarted = new AtomicBoolean(false);
+		AtomicLong lastAttempt = new AtomicLong(0);
+
+		new Thread(() -> {
+			while (!hlsStarted.get()) {
+				try {
+					Path videoFilePath = findVideoFile(downloadDir);
+
+					if (isVideoFileReady(videoFilePath)) {
+						long now = System.currentTimeMillis();
+						if (now - lastAttempt.get() > 10_000) {
+							lastAttempt.set(now);
+
+							Path hlsDir = downloadDir.resolve("hls");
+							try {
+								Files.createDirectories(hlsDir);
+							} catch (IOException e) {
+								System.err.println("Failed to create HLS directory: " + hlsDir);
+								return;
+							}
+
+							ProcessBuilder processBuilder = getProcess(videoFilePath, downloadDir.resolve("hls"));
+							Process process = processBuilder.start();
+							hlsStarted.set(true);
+							System.out.println("[FFMPEG] CONVERSION STARTED, GENERATING HLS");
+
+							new Thread(() -> {
+								try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+									while ((reader.readLine()) != null) {
+										System.out.println(reader.readLine());
+									}
+								} catch (IOException e) {
+									throw new RuntimeException(e);
+								}
+							}).start();
+
+							int exitCode = process.waitFor();
+							if (exitCode != 0) {
+								hlsStarted.set(false);
+								System.out.println("[FFMPEG] CONVERSION FAILED");
+							}
+						}
+					} else {
+						System.out.println("[FFMPEG] VIDEO FILE FOUND BUT NOT READY, RETRYING...");
+					}
+				} catch (FileNotFoundException e) {
+					System.out.println("[FFMPEG] NO VIDEO FILE YET, WAITING...");
+				} catch (IOException | InterruptedException e) {
+					throw new RuntimeException(e);
+				}
+
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException ignored) {}
+			}
+		}).start();
 	}
 
 	public String waitForPlaylist(String hash, Duration timeout) {
@@ -145,41 +182,13 @@ public class TorrentService {
 		}
 	}
 
-	public void generateHlsStream(Path videoFile, Path hlsOutputDir) {
-		try {
-			if (!Files.exists(hlsOutputDir)) {
-				Files.createDirectories(hlsOutputDir);
-			}
-			Process process = getProcess(videoFile, hlsOutputDir);
-			System.out.println("[FFMPEG] CONVERSION STARTED, GENERATING HLS");
-
-			new Thread(() -> {
-				try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-					while ((reader.readLine()) != null) {
-					}
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-			}).start();
-
-			int exitCode = process.waitFor();
-			if (exitCode != 0) {
-				throw new RuntimeException("FFMPEG ERROR GENERATING HLS");
-			}
-		} catch (IOException | InterruptedException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private static Process getProcess(Path videoFile, Path hlsOutputDir) throws IOException {
+	private static ProcessBuilder getProcess(Path videoFile, Path hlsOutputDir) throws IOException {
 		List<String> command = List.of(
 				"ffmpeg",
 				"-i", videoFile.toString(),
 				"-c:v", "libx264",
-				"-preset", "ultrafast",
-				"-profile:v", "baseline",
-				"-level", "4.1",
-				"-crf", "18",
+				"-preset", "fast",
+				"-crf", "23",
 				"-pix_fmt", "yuv420p",
 				"-movflags", "+faststart",
 				"-c:a", "aac",
@@ -187,16 +196,20 @@ public class TorrentService {
 				"-ar", "48000",
 				"-ac", "2",
 				"-start_number", "0",
-				"-hls_time", "10",
+				"-hls_time", "12",
 				"-hls_list_size", "0",
+				"-hls_playlist_type", "event",
+				"-force_key_frames", "expr:gte(t,n_forced*12)",
+				"-max_muxing_queue_size", "2048",
 				"-f", "hls",
+				"-hls_flags", "independent_segments+append_list",
 				hlsOutputDir.resolve("playlist.m3u8").toString()
 		);
 
+		System.out.println("[FFMPEG] " + command);
 		ProcessBuilder pb = new ProcessBuilder(command);
 		pb.redirectErrorStream(true);
-		Process process = pb.start();
-		return process;
+		return pb;
 	}
 
 	public boolean isVideoFileReady(Path file) {

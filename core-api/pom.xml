@@ -135,6 +135,11 @@
 			<artifactId>juniversalchardet</artifactId>
 			<version>2.5.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.atomashpolskiy</groupId>
+			<artifactId>bt-dht</artifactId>
+			<version>1.10</version>
+		</dependency>
 	</dependencies>
 
 	<build>
