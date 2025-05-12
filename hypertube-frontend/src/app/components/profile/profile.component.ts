@@ -41,6 +41,7 @@ export class ProfileComponent {
 
   ngOnInit() {
     this.userService.getUser(this.userId).subscribe((user) => {
+      console.log(user)
       this.profileForm.patchValue({
         email: user.email,
         username: user.username,
@@ -59,6 +60,7 @@ export class ProfileComponent {
     });
   }
 
+  // probleme quand on change le username, le client est deconnecte.
   onSubmit() {
     if (this.profileForm.invalid) {
       return;

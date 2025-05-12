@@ -24,8 +24,9 @@ export class ModifyPasswordComponent {
     currentPassword: new FormControl<string>(''),
     password: new FormControl<string>('', [Validators.required, ]),
     confirmPassword: new FormControl<string>('', [Validators.required]),
-  // }, { validators: this.confirmPasswordValidator });
   },{ validators: (control) => this.confirmPasswordValidator(control) });
+  // }, { validators: this.confirmPasswordValidator });
+
 
   successMessage: boolean = false;
   errorMessage: string = '';
@@ -38,9 +39,8 @@ export class ModifyPasswordComponent {
   confirmPasswordValidator(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password')?.value;
     const confirmPassword = control.get('confirmPassword')?.value;
-    const currentPassword = control.get('currentPassword')?.value;
+    const currentPassword = control.get('currentPassword')?.value
 
-    console.log("Curnet password: ", currentPassword);
     if (!password || !confirmPassword) {
       return null;
     }
@@ -97,8 +97,37 @@ export class ModifyPasswordComponent {
     return null;    
   }
 
+  verifyCurrentPassword(currentPassword: string): boolean {
+      const verifCurrent = this.authService.verifyCurrentPassword(currentPassword).subscribe({
+      next: (response: any) => {
+        console.log("Response: ", response); // output this: {"reponse": false}
+        console.log("Response: ", response.response); 
+        if (response.reposnse === false) {
+          this.errorMessage = "Current password is incorrect.";
+          // return { PasswordVerificationError: true };
+          return false;
+        }
+        // return null;
+        return true;
+      },
+      error: (_) => {
+        this.errorMessage = "An error occurred while verifying the current password.";
+        // return { PasswordVerificationError: true };
+        return false;
+      }
+    });
+
+    // return false
+    return true
+  }
+
   onSubmit() {
-    console.log(this.passwordForm.value);
+    const currentPassword = this.passwordForm.get('currentPassword')?.value;
+
+    if (!currentPassword ||  this.verifyCurrentPassword(currentPassword) === false){
+      this.errorMessage = "Current password is incorrect.";
+      return;
+    }
 
     if (this.passwordForm.valid) {
       const password = this.passwordForm.get('password')?.value || '';
@@ -115,7 +144,7 @@ export class ModifyPasswordComponent {
       );
     }
     else {
-      console.log('Form is invalid!');
+      this.errorMessage = 'Form is invalid!';
     }
   }
 

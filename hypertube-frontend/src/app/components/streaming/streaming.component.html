@@ -12,10 +12,15 @@
 <div class="streaming-container">
     <h1 class="movie-title">{{videoTitle}}</h1>
     <div class="movie-container">
-        <video width="320" height="180" class="video-player" #videoPlayer controls type="application/x-mpegURL">
-            <source src="{{videoUrl}}">
-            Your browser does not support the video tag.
-        </video>
+        <div class="loading-container" *ngIf="loading">
+            <mat-spinner class="loading-spinner"></mat-spinner>
+        </div>
+        <div *ngIf="!loading">
+            <video width="320" height="180" class="video-player" #videoPlayer controls type="application/x-mpegURL">
+                <source src="{{videoUrl}}">
+                Your browser does not support the video tag.
+            </video>
+        </div>
         <!-- <track label="Français" kind="subtitles" srclang="fr" default
             src="{{tracksUrl}}" /> -->
     </div>

@@ -2,12 +2,14 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { TorrentService } from '../../services/torrent.service';
 import { MatDivider } from '@angular/material/divider';
 import { Torrent } from '../../models/torrent.models';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import Hls from "hls.js";
+import { NgIf } from '@angular/common';
 
 
 @Component({
   selector: 'app-streaming',
-  imports: [MatDivider],
+  imports: [MatDivider, MatProgressSpinnerModule, NgIf],
   standalone: true,
   templateUrl: './streaming.component.html',
   styleUrl: './streaming.component.css'
@@ -17,6 +19,7 @@ export class StreamingComponent {
 
   videoUrl: string = '';
   tracksUrl: string = '';
+  loading: boolean = false;
   // @Input() videoTitle: string = 'A minecraft movie';
   // @Input() videoTitle: string = 'The Sorcerer s Apprentice';
   @Input() videoTitle: string = 'The lion king';
@@ -46,7 +49,7 @@ export class StreamingComponent {
       return;
     }
     this.magnet = selectedOption;
-
+    this.loading = true;
     console.log('Selected torrent magnet:', this.magnet);
     this.torrentService.isTorrentStarted(this.magnet).subscribe(
       (response: string) => {
@@ -86,7 +89,8 @@ export class StreamingComponent {
 
   // launchStreaming(intervalId: number | null) {
   launchStreaming() {
-    if (!this.hash) {
+    if (!this.hash) {   
+      console.error('Error: hash is not defined');
       return;
     }
 
@@ -102,6 +106,7 @@ export class StreamingComponent {
       } else {
         console.error('Error: videoUrl is empty');
       }
+      this.loading = false;
     }, (error) => {
       console.error('Error fetching torrent path:', error);
     });

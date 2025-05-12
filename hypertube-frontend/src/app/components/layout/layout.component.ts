@@ -7,7 +7,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatMenuModule, MatMenuTrigger} from "@angular/material/menu";
-import {NgStyle} from "@angular/common";
+import {NgIf, NgStyle} from "@angular/common";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {UserModel} from "../../models/user.model";
 import {UserService} from "../../services/user.service";
@@ -25,13 +25,14 @@ import {UserService} from "../../services/user.service";
     MatMenuTrigger,
     MatMenuModule,
     NgStyle,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    NgIf
   ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent implements OnInit {
-  currentUser!: UserModel;
+  currentUser: UserModel | null = null;
 
   constructor(private authService: AuthService,
               private userService: UserService,
@@ -43,7 +44,6 @@ export class LayoutComponent implements OnInit {
     if (id != null) {
       this.userService.getUser(id).subscribe((data) => {
         this.currentUser = data;
-        console.log(data);
       })
     }
   }

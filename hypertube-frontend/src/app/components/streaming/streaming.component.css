@@ -38,6 +38,20 @@
     padding: 1vh;
 }
 
+.loading-container{
+    width: 100%;
+    height: 50vh;
+    padding: 1vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.loading-spinner { 
+    --mdc-circular-progress-active-indicator-color: #AFBB80; 
+}
 
 .mat-divider {
     border-top-color: #AFBB80;
