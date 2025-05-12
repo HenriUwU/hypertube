@@ -6,19 +6,19 @@
         <div class="form-container">
             <div class="form-boxes">
                 <div class="left-column">
-                    <label for="email">Email address: </label>
+                    <label for="email">{{"email" | translate}}: </label>
                     <input id="email" type="email" formControlName="email" [readonly]="this.isReadOnly" />
                     <br />
 
-                    <label for="username">Username: </label>
+                    <label for="username">{{"username" | translate}}: </label>
                     <input id="username" type="text" formControlName="username" [readonly]="this.isReadOnly" />
                     <br />
 
-                    <label for="lastname">Last Name: </label>
+                    <label for="lastname">{{"Last name" | translate}}: </label>
                     <input id="lastname" type="text" formControlName="lastname" [readonly]="this.isReadOnly" />
                     <br />
 
-                    <label for="firstname">First Name: </label>
+                    <label for="firstname">{{"First name" | translate}}: </label>
                     <input id="firstname" type="text" formControlName="firstname" [readonly]="this.isReadOnly" />
                     <br />
                     <!-- 
@@ -33,12 +33,13 @@
                                 id="profile-picture" />
                         </div>
                         <div class="profile-picture-input" *ngIf="!isReadOnly">
+                            <label for="profile-picture-input-id">{{"PP" | translate}}</label>
                             <input id="profile-picture-input-id" type="file" (change)="onFileSelected($event)"
                                 [disabled]="this.isReadOnly" />
                         </div>
                     </div>
                     <div class="language-container">
-                        <label for="language">Language:</label>
+                        <label for="language">{{"Language" | translate}}:</label>
                         <br />
                         <ng-container *ngIf="isReadOnly; else editableSelect">
                             <span id="language">{{ getCurrentLanguage() }}</span>
@@ -54,7 +55,8 @@
 
             </div>
             <div class="form-button" *ngIf="!isReadOnly">
-                <button type="submit" [disabled]="!profileForm.valid" id="submitButton">Modify</button>
+                <button type="submit" [disabled]="!profileForm.valid" id="submitButton">{{"Modify" |
+                    translate}}</button>
             </div>
         </div>
     </form>

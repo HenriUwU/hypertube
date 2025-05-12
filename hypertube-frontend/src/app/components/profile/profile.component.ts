@@ -3,10 +3,12 @@ import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { UserModel } from '../../models/user.model';
+import { TranslateModule } from "@ngx-translate/core"
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule, NgFor, NgIf],
+  imports: [ReactiveFormsModule, NgFor, NgIf, TranslateModule],
   standalone: true,
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
@@ -36,7 +38,13 @@ export class ProfileComponent {
     { value: 'ch', viewValue: 'Chibraxo' },
   ];
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private translate: TranslateService) {
+    translate.addLangs(['en', 'fr', 'es']);
+    translate.setDefaultLang('en');
+
+    const language = sessionStorage.getItem('language');
+    
+    translate.use(language ? language : 'en');
   }
 
   ngOnInit() {
@@ -85,6 +93,7 @@ export class ProfileComponent {
         profilePicture: response.profilePicture ? response.profilePicture : this.defaultProfilePicture,
         language: response.language
       });
+      this.updateLanguage(response.language);
     }
     , (error) => {
       console.error('Error updating user:', error);
@@ -112,5 +121,11 @@ export class ProfileComponent {
       return this.languages.find(lang => lang.value === language)?.viewValue || 'English';
     }
     return 'English';
+  }
+
+  // update the language in the session storage
+  updateLanguage(language: string) {
+    sessionStorage.setItem('language', language);
+    this.translate.use(language);
   }
 }

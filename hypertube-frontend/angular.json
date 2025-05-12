@@ -6,6 +6,13 @@
     "hypertube-frontend": {
       "projectType": "application",
       "schematics": {},
+      "i18n": {
+        "sourceLocale": "en",
+        "locales": {
+          "en": "src/assets/i18n/en.json",
+          "fr": "src/assets/i18n/fr.json"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
