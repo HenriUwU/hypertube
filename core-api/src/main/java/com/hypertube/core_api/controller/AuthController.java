@@ -40,6 +40,11 @@ public class AuthController {
         return userService.omniauthDiscord(code);
     }
 
+    @PostMapping(path = "/omniauth/google")
+    public ResponseEntity<Map<String, String>> omniauthGoogle(@RequestBody String code) throws Exception {
+        return userService.omniauthGoogle(code);
+    }
+
     @GetMapping("/verify-email")
     public ResponseEntity<String> verifyEmail(@RequestParam String token) {
         return this.userService.verifyEmail(token);

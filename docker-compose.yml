@@ -55,8 +55,19 @@ services:
       - "3001:3001"
     networks:
       - docker-network
+    
+  libretranslate:
+    image: libretranslate/libretranslate
+    container_name: libretranslate
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+    volumes:
+      - libretranslate_data:/home/libretranslate/.local
 
 volumes:
   postgres_data: # select a path used to save db
+  libretranslate_data:
 networks:
   docker-network:
