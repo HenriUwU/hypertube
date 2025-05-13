@@ -8,7 +8,7 @@ public class LanguageModel {
     String iso_639_1;
     @JsonProperty("english_name")
     String englishName;
-    String image;
+    String flag;
 
     public String getIso_639_1() {
         return iso_639_1;
@@ -26,11 +26,11 @@ public class LanguageModel {
         this.englishName = englishName;
     }
 
-    public String getImage() {
-        return image;
+    public String getFlag() {
+        return flag;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 }

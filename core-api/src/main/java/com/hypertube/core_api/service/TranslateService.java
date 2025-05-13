@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hypertube.core_api.model.LanguageModel;
 import com.hypertube.core_api.model.LibreLangModel;
 import com.hypertube.core_api.model.TranslateModel;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -85,7 +84,7 @@ public class TranslateService {
             for (LanguageModel languageModel : response.getBody()) {
                 String code = languageModel.getIso_639_1();
                 if (supportedCodes.contains(code)) {
-                    languageModel.setImage("https://flagcdn.com/w80/" + code + ".png");
+                    languageModel.setFlag("https://flagcdn.com/w80/" + code + ".png");
                     languageList.add(languageModel);
                 }
             }
