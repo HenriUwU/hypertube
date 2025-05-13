@@ -32,7 +32,7 @@ public class TranslateService {
         Map<String, Object> result = new HashMap<>();
 
         for (String text : translateModel.getText()) {
-            String url = "http://localhost:5000/translate";
+            String url = "http://libretranslate:5000/translate";
             // String url = "http://localhost:5000/translate";
             String requestJson = "{"
                     + "\"q\": \"" + text + "\","
@@ -70,7 +70,8 @@ public class TranslateService {
         );
 
         ResponseEntity<List<LibreLangModel>> responseLanguages = restTemplate.exchange(
-                "http://localhost:5000/languages",
+                // "http://localhost:5000/languages",
+                "http://libretranslate:5000/languages",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<LibreLangModel>>() {}

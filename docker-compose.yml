@@ -65,6 +65,8 @@ services:
       - postgres
     volumes:
       - libretranslate_data:/home/libretranslate/.local
+    networks:
+      - docker-network
 
 volumes:
   postgres_data: # select a path used to save db

@@ -18,7 +18,6 @@ export class ProfileComponent {
     username: new FormControl(''),
     lastname: new FormControl(''),
     firstname: new FormControl(''),
-    // password: new FormControl(''),
     profilePicture: new FormControl(''),
     language: new FormControl('English')
   });
@@ -36,7 +35,7 @@ export class ProfileComponent {
     { value: 'ch', viewValue: 'Chibraxo' },
   ];
 
-  constructor(private userService: UserService,) {
+  constructor(private userService: UserService) {
   }
 
   ngOnInit() {
@@ -85,7 +84,7 @@ export class ProfileComponent {
         profilePicture: response.profilePicture ? response.profilePicture : this.defaultProfilePicture,
         language: response.language
       });
-      this.updateLanguage(response.language);
+      // this.updateLanguage(response.language);
     }
     , (error) => {
       console.error('Error updating user:', error);
