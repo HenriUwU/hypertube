@@ -26,4 +26,8 @@ export class TranslateService {
       map((response: any) => response.translations)
     );
   }
+
+  autoTranslate(text: string[]): Observable<any> {
+    return this.translateStrings(text, 'en', sessionStorage.getItem('language') ? sessionStorage.getItem('language')! : 'en')
+  }
 }
