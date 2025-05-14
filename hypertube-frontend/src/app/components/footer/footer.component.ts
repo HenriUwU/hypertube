@@ -33,19 +33,20 @@ export class FooterComponent {
     ["using", "using"]
   ]);
   constructor(private translateService: TranslateService) {
-    window.addEventListener('storage', (event) => {
-      if (event.storageArea === sessionStorage && event.key === 'language') {
-        const texts: string[] = Array.from(this.textMap.keys());
-        const sourceLang = "en";
-        const targetLang = sessionStorage.getItem('language') ? sessionStorage.getItem('language')! : 'en';
+    // window.addEventListener('storage', (event) => {
+    //   if (event.storageArea === sessionStorage && event.key === 'language') {
+    //     const texts: string[] = Array.from(this.textMap.keys());
+    //     const sourceLang = "en";
+    //     const targetLang = sessionStorage.getItem('language') ? sessionStorage.getItem('language')! : 'en';
   
-        this.translateService.translateStrings(texts, sourceLang, targetLang).subscribe((translations: string[]) => {
-          translations.forEach((translation, index) => {
-            this.textMap.set(texts[index], translation);
-          });
-        });
-      }
-    });
+    //     this.translateService.translateStrings(texts, sourceLang, targetLang).subscribe((translations: string[]) => {
+    //       translations.forEach((translation, index) => {
+    //         this.textMap.set(texts[index], translation);
+    //       });
+    //     });
+    //   }
+    // });
+    
   }
 
   ngOnInit() {
@@ -59,7 +60,18 @@ export class FooterComponent {
       });
     }
     );
+    window.addEventListener('storage', (event) => {
+      console.log("WHOOOOOOO")
+      if (event.storageArea === sessionStorage && event.key === 'language') {
+        console.log("TOURVEE")
+        const texts: string[] = Array.from(this.textMap.keys());
+        this.translateService.autoTranslate(texts).subscribe((translations: string[]) => {
+          translations.forEach((translation, index) => {
+            this.textMap.set(texts[index], translation);
+          });
+        });
+      }
+    });
   }
-
 
 }
