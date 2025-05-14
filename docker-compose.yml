@@ -44,13 +44,33 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       NODE_ENV: development
+    volumes:
+      - shared-data:/torrents
     networks:
       - docker-network
     depends_on:
       - postgres
-  scraping:
-    build: core-api/Scraping/
-    container_name: scraping
+  torrent-downloader:
+    build: torrent-downloader/
+    container_name: torrent-downloader
+    ports:
+      - "5001:5001"
+    volumes:
+      - shared-data:/torrents
+    networks:
+      - docker-network
+  torrent-hls-transcoder:
+    build: torrent-hls-transcoder/
+    container_name: torrent-hls-trancoder
+    ports:
+      - "5002:5002"
+    volumes:
+      - shared-data:/torrents
+    networks:
+      - docker-network
+  torrent-scraping:
+    build: torrent-scraping/
+    container_name: torrent-scraping
     ports:
       - "3001:3001"
     networks:
@@ -69,7 +89,8 @@ services:
       - docker-network
 
 volumes:
-  postgres_data: # select a path used to save db
+  postgres_data:
+  shared-data:
   libretranslate_data:
 networks:
   docker-network:
