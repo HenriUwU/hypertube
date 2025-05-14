@@ -5,6 +5,7 @@ import { Torrent } from '../../models/torrent.models';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import Hls from "hls.js";
 import { NgIf } from '@angular/common';
+import { TranslateService } from '../../services/translate.service';
 
 
 @Component({
@@ -29,10 +30,18 @@ export class StreamingComponent {
   private hash: string = '';
   private magnet: string = '';
 
-  constructor(private torrentService: TorrentService) {
+  textMap = new Map<string, string>([
+    ["Select a torrent", "Select a torrent"],
+    ["Your browser does not support the video tag.", "Your browser does not support the video tag."],
+  ]);
+
+  constructor(private torrentService: TorrentService, private translationService: TranslateService) {
   }
 
   ngOnInit() {
+    this.translationService.autoTranslateTexts(this.textMap);
+    this.translationService.initializeLanguageListener(this.textMap);
+
     this.torrentService.searchTorrent(this.videoTitle).subscribe((response: Torrent[]) => {
       this.torrentOptions = response;
     }

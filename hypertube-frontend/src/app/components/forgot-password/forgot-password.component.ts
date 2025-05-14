@@ -18,6 +18,11 @@ export class ForgotPasswordComponent {
   message: string = '';
   isLoading: boolean = false;
 
+  textMap = new Map<string, string>([
+    ["An error occurred.", "An error occurred."],
+    ["No token provided.", "No token provided."],
+  ]);
+
   constructor(private authService: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -32,13 +37,13 @@ export class ForgotPasswordComponent {
           this.isLoading = false;
         },
         error: (err: HttpErrorResponse) => {
-          this.message = err.error?.message || 'Une erreur est survenue.';
+          this.message = err.error?.message || this.textMap.get("An error occurred.") || "An error occurred.";
           this.accessPermitted = false;
           this.isLoading = false;
         }
       });
     } else {
-      this.message = 'Aucun token fourni.';
+      this.message = this.textMap.get("No token provided.") || "No token provided.";
       this.accessPermitted = false;
     }
   }
