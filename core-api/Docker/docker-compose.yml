@@ -17,12 +17,6 @@ services:
     container_name: libretranslate
     ports:
       - "5000:5000"
-    environment:
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
     depends_on:
       - postgres
     volumes:

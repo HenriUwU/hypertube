@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class TranslateService {
+    private final String translateApiUrl;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     @Value("${tmdb.bearer-token}")
@@ -25,6 +26,7 @@ public class TranslateService {
     public TranslateService(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
         this.restTemplate = new RestTemplate();
+        this.translateApiUrl = "http://localhost:5000/";
     }
 
     public ResponseEntity<Map<String, Object>> translate(TranslateModel translateModel) throws JsonProcessingException {
@@ -32,7 +34,7 @@ public class TranslateService {
         Map<String, Object> result = new HashMap<>();
 
         for (String text : translateModel.getText()) {
-            String url = "http://localhost:5000/translate";
+            String url = this.translateApiUrl + "/translate";
             String requestJson = "{"
                     + "\"q\": \"" + text + "\","
                     + "\"source\": \"" + translateModel.getSource() + "\","
@@ -65,14 +67,16 @@ public class TranslateService {
                 "https://api.themoviedb.org/3/configuration/languages",
                 HttpMethod.GET,
                 entity,
-                new ParameterizedTypeReference<List<LanguageModel>>() {}
+                new ParameterizedTypeReference<>() {
+                }
         );
 
         ResponseEntity<List<LibreLangModel>> responseLanguages = restTemplate.exchange(
-                "http://localhost:5000/languages",
+                this.translateApiUrl + "/languages",
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<LibreLangModel>>() {}
+                new ParameterizedTypeReference<>() {
+                }
         );
 
         Set<String> supportedCodes = responseLanguages.getBody()
@@ -91,7 +95,6 @@ public class TranslateService {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         return new ResponseEntity<>(languageList, HttpStatus.OK);
     }
 }

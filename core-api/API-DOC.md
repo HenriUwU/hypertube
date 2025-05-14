@@ -25,6 +25,7 @@ Bienvenue dans la documentation de l’API **Hypertube**.
       - [`POST /movies/watched`](#post-movieswatched)
       - [`PUT /movies/watched`](#put-movieswatched)
       - [`GET /movies/{tmdb_id}/subtitles`](#get-moviestmdb_idsubtitles)
+      - [`GET /movies/{tmdb_id}/trailer`](#get-moviestmdb_idtrailer)
     - [Commentaires: /comment](#commentaires-comment)
       - [`POST /comment`](#post-comment)
       - [`PUT /comment`](#put-comment)
@@ -274,6 +275,16 @@ http://localhost:8080/
         "url": "https://www.opensubtitles.org/en/subtitleserve/sub/13057116"
     },
 ]
+```
+
+#### `GET /movies/{tmdb_id}/trailer`
+- **Description :** Renvoie un lien du trailer dans la langue de l'utilisateur ou Anglais si pas de resultat
+- **Auth requise :** ✅ Oui
+- **Réponse :**
+```json
+{
+    "link": "https://www.youtube.com/embed/xitSoRbHJ50"
+}
 ```
 
 ### Commentaires: /comment

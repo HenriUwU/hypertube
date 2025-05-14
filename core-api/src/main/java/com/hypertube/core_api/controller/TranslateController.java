@@ -27,7 +27,7 @@ public class TranslateController {
     }
 
     @GetMapping("/lang")
-    public ResponseEntity<List<LanguageModel>> getAvailableLang() throws JsonProcessingException {
+    public ResponseEntity<List<LanguageModel>> getAvailableLang() {
         return translateService.getAvailableLang();
     }
 }

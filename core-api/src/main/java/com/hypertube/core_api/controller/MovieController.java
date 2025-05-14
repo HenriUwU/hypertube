@@ -7,10 +7,12 @@ import com.hypertube.core_api.model.SearchModel;
 import com.hypertube.core_api.model.SortByModel;
 import com.hypertube.core_api.model.SubtitleModel;
 import com.hypertube.core_api.service.MovieService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -56,6 +58,11 @@ public class MovieController {
     @GetMapping("/{tmdbId}/subtitles")
     public List<SubtitleModel> getSubtitles(@PathVariable String tmdbId) throws IOException {
         return this.movieService.getSubtitles(tmdbId);
+    }
+
+    @GetMapping("/{id}/trailer")
+    public ResponseEntity<Map<String, String>> getTrailers(@PathVariable Integer id, @RequestHeader("Authorization") String token) {
+        return this.movieService.getTrailers(id, token);
     }
 
 }
