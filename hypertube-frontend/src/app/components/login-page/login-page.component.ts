@@ -59,6 +59,7 @@ export class LoginPageComponent implements OnInit {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
+          sessionStorage.setItem('language', 'en');
           this.router.navigate(['']).then()
         },
         error: () => {

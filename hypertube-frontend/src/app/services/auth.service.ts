@@ -57,4 +57,25 @@ export class AuthService {
   verifyEmail(token: string): Observable<string> {
     return this.http.get<string>(`${this.apiUrlAuth}/verify-email?token=${token}`).pipe();
   }
+
+  forgotPassword(email: string): Observable<any> {
+    return this.http.get(`${this.apiUrlAuth}/forgot-password?email=${email}`);
+  }
+
+  verifyPasswordToken(token: string): Observable<any> {
+    return this.http.get(`${this.apiUrlAuth}/reset-password?token=${token}`);
+  }
+
+  verifyCurrentPassword(password: string): Observable<any> {
+    const token = this.getToken();
+    const headers = { Authorization: `Bearer ${token}` };
+
+    return this.http.post(`${this.apiUrlAuth}/old-password-verify`, password, { headers, responseType: 'text' as 'json'  });
+  }
+
+  updatePassword(token: string, password: string): Observable<any> {
+    const tokenBearer = this.getToken();
+    const headers = { Authorization: `Bearer ${tokenBearer}`, responseType: 'text' };
+    return this.http.post(`${this.apiUrlAuth}/update-password?token=${token}`, password, { headers, responseType: 'text' as 'json'  });
+  }
 }

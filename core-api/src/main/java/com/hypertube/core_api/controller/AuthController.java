@@ -55,7 +55,7 @@ public class AuthController {
         return this.userService.forgotPassword(email);
     }
 
-    @GetMapping("/reset-password")
+    @GetMapping("/reset-password")  
     public ResponseEntity<Map<String, String>> resetPassword(@RequestParam String token) {
         return this.userService.resetPassword(token);
     }

@@ -1,5 +1,6 @@
 <div class="streaming-select">
-    <select class="form-select" aria-label="Default select example" (change)="onSortChange($event)">
+    <select class="form-select" aria-label="Default select example" (change)="onTorrentChange($event)">
+        <option value="" disabled selected>Choose a torrent</option>
         @for (opt of torrentOptions; track torrentOptions) {
         <option value="{{opt.Magnet}}">{{opt.Name}}</option>
         }
@@ -11,9 +12,33 @@
 <div class="streaming-container">
     <h1 class="movie-title">{{videoTitle}}</h1>
     <div class="movie-container">
-        <video width="320" height="180" class="video-player" #videoPlayer autoplay muted controls>
-            <source src="{{videoUrl}}" type=" video/mp4">
-            Your browser does not support the video tag.
-        </video>
+        <div class="loading-container" *ngIf="loading">
+            <mat-spinner class="loading-spinner"></mat-spinner>
+        </div>
+	<!--
+        <div *ngIf="!loading">
+            <video width="320" height="180" class="video-player" #videoPlayer controls type="application/x-mpegURL">
+                <source src="{{videoUrl}}">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+	-->
+      <video
+        width="320"
+        height="180"
+        class="video-player"
+        #videoPlayer
+        controls
+        preload="auto"
+        autoplay
+        muted
+      >
+        <source [src]="videoUrl" type="application/vnd.apple.mpegurl">
+        Your browser does not support the video tag.
+      </video>
+
+>>>>>>> 1e95fc350628b5cf0b3e0871ec5a7a1567cf218c
+        <!-- <track label="Français" kind="subtitles" srclang="fr" default
+            src="{{tracksUrl}}" /> -->
     </div>
 </div>

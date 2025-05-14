@@ -26,7 +26,8 @@ public class TranslateService {
     public TranslateService(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
         this.restTemplate = new RestTemplate();
-        this.translateApiUrl = "http://localhost:5000/";
+        // this.translateApiUrl = "http://locahost:5000/";
+        this.translateApiUrl = "http://libretranslate:5000/";
     }
 
     public ResponseEntity<Map<String, Object>> translate(TranslateModel translateModel) throws JsonProcessingException {

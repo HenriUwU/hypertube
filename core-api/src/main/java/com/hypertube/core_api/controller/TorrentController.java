@@ -27,7 +27,7 @@ public class TorrentController {
 
 	@PostMapping(path = "/start")
 	public String startTorrent(@RequestBody TorrentModel torrentModel) {
-		return torrentService.start(torrentModel);
+		return torrentService.startDownload(torrentModel);
 	}
 
 	@PostMapping(path = "/is-started")

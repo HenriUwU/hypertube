@@ -22,4 +22,21 @@ export class TorrentService {
       responseType: 'text' as 'json'
     }).pipe();
   }
+
+  getTorrentPath(hash: string): Observable<string> {
+    return this.http.get<string>(`${this.apiUrlAuth}/stream/${hash}`, {
+      responseType: 'text' as 'json'
+    }).pipe();
+  }
+
+  isTorrentStarted(magnet: string): Observable<string> {
+    // return this.http.get<string>(`${this.apiUrlAuth}/is-started/${magnet}`, {
+    //   responseType: 'text' as 'json'
+    // }).pipe();
+    const params = {'Magnet': magnet}
+    return this.http.post<string>(`${this.apiUrlAuth}/is-started`, params, {
+      responseType: 'text' as 'json'
+    }).pipe();
+  }
+
 }

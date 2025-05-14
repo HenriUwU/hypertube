@@ -12,6 +12,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
 import { StreamingComponent } from './components/streaming/streaming.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { ModifyPasswordComponent } from './components/modify-password/modify-password.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import {AuthCallbackGoogleComponent} from "./components/auth-callback-components/auth.callback.google.component";
 
 export const routes: Routes = [
@@ -42,6 +44,8 @@ export const routes: Routes = [
       {path: 'homepage', component: HomePageComponent},
       {path: 'stream', component: StreamingComponent},
       {path: 'profile', component: ProfileComponent},
+      {path: 'passwd', component: ModifyPasswordComponent},
+      {path: 'forgot', component: ForgotPasswordComponent}
     ]
   }
 ];
