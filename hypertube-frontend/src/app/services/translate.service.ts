@@ -30,4 +30,15 @@ export class TranslateService {
   autoTranslate(text: string[]): Observable<any> {
     return this.translateStrings(text, 'en', sessionStorage.getItem('language') ? sessionStorage.getItem('language')! : 'en')
   }
+
+  updateLanguage(language: string): void{
+    sessionStorage.setItem('language', language);
+
+    const event = new StorageEvent('storage', {
+      key: 'language',
+      newValue: language,
+      storageArea: sessionStorage
+    });
+    window.dispatchEvent(event);
+  }
 }
