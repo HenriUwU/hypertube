@@ -63,7 +63,7 @@ public class SecurityConfig {
         @Override
         public void addResourceHandlers(ResourceHandlerRegistry registry) {
             registry.addResourceHandler("/torrents/**")
-                    .addResourceLocations("file:./torrents/");
+                    .addResourceLocations("file:/torrents/");
         }
 
         @Override
