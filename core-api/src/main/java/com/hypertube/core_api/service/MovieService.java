@@ -73,12 +73,12 @@ public class MovieService {
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<MovieModel> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + movieId + "?language=en-US&append_to_response=credits",
+        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+        ResponseEntity<MovieModel> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + movieId + "?language=" + userEntity.getLanguage() + "&append_to_response=credits",
                 HttpMethod.GET,
                 entity,
                 MovieModel.class);
 
-        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
         MovieModel movie = response.getBody();
         if (movie != null) {
             movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail());
@@ -111,12 +111,13 @@ public class MovieService {
 
     public List<MovieModel> sortByMovies(SortByModel sortByDTO, String token) throws JsonProcessingException {
         checkSortByDTO(sortByDTO);
+        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + sortByDTO.getSortBy() + "?language=en-US&page=" + sortByDTO.getPage(),
+        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + sortByDTO.getSortBy() + "?language=" + userEntity.getLanguage() + "&page=" + sortByDTO.getPage(),
                 HttpMethod.GET,
                 entity,
                 String.class);
@@ -131,8 +132,9 @@ public class MovieService {
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
+        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
 
-        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/search/movie?query=" + searchDTO.getQuery() + "&language=en-US&page=" + searchDTO.getPage(),
+        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/search/movie?query=" + searchDTO.getQuery() + "&language=" + userEntity.getLanguage() + "&page=" + searchDTO.getPage(),
                 HttpMethod.GET,
                 entity,
                 String.class);

@@ -1,24 +1,24 @@
 <div class="profile-container">
     <div class="profile-title">
-        <h1>profile</h1>
+        <h1>{{textMap.get('profile')}}</h1>
     </div>
     <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
         <div class="form-container">
             <div class="form-boxes">
                 <div class="left-column">
-                    <label for="email">{{"email" | translate}}: </label>
+                    <label for="email">{{textMap.get('Email Address')}}: </label>
                     <input id="email" type="email" formControlName="email" [readonly]="this.isReadOnly" />
                     <br />
 
-                    <label for="username">{{"username" | translate}}: </label>
+                    <label for="username">{{textMap.get('Username')}}: </label>
                     <input id="username" type="text" formControlName="username" [readonly]="this.isReadOnly" />
                     <br />
 
-                    <label for="lastname">{{"Last name" | translate}}: </label>
+                    <label for="lastname">{{textMap.get('Last Name')}}: </label>
                     <input id="lastname" type="text" formControlName="lastname" [readonly]="this.isReadOnly" />
                     <br />
 
-                    <label for="firstname">{{"First name" | translate}}: </label>
+                    <label for="firstname">{{textMap.get('First Name')}}: </label>
                     <input id="firstname" type="text" formControlName="firstname" [readonly]="this.isReadOnly" />
                     <br />
                     <!-- 
@@ -33,13 +33,13 @@
                                 id="profile-picture" />
                         </div>
                         <div class="profile-picture-input" *ngIf="!isReadOnly">
-                            <label for="profile-picture-input-id">{{"PP" | translate}}</label>
+                            <label for="profile-picture-input-id">{{textMap.get('Profile Picture')}}</label>
                             <input id="profile-picture-input-id" type="file" (change)="onFileSelected($event)"
                                 [disabled]="this.isReadOnly" />
                         </div>
                     </div>
                     <div class="language-container">
-                        <label for="language">{{"Language" | translate}}:</label>
+                        <label for="language">{{textMap.get('Language')}}:</label>
                         <br />
                         <ng-container *ngIf="isReadOnly; else editableSelect">
                             <span id="language">{{ getCurrentLanguage() }}</span>
@@ -55,8 +55,7 @@
 
             </div>
             <div class="form-button" *ngIf="!isReadOnly">
-                <button type="submit" [disabled]="!profileForm.valid" id="submitButton">{{"Modify" |
-                    translate}}</button>
+                <button type="submit" [disabled]="!profileForm.valid" id="submitButton">{{textMap.get('Save')}}</button>
             </div>
         </div>
     </form>

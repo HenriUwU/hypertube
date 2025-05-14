@@ -3,12 +3,11 @@ import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { UserModel } from '../../models/user.model';
-import { TranslateModule } from "@ngx-translate/core"
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '../../services/translate.service';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule, NgFor, NgIf, TranslateModule],
+  imports: [ReactiveFormsModule, NgFor, NgIf],
   standalone: true,
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
@@ -20,14 +19,23 @@ export class ProfileComponent {
     username: new FormControl(''),
     lastname: new FormControl(''),
     firstname: new FormControl(''),
-    // password: new FormControl(''),
     profilePicture: new FormControl(''),
     language: new FormControl('English')
   });
 
+  textMap = new Map<string, string>([
+    ["Email Address", "Email Address"],
+    ["Username", "Username"],
+    ["Last Name", "Last Name"],
+    ["First Name", "First Name"],
+    ["Profile Picture", "Profile Picture"],
+    ["Language", "Language"],
+    ["Save", "Save"],
+    ["profile", "profile"],
+  ]);
+
   @Input () userId: string = sessionStorage.getItem('id') ? sessionStorage.getItem('id')! : '0';
   isReadOnly: boolean = true;
-
 
   private defaultProfilePicture = '../../../../assets/images/default_pp.svg' ;
 
@@ -35,19 +43,19 @@ export class ProfileComponent {
     { value: 'en', viewValue: 'English' },
     { value: 'fr', viewValue: 'Français' },
     { value: 'es', viewValue: 'Español' },
-    { value: 'ch', viewValue: 'Chibraxo' },
   ];
 
-  constructor(private userService: UserService, private translate: TranslateService) {
-    translate.addLangs(['en', 'fr', 'es']);
-    translate.setDefaultLang('en');
-
-    const language = sessionStorage.getItem('language');
-    
-    translate.use(language ? language : 'en');
+  constructor(private userService: UserService, private translateService: TranslateService) {
   }
 
   ngOnInit() {
+    const texts: string[] = Array.from(this.textMap.keys());
+    this.translateService.autoTranslate(texts).subscribe((translations: string[]) => {
+      translations.forEach((translation, index) => {
+        this.textMap.set(texts[index], translation);
+      });
+    });
+
     this.userService.getUser(this.userId).subscribe((user) => {
       console.log(user)
       this.profileForm.patchValue({
@@ -126,6 +134,11 @@ export class ProfileComponent {
   // update the language in the session storage
   updateLanguage(language: string) {
     sessionStorage.setItem('language', language);
-    this.translate.use(language);
+    const texts: string[] = Array.from(this.textMap.keys());
+    this.translateService.autoTranslate(texts).subscribe((translations: string[]) => {
+      translations.forEach((translation, index) => {
+        this.textMap.set(texts[index], translation);
+      });
+    });
   }
 }
