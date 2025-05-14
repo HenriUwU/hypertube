@@ -49,12 +49,8 @@ export class ProfileComponent {
   }
 
   ngOnInit() {
-    const texts: string[] = Array.from(this.textMap.keys());
-    this.translateService.autoTranslate(texts).subscribe((translations: string[]) => {
-      translations.forEach((translation, index) => {
-        this.textMap.set(texts[index], translation);
-      });
-    });
+    this.translateService.autoTranslateTexts(this.textMap);
+    this.translateService.initializeLanguageListener(this.textMap);
 
     this.userService.getUser(this.userId).subscribe((user) => {
       console.log(user)
@@ -101,7 +97,7 @@ export class ProfileComponent {
         profilePicture: response.profilePicture ? response.profilePicture : this.defaultProfilePicture,
         language: response.language
       });
-      this.updateLanguage(response.language);
+      this.translateService.updateLanguage(response.language? response.language : 'en');
     }
     , (error) => {
       console.error('Error updating user:', error);
@@ -129,16 +125,5 @@ export class ProfileComponent {
       return this.languages.find(lang => lang.value === language)?.viewValue || 'English';
     }
     return 'English';
-  }
-
-  // update the language in the session storage
-  updateLanguage(language: string) {
-    sessionStorage.setItem('language', language);
-    const texts: string[] = Array.from(this.textMap.keys());
-    this.translateService.autoTranslate(texts).subscribe((translations: string[]) => {
-      translations.forEach((translation, index) => {
-        this.textMap.set(texts[index], translation);
-      });
-    });
   }
 }

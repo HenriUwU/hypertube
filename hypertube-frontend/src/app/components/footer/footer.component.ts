@@ -33,33 +33,11 @@ export class FooterComponent {
     ["using", "using"]
   ]);
   constructor(private translateService: TranslateService) {
-    window.addEventListener('storage', (event) => {
-      if (event.storageArea === sessionStorage && event.key === 'language') {
-        const texts: string[] = Array.from(this.textMap.keys());
-        const sourceLang = "en";
-        const targetLang = sessionStorage.getItem('language') ? sessionStorage.getItem('language')! : 'en';
-  
-        this.translateService.translateStrings(texts, sourceLang, targetLang).subscribe((translations: string[]) => {
-          translations.forEach((translation, index) => {
-            this.textMap.set(texts[index], translation);
-          });
-        });
-      }
-    });
   }
 
   ngOnInit() {
-    const texts: string[] = Array.from(this.textMap.keys());
-    const sourceLang = "en";
-    const targetLang = sessionStorage.getItem('language') ? sessionStorage.getItem('language')! : 'en';
-
-    this.translateService.translateStrings(texts, sourceLang, targetLang).subscribe((translations: string[]) => {
-      translations.forEach((translation, index) => {
-        this.textMap.set(texts[index], translation);
-      });
-    }
-    );
+    this.translateService.autoTranslateTexts(this.textMap);
+    this.translateService.initializeLanguageListener(this.textMap);
   }
-
 
 }

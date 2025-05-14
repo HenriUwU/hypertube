@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors, 
 // import { BrowserModule } from '@angular/platform-browser'
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { TranslateService } from '../../services/translate.service';
 ;
 
 @Component({
@@ -27,13 +28,23 @@ export class ModifyPasswordComponent {
   },{ validators: (control) => this.confirmPasswordValidator(control) });
   // }, { validators: this.confirmPasswordValidator });
 
-
+  
   successMessage: boolean = false;
-  errorMessage: string = '';
+  private _errorMessage: string = '';
 
-  constructor(private authService: AuthService) { }
+  textMap = new Map<string, string>([
+    ["Current Password", "Current Password"],
+    ["New Password", "New Password"],
+    ["Confirm New Password", "Confirm New Password"],
+    ["Update", "Update"],
+    ["Password updated successfully!", "Password updated successfully!"],
+  ]);
+
+  constructor(private authService: AuthService, private translateService: TranslateService) { }
 
   ngOnInit(): void {
+    this.translateService.autoTranslateTexts(this.textMap);
+    this.translateService.initializeLanguageListener(this.textMap);
   }
 
   confirmPasswordValidator(control: AbstractControl): ValidationErrors | null {
@@ -148,4 +159,15 @@ export class ModifyPasswordComponent {
     }
   }
 
+  get errorMessage(): string {
+    return this._errorMessage;
+  }
+  
+  set errorMessage(value: string) {
+    this.translateService.autoTranslate([value]).subscribe((translations: string[]) => {
+          translations.forEach((translation, index) => {
+            this._errorMessage = translation;
+      });
+    });
+  }
 }

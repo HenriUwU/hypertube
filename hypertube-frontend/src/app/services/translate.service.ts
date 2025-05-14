@@ -30,4 +30,40 @@ export class TranslateService {
   autoTranslate(text: string[]): Observable<any> {
     return this.translateStrings(text, 'en', sessionStorage.getItem('language') ? sessionStorage.getItem('language')! : 'en')
   }
+
+  autoTranslateTexts(textMap: Map<string, string>): void{
+    const texts: string[] = Array.from(textMap.keys());
+    const sourceLang = "en";
+    const targetLang = sessionStorage.getItem('language') ? sessionStorage.getItem('language')! : 'en';
+
+    this.translateStrings(texts, sourceLang, targetLang).subscribe((translations: string[]) => {
+      translations.forEach((translation, index) => {
+        textMap.set(texts[index], translation);
+      });
+    });
+  }
+
+  updateLanguage(language: string): void{
+    sessionStorage.setItem('language', language);
+
+    const event = new StorageEvent('storage', {
+      key: 'language',
+      newValue: language,
+      storageArea: sessionStorage
+    });
+    window.dispatchEvent(event);
+  }
+
+  initializeLanguageListener(textMap: Map<string, string>): void {
+    window.addEventListener('storage', (event) => {
+      if (event.storageArea === sessionStorage && event.key === 'language') {
+        const texts: string[] = Array.from(textMap.keys());
+        this.autoTranslate(texts).subscribe((translations: string[]) => {
+          translations.forEach((translation, index) => {
+            textMap.set(texts[index], translation);
+          });
+        });
+      }
+    });
+  }
 }
