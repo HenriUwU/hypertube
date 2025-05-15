@@ -61,7 +61,7 @@ services:
       - docker-network
   torrent-hls-transcoder:
     build: torrent-hls-transcoder/
-    container_name: torrent-hls-trancoder
+    container_name: torrent-hls-transcoder
     ports:
       - "5002:5002"
     volumes:
@@ -75,7 +75,6 @@ services:
       - "3001:3001"
     networks:
       - docker-network
-    
   libretranslate:
     image: libretranslate/libretranslate
     container_name: libretranslate
