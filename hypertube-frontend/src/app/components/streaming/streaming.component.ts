@@ -6,6 +6,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import Hls from "hls.js";
 import { NgIf } from '@angular/common';
 import { TranslateService } from '../../services/translate.service';
+import {MovieService} from "../../services/movie.service";
+import {Subtitles} from "../../models/movie.model";
 
 
 @Component({
@@ -19,7 +21,6 @@ export class StreamingComponent {
   @ViewChild('videoPlayer', {static: false}) videoPlayer!: ElementRef;
 
   videoUrl: string = '';
-  tracksUrl: string = '';
   loading: boolean = false;
   // @Input() videoTitle: string = 'A minecraft movie';
   // @Input() videoTitle: string = 'The Sorcerer s Apprentice';
@@ -35,7 +36,7 @@ export class StreamingComponent {
     ["Your browser does not support the video tag.", "Your browser does not support the video tag."],
   ]);
 
-  constructor(private torrentService: TorrentService, private translationService: TranslateService) {
+  constructor(private torrentService: TorrentService, private translationService: TranslateService, private movieService: MovieService) {
   }
 
   ngOnInit() {
@@ -59,7 +60,37 @@ export class StreamingComponent {
     }
     this.magnet = selectedOption;
     this.loading = true;
-    console.log('Selected torrent magnet:', this.magnet);
+    const videoEl: HTMLVideoElement = this.videoPlayer.nativeElement;
+    Array.from(videoEl.querySelectorAll('track')).forEach(track => track.remove());
+
+    this.movieService.subtitles("tt13186482").subscribe(
+      (response: Subtitles[]) => {
+        if (response.length > 0) {
+          response.forEach((sub, index) => {
+            if (sub.url) {
+              const trackEl = document.createElement('track');
+              trackEl.kind = 'subtitles';
+              trackEl.label = sub.title;
+              trackEl.srclang = sub.language || 'en';
+              trackEl.src = sub.url;
+              trackEl.default = false;
+
+              videoEl.appendChild(trackEl);
+            }
+          });
+          setTimeout(() => {
+            const tracks = videoEl.textTracks;
+            if (tracks.length > 0) {
+              tracks[0].mode = 'showing';
+            }
+          }, 500);
+        }
+      },
+      (error) => {
+        console.log('Subtitle fetch error:', error);
+      }
+    );
+
     this.torrentService.isTorrentStarted(this.magnet).subscribe(
       (response: string) => {
         this.hash = response;
@@ -98,7 +129,7 @@ export class StreamingComponent {
 
   // launchStreaming(intervalId: number | null) {
   launchStreaming() {
-    if (!this.hash) {   
+    if (!this.hash) {
       console.error('Error: hash is not defined');
       return;
     }

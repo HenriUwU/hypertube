@@ -45,3 +45,9 @@ export interface MovieThumbnail {
   genres: GenreModel[];
   vote_average: number;
 }
+
+export interface Subtitles {
+  title: string,
+  language: string,
+  url: string
+}

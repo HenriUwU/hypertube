@@ -62,7 +62,8 @@
               "buildTarget": "hypertube-frontend:build:production"
             },
             "development": {
-              "buildTarget": "hypertube-frontend:build:development"
+              "buildTarget": "hypertube-frontend:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

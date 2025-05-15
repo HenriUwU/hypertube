@@ -55,9 +55,9 @@ public class MovieController {
         return this.movieService.getComments(id);
     }
 
-    @GetMapping("/{tmdbId}/subtitles")
-    public List<SubtitleModel> getSubtitles(@PathVariable String tmdbId) throws IOException {
-        return this.movieService.getSubtitles(tmdbId);
+    @GetMapping("/{imdbId}/subtitles")
+    public List<SubtitleModel> getSubtitles(@PathVariable String imdbId) throws IOException {
+        return this.movieService.getSubtitles(imdbId);
     }
 
     @GetMapping("/{id}/trailer")
