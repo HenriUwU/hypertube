@@ -22,6 +22,7 @@ export class StreamingComponent {
 
   videoUrl: string = '';
   loading: boolean = false;
+  blankVideo: boolean = true;
   // @Input() videoTitle: string = 'A minecraft movie';
   // @Input() videoTitle: string = 'The Sorcerer s Apprentice';
   @Input() videoTitle: string = 'The lion king';
@@ -58,6 +59,7 @@ export class StreamingComponent {
     if (!selectedOption) {
       return;
     }
+    this.blankVideo = false;
     this.magnet = selectedOption;
     this.loading = true;
     const videoEl: HTMLVideoElement = this.videoPlayer.nativeElement;
