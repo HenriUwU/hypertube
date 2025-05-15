@@ -1,6 +1,6 @@
 import { Time } from "@angular/common";
 
-interface GenreModel {
+export interface GenreModel {
   id: number;
   name: string;
 }

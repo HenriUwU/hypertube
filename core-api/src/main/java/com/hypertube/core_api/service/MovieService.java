@@ -22,6 +22,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -119,6 +120,23 @@ public class MovieService {
         List<Integer> selectedGenreIds = sortByDTO.getGenresIds();
         return sortMovieByGenre(response, selectedGenreIds, token);
     }
+
+    public List<GenreModel> getGenres(String token) throws JsonProcessingException {
+        HttpHeaders headers;
+        headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + this.tmdbToken);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+
+        ResponseEntity<GenresResponse> response = restTemplate.exchange(
+                "https://api.themoviedb.org/3/genre/movie/list?language=" + userEntity.getLanguage(),
+                HttpMethod.GET,
+                entity,
+                GenresResponse.class
+        );
+        return response.getBody().getGenres();
+    }
+
 
     public List<MovieModel> searchMovies(SearchModel searchDTO, String token) throws JsonProcessingException {
         checkSearchDTO(searchDTO);

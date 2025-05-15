@@ -65,7 +65,7 @@ export class StreamingComponent {
     const videoEl: HTMLVideoElement = this.videoPlayer.nativeElement;
     Array.from(videoEl.querySelectorAll('track')).forEach(track => track.remove());
 
-    this.movieService.subtitles("tt13186482").subscribe(
+    this.movieService.getSubtitles("tt13186482").subscribe(
       (response: Subtitles[]) => {
         if (response.length > 0) {
           response.forEach((sub, index) => {

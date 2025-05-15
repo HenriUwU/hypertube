@@ -2,10 +2,7 @@ package com.hypertube.core_api.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hypertube.core_api.dto.*;
-import com.hypertube.core_api.model.MovieModel;
-import com.hypertube.core_api.model.SearchModel;
-import com.hypertube.core_api.model.SortByModel;
-import com.hypertube.core_api.model.SubtitleModel;
+import com.hypertube.core_api.model.*;
 import com.hypertube.core_api.service.MovieService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,4 +62,8 @@ public class MovieController {
         return this.movieService.getTrailers(id, token);
     }
 
+    @GetMapping("/genres")
+    public List<GenreModel> getGenres(@RequestHeader("Authorization") String token) throws JsonProcessingException {
+        return this.movieService.getGenres(token);
+    }
 }
