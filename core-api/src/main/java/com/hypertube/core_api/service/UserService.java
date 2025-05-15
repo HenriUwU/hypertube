@@ -32,10 +32,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
-import javax.sql.rowset.serial.SerialBlob;
-import java.io.InputStream;
-import java.net.URL;
-import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -154,7 +150,13 @@ public class UserService implements UserDetailsService {
             existingUser.setProfilePicture(null);
         }
 
-        return userMapper.map(userRepository.save(existingUser));
+        UserDTO updatedUser = userMapper.map(userRepository.save(existingUser));
+
+        if (!updatedUser.getUsername().equals(user.getUsername())) {
+            updatedUser.setToken(jwtTokenUtil.generateToken(user.getUsername()));
+        }
+
+        return updatedUser;
     }
 
     public ResponseEntity<Map<String, String>> omniauthDiscord(String code) throws Exception {

@@ -1,7 +1,5 @@
 package com.hypertube.core_api.dto;
 
-import jakarta.persistence.Lob;
-
 public class UserDTO {
     private Integer id;
     private String username;
@@ -10,6 +8,7 @@ public class UserDTO {
     private String lastName;
     private String language;
     private String profilePicture;
+    private String token;
 
     public Integer getId() {
         return id;
@@ -66,4 +65,8 @@ public class UserDTO {
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
+
+    public String getToken() {return token;}
+
+    public void setToken(String token) {this.token = token;}
 }
