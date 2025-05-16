@@ -133,7 +133,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public UserDTO updateUser(UserDTO user) throws SQLException {
+    public UserDTO updateUser(UserDTO user) {
         if (user.getId() == null) {
             throw new RuntimeException("Id can not be null");
         }
@@ -151,11 +151,7 @@ public class UserService implements UserDetailsService {
         }
 
         UserDTO updatedUser = userMapper.map(userRepository.save(existingUser));
-
-        if (!updatedUser.getUsername().equals(user.getUsername())) {
-            updatedUser.setToken(jwtTokenUtil.generateToken(user.getUsername()));
-        }
-
+        updatedUser.setToken(jwtTokenUtil.generateToken(user.getUsername()));
         return updatedUser;
     }
 
