@@ -5,13 +5,28 @@ import { MovieService } from '../../services/movie.service';
 import { MovieThumbnail } from '../../models/movie.model';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import {animate, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'app-thumbnail',
   standalone: true,
   imports: [MatProgressBarModule, CommonModule, MatIconModule],
   templateUrl: './thumbnail.component.html',
-  styleUrl: './thumbnail.component.css'
+  styleUrl: './thumbnail.component.css',
+  animations: [
+    trigger('slideInAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-50px)' }),
+        animate('0.8s ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+      ]),
+    ]),
+    trigger('zoomInAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.9)' }),
+        animate('0.5s ease-out', style({ opacity: 1, transform: 'scale(1)' })),
+      ]),
+    ]),
+  ],
 })
 
 export class ThumbnailComponent implements OnInit {
@@ -35,7 +50,7 @@ export class ThumbnailComponent implements OnInit {
   constructor(private router: Router,
     private movieService: MovieService){
     }
-    
+
   ngOnInit(): void {
       this.fillMovieThumbnail(this.movieId);
   }
