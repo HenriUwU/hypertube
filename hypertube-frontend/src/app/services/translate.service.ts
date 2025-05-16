@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
+import { TranslateModel } from '../models/translate.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class TranslateService {
 
   constructor(private http:HttpClient) { }
 
-  availableLanguages(): Observable<any> {
+  availableLanguages(): Observable<TranslateModel[]> {
     return this.http.get(`${this.apiUrlAuth}/lang`).pipe(
       map((response: any) => response)
     );

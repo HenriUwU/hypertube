@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { UserModel } from '../../models/user.model';
 import { TranslateService } from '../../services/translate.service';
+import { GlobalMessageService } from '../../services/global.message.service';
 
 @Component({
   selector: 'app-profile',
@@ -32,6 +33,10 @@ export class ProfileComponent {
     ["Language", "Language"],
     ["Save", "Save"],
     ["profile", "profile"],
+    ["Change Password", "Change Password"],
+    ["Profile updated successfully", "Profile updated successfully"],
+    ["Please select a valid image file", "Please select a valid image file"],
+    ["Error", "Error"],
   ]);
 
   @Input () userId: string = sessionStorage.getItem('id') ? sessionStorage.getItem('id')! : '0';
@@ -41,25 +46,27 @@ export class ProfileComponent {
 
   languages = [
     { value: 'en', viewValue: 'English' },
-    { value: 'fr', viewValue: 'Français' },
-    { value: 'es', viewValue: 'Español' },
   ];
 
-  constructor(private userService: UserService, private translateService: TranslateService) {
+  constructor(private userService: UserService, private translateService: TranslateService,  private globalMessageService: GlobalMessageService) {
   }
 
   ngOnInit() {
     this.translateService.autoTranslateTexts(this.textMap);
     this.translateService.initializeLanguageListener(this.textMap);
 
+    this.translateService.availableLanguages().subscribe((response) => {
+      response.forEach((lang: any) => {
+        this.languages.push({ value: lang.iso_639_1, viewValue: lang.english_name });
+      });
+    }
+    );
     this.userService.getUser(this.userId).subscribe((user) => {
-      console.log(user)
       this.profileForm.patchValue({
         email: user.email,
         username: user.username,
         lastname: user.lastName,
         firstname: user.firstName,
-        // password: user.password,
         profilePicture: user.profilePicture ? user.profilePicture : this.defaultProfilePicture,
         language: user.language
       });
@@ -72,7 +79,6 @@ export class ProfileComponent {
     });
   }
 
-  // probleme quand on change le username, le client est deconnecte.
   onSubmit() {
     if (this.profileForm.invalid) {
       return;
@@ -93,24 +99,28 @@ export class ProfileComponent {
         username: response.username,
         lastname: response.lastName,
         firstname: response.firstName,
-        // password: response.password,
         profilePicture: response.profilePicture ? response.profilePicture : this.defaultProfilePicture,
         language: response.language
       });
-      // console.log('User updated successfully:', response);
       if (response.token && response.token !== null) {
         sessionStorage.setItem(`token`, response.token);
       }
       this.translateService.updateLanguage(response.language? response.language : 'en');
+      this.globalMessageService.showMessage(this.textMap.get("Profile updated successfully") || "Profile updated successfully", true);
     }
     , (error) => {
-      console.error('Error updating user:', error);
+      this.globalMessageService.showMessage(`${this.textMap.get('Error') || 'Error'}: ${error}`, false);
     }
     );
   }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
+    // accept only image files
+    if (!file || !file.type.startsWith('image/')) {
+      this.globalMessageService.showMessage(this.textMap.get('Please select a valid image file') || "Please select a valid image file", false);
+      return;
+    }
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {

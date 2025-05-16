@@ -93,7 +93,10 @@
     padding-bottom: 1em;
 
     height: 10%;
+    /* keep the text on a single line */
+    white-space: nowrap;
 }
+
 
 .profile-picture-container {
     display: flex;
