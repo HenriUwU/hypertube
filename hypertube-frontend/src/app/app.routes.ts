@@ -1,19 +1,18 @@
-import { Routes } from '@angular/router';
+import {Routes} from '@angular/router';
 import {LoginPageComponent} from "./components/login-page/login-page.component";
 import {RegisterPageComponent} from "./components/register-page/register-page.component";
 import {HomePageComponent} from "./components/home-page/home-page.component";
 import {authGuard} from "./auth.guard";
 import {AuthCallback42Component} from "./components/auth-callback-components/auth.callback.42.component";
 import {AuthCallbackDiscordComponent} from "./components/auth-callback-components/auth.callback.discord.component";
-import {LayoutComponent} from "./components/layout/layout.component";
 import {VerifyEmailComponent} from "./components/verify-email/verify.email.component";
 import {FooterComponent} from "./components/footer/footer.component";
-import { HeaderComponent } from './components/header/header.component';
-import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
-import { StreamingComponent } from './components/streaming/streaming.component';
-import { ProfileComponent } from './components/profile/profile.component';
-import { ModifyPasswordComponent } from './components/modify-password/modify-password.component';
-import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import {HeaderComponent} from './components/header/header.component';
+import {ThumbnailComponent} from './components/thumbnail/thumbnail.component';
+import {StreamingComponent} from './components/streaming/streaming.component';
+import {ProfileComponent} from './components/profile/profile.component';
+import {ModifyPasswordComponent} from './components/modify-password/modify-password.component';
+import {ForgotPasswordComponent} from './components/forgot-password/forgot-password.component';
 import {AuthCallbackGoogleComponent} from "./components/auth-callback-components/auth.callback.google.component";
 
 export const routes: Routes = [
@@ -30,7 +29,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    component: LayoutComponent,
+    component: HomePageComponent,
     children: [
       {path: '', component: HomePageComponent, canActivate: [authGuard]}
     ]
