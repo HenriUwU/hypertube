@@ -1,7 +1,6 @@
-/* app-global-message {
-    position: relative;
+app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }
-
-router-outlet {
-    position: relative;
-} */

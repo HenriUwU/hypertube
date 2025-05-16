@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors, 
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { TranslateService } from '../../services/translate.service';
+import { GlobalMessageService } from '../../services/global.message.service';
 ;
 
 @Component({
@@ -26,7 +27,6 @@ export class ModifyPasswordComponent {
     password: new FormControl<string>('', [Validators.required, ]),
     confirmPassword: new FormControl<string>('', [Validators.required]),
   },{ validators: (control) => this.confirmPasswordValidator(control) });
-  // }, { validators: this.confirmPasswordValidator });
 
   
   successMessage: boolean = false;
@@ -40,7 +40,7 @@ export class ModifyPasswordComponent {
     ["Password updated successfully!", "Password updated successfully!"],
   ]);
 
-  constructor(private authService: AuthService, private translateService: TranslateService) { }
+  constructor(private authService: AuthService, private translateService: TranslateService, private globalMessageService: GlobalMessageService) { }
 
   ngOnInit(): void {
     this.translateService.autoTranslateTexts(this.textMap);
@@ -88,31 +88,12 @@ export class ModifyPasswordComponent {
       this.errorMessage = "Current password is required.";
       return { PasswordVerificationError: true };
     }
-    // const verifCurrent = this.authService.verifyCurrentPassword(currentPassword).subscribe({
-    //   next: (response: any) => {
-    //     console.log("Response: ", response);
-    //     console.log("Response: ", response.response);
-    //     if (response.status === 200 && response.data === true) {
-    //       this.errorMessage = "Current password is incorrect.";
-    //       return { PasswordVerificationError: true };
-    //     }
-    //     return null;
-    //   },
-    //   error: (error: any) => {
-    //     this.errorMessage = "An error occurred while verifying the current password.";
-    //     return { PasswordVerificationError: true };
-    //   }
-    // });
-
-    // return verifCurrent;    
     return null;    
   }
 
   verifyCurrentPassword(currentPassword: string): boolean {
       const verifCurrent = this.authService.verifyCurrentPassword(currentPassword).subscribe({
       next: (response: any) => {
-        console.log("Response: ", response); // output this: {"reponse": false}
-        console.log("Response: ", response.response); 
         if (response.reposnse === false) {
           this.errorMessage = "Current password is incorrect.";
           return false;
@@ -140,11 +121,10 @@ export class ModifyPasswordComponent {
       const password = this.passwordForm.get('password')?.value || '';
       this.authService.updatePassword('', password).subscribe(
         (response: any) => {
-          console.log('Password updated successfully!', response);
+          this.globalMessageService.showMessage(this.textMap.get("Password updated successfully!") || "Password updated successfully!", true);
           this.successMessage = true;
         },
         (error: any) => {
-          console.error('Error updating password:', error);
           this.errorMessage = 'Error updating password.';
           this.successMessage = false;
         }
