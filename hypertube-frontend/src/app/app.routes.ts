@@ -14,6 +14,7 @@ import { StreamingComponent } from './components/streaming/streaming.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ModifyPasswordComponent } from './components/modify-password/modify-password.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import {AuthCallbackGoogleComponent} from "./components/auth-callback-components/auth.callback.google.component";
 
 export const routes: Routes = [
   {

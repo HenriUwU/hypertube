@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { UserModel } from '../../models/user.model';
+import { TranslateService } from '../../services/translate.service';
 
 @Component({
   selector: 'app-profile',
@@ -18,14 +19,23 @@ export class ProfileComponent {
     username: new FormControl(''),
     lastname: new FormControl(''),
     firstname: new FormControl(''),
-    // password: new FormControl(''),
     profilePicture: new FormControl(''),
     language: new FormControl('English')
   });
 
+  textMap = new Map<string, string>([
+    ["Email Address", "Email Address"],
+    ["Username", "Username"],
+    ["Last Name", "Last Name"],
+    ["First Name", "First Name"],
+    ["Profile Picture", "Profile Picture"],
+    ["Language", "Language"],
+    ["Save", "Save"],
+    ["profile", "profile"],
+  ]);
+
   @Input () userId: string = sessionStorage.getItem('id') ? sessionStorage.getItem('id')! : '0';
   isReadOnly: boolean = true;
-
 
   private defaultProfilePicture = '../../../../assets/images/default_pp.svg' ;
 
@@ -33,13 +43,15 @@ export class ProfileComponent {
     { value: 'en', viewValue: 'English' },
     { value: 'fr', viewValue: 'Français' },
     { value: 'es', viewValue: 'Español' },
-    { value: 'ch', viewValue: 'Chibraxo' },
   ];
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private translateService: TranslateService) {
   }
 
   ngOnInit() {
+    this.translateService.autoTranslateTexts(this.textMap);
+    this.translateService.initializeLanguageListener(this.textMap);
+
     this.userService.getUser(this.userId).subscribe((user) => {
       console.log(user)
       this.profileForm.patchValue({
@@ -85,6 +97,7 @@ export class ProfileComponent {
         profilePicture: response.profilePicture ? response.profilePicture : this.defaultProfilePicture,
         language: response.language
       });
+      this.translateService.updateLanguage(response.language? response.language : 'en');
     }
     , (error) => {
       console.error('Error updating user:', error);

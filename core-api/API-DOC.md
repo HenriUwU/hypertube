@@ -25,12 +25,16 @@ Bienvenue dans la documentation de l’API **Hypertube**.
       - [`POST /movies/watched`](#post-movieswatched)
       - [`PUT /movies/watched`](#put-movieswatched)
       - [`GET /movies/{tmdb_id}/subtitles`](#get-moviestmdb_idsubtitles)
+      - [`GET /movies/{tmdb_id}/trailer`](#get-moviestmdb_idtrailer)
     - [Commentaires: /comment](#commentaires-comment)
       - [`POST /comment`](#post-comment)
       - [`PUT /comment`](#put-comment)
       - [`DELETE /comment/{comment_id}`](#delete-commentcomment_id)
       - [`POST /comment/like/{comment_id}`](#post-commentlikecomment_id)
       - [`DELETE /comment/unlike/{comment_id}`](#delete-commentunlikecomment_id)
+    - [Traduction: /translate](#traduction-translate)
+      - [`GET /translate/lang`](#get-translatelang)
+      - [`POST /translate`](#post-translate)
 
 ## 🛠️ Base URL
 
@@ -273,6 +277,16 @@ http://localhost:8080/
 ]
 ```
 
+#### `GET /movies/{tmdb_id}/trailer`
+- **Description :** Renvoie un lien du trailer dans la langue de l'utilisateur ou Anglais si pas de resultat
+- **Auth requise :** ✅ Oui
+- **Réponse :**
+```json
+{
+    "link": "https://www.youtube.com/embed/xitSoRbHJ50"
+}
+```
+
 ### Commentaires: /comment
 #### `POST /comment`
 - **Description :** Ajoute un commentaire a un film et le renvoie
@@ -307,3 +321,48 @@ http://localhost:8080/
 #### `DELETE /comment/unlike/{comment_id}`
 - **Description :** Unlike un commentaire et le renvoie
 - **Auth requise :** ✅ Oui
+
+### Traduction: /translate
+
+#### `GET /translate/lang`
+
+- **Description :** Renvoie la list des lang disponible 
+- **Auth requise :** ✅ Oui
+- **Réponse List<LanguageModel>:**
+```json
+[
+    {
+        "iso_639_1": "az",
+        "flag": "https://flagcdn.com/w80/az.png",
+        "english_name": "Azerbaijani"
+    },
+    {
+        "iso_639_1": "bn",
+        "flag": "https://flagcdn.com/w80/bn.png",
+        "english_name": "Bengali"
+    }
+]
+```
+
+#### `POST /translate`
+
+- **Description :** Prend une liste de text a traduire dans une langue et renvoie la traduction
+- **Auth requise :** ✅ Oui
+- **Body TranslateModel**
+```json
+{
+    "text": ["Bonjour", "Bonne journee"],
+    "source": "fr",
+    "target": "en"
+}
+```
+
+- **Réponse List<String>:**
+```json
+{
+    "translations": [
+        "Hello",
+        "Good day"
+    ]
+}
+```

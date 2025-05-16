@@ -35,6 +35,7 @@ public class UserEntity {
     private String language = "en";
 	private String fortyTwoEid;
 	private String discordEid;
+	private String googleEid;
 
 	@Lob
 	private Blob profilePicture;
@@ -154,5 +155,13 @@ public class UserEntity {
 
 	public void setTokenEntity(List<TokenEntity> tokenEntity) {
 		this.tokenEntity = tokenEntity;
+	}
+
+	public String getGoogleEid() {
+		return googleEid;
+	}
+
+	public void setGoogleEid(String googleEid) {
+		this.googleEid = googleEid;
 	}
 }

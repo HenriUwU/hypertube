@@ -10,10 +10,7 @@ import com.hypertube.core_api.entity.UserEntity;
 import com.hypertube.core_api.entity.WatchedMoviesEntity;
 import com.hypertube.core_api.mapper.CommentMapper;
 import com.hypertube.core_api.mapper.WatchedMoviesMapper;
-import com.hypertube.core_api.model.MovieModel;
-import com.hypertube.core_api.model.SearchModel;
-import com.hypertube.core_api.model.SortByModel;
-import com.hypertube.core_api.model.SubtitleModel;
+import com.hypertube.core_api.model.*;
 import com.hypertube.core_api.repository.CommentRepository;
 import com.hypertube.core_api.repository.UserRepository;
 import com.hypertube.core_api.repository.WatchedMoviesRepository;
@@ -25,11 +22,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
@@ -73,12 +69,12 @@ public class MovieService {
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<MovieModel> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + movieId + "?language=en-US&append_to_response=credits",
+        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+        ResponseEntity<MovieModel> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + movieId + "?language=" + userEntity.getLanguage() + "&append_to_response=credits",
                 HttpMethod.GET,
                 entity,
                 MovieModel.class);
 
-        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
         MovieModel movie = response.getBody();
         if (movie != null) {
             movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail());
@@ -111,12 +107,13 @@ public class MovieService {
 
     public List<MovieModel> sortByMovies(SortByModel sortByDTO, String token) throws JsonProcessingException {
         checkSortByDTO(sortByDTO);
+        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + sortByDTO.getSortBy() + "?language=en-US&page=" + sortByDTO.getPage(),
+        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + sortByDTO.getSortBy() + "?language=" + userEntity.getLanguage() + "&page=" + sortByDTO.getPage(),
                 HttpMethod.GET,
                 entity,
                 String.class);
@@ -131,8 +128,9 @@ public class MovieService {
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
+        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
 
-        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/search/movie?query=" + searchDTO.getQuery() + "&language=en-US&page=" + searchDTO.getPage(),
+        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/search/movie?query=" + searchDTO.getQuery() + "&language=" + userEntity.getLanguage() + "&page=" + searchDTO.getPage(),
                 HttpMethod.GET,
                 entity,
                 String.class);
@@ -217,6 +215,46 @@ public class MovieService {
             }
         }
         return subtitles;
+    }
+
+    public ResponseEntity<Map<String, String>> getTrailers(Integer id, String token) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + this.tmdbToken);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        UserEntity userEntity = userRepository
+                .findByUsername(jwtTokenUtil.extractUsername(token.substring(7)))
+                .orElseThrow();
+
+        TrailerModel trailer = fetchTrailer(id, userEntity.getLanguage(), entity);
+
+        if (trailer == null) {
+            trailer = fetchTrailer(id, "en", entity);
+        }
+
+        Map<String, String> trailers = new HashMap<>();
+        if (trailer != null) {
+            String youtubeUrl = "https://www.youtube.com/embed/" + trailer.getKey();
+            trailers.put("link", youtubeUrl);
+            return ResponseEntity.ok(trailers);
+        } else {
+            trailers.put("error", "No trailer found in user language or English.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(trailers);
+        }
+    }
+
+    private TrailerModel fetchTrailer(Integer movieId, String language, HttpEntity<String> entity) {
+        ResponseEntity<TrailersModel> response = restTemplate.exchange(
+                "https://api.themoviedb.org/3/movie/" + movieId + "/videos?language=" + language,
+                HttpMethod.GET,
+                entity,
+                TrailersModel.class
+        );
+
+        return response.getBody().getResults().stream()
+                .filter(t -> "Trailer".equalsIgnoreCase(t.getType()) && "YouTube".equalsIgnoreCase(t.getSite()))
+                .findFirst()
+                .orElse(null);
     }
 
     private List<Path> downloadSubtitle(String encodedLink, String imdb_id) throws IOException {

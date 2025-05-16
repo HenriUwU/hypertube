@@ -64,6 +64,7 @@ export class RegisterPageComponent implements OnInit {
     if (this.registerForm.valid) {
       this.authService.register(this.registerForm.value).subscribe({
         next: () => {
+          sessionStorage.setItem('language', 'en');
           this.globalMessageService.showMessage('You\'re registered successfully! Redirecting to login...', true);
           this.router.navigate(['auth/login']).then()
         },

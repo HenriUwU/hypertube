@@ -2,10 +2,14 @@ package com.hypertube.core_api.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 import com.hypertube.core_api.dto.UserDTO;
 import com.hypertube.core_api.entity.TokenEntity;
-import com.hypertube.core_api.mapper.UserMapper;
 import com.hypertube.core_api.entity.UserEntity;
+import com.hypertube.core_api.mapper.UserMapper;
 import com.hypertube.core_api.model.TokenType;
 import com.hypertube.core_api.repository.TokenRepository;
 import com.hypertube.core_api.repository.UserRepository;
@@ -13,10 +17,7 @@ import com.hypertube.core_api.security.JwtTokenUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.AccessDeniedException;
@@ -31,12 +32,13 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.InputStream;
+import java.net.URL;
+import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -53,6 +55,13 @@ public class UserService implements UserDetailsService {
     private String fortyTwoClientId;
     @Value("${42.client.secret}")
     private String fortyTwoClientSecret;
+
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    private String googleClientId;
+    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
+    private String googleClientSecret;
+    @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
+    private String googleRedirectUri;
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -204,7 +213,7 @@ public class UserService implements UserDetailsService {
             user.setLastName(lastName);
             user.setPassword(token);
             user.setDiscordEid(eidDiscord);
-            register(user);
+            userRepository.save(user);
 
             jwt.put("id", user.getId().toString());
             jwt.put("token", jwtTokenUtil.generateToken(username));
@@ -246,7 +255,7 @@ public class UserService implements UserDetailsService {
             user.setLastName(lastName);
             user.setPassword(token);
             user.setFortyTwoEid(eid42);
-            register(user);
+            userRepository.save(user);
 
             jwt.put("id", user.getId().toString());
             jwt.put("token", jwtTokenUtil.generateToken(username));
@@ -359,13 +368,11 @@ public class UserService implements UserDetailsService {
         UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
 
         Map<String, String> map = new HashMap<>();
-        if (passwordEncoder.matches(oldPassword, userEntity.getPassword())) {
+        if (passwordEncoder.matches(oldPassword, userEntity.getPassword()))
             map.put("response", "true");
-            return ResponseEntity.ok(map);
-        } else {
+        else
             map.put("response", "false");
-            return ResponseEntity.ok(map);
-        }
+        return ResponseEntity.ok(map);
     }
 
     public ResponseEntity<Map<String, String>> updatePasswordAuth(String newPassword, String token) {
@@ -390,4 +397,66 @@ public class UserService implements UserDetailsService {
         map.put("response", "Password changed");
         return ResponseEntity.ok(map);
     }
+
+    public ResponseEntity<Map<String, String>> omniauthGoogle(String code) throws Exception {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("code", code);
+        params.add("client_id", googleClientId);
+        params.add("client_secret", googleClientSecret);
+        params.add("redirect_uri", googleRedirectUri);
+        params.add("grant_type", "authorization_code");
+
+        HttpEntity<MultiValueMap<String, String>> tokenRequest = new HttpEntity<>(params, headers);
+
+        ResponseEntity<Map> tokenResponse = restTemplate.postForEntity(
+                "https://oauth2.googleapis.com/token",
+                tokenRequest,
+                Map.class
+        );
+
+        String idTokenString = (String) tokenResponse.getBody().get("id_token");
+        if (idTokenString == null)
+            throw new RuntimeException("id_token is missing from the token response.");
+
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
+                new NetHttpTransport(), GsonFactory.getDefaultInstance()
+        )
+                .setAudience(Collections.singletonList(googleClientId))
+                .build();
+
+        GoogleIdToken idToken = verifier.verify(idTokenString);
+        if (idToken == null)
+            throw new RuntimeException("Invalid ID token.");
+
+        GoogleIdToken.Payload payload = idToken.getPayload();
+
+        String email = payload.getEmail();
+        String name = (String) payload.get("name");
+        String picture = (String) payload.get("picture");
+        String googleEid = payload.getSubject();
+
+        Map<String, String> response = new HashMap<>();
+        Optional<UserEntity> optUser = userRepository.findByGoogleEid(googleEid);
+        if (optUser.isPresent()) {
+            response.put("id", optUser.get().getId().toString());
+            response.put("token", jwtTokenUtil.generateToken(optUser.get().getUsername()));
+            return ResponseEntity.ok(response);
+        }
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail(email);
+        userEntity.setUsername(name);
+        userEntity.setPassword(passwordEncoder.encode(googleEid));
+        userEntity.setGoogleEid(googleEid);
+        userRepository.save(userEntity);
+
+        response.put("id", userEntity.getId().toString());
+        response.put("token", jwtTokenUtil.generateToken(name));
+        return ResponseEntity.ok(response);
+    }
 }
+
