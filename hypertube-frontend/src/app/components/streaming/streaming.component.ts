@@ -46,6 +46,7 @@ export class StreamingComponent {
       this.torrentOptions = response;
     }
     );
+    this.loading = true; 
   }
 
   onTorrentChange(event: Event) {
