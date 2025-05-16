@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
@@ -122,6 +121,23 @@ public class MovieService {
         return sortMovieByGenre(response, selectedGenreIds, token);
     }
 
+    public List<GenreModel> getGenres(String token) throws JsonProcessingException {
+        HttpHeaders headers;
+        headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + this.tmdbToken);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+
+        ResponseEntity<GenresResponse> response = restTemplate.exchange(
+                "https://api.themoviedb.org/3/genre/movie/list?language=" + userEntity.getLanguage(),
+                HttpMethod.GET,
+                entity,
+                GenresResponse.class
+        );
+        return response.getBody().getGenres();
+    }
+
+
     public List<MovieModel> searchMovies(SearchModel searchDTO, String token) throws JsonProcessingException {
         checkSearchDTO(searchDTO);
         HttpHeaders headers;
@@ -162,10 +178,10 @@ public class MovieService {
         return commentMapper.map(commentRepository.getCommentEntitiesByMovieId(movieId));
     }
 
-    public List<SubtitleModel> getSubtitles(String imdb_id) throws IOException {
+    public List<SubtitleModel> getSubtitles(String imdbId) throws IOException {
         List<SubtitleModel> subtitles = new ArrayList<>();
         String baseUrl = "https://yts-subs.com";
-        String url = baseUrl + "/movie-imdb/" + imdb_id;
+        String url = baseUrl + "/movie-imdb/" + imdbId;
 
         // Load the main subtitle page
         Document doc = Jsoup.connect(url)
@@ -199,7 +215,7 @@ public class MovieService {
 
             String encodedLink = downloadButton.attr("data-link");
 
-            List<Path> subtitleFiles = downloadSubtitle(encodedLink, imdb_id);
+            List<Path> subtitleFiles = downloadSubtitle(encodedLink, imdbId);
 
             for (Path filePath : subtitleFiles) {
                 if (!Files.exists(filePath))
@@ -260,7 +276,7 @@ public class MovieService {
     private List<Path> downloadSubtitle(String encodedLink, String imdb_id) throws IOException {
         String downloadUrl = new String(Base64.getDecoder().decode(encodedLink), StandardCharsets.UTF_8);
         String fileName = Paths.get(new URL(downloadUrl).getPath()).getFileName().toString();
-        Path outputDir = Paths.get("").toAbsolutePath().resolve("movies/subs/" + imdb_id);
+        Path outputDir = Paths.get("/torrents/subs/" + imdb_id);
         Files.createDirectories(outputDir);
         Path zipPath = outputDir.resolve(fileName);
 

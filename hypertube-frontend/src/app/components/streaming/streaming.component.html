@@ -12,32 +12,25 @@
 <div class="streaming-container">
     <h1 class="movie-title">{{videoTitle}}</h1>
     <div class="movie-container">
-        <div class="loading-container" *ngIf="loading">
+        <div class="loading-container" [style.display]="!loading ? 'none' : 'flex'">
             <mat-spinner class="loading-spinner"></mat-spinner>
         </div>
-	<!--
-        <div *ngIf="!loading">
-            <video width="320" height="180" class="video-player" #videoPlayer controls type="application/x-mpegURL">
-                <source src="{{videoUrl}}">
-                Your browser does not support the video tag.
+
+        <div [style.display]="loading ? 'none' : 'block'">
+            <video
+            width="320"
+            height="180"
+            class="video-player"
+            #videoPlayer
+            controls
+            preload="auto"
+            autoplay
+            muted
+            >
+                <source [src]="videoUrl" type="application/vnd.apple.mpegurl">
+                {{textMap.get("Your browser does not support the video tag.")}}
             </video>
         </div>
-	-->
-      <video
-        width="320"
-        height="180"
-        class="video-player"
-        #videoPlayer
-        controls
-        preload="auto"
-        autoplay
-        muted
-      >
-        <source [src]="videoUrl" type="application/vnd.apple.mpegurl">
-        {{textMap.get("Your browser does not support the video tag.")}}
-      </video>
 
-        <!-- <track label="Français" kind="subtitles" srclang="fr" default
-            src="{{tracksUrl}}" /> -->
     </div>
 </div>

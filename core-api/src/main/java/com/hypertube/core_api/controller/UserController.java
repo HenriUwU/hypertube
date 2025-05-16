@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @PutMapping()
-    public UserDTO updateUser(@RequestBody UserDTO user) throws SQLException {
+    public UserDTO updateUser(@RequestBody UserDTO user) {
         return userService.updateUser(user);
     }
 

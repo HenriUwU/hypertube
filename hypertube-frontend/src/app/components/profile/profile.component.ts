@@ -97,6 +97,10 @@ export class ProfileComponent {
         profilePicture: response.profilePicture ? response.profilePicture : this.defaultProfilePicture,
         language: response.language
       });
+      // console.log('User updated successfully:', response);
+      if (response.token && response.token !== null) {
+        sessionStorage.setItem(`token`, response.token);
+      }
       this.translateService.updateLanguage(response.language? response.language : 'en');
     }
     , (error) => {

@@ -3,6 +3,7 @@ from pathlib import Path
 import os
 import subprocess
 import threading
+import json
 
 app = Flask(__name__)
 
@@ -76,23 +77,32 @@ def start_transcoding(torrent_hash):
 		print(f"FFmpeg error: {e}")
 	except FileNotFoundError as e:
 		print(f"File error: {e}")
-		
-import subprocess
 
 def check_ffmpeg(input_path):
-	command = [
-		"ffprobe",
-		"-v", "error",
-		"-show_entries", "format=duration",
-		"-of", "default=noprint_wrappers=1:nokey=1",
-		str(input_path)
-	]
-	try:
-		result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
-		duration = result.stdout.decode().strip()
-		return duration != ""
-	except subprocess.CalledProcessError:
-		return False
+    command = [
+        "ffprobe",
+        "-v", "error",
+        "-select_streams", "v:0",
+        "-show_entries", "stream=codec_name,pix_fmt,width,height",
+        "-of", "json",
+        str(input_path)
+    ]
+    try:
+        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+        data = json.loads(result.stdout)
+        streams = data.get("streams", [])
+
+        if not streams:
+            return False
+
+        stream = streams[0]
+        has_codec = stream.get("codec_name") is not None
+        has_pix_fmt = stream.get("pix_fmt") is not None
+        has_resolution = stream.get("width") and stream.get("height")
+
+        return has_codec and has_pix_fmt and has_resolution
+    except subprocess.CalledProcessError:
+        return False
 
 def find_video_file(base_dir):
 	video_extensions = [".mp4", ".mkv", ".avi"]

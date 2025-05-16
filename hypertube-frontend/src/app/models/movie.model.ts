@@ -1,6 +1,6 @@
 import { Time } from "@angular/common";
 
-interface GenreModel {
+export interface GenreModel {
   id: number;
   name: string;
 }
@@ -44,4 +44,10 @@ export interface MovieThumbnail {
   stoppedAt: Time;
   genres: GenreModel[];
   vote_average: number;
+}
+
+export interface Subtitles {
+  title: string,
+  language: string,
+  url: string
 }
