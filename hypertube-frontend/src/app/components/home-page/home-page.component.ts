@@ -9,13 +9,19 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatDivider } from '@angular/material/divider';
 import { catchError, firstValueFrom, map, of } from 'rxjs';
+import {MatMenuModule} from "@angular/material/menu";
+import {MatIconModule} from "@angular/material/icon";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatButtonModule} from "@angular/material/button";
+import {GenreModel} from "../../models/movie.model";
 
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
   imports: [
-    MatProgressSpinnerModule, NgFor, NgForOf, ThumbnailComponent, MatFormFieldModule, MatSelectModule, MatInputModule, FormsModule, MatDivider
+    MatMenuModule, MatButtonModule, MatCheckboxModule, MatIconModule,  MatProgressSpinnerModule, MatFormFieldModule,
+    NgFor, NgForOf, ThumbnailComponent, MatFormFieldModule, MatSelectModule, MatInputModule, FormsModule, MatDivider
   ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'
@@ -26,6 +32,8 @@ export class HomePageComponent implements OnInit {
   currentPage: number = 1;
   isLoading: boolean = false;
   selectSortingOpt: string = 'popular';
+  genres: GenreModel[] = [];
+  selectedGenreIds = new Set<number>();
 
   constructor(private movieService: MovieService) {
 
@@ -34,8 +42,23 @@ export class HomePageComponent implements OnInit {
   ngOnInit() {
     this.movieService.sortBy('popular', 1, []).subscribe((data: any) => {
       this.movies = data;
+    });
+    this.movieService.getGenres().subscribe((genres: GenreModel[]) => {
+      this.genres = genres
+    });
+  }
+
+  isChecked(genre: GenreModel): boolean {
+    return this.selectedGenreIds.has(genre.id);
+  }
+
+  toggleSelection(genre: GenreModel): void {
+    if (this.selectedGenreIds.has(genre.id)) {
+      this.selectedGenreIds.delete(genre.id);
+    } else {
+      this.selectedGenreIds.add(genre.id);
     }
-    );
+    this.applyGenreFilter();
   }
 
   async loadMovies(sortBy: string) {
@@ -43,7 +66,7 @@ export class HomePageComponent implements OnInit {
 
     this.isLoading = true;
     try {
-      const source$ = this.movieService.sortBy(sortBy, this.currentPage, []).pipe(
+      const source$ = this.movieService.sortBy(sortBy, this.currentPage, Array.from(this.selectedGenreIds)).pipe(
         catchError((error) => {
           console.error('Error loading movies:', error);
           return of([]);
@@ -62,15 +85,8 @@ export class HomePageComponent implements OnInit {
     }
   }
 
-  onSortChange(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    if (!selectElement) {
-      return;
-    }
-    const selectedOption = selectElement.value;
-    if (!selectedOption) {
-      return;
-    }
+  onSortChange(selectedOption: string) {
+    if (!selectedOption) return;
     this.movies = [];
     this.selectSortingOpt = selectedOption;
     this.currentPage = 1;
@@ -85,5 +101,11 @@ export class HomePageComponent implements OnInit {
         await this.loadMovies(this.selectSortingOpt);
       }
     }
+  }
+
+  applyGenreFilter() {
+    this.movies = [];
+    this.currentPage = 1;
+    this.loadMovies(this.selectSortingOpt);
   }
 }

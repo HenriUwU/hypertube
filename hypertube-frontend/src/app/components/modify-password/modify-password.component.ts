@@ -19,7 +19,7 @@ import { TranslateService } from '../../services/translate.service';
 })
 export class ModifyPasswordComponent {
 
-  @Input() resetPassword: boolean = false;
+  @Input() forgotPassword: boolean = false;
 
   passwordForm = new FormGroup({
     currentPassword: new FormControl<string>(''),
@@ -115,20 +115,16 @@ export class ModifyPasswordComponent {
         console.log("Response: ", response.response); 
         if (response.reposnse === false) {
           this.errorMessage = "Current password is incorrect.";
-          // return { PasswordVerificationError: true };
           return false;
         }
-        // return null;
         return true;
       },
       error: (_) => {
         this.errorMessage = "An error occurred while verifying the current password.";
-        // return { PasswordVerificationError: true };
         return false;
       }
     });
 
-    // return false
     return true
   }
 

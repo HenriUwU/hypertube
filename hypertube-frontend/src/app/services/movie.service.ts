@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import {Movie, Subtitles} from '../models/movie.model';
+import {GenreModel, Movie, Subtitles} from '../models/movie.model';
 
 @Injectable({
   providedIn: 'root'
@@ -30,9 +30,15 @@ export class MovieService {
     );
   }
 
-  subtitles(tmdbId: string): Observable<Subtitles[]> {
-    return this.http.get<Subtitles[]>(`${this.apiUrlAuth}/${tmdbId}/subtitles`).pipe(
+  getSubtitles(imdbId: string): Observable<Subtitles[]> {
+    return this.http.get<Subtitles[]>(`${this.apiUrlAuth}/${imdbId}/subtitles`).pipe(
       map((response: Subtitles[]) => response)
     );
+  }
+
+  getGenres(): Observable<GenreModel[]> {
+    return this.http.get<GenreModel[]>(`${this.apiUrlAuth}/genres`).pipe(
+      map((response: GenreModel[]) => response)
+    )
   }
 }

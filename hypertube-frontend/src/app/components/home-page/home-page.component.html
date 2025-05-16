@@ -1,9 +1,32 @@
-<div class="homepage-select">
-  <select class="form-select" aria-label="Default select example" (change)="onSortChange($event)">
-    @for (opt of sortingOptions; track sortingOptions) {
-    <option value="{{opt}}">{{opt}}</option>
-    }
-  </select>
+<div class="homepage-controls">
+  <mat-form-field appearance="fill" class="transparent-form-field">
+    <mat-label>Sort by</mat-label>
+    <mat-select [(value)]="selectSortingOpt" (selectionChange)="onSortChange($event.value)">
+      <mat-option *ngFor="let opt of sortingOptions" [value]="opt">
+        {{ opt }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-button [matMenuTriggerFor]="filterMenu">
+    Filter
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+
+  <mat-menu #filterMenu="matMenu" class="genre-filter-menu">
+    <div class="genre-checkbox-list">
+      <div *ngFor="let genre of genres" class="checkbox-wrapper">
+        <mat-checkbox
+          [checked]="isChecked(genre)"
+          (change)="toggleSelection(genre)"
+          [disableRipple]="true"
+          (click)="$event.stopPropagation()"
+        >
+          {{ genre.name }}
+        </mat-checkbox>
+      </div>
+    </div>
+  </mat-menu>
 </div>
 
 <mat-divider></mat-divider>

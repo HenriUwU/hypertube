@@ -15,27 +15,25 @@
         <div class="loading-container" *ngIf="loading">
             <mat-spinner class="loading-spinner"></mat-spinner>
         </div>
-	<!--
+
         <div *ngIf="!loading">
-            <video width="320" height="180" class="video-player" #videoPlayer controls type="application/x-mpegURL">
-                <source src="{{videoUrl}}">
-                Your browser does not support the video tag.
+            
+            <video
+            width="320"
+            height="180"
+            class="video-player"
+            #videoPlayer
+            controls
+            preload="auto"
+            autoplay
+            muted
+            >
+                <div *ngIf="videoUrl">
+                    <source [src]="videoUrl" type="application/vnd.apple.mpegurl">
+                    {{textMap.get("Your browser does not support the video tag.")}}
+                </div>
             </video>
         </div>
-	-->
-      <video
-        width="320"
-        height="180"
-        class="video-player"
-        #videoPlayer
-        controls
-        preload="auto"
-        autoplay
-        muted
-      >
-        <source [src]="videoUrl" type="application/vnd.apple.mpegurl">
-        {{textMap.get("Your browser does not support the video tag.")}}
-      </video>
 
     </div>
 </div>
