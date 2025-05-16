@@ -15,6 +15,7 @@ import com.hypertube.core_api.repository.TokenRepository;
 import com.hypertube.core_api.repository.UserRepository;
 import com.hypertube.core_api.security.JwtTokenUtil;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -96,6 +97,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username)));
     }
 
+    @Transactional
     public UserDTO getUser(Integer id) {
         if (id == null) return null;
         return userMapper.map(userRepository.findById(id).orElse(null));
