@@ -38,13 +38,13 @@ public class MovieController {
     }
 
     @PostMapping(path = "/sort-by")
-    public List<MovieModel> sortByMovies(@RequestBody SortByModel sortByDTO, @RequestHeader("Authorization") String token) throws JsonProcessingException {
-        return this.movieService.sortByMovies(sortByDTO, token);
+    public List<MovieModel> sortByMovies(@RequestBody SortByModel sortByModel, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+        return this.movieService.sortByMovies(sortByModel, token);
     }
 
     @PostMapping(path = "/search")
-    public List<MovieModel> searchMovies(@RequestBody SearchModel searchDTO, @RequestHeader("Authorization") String token) throws JsonProcessingException {
-        return this.movieService.searchMovies(searchDTO, token);
+    public List<MovieModel> searchMovies(@RequestBody SearchModel searchModel, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+        return this.movieService.searchMovies(searchModel, token);
     }
 
     @GetMapping(path = "/{id}/comments")

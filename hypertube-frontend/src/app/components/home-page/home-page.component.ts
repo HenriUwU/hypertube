@@ -1,14 +1,14 @@
 import {Component, HostListener, OnInit, ViewEncapsulation} from '@angular/core';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MovieService} from '../../services/movie.service';
-import {NgFor, NgForOf} from '@angular/common';
+import {NgFor, NgForOf, NgIf} from '@angular/common';
 import {ThumbnailComponent} from '../thumbnail/thumbnail.component';
 import {FormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDivider} from '@angular/material/divider';
-import {catchError, firstValueFrom, of} from 'rxjs';
+import {catchError, firstValueFrom, Observable, of} from 'rxjs';
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
 import {MatCheckboxModule} from "@angular/material/checkbox";
@@ -23,7 +23,7 @@ import {TranslateService} from "../../services/translate.service";
   standalone: true,
   imports: [
     MatMenuModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatProgressSpinnerModule, MatFormFieldModule,
-    NgFor, NgForOf, ThumbnailComponent, MatFormFieldModule, MatSelectModule, MatInputModule, FormsModule, MatDivider, MatTab, MatTabGroup
+    NgFor, NgForOf, ThumbnailComponent, MatFormFieldModule, MatSelectModule, MatInputModule, FormsModule, MatDivider, MatTab, MatTabGroup, NgIf
   ],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css'],
@@ -41,6 +41,7 @@ export class HomePageComponent implements OnInit {
   minStars = 0;
   hoverIndex = -1;
   starsArray = new Array(10);
+  searchTerm: string = '';
 
   textMap = new Map<string, string>([
     ["popular", "popular"],
@@ -48,7 +49,9 @@ export class HomePageComponent implements OnInit {
     ["now playing", "now playing"],
     ["upcoming", "upcoming"],
     ["Genres", "Genres"],
-    ["Min. stars", "Min. stars"]
+    ["Min. stars", "Min. stars"],
+    ["Search", "Search"],
+    ["All", "All"]
   ])
 
   constructor(private movieService: MovieService, private translateService: TranslateService) {
@@ -66,11 +69,18 @@ export class HomePageComponent implements OnInit {
     });
   }
 
+  onSearchChange(value: string) {
+    this.searchTerm = value;
+    this.movies = [];
+    this.currentPage = 1;
+    this.loadMovies()
+  }
+
   setMinStars(n: number) {
     this.minStars = n;
     this.movies = [];
     this.currentPage = 1;
-    this.loadMovies(this.selectSortingOpt)
+    this.loadMovies()
   }
 
   isChecked(genre: GenreModel): boolean {
@@ -86,17 +96,49 @@ export class HomePageComponent implements OnInit {
     this.applyGenreFilter();
   }
 
-  async loadMovies(sortBy: string) {
+  areAllGenresSelected(): boolean {
+    return this.genres.every(genre => this.isChecked(genre));
+  }
+
+  toggleAllSelections(isChecked: boolean): void {
+    if (isChecked) {
+      this.genres.forEach(genre => {
+        if (!this.isChecked(genre)) {
+          this.selectedGenreIds.add(genre.id);
+        }
+      });
+    } else {
+      this.genres.forEach(genre => {
+        if (this.isChecked(genre)) {
+          this.selectedGenreIds.delete(genre.id);
+        }
+      });
+    }
+    this.applyGenreFilter();
+  }
+
+  async loadMovies() {
     if (this.isLoading) return;
 
     this.isLoading = true;
     try {
-      const source$ = this.movieService.sortBy(sortBy, this.currentPage, Array.from(this.selectedGenreIds), this.minStars).pipe(
-        catchError((error) => {
-          console.error('Error loading movies:', error);
-          return of([]);
-        })
-      );
+      let source$: Observable<any>;
+
+      if (this.searchTerm && this.searchTerm.trim() !== '') {
+        source$ = this.movieService.search(this.searchTerm, this.currentPage, Array.from(this.selectedGenreIds), this.minStars).pipe(
+          catchError((error) => {
+            console.error('Error loading movies:', error);
+            return of([]);
+          })
+        );
+      } else {
+        source$ = this.movieService.sortBy(this.selectSortingOpt, this.currentPage, Array.from(this.selectedGenreIds), this.minStars).pipe(
+          catchError((error) => {
+            console.error('Error loading movies:', error);
+            return of([]);
+          })
+        );
+      }
       const data: any[] = await firstValueFrom<any[]>(source$);
       if (!data || data.length === 0) {
         console.log('No more movies to load');
@@ -114,7 +156,7 @@ export class HomePageComponent implements OnInit {
     this.selectSortingOpt = this.sortingOptions[index];
     this.movies = [];
     this.currentPage = 1;
-    this.loadMovies(this.selectSortingOpt);
+    this.loadMovies();
   }
 
   formatLabel(opt: string): string {
@@ -126,7 +168,7 @@ export class HomePageComponent implements OnInit {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100 && !this.isLoading) {
       this.currentPage++;
       if (this.currentPage % 20 === 0) { // load a batch each 20 y offset scroll
-        await this.loadMovies(this.selectSortingOpt);
+        await this.loadMovies();
       }
     }
   }
@@ -134,6 +176,8 @@ export class HomePageComponent implements OnInit {
   applyGenreFilter() {
     this.movies = [];
     this.currentPage = 1;
-    this.loadMovies(this.selectSortingOpt);
+    this.loadMovies();
   }
+
+  protected readonly HTMLInputElement = HTMLInputElement;
 }

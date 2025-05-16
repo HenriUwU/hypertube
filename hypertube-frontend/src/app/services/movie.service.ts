@@ -31,6 +31,18 @@ export class MovieService {
     );
   }
 
+  search(query: string, page: number, genresIds: number[], minStars: number): Observable<any> {
+    const body = {
+      query: query,
+      page: page,
+      genresIds: genresIds,
+      minStars: minStars
+    };
+    return this.http.post<Movie[]>(`${this.apiUrlAuth}/search`, body).pipe(
+      map((response: any) => response)
+    );
+  }
+
   getSubtitles(imdbId: string): Observable<Subtitles[]> {
     return this.http.get<Subtitles[]>(`${this.apiUrlAuth}/${imdbId}/subtitles`).pipe(
       map((response: Subtitles[]) => response)

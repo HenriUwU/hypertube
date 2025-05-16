@@ -166,7 +166,11 @@ public class MovieService {
                         || (movie.getGenreIds() != null && !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)))
                 .filter(movie -> movie.getVoteAverage() != null && movie.getVoteAverage() >= minStars)
                 .peek(movie -> movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail()))
-                .peek(movie -> movie.setReleaseDate(movie.getReleaseDate().substring(0, 4)))
+                .peek(movie -> movie.setReleaseDate(
+                        (movie.getReleaseDate() != null && movie.getReleaseDate().length() >= 4)
+                                ? movie.getReleaseDate().substring(0, 4)
+                                : ""
+                ))
                 .peek(movie -> Optional.ofNullable(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))
                         .map(WatchedMoviesEntity::getStoppedAt)
                         .ifPresent(movie::setStoppedAt))

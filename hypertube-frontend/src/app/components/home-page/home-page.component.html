@@ -1,4 +1,14 @@
 <div class="homepage-controls">
+  <mat-form-field appearance="fill" class="search-field transparent-form-field">
+    <mat-label>{{textMap.get('Search')}}</mat-label>
+    <input matInput [(ngModel)]="searchTerm" (input)="onSearchChange(searchTerm)" placeholder="Search movies..." />
+    <button *ngIf="searchTerm" matSuffix mat-icon-button aria-label="Clear" (click)="searchTerm=''; onSearchChange('')">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <div class="spacer"></div>
+
   <mat-tab-group class="sort-tab-group" (selectedIndexChange)="onSortChangeIndex($event)">
     <mat-tab *ngFor="let opt of sortingOptions" [label]="textMap.get(formatLabel(opt)) ?? formatLabel(opt)"></mat-tab>
   </mat-tab-group>
@@ -25,6 +35,17 @@
 
   <mat-menu #filterMenu="matMenu" class="genre-filter-menu">
     <div class="genre-checkbox-list">
+      <div class="checkbox-wrapper">
+        <mat-checkbox
+          [checked]="areAllGenresSelected()"
+          (change)="toggleAllSelections($event.checked)"
+          [disableRipple]="true"
+          (click)="$event.stopPropagation()"
+        >
+          {{textMap.get('All')}}
+        </mat-checkbox>
+      </div>
+
       <div *ngFor="let genre of genres" class="checkbox-wrapper">
         <mat-checkbox
           [checked]="isChecked(genre)"
