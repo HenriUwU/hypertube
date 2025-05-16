@@ -6,6 +6,7 @@ public class SearchModel {
     private String query;
     private List<Integer> genresIds;
     private Integer page;
+    private Integer minStars;
 
     public List<Integer> getGenresIds() {
         return genresIds;
@@ -31,4 +32,11 @@ public class SearchModel {
         this.query = query;
     }
 
+    public Integer getMinStars() {
+        return minStars;
+    }
+
+    public void setMinStars(Integer minStars) {
+        this.minStars = minStars;
+    }
 }

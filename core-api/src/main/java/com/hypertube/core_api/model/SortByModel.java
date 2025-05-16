@@ -9,6 +9,7 @@ public class SortByModel {
 	private SortBy sortBy;
 	private List<Integer> genresIds;
 	private Integer page;
+	private Integer minStars;
 
 	public List<Integer> getGenresIds() {
 		return genresIds;
@@ -34,4 +35,11 @@ public class SortByModel {
 		this.sortBy = sortBy;
 	}
 
+	public Integer getMinStars() {
+		return minStars;
+	}
+
+	public void setMinStars(Integer minStars) {
+		this.minStars = minStars;
+	}
 }

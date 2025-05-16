@@ -105,7 +105,7 @@ http://localhost:8080/
 
 - **Description :** Récupère un utilisateur par son ID
 - **Auth requise :** ✅ Oui
-- **Réponse UserDTO:**
+- **Réponse `UserDTO`:**
 ```json
 {
     "id": 3,
@@ -120,7 +120,7 @@ http://localhost:8080/
 #### `PUT /user`
 - **Description :** Met a jour un utilisateur
 - **Auth requise :** ✅ Oui
-- **Body UserDTO:**
+- **Body `UserDTO`:**
 ```json
 {
     "id": 3,
@@ -132,7 +132,7 @@ http://localhost:8080/
     "profilePicture": null
 }
 ```
-- **Réponse UserDTO modifie:**
+- **Réponse `UserDTO` modifie:**
   
 #### `DELETE /user/{id}`
 - **Description :** Supprime un utilisateur par son ID
@@ -144,7 +144,7 @@ http://localhost:8080/
 
 - **Description :** Récupère un utilisateur par son ID
 - **Auth requise :** ✅ Oui
-- **Réponse MovieDTO:**
+- **Réponse `MovieDTO`:**
 ```json
 {
     "id": 268,
@@ -191,7 +191,7 @@ http://localhost:8080/
 
 - **Description :** Renvoie une liste de film trier par les genres et le sortBy (now_playing, popular, top_rating, upcoming)
 - **Auth requise :** ✅ Oui
-- **Body SortByModel:**
+- **Body `SortByModel`:**
 ```json
 {
     "sortBy": "popular",
@@ -199,7 +199,7 @@ http://localhost:8080/
     "genresIds": []
 }
 ```
-- **Réponse List\<MovieDTO\>:**
+- **Réponse `List<MovieDTO>`:**
 - 
 #### `POST /movies/search`
 
@@ -213,12 +213,12 @@ http://localhost:8080/
     "genresIds": []
 }
 ```
-- **Réponse List\<MovieDTO\>:**
+- **Réponse `List<MovieDTO>`:**
 
 #### `GET /movies/{movie_id}/comments`
 - **Description :** Renvoie une liste des commentaire en fonction du film ID
 - **Auth requise :** ✅ Oui
-- **Réponse List\<CommentDTO\>:**
+- **Réponse `List<CommentDTO>`:**
 ```json
 {
     "id": 13,
@@ -242,26 +242,26 @@ http://localhost:8080/
 #### `POST /movies/watched`
 - **Description :** Sauvegarde le temps ou l'utilisateur s'est arreter de regarder le film
 - **Auth requise :** ✅ Oui
-- **Body WatchedMoviesDTO:**
+- **Body `WatchedMoviesDTO`:**
 ```json
 {
     "movieId": 950387,
     "stoppedAt": "02:38:16"
 }
 ```
-- **Réponse WatchedMoviesDTO:**
+- **Réponse `WatchedMoviesDTO`:**
 
 #### `PUT /movies/watched`
 - **Description :** Met a jour le temps ou l'utilisateur s'est arreter de regarder le film
 - **Auth requise :** ✅ Oui
-- **Body WatchedMoviesDTO:**
-- **Réponse WatchedMoviesDTO:**
+- **Body `WatchedMoviesDTO`:**
+- **Réponse `WatchedMoviesDTO`:**
 
 
 #### `GET /movies/{tmdb_id}/subtitles`
 - **Description :** Recupere les sous-titres associe au tmdb_id
 - **Auth requise :** ✅ Oui
-- **Réponse List<SubtitlesDTO>:**
+- **Réponse `List<SubtitlesDTO>`:**
 ```json
 [
     {
@@ -287,11 +287,28 @@ http://localhost:8080/
 }
 ```
 
+#### `GET /movies/genres`
+- **Description :** Renvoie une list de tout les genres disponble
+- **Auth requise :** ✅ Oui
+- **Réponse `List<GenreModel>`:**
+```json
+[
+    {
+        "id": 28,
+        "name": "Action"
+    },
+    {
+        "id": 12,
+        "name": "Adventure"
+    },
+]
+```
+
 ### Commentaires: /comment
 #### `POST /comment`
 - **Description :** Ajoute un commentaire a un film et le renvoie
 - **Auth requise :** ✅ Oui
-- **Body CommentDTO:**
+- **Body `CommentDTO`:**
 ```json
 {
     "movieId": 268,
@@ -299,14 +316,14 @@ http://localhost:8080/
     "content": "Batman il fait trop l'ancien le joker il va le djoufara"
 }
 ```
-- **Réponse CommentDTO:**
+- **Réponse `CommentDTO`:**
 
 #### `PUT /comment`
 
 - **Description :** Met a jour un commentaire et le renvoie
 - **Auth requise :** ✅ Oui
-- **Body CommentDTO:**
-- **Réponse CommentDTO:**
+- **Body `CommentDTO`:**
+- **Réponse `CommentDTO`:**
 
 #### `DELETE /comment/{comment_id}`
 
@@ -316,7 +333,7 @@ http://localhost:8080/
 #### `POST /comment/like/{comment_id}`
 - **Description :** Like un commentaire et le renvoie
 - **Auth requise :** ✅ Oui
-- **Response CommentDTO:**
+- **Response `CommentDTO`:**
 
 #### `DELETE /comment/unlike/{comment_id}`
 - **Description :** Unlike un commentaire et le renvoie
@@ -328,7 +345,7 @@ http://localhost:8080/
 
 - **Description :** Renvoie la list des lang disponible 
 - **Auth requise :** ✅ Oui
-- **Réponse List<LanguageModel>:**
+- **Réponse `List<LanguageModel>`:**
 ```json
 [
     {
@@ -348,7 +365,7 @@ http://localhost:8080/
 
 - **Description :** Prend une liste de text a traduire dans une langue et renvoie la traduction
 - **Auth requise :** ✅ Oui
-- **Body TranslateModel**
+- **Body `TranslateModel`:**
 ```json
 {
     "text": ["Bonjour", "Bonne journee"],
@@ -357,7 +374,7 @@ http://localhost:8080/
 }
 ```
 
-- **Réponse List<String>:**
+- **Réponse `List<String>`:**
 ```json
 {
     "translations": [

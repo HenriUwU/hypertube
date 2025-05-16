@@ -1,16 +1,26 @@
 <div class="homepage-controls">
-  <mat-form-field appearance="fill" class="transparent-form-field">
-    <mat-label>Sort by</mat-label>
-    <mat-select [(value)]="selectSortingOpt" (selectionChange)="onSortChange($event.value)">
-      <mat-option *ngFor="let opt of sortingOptions" [value]="opt">
-        {{ opt }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <mat-tab-group class="sort-tab-group" (selectedIndexChange)="onSortChangeIndex($event)">
+    <mat-tab *ngFor="let opt of sortingOptions" [label]="textMap.get(formatLabel(opt)) ?? formatLabel(opt)"></mat-tab>
+  </mat-tab-group>
+
+  <div class="star-rating-filter">
+    <label>{{textMap.get('Min. stars')}}</label>
+    <div class="stars">
+    <span
+      *ngFor="let star of starsArray; let i = index"
+      class="star"
+      [class.filled]="(hoverIndex !== -1 ? i <= hoverIndex : i < minStars)"
+      (mouseenter)="hoverIndex = i"
+      (mouseleave)="hoverIndex = -1"
+      (click)="setMinStars(i + 1)"
+    >&#9733;</span
+    >
+    </div>
+  </div>
 
   <button mat-button [matMenuTriggerFor]="filterMenu">
-    Filter
-    <mat-icon>arrow_drop_down</mat-icon>
+    {{textMap.get('Genres')}}
+    <mat-icon>filter_alt</mat-icon>
   </button>
 
   <mat-menu #filterMenu="matMenu" class="genre-filter-menu">

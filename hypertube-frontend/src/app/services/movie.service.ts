@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import {map, min, Observable} from 'rxjs';
 import {GenreModel, Movie, Subtitles} from '../models/movie.model';
 
 @Injectable({
@@ -19,11 +19,12 @@ export class MovieService {
     return this.http.get<Movie>(`${this.apiUrlAuth}/${id.toString()}`).pipe();
   }
 
-  sortBy(sortBy: string, page: number, genresIds: number[]): Observable<any> {
+  sortBy(sortBy: string, page: number, genresIds: number[], minStars: number): Observable<any> {
     const body = {
       sortBy: sortBy,
       page: page,
-      genresIds: genresIds
+      genresIds: genresIds,
+      minStars: minStars
     };
     return this.http.post<Movie[]>(`${this.apiUrlAuth}/sort-by`, body).pipe(
       map((response: any) => response)

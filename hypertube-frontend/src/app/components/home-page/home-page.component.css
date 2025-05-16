@@ -1,3 +1,106 @@
+.homepage-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background-color: #2c2c2c;
+  border: 2px solid #66bb6a;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  color: #ffffff;
+}
+
+.sort-tab-group {
+  background-color: #2c2c2c;
+  font-family: 'Courier New', monospace;
+  border-radius: 6px;
+}
+
+.sort-tab-group .mdc-tab__text-label {
+  color: white !important;
+  transition: color 0.3s;
+}
+
+.sort-tab-group .mdc-tab--active .mdc-tab__text-label {
+  color: #66bb6a !important;
+  font-weight: bold;
+}
+
+.sort-tab-group .mdc-tab:hover .mdc-tab__text-label {
+  color: #a5d6a7 !important;
+}
+
+button[mat-button] {
+  background-color: #424242;
+  color: #ffffff;
+  border: 1px solid #66bb6a;
+  font-family: 'Courier New', monospace;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button[mat-button]:hover {
+  background-color: #616161;
+  transform: scale(1.03);
+}
+
+.genre-filter-menu {
+  background-color: #333;
+  border: 1px solid #66bb6a;
+  padding: 12px;
+  border-radius: 6px;
+  color: white;
+  font-family: 'Courier New', monospace;
+}
+
+.genre-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkbox-wrapper mat-checkbox {
+  font-size: 14px;
+  color: white;
+}
+
+.star-rating-filter {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Courier New', monospace;
+  color: white;
+  user-select: none;
+  gap: 6px;
+}
+
+.star-rating-filter label {
+  font-size: 14px;
+}
+
+.star-rating-filter .stars {
+  display: flex;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.star-rating-filter .star {
+  font-size: 24px;
+  color: #555;
+  transition: color 0.2s ease;
+  text-shadow: 0 0 2px #2e7d32;
+}
+
+.star-rating-filter .star.filled {
+  color: #66bb6a;
+  text-shadow: 0 0 5px #81c784;
+}
+
 .movie-list {
   display: flex;
   flex-wrap: wrap;
@@ -27,3 +130,4 @@
 .checkbox-wrapper {
   display: block;
 }
+

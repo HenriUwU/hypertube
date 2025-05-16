@@ -104,21 +104,20 @@ public class MovieService {
         return watchedMoviesMapper.map(watchedMoviesRepository.save(watchedMoviesEntity));
     }
 
-    public List<MovieModel> sortByMovies(SortByModel sortByDTO, String token) throws JsonProcessingException {
-        checkSortByDTO(sortByDTO);
+    public List<MovieModel> sortByMovies(SortByModel sortByModel, String token) throws JsonProcessingException {
+        checkSortByDTO(sortByModel);
         UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + sortByDTO.getSortBy() + "?language=" + userEntity.getLanguage() + "&page=" + sortByDTO.getPage(),
+        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + sortByModel.getSortBy() + "?language=" + userEntity.getLanguage() + "&page=" + sortByModel.getPage(),
                 HttpMethod.GET,
                 entity,
                 String.class);
 
-        List<Integer> selectedGenreIds = sortByDTO.getGenresIds();
-        return sortMovieByGenre(response, selectedGenreIds, token);
+        return sortMovieByGenre(response, sortByModel.getGenresIds(), sortByModel.getMinStars(), token);
     }
 
     public List<GenreModel> getGenres(String token) throws JsonProcessingException {
@@ -138,24 +137,23 @@ public class MovieService {
     }
 
 
-    public List<MovieModel> searchMovies(SearchModel searchDTO, String token) throws JsonProcessingException {
-        checkSearchDTO(searchDTO);
+    public List<MovieModel> searchMovies(SearchModel searchModel, String token) throws JsonProcessingException {
+        checkSearchDTO(searchModel);
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
         UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
 
-        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/search/movie?query=" + searchDTO.getQuery() + "&language=" + userEntity.getLanguage() + "&page=" + searchDTO.getPage(),
+        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/search/movie?query=" + searchModel.getQuery() + "&language=" + userEntity.getLanguage() + "&page=" + searchModel.getPage(),
                 HttpMethod.GET,
                 entity,
                 String.class);
 
-        List<Integer> selectedGenreIds = searchDTO.getGenresIds();
-        return sortMovieByGenre(response, selectedGenreIds, token);
+        return sortMovieByGenre(response, searchModel.getGenresIds(), searchModel.getMinStars(), token);
     }
 
-    private List<MovieModel> sortMovieByGenre(ResponseEntity<String> response, List<Integer> selectedGenreIds, String token) throws JsonProcessingException {
+    private List<MovieModel> sortMovieByGenre(ResponseEntity<String> response, List<Integer> selectedGenreIds, Integer minStars, String token) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(response.getBody());
         JsonNode resultsNode = rootNode.path("results");
@@ -166,6 +164,7 @@ public class MovieService {
         return movies.stream()
                 .filter(movie ->  selectedGenreIds.isEmpty()
                         || (movie.getGenreIds() != null && !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)))
+                .filter(movie -> movie.getVoteAverage() != null && movie.getVoteAverage() >= minStars)
                 .peek(movie -> movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail()))
                 .peek(movie -> movie.setReleaseDate(movie.getReleaseDate().substring(0, 4)))
                 .peek(movie -> Optional.ofNullable(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))
