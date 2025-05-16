@@ -97,11 +97,11 @@ export class ProfileComponent {
         profilePicture: response.profilePicture ? response.profilePicture : this.defaultProfilePicture,
         language: response.language
       });
-      this.translateService.updateLanguage(response.language? response.language : 'en');
-      console.log('User updated successfully:', response);
+      // console.log('User updated successfully:', response);
       if (response.token && response.token !== null) {
         sessionStorage.setItem(`token`, response.token);
       }
+      this.translateService.updateLanguage(response.language? response.language : 'en');
     }
     , (error) => {
       console.error('Error updating user:', error);

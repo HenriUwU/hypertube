@@ -23,8 +23,6 @@ export class StreamingComponent {
   videoUrl: string = '';
   loading: boolean = false;
   blankVideo: boolean = true;
-  // @Input() videoTitle: string = 'A minecraft movie';
-  // @Input() videoTitle: string = 'The Sorcerer s Apprentice';
   @Input() videoTitle: string = 'The lion king';
 
 
@@ -61,7 +59,7 @@ export class StreamingComponent {
     }
     this.blankVideo = false;
     this.magnet = selectedOption;
-    // this.loading = true;
+    this.loading = true;
     const videoEl: HTMLVideoElement = this.videoPlayer.nativeElement;
     Array.from(videoEl.querySelectorAll('track')).forEach(track => track.remove());
 
@@ -113,39 +111,25 @@ export class StreamingComponent {
       }
     );
   }
-
   startTorrent() {
-    // this.torrentService.sendMagnet(this.magnet).subscribe((response: string) => {
-    //   this.hash = response;
-    //   var interId = setInterval(() => {
-    //     this.launchStreaming(interId as unknown as number);
-    //   }, 5000);
-    // }, (error) => {
-    //   console.error('Error starting torrent:', error);
-    // });
     this.torrentService.sendMagnet(this.magnet).subscribe((response: string) => {
       this.hash = response;
       this.launchStreaming();
     });
   }
 
-  // launchStreaming(intervalId: number | null) {
   launchStreaming() {
     if (!this.hash) {
       console.error('Error: hash is not defined');
       return;
     }
-
     this.torrentService.getTorrentPath(this.hash).subscribe((response: string) => {
       this.videoUrl = response;
       console.log(this.videoUrl);
       if (this.videoUrl) {
+        this.loading = false;
         const video = this.videoPlayer.nativeElement;
         this.hlsConversion(this.videoUrl, video);
-        // this.loading = false;
-        // if (intervalId) {
-          // clearInterval(intervalId);
-        // }
       } else {
         console.error('Error: videoUrl is empty');
       }
