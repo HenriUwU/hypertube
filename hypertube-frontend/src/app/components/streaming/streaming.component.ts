@@ -61,7 +61,7 @@ export class StreamingComponent {
     }
     this.blankVideo = false;
     this.magnet = selectedOption;
-    this.loading = true;
+    // this.loading = true;
     const videoEl: HTMLVideoElement = this.videoPlayer.nativeElement;
     Array.from(videoEl.querySelectorAll('track')).forEach(track => track.remove());
 
@@ -142,13 +142,13 @@ export class StreamingComponent {
       if (this.videoUrl) {
         const video = this.videoPlayer.nativeElement;
         this.hlsConversion(this.videoUrl, video);
+        // this.loading = false;
         // if (intervalId) {
           // clearInterval(intervalId);
         // }
       } else {
         console.error('Error: videoUrl is empty');
       }
-      this.loading = false;
     }, (error) => {
       console.error('Error fetching torrent path:', error);
     });

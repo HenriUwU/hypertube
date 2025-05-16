@@ -100,7 +100,7 @@ export class ProfileComponent {
       this.translateService.updateLanguage(response.language? response.language : 'en');
       console.log('User updated successfully:', response);
       if (response.token && response.token !== null) {
-        sessionStorage.setItem(`id`, response.id);
+        sessionStorage.setItem(`token`, response.token);
       }
     }
     , (error) => {
