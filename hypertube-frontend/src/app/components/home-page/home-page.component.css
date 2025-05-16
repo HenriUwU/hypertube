@@ -1,7 +1,7 @@
 .movie-list {
   display: flex;
   flex-wrap: wrap;
-  flex-direction: line;
+  justify-content: center;
 }
 
 .mat-divider {
