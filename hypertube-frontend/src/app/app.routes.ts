@@ -23,8 +23,8 @@ export const routes: Routes = [
       {path: 'register', component: RegisterPageComponent},
       {path: 'omniauth/42', component: AuthCallback42Component},
       {path: 'omniauth/discord', component: AuthCallbackDiscordComponent},
-      {path: 'omniauth/google', component: AuthCallbackGoogleComponent},
-      {path: 'verify-email', component: VerifyEmailComponent}
+      {path: 'verify-email', component: VerifyEmailComponent},
+      {path: 'forgot-password', component: ForgotPasswordComponent}
     ]
   },
   {

@@ -21,9 +21,8 @@
                     <label for="firstname">{{textMap.get('First Name')}}: </label>
                     <input id="firstname" type="text" formControlName="firstname" [readonly]="this.isReadOnly" />
                     <br />
-                    <!-- 
-                    <label for="password">Password: </label>
-                    <input id="password" type="password" formControlName="password" /> -->
+                    <button type="submit" id="submitButton">{{textMap.get('Change Password')}}</button>
+
                 </div>
 
                 <div class="right-column">
@@ -35,7 +34,7 @@
                         <div class="profile-picture-input" *ngIf="!isReadOnly">
                             <label for="profile-picture-input-id">{{textMap.get('Profile Picture')}}</label>
                             <input id="profile-picture-input-id" type="file" (change)="onFileSelected($event)"
-                                [disabled]="this.isReadOnly" />
+                                [disabled]="this.isReadOnly" accept="image/*" />
                         </div>
                     </div>
                     <div class="language-container">
