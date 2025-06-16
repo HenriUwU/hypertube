@@ -24,19 +24,20 @@ export class MovieService {
       sortBy: sortBy,
       page: page,
       genresIds: genresIds,
-      minStars: minStars
+      minStars: minStars,
     };
     return this.http.post<Movie[]>(`${this.apiUrlAuth}/sort-by`, body).pipe(
       map((response: any) => response)
     );
   }
 
-  search(query: string, page: number, genresIds: number[], minStars: number): Observable<any> {
+  search(query: string, page: number, genresIds: number[], minStars: number, productionYear: number | null): Observable<any> {
     const body = {
       query: query,
       page: page,
       genresIds: genresIds,
-      minStars: minStars
+      minStars: minStars,
+      productionYear: productionYear
     };
     return this.http.post<Movie[]>(`${this.apiUrlAuth}/search`, body).pipe(
       map((response: any) => response)

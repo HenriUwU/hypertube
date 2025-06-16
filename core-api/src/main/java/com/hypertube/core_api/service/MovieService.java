@@ -22,7 +22,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -145,7 +144,7 @@ public class MovieService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
         UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
 
-        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/search/movie?query=" + searchModel.getQuery() + "&language=" + userEntity.getLanguage() + "&page=" + searchModel.getPage(),
+        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/search/movie?query=" + searchModel.getQuery() + "&language=" + userEntity.getLanguage() + "&primary_release_year=" + searchModel.getProductionYear() + "&page=" + searchModel.getPage(),
                 HttpMethod.GET,
                 entity,
                 String.class);

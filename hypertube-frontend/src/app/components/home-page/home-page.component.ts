@@ -42,6 +42,7 @@ export class HomePageComponent implements OnInit {
   hoverIndex = -1;
   starsArray = new Array(10);
   searchTerm: string = '';
+  filterYear: number | null = null;
 
   textMap = new Map<string, string>([
     ["popular", "popular"],
@@ -51,11 +52,13 @@ export class HomePageComponent implements OnInit {
     ["Genres", "Genres"],
     ["Min. stars", "Min. stars"],
     ["Search", "Search"],
-    ["All", "All"]
+    ["Year", "Year"],
+    ["All", "All"],
+    ["e.g. 2022", "e.g. 2022"]
   ])
 
-  constructor(private movieService: MovieService, private translateService: TranslateService) {
 
+  constructor(private movieService: MovieService, private translateService: TranslateService) {
   }
 
   ngOnInit() {
@@ -67,6 +70,12 @@ export class HomePageComponent implements OnInit {
     this.movieService.getGenres().subscribe((genres: GenreModel[]) => {
       this.genres = genres
     });
+  }
+
+  onYearChange() {
+    this.movies = [];
+    this.currentPage = 1;
+    this.loadMovies()
   }
 
   onSearchChange(value: string) {
@@ -125,7 +134,7 @@ export class HomePageComponent implements OnInit {
       let source$: Observable<any>;
 
       if (this.searchTerm && this.searchTerm.trim() !== '') {
-        source$ = this.movieService.search(this.searchTerm, this.currentPage, Array.from(this.selectedGenreIds), this.minStars).pipe(
+        source$ = this.movieService.search(this.searchTerm, this.currentPage, Array.from(this.selectedGenreIds), this.minStars, this.filterYear).pipe(
           catchError((error) => {
             console.error('Error loading movies:', error);
             return of([]);

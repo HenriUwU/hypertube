@@ -1,11 +1,27 @@
 <div class="homepage-controls">
-  <mat-form-field appearance="fill" class="search-field transparent-form-field">
-    <mat-label>{{textMap.get('Search')}}</mat-label>
-    <input matInput [(ngModel)]="searchTerm" (input)="onSearchChange(searchTerm)" placeholder="Search movies..." />
-    <button *ngIf="searchTerm" matSuffix mat-icon-button aria-label="Clear" (click)="searchTerm=''; onSearchChange('')">
-      <mat-icon>close</mat-icon>
-    </button>
-  </mat-form-field>
+  <div class="search-and-year">
+    <mat-form-field appearance="fill" class="search-field transparent-form-field">
+      <mat-label>{{textMap.get('Search')}}</mat-label>
+      <input matInput [(ngModel)]="searchTerm" (input)="onSearchChange(searchTerm)" placeholder="Search movies..." />
+      <button *ngIf="searchTerm" matSuffix mat-icon-button aria-label="Clear" (click)="searchTerm=''; onSearchChange('')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <div class="year-filter" [class.disabled]="!searchTerm?.trim()">
+      <label>{{ textMap.get('Year') }}:</label>
+      <input
+        type="number"
+        [(ngModel)]="filterYear"
+        (input)="onYearChange()"
+        [placeholder]="textMap.get('e.g. 2022')"
+        maxlength="4"
+        inputmode="numeric"
+        pattern="\d{4}"
+        [disabled]="!searchTerm?.trim()"
+      />
+    </div>
+  </div>
 
   <div class="spacer"></div>
 
