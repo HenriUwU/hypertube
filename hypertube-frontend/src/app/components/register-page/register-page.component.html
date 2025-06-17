@@ -1,78 +1,79 @@
 <div class="register-container">
   <div class="register-box" @slideInAnimation>
 
-    <h2>Register now</h2>
-    <div class="sign-in-text">Already have an account? <a class="sign-in-hyperlink" routerLink="/auth/login">Sign in</a></div>
+    <h2>register now</h2>
 
     <form [formGroup]="registerForm" class="register-form">
+      <label for="username">Username</label>
       <mat-form-field appearance="outline" color="accent" class="register-field">
-        <mat-label>Username</mat-label>
+        <mat-label>username</mat-label>
         <input matInput formControlName="username" type="text" required/>
-        <mat-icon matPrefix>person_icon</mat-icon>
       </mat-form-field>
+
+      <label for="password">Password</label>
       <mat-form-field appearance="outline" color="accent" class="register-field">
-        <mat-label>Password</mat-label>
+        <mat-label>********</mat-label>
         <input matInput formControlName="password" type="password" [type]="hide ? 'password' : 'text'" required/>
-        <mat-icon matPrefix>lock</mat-icon>
         <button mat-icon-button matSuffix (click)="hide = !hide">
           <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
       </mat-form-field>
 
       <div class="or-container">
-        <div class="line"></div>
-        <span>Personal information</span>
-        <div class="line"></div>
+        <span><B>Personal informations</B></span>
       </div>
 
+      <label for="email">E-mail</label>
       <mat-form-field appearance="outline" color="accent" class="register-field">
-        <mat-label>email</mat-label>
+        <mat-label>e-mail</mat-label>
         <input matInput formControlName="email" type="email" required/>
-        <mat-icon matPrefix>email</mat-icon>
       </mat-form-field>
+
+      <label for="lastName">Last Name</label>
       <mat-form-field appearance="outline" color="accent" class="register-field">
-        <mat-label>Last Name</mat-label>
+        <mat-label>last name</mat-label>
         <input matInput formControlName="lastName" type="text" required/>
-        <mat-icon matPrefix>person_icon</mat-icon>
       </mat-form-field>
+
+      <label for="firstName">First Name</label>
       <mat-form-field appearance="outline" color="accent" class="register-field">
-        <mat-label>First Name</mat-label>
+        <mat-label>first name</mat-label>
         <input matInput formControlName="firstName" type="text" required/>
-        <mat-icon matPrefix>person_icon</mat-icon>
       </mat-form-field>
 
       <button mat-flat-button class="register-btn" color="accent" type="submit" (click)="register()">
-        <mat-icon>login</mat-icon>
-        Register
+        register
       </button>
     </form>
 
     <div class="or-container">
-      <div class="line"></div>
-      <span>Or</span>
-      <div class="line"></div>
+      <span>OR<br>register with<br><br></span>
     </div>
 
     <div class="omniauth-buttons">
-      <a href="https://discord.com/oauth2/authorize?client_id=1332866171581632643&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A4200%2Fauth%2Fomniauth%2Fdiscord&scope=identify+email" class="omniauth-btn">
+      <a href="https://discord.com/oauth2/authorize?client_id=1332866171581632643&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A4200%2Fauth%2Fomniauth%2Fdiscord&scope=identify+email"
+        class="omniauth-btn">
         <div class="logo-box">
-          <div class="logo-container">
-            <img ngSrc="assets/logos/discord-logo.svg" alt="Google Logo" width="1024" height="1045"/>
-          </div>
+            <img ngSrc="assets/logos/discord-logo.svg" alt="Google Logo" width="1024" height="1045" />
         </div>
       </a>
-      <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-3d0b78d85d1720e444f1354145f582882a28378ec38a8c07fedc6bad0323ad89&redirect_uri=http%3A%2F%2Flocalhost%3A4200%2Fauth%2Fomniauth%2F42&response_type=code" class="omniauth-btn">
+      <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-3d0b78d85d1720e444f1354145f582882a28378ec38a8c07fedc6bad0323ad89&redirect_uri=http%3A%2F%2Flocalhost%3A4200%2Fauth%2Fomniauth%2F42&response_type=code"
+        class="omniauth-btn">
         <div class="logo-box">
-          <img ngSrc="assets/logos/42-logo.svg" alt="42 Logo" width="600" height="421"/>
+          <img ngSrc="assets/logos/42-logo.svg" alt="42 Logo" width="600" height="421" />
         </div>
       </a>
-      <a href="/auth/42"  class="omniauth-btn">
+      <a href="/auth/42" class="omniauth-btn">
         <div class="logo-box">
-          <div class="logo-container">
-            <img ngSrc="assets/logos/github-logo.svg" alt="github Logo" width="1024" height="1024"/>
-          </div>
+            <img ngSrc="assets/logos/github-logo.svg" alt="github Logo" width="1024" height="1024" />
         </div>
       </a>
+    </div>
+
+    <div class="sign-in-text">Already have an 
+      <span style="font-family: 'Borel', cursive;">account</span>
+       ?
+      <a class="sign-in-hyperlink" routerLink="/auth/login">Sign in now.</a>
     </div>
 
   </div>

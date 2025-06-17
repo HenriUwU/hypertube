@@ -2,125 +2,113 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  color: #FFFFFF;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
 }
 
 .register-box {
-  background-color: #121212;
-  color: #FFFFFF;
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  border-radius: 8px;
+  background-color: #1a1a1a;
+  border-radius: 2px;
+  padding: 2rem;
   width: 100%;
-  max-width: 20%;
-  min-width: 500px;
+  max-width: 500px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  box-sizing: border-box;
 }
 
-h2 {
-  color: #B8B8B8;
-  text-align: center;
-  margin-bottom: 10px;
+.register-box h2 {
+  font-family: "Borel Regular", serif;
+  color: whitesmoke;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
 }
 
-.sign-in-text {
-  text-align: center;
-  color: rgba(160, 160, 160, 0.5);
-  margin-bottom: 40px;
-}
-
-.sign-in-hyperlink {
+label {
+  font-family: "Open Sans", serif;
+  display: block;
+  margin: 0.5rem 0 0.2rem;
   font-weight: bold;
-  color: #69f0ae;
-  text-decoration: none;
+  color: #AFBB80;
 }
 
-.sign-in-hyperlink:hover {
-  text-shadow: 0 4px 8px rgba(105, 240, 174, 0.5);
-}
-
-.register-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+mat-form-field {
   width: 100%;
-  max-width: 400px;
-  margin: auto;
-}
-
-.register-field input {
-  color: #B8B8B8;
+  color: #AFBB80;
 }
 
 .register-btn {
-  margin-top: 15px;
-}
-
-.register-btn:hover {
-  box-shadow: 0 4px 8px rgba(105, 240, 174, 0.5);
+  background-color: #AFBB80 !important;
+  color: #1a1a1a !important;
+  margin-top: 1rem;
+  width: 100%;
+  font-weight: bold;
+  padding: 0.75rem;
+  cursor: pointer;
 }
 
 .or-container {
-  color: #D8DEE9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 20px 0;
-}
-
-.or-container .line {
-  flex-grow: 1;
-  height: 1px;
-  background-color: #555555;
-  margin: 0 10px;
-}
-
-.or-container span {
-  font-size: 16px;
-  color: #A0A0A0;
+  font-family: "Open Sans", serif;
+  text-align: center;
+  margin: 1.5rem 0 0.5rem;
+  color: #888;
+  font-size: 0.9rem;
 }
 
 .omniauth-buttons {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin-top: 20px;
-  gap: 20px;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .omniauth-btn {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  padding: 10px;
-  border-radius: 5px;
+  background-color: #AFBB80;
+  color: #1a1a1a;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .logo-box {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 55px;
-  background-color: #373737;
-  box-shadow: 0 4px 8px rgb(0, 0, 0, 100);
-  border-radius: 5px;
-}
-
-.logo-box:hover {
-  background-color: #69f0ae;
-  box-shadow: 0 4px 8px rgba(105, 240, 174, 0.5);
 }
 
 .logo-box img {
-  display: block;
-  margin: auto;
-  padding: 0;
-  max-height: 25px;
-  max-width: 100%;
-  object-fit: contain;
+  height: 24px;
 }
 
+.sign-in-text {
+  font-family: "Open Sans", serif;
+  font-size: 0.85rem;
+  margin-top: 1rem;
+  color: #888;
+  text-align: center;
+}
+
+.sign-in-text a {
+  font-family: "Open Sans", serif;
+  color: #AFBB80;
+}
+
+.sign-in-text span {
+  font-weight: bold;
+}
+
+@media (max-width: 576px) {
+  .register-box {
+    padding: 1.5rem;
+  }
+
+  .register-box h2 {
+    font-size: 1.5rem;
+  }
+
+  .register-btn, .omniauth-btn {
+    font-size: 0.95rem;
+    padding: 0.6rem;
+  }
+}
