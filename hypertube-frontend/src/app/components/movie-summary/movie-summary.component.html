@@ -1,0 +1,31 @@
+<div class="summary-container">
+    <div class="poster">
+        <img src="{{movie.poster_path}}" alt="poster">
+    </div>
+
+    <div class="movie-info">
+        <div class="movie-title">
+        <h1 class="movie-title">{{movie.title}}</h1>
+        </div>
+
+        <div class="time">
+        <p class="release-date">{{movie.release-date}}</p>
+        <p class="runtime">{{movie.runtime}}</p>
+        </div>
+
+        <div class="synopsis"></div>
+        <p class="synopsis">{{movie.overview}}</p>
+
+        <!-- <div class="people"></div>
+        <p class="credits">{{movie.credits}}</p> -->
+    </div>
+
+</div>
+
+<!-- prendre en input l'id du film 
+
+  getMovieDataFromIdAsInterface(id: number): Observable<Movie> {
+    return this.http.get<Movie>(`${this.apiUrlAuth}/${id.toString()}`).pipe();
+  } 
+
+-->
