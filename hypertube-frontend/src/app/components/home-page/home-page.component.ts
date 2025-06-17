@@ -176,7 +176,7 @@ export class HomePageComponent implements OnInit {
   async onScroll(): Promise<void> {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100 && !this.isLoading) {
       this.currentPage++;
-      if (this.currentPage % 20 === 0) { // load a batch each 20 y offset scroll
+      if (this.currentPage % 5 === 0) { // load a batch each 20 y offset scroll
         await this.loadMovies();
       }
     }

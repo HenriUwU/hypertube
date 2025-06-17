@@ -29,13 +29,18 @@ import {animate, style, transition, trigger} from "@angular/animations";
   ],
 })
 
+
+
 export class ThumbnailComponent implements OnInit {
+  private defaultProfilePicture = '../../../../assets/images/thumbnail_not_found.svg' ;
+  private fileNotFoundIMDB = 'https://image.tmdb.org/t/p/originalnull'
+
 
   movieThumbnail: MovieThumbnail = {
     id: 0,
     title: '',
     release_date: 0,
-    poster_path: '',
+    poster_path: this.defaultProfilePicture,
     runtime: 0,
     stoppedAt: { hours: 0, minutes: 0 },
     genres: [],
@@ -43,6 +48,7 @@ export class ThumbnailComponent implements OnInit {
   };
   // movieThumbnail!: MovieThumbnail;
   watchedMovie: boolean = false;
+  initialized: boolean = false;
 
   // @Input() movieId! : number;
   @Input() movieId : number = 950387;
@@ -61,9 +67,14 @@ export class ThumbnailComponent implements OnInit {
         next: (data: MovieThumbnail) => {
           this.movieThumbnail = data;
           this.watchedMovie = this.movieThumbnail.stoppedAt !== null;
+          if (this.movieThumbnail.poster_path == this.fileNotFoundIMDB){
+            this.movieThumbnail.poster_path = this.defaultProfilePicture;
+          }
+          this.initialized = true;
         },
         error: (e) => {
           console.error('Error fetching movie data:', e);
+          this.initialized = false;
         },
         complete: () => {
         }
@@ -77,6 +88,9 @@ export class ThumbnailComponent implements OnInit {
   }
 
   getLength(): string {
+    if (this.movieThumbnail.runtime == 0){
+      return '---'
+    }
     const hours = Math.floor(this.movieThumbnail.runtime / 60);
     const minutes = this.movieThumbnail.runtime % 60;
     return `${hours}h ${minutes}m`;

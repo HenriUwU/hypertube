@@ -8,7 +8,8 @@
       </button>
     </mat-form-field>
 
-    <div class="year-filter" [class.disabled]="!searchTerm?.trim()">
+    <!-- <div class="year-filter" [class.disabled]="!searchTerm?.trim()"> -->
+    <div class="year-filter" [class.disabled]="!searchTerm.trim()">
       <label>{{ textMap.get('Year') }}:</label>
       <input
         type="number"
@@ -18,8 +19,9 @@
         maxlength="4"
         inputmode="numeric"
         pattern="\d{4}"
-        [disabled]="!searchTerm?.trim()"
-      />
+        [disabled]="!searchTerm.trim()"
+        />
+        <!-- [disabled]="!searchTerm?.trim()" -->
     </div>
   </div>
 
