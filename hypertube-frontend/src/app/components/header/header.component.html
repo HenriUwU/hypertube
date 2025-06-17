@@ -1,9 +1,50 @@
-<header>
-    <nav>
-        <div class="site-title">Hypertube</div>
-        <ul>
-            <li><a href="/archive">language</a></li>
-            <li><a href="/events">log in</a></li>
-        </ul>
-    </nav>
-</header>
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width-device-width, initial-scale=1.0">
+    <title>Hypertube</title>
+    <link rel="stylesheet" href="header.component.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-left">
+            <h1>Hypertube</h1>
+            <li class="language">
+                <img src="../../../assets/images/language.svg">
+                <a href="#">language</a>
+            </li>
+            <!-- <select class="form-select form-select-sm">
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="es">Español</option>
+            </select> -->
+            <!-- profile if logged -->
+        </div>
+        <div class="header-right">
+            <!-- <form [formGroup]="searchForm">
+                <div class="search">
+                    <input type="text" placeholder="Search..." formControlName="query" (keydown.enter)="search()">
+                </div>
+            </form>
+            <li class="login"><a href="#">log out</a></li> -->
+
+            <div *ngIf="isLog" class="is-log">
+                <form [formGroup]="searchForm">
+                    <div class="search">
+                        <input type="text" placeholder="Search..." formControlName="query" (keydown.enter)="search()">
+                    </div>
+                </form>
+                <li class="login"><a href="#">log out</a></li>
+            </div>
+            <div *ngIf="!isLog" class="not-log">
+                <form [formGroup]="searchForm">
+                    <div class="search">
+                        <input type="text" placeholder="Search..." formControlName="query" (keydown.enter)="search()">
+                    </div>
+                </form>
+                <li class="login"><a href="#">log in</a></li>
+            </div>
+        </div>
+    </header>
+</body>

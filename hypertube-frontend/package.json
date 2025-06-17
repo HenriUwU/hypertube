@@ -27,6 +27,7 @@
     "hls": "^0.0.1",
     "hls.js": "^1.6.3-0.canary.11183",
     "primeicons": "^7.0.0",
+    "ng2-search-filter": "^0.5.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
