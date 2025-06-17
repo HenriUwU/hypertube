@@ -11,6 +11,7 @@ import {ProfileComponent} from './components/profile/profile.component';
 import {ModifyPasswordComponent} from './components/modify-password/modify-password.component';
 import {ForgotPasswordComponent} from './components/forgot-password/forgot-password.component';
 import {AuthCallbackGoogleComponent} from "./components/auth-callback-components/auth.callback.google.component";
+import { MovieSummaryComponent } from './components/movie-summary/movie-summary.component';
 
 export const routes: Routes = [
   {
@@ -38,8 +39,8 @@ export const routes: Routes = [
   },
   {
     path: 'stream', component: StreamingComponent, canActivate: [authGuard]
+  },
+  {
+    path: 'summary', component: MovieSummaryComponent
   }
-  // {
-  //   path: 'summary', component:
-  // }
 ];
