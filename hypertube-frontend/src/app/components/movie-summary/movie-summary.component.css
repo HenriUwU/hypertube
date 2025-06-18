@@ -1,5 +1,6 @@
 .summary-container {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
   align-items: flex-start;
   max-width: 900px;
@@ -12,6 +13,7 @@
 
 .poster img {
   width: 250px;
+  max-width: 100%;
   height: auto;
   border-radius: 6px;
   border: 3px solid black;
@@ -26,8 +28,7 @@
   display: flex;
   justify-content: space-between;
   position: relative;
-  height: 35px;
-  /* background-color: red; */
+  height: 35px; /* responsive ? */
 }
 
 .movie-title {
@@ -38,6 +39,7 @@
   margin-top: 1%;
   font-family: Arial, sans-serif;
   color: #20242a;
+  text-align: center;
   display: inline-block;
   background-color: whitesmoke;
   padding: 7px 6px;
@@ -52,7 +54,6 @@
   flex-direction: column;
   flex: 1;
   padding: 10px;
-  /* background: brown; */
 }
 
 .movie-info .time {
@@ -62,30 +63,64 @@
   justify-content: space-between;
   color: whitesmoke;
   margin-bottom: 15px;
-  /* background-color: pink; */
 }
 
 .movie-info .synopsis {
   font-family: "Open Sans", serif;
-  /* background-color: orange; */
   text-align: justify;
   color: whitesmoke;
   font-size: 0.9rem;
+}
+
+.movie-info .people {
+  font-family: "Open Sans", serif;
+  text-align: justify;
+  color: whitesmoke;
+  font-size: 0.8rem;
+  margin-top: 3%;
 }
 
 @media (max-width: 600px) {
   .summary-container {
     flex-direction: column;
     align-items: center;
+    max-width: 100%;
+    padding: 10px;
+    border-width: 5px;
   }
 
   .poster img {
     width: 100%;
     max-width: 300px;
     margin-bottom: 20px;
+    margin: 0 auto;
+    border-width: 2px;
   }
 
   .movie-info {
     width: 100%;
+    padding: 10px 0 0 0;
+  }
+
+  .title {
+    height: auto;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .movie-title {
+    font-size: 1.2rem;
+  }
+
+  .movie-note {
+    font-size: 0.7rem;
+    padding: 5px 6px;
+    text-align: center;
+  }
+
+  .movie-info .time,
+  .movie-info .synopsis,
+  .movie-info .people {
+    font-size: 0.75rem;
   }
 }
