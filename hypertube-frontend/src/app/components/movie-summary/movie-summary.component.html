@@ -4,17 +4,19 @@
     </div>
 
     <div class="movie-info">
-        <div class="movie-title">
-        <h1 class="movie-title">{{movie.title}}</h1>
+        <div class="title">
+          <h1 class="movie-title">{{movie.title}}</h1>
+          <p class="movie-note">{{movie.vote_average}} / 10 &#9733;</p>
         </div>
 
         <div class="time">
-        <p class="release-date">{{movie.release-date}}</p>
-        <p class="runtime">{{movie.runtime}}</p>
+          <p class="runtime"><strong>{{getMovieRuntime()}}</strong></p>
+          <p class="release-date"><strong>{{movie.release_date}}</strong></p>
         </div>
 
-        <div class="synopsis"></div>
-        <p class="synopsis">{{movie.overview}}</p>
+        <div class="synopsis">
+          <p class="synopsis">{{movie.overview}}</p>
+        </div>
 
         <!-- <div class="people"></div>
         <p class="credits">{{movie.credits}}</p> -->

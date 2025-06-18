@@ -29,4 +29,13 @@ export class MovieSummaryComponent implements OnInit {
           }
         );
   }
+
+  getMovieRuntime(): string {
+    if (this.movie.runtime == 0){
+      return '---'
+    }
+    const hours = Math.floor(this.movie.runtime / 60);
+    const minutes = this.movie.runtime % 60;
+    return `${hours}h ${minutes}m`;
+  }
 }
