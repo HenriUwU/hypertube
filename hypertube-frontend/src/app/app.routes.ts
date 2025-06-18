@@ -41,6 +41,6 @@ export const routes: Routes = [
     path: 'stream', component: StreamingComponent, canActivate: [authGuard]
   },
   {
-    path: 'summary', component: MovieSummaryComponent, canActivate: [authGuard]
+    path: 'summary/:id', component: MovieSummaryComponent, canActivate: [authGuard]
   }
 ];

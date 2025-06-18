@@ -71,16 +71,25 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  toHomepage():void{
+	  this.router.navigate(['/']).then();
+  }
+
   isLog(): boolean {
     return this.authService.isLoggedIn();
   }
 
   logout(): void {
     this.authService.logout();
+	  this.router.navigate(['/']).then();
   }
 
   login(): void {
 	  this.router.navigate(['auth', 'login']).then();
+  }
+
+  toProfile():void{
+	  this.router.navigate(['user', 'profile']).then();
   }
 
 }

@@ -15,7 +15,7 @@
 }
 
 .header-left {
-  background-color: purple;
+  /* background-color: purple; */
   display: flex;
   gap: 1.5rem;
 }
@@ -67,16 +67,16 @@
   border-color: #AFBB80;
 }
 
-.login {
+.header-button {
   list-style-type: none;
 }
 
-.login a {
+.header-button a {
   color: white;
   text-decoration: none;
 }
 
-.login:hover {
+.header-button:hover {
 	text-shadow: 1px 1px 2px #f0f0f0;
 	cursor: pointer;
 }

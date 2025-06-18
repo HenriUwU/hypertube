@@ -1,10 +1,17 @@
+.wrapper {
+  display: flex;
+  justify-content: center;  /* Horizontal center */
+  align-items: center;      /* Vertical center */
+  height: 85vh;            /* Full viewport height */
+}
+
 .profile-container {
-    background-color: #20242a;
-    justify-content: space-between;
-    width: 80%;
-    margin: 10%;
-    border-radius: 5%;
+    background-color: #1e1e1e;
+    width: 50%;
+    border-radius: 2%;
     color: white;
+    margin:  0 auto;
+    border: 10px solid #eac29f;
 }
 
 .profile-title {
@@ -73,6 +80,7 @@
     justify-content: center;
     display: flex;
     align-self: center;
+    margin-bottom: 2%;
 }
 
 #submitButton {
@@ -145,7 +153,14 @@
     margin-top: 1em;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1600px) {
+    .wrapper {
+        display: flex;
+        justify-content: center;  /* Horizontal center */
+        align-items: center;      /* Vertical center */
+        height: auto;            /* Full viewport height */
+    }
+
     .profile-container {
         flex-direction: column;
         width: 98%;

@@ -2,6 +2,7 @@ import { Component, Input, OnInit  } from '@angular/core';
 import { MovieService } from '../../services/movie.service';
 import { Movie, PersonModel } from '../../models/movie.model';
 import { NgFor, NgIf } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-movie-summary',
@@ -15,22 +16,32 @@ export class MovieSummaryComponent implements OnInit {
   @Input() movieId : number = 950387;
   movie! : Movie;
 
-  constructor(private movieService:MovieService) {}
+  constructor(private movieService:MovieService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.movieService.getMovieDataFromIdAsInterface(this.movieId).subscribe(
-          {
-            next: (data: Movie) => {
-              this.movie = data;
-              console.log(this.movie);
-            },
-            error: (e) => {
-              console.error('Error fetching movie data:', e);
-            },
-            complete: () => {
-            }
+    this.route.paramMap.subscribe(params => {
+          const id = params.get('id');
+          if (id) {
+            this.movieId = +id;
+            this.loadMovie();
           }
-        );
+    });
+  }
+
+  loadMovie(){
+    this.movieService.getMovieDataFromIdAsInterface(this.movieId).subscribe(
+      {
+        next: (data: Movie) => {
+          this.movie = data;
+          console.log(this.movie);
+        },
+        error: (e) => {
+          console.error('Error fetching movie data:', e);
+        },
+        complete: () => {
+        }
+      }
+    );
   }
 
   getMovieRuntime(): string {
