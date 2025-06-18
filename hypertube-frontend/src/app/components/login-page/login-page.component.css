@@ -66,18 +66,34 @@ mat-form-field {
 
 .omniauth-buttons {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 0.5rem;
+	width: 100%;
 }
 
+/*.omniauth-btn {*/
+/*  background-color: #AFBB80;*/
+/*  color: #1a1a1a;*/
+/*  text-align: center;*/
+/*  padding: 0.5rem;*/
+/*  border-radius: 4px;*/
+/*  cursor: pointer;*/
+/*	width: auto;*/
+/*}*/
+
 .omniauth-btn {
-  background-color: #AFBB80;
-  color: #1a1a1a;
-  text-align: center;
-  padding: 0.5rem;
-  border-radius: 4px;
-  cursor: pointer;
+	background-color: #AFBB80;
+	color: #1a1a1a;
+	text-align: center;
+	padding: 0.5rem;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100%;
+	max-width: 140px;
+	margin: 0 auto;
+	box-sizing: border-box;
 }
+
 
 .logo-box {
   display: flex;

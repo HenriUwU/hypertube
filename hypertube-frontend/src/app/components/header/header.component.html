@@ -29,22 +29,12 @@
             </form>
             <li class="login"><a href="#">log out</a></li> -->
 
-            <div *ngIf="isLog" class="is-log">
-                <form [formGroup]="searchForm">
-                    <div class="search">
-                        <input type="text" placeholder="Search..." formControlName="query" (keydown.enter)="search()">
-                    </div>
-                </form>
-                <li class="login"><a href="#">log out</a></li>
+            <div *ngIf="isLog()" class="is-log" (click)="logout()">
+				<div class="login">logout</div>
             </div>
-            <div *ngIf="!isLog" class="not-log">
-                <form [formGroup]="searchForm">
-                    <div class="search">
-                        <input type="text" placeholder="Search..." formControlName="query" (keydown.enter)="search()">
-                    </div>
-                </form>
-                <li class="login"><a href="#">log in</a></li>
-            </div>
+			<div *ngIf="!isLog()" (click)="login()">
+				<div class="login">login</div>
+			</div>
         </div>
     </header>
 </body>
