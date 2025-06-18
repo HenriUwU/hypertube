@@ -25,6 +25,31 @@
   </div>
 </div>
 
+<div class="trailer-container">
+  <div class="watch-container">
+    <div class="trailer">
+      <p>Trailer</p>
+    </div>
+  
+    <div class="torrent-list">
+          <div class="torrent-item" *ngFor="let torrent of torrents" (click)="selectTorrent(torrent.Magnet)" [class.selected]="torrent.Magnet === magnet">
+              {{torrent.Name}}
+              <br/>
+              Seeders: {{torrent.Seeders}} | Size: {{torrent.Size}}
+          </div>
+    </div>
+  </div>
+
+  <div class="play">
+    <button mat-flat-button class="play-btn" type="submit">
+        ▶ Play
+    </button>
+  </div>
+
+  
+
+</div>
+
 <!-- prendre en input l'id du film 
 
   getMovieDataFromIdAsInterface(id: number): Observable<Movie> {

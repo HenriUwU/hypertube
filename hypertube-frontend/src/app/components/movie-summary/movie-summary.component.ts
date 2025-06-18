@@ -2,6 +2,8 @@ import { Component, Input, OnInit  } from '@angular/core';
 import { MovieService } from '../../services/movie.service';
 import { Movie, PersonModel } from '../../models/movie.model';
 import { NgFor, NgIf } from '@angular/common';
+import { TorrentService } from '../../services/torrent.service';
+import { Torrent } from '../../models/torrent.models';
 
 @Component({
   selector: 'app-movie-summary',
@@ -14,23 +16,31 @@ export class MovieSummaryComponent implements OnInit {
   // HERE
   @Input() movieId : number = 950387;
   movie! : Movie;
+  torrents! : Torrent[];
+  magnet!: string;
 
-  constructor(private movieService:MovieService) {}
+  constructor(private movieService: MovieService, private torrentService: TorrentService) {}
 
   ngOnInit(): void {
     this.movieService.getMovieDataFromIdAsInterface(this.movieId).subscribe(
           {
             next: (data: Movie) => {
               this.movie = data;
-              console.log(this.movie);
+
+              this.torrentService.searchTorrent(this.movie.title).subscribe(
+                {next: (data: Torrent[]) => {
+                  this.torrents = data;
+                  console.log(this.torrents);
+                },
+                error: (e) => {
+
+                }});
             },
             error: (e) => {
               console.error('Error fetching movie data:', e);
             },
             complete: () => {
-            }
-          }
-        );
+            }});
   }
 
   getMovieRuntime(): string {
@@ -60,6 +70,10 @@ export class MovieSummaryComponent implements OnInit {
     return this.getFirstFiveCrew()
       .map(p => p.name + (p.character ? ` as ${p.character}` : ''))
       .join(', ');
+  }
+
+  selectTorrent(magnet: string): void {
+    this.magnet = magnet;
   }
 
 }
