@@ -3,6 +3,9 @@
     <mat-form-field appearance="fill" class="search-field transparent-form-field">
       <mat-label>{{textMap.get('Search')}}</mat-label>
       <input matInput (input)="onSearchInputFromEvent($event)" [value]="searchTerm" placeholder="Search movies..." />
+      <button *ngIf="searchTerm" matSuffix mat-icon-button aria-label="Clear" (click)="onSearchInput('')">
+        <mat-icon>close</mat-icon>
+      </button>
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="production-year-select">
@@ -84,5 +87,9 @@
     <div *ngFor="let movie of movies" class="movie-item">
       <app-thumbnail [movieId]="movie.id"></app-thumbnail>
     </div>
+  </div>
+
+  <div *ngIf="noMoreMovies" class="no-more-movies-message">
+    {{ textMap.get('No more movies to load.') || 'No more movies to load.' }}
   </div>
 </div>
