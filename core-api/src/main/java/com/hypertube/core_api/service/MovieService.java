@@ -1,5 +1,6 @@
 package com.hypertube.core_api.service;
 
+import ch.qos.logback.core.util.StringUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -63,27 +64,44 @@ public class MovieService {
     }
 
     public MovieModel getMovie(Integer movieId, String token) throws IOException {
-        HttpHeaders headers;
-        headers = new HttpHeaders();
+        String language = "en";
+        UserEntity userEntity = null;
+
+
+        if (!StringUtil.isNullOrEmpty(token)) {
+            String username = jwtTokenUtil.extractUsername(token.substring(7));
+            userEntity = userRepository.findByUsername(username).orElse(null);
+            if (userEntity != null && userEntity.getLanguage() != null) {
+                language = userEntity.getLanguage();
+            }
+        }
+
+        HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
-        ResponseEntity<MovieModel> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + movieId + "?language=" + userEntity.getLanguage() + "&append_to_response=credits",
+
+        ResponseEntity<MovieModel> response = restTemplate.exchange(
+                "https://api.themoviedb.org/3/movie/" + movieId + "?language=" + language + "&append_to_response=credits",
                 HttpMethod.GET,
                 entity,
-                MovieModel.class);
+                MovieModel.class
+        );
 
         MovieModel movie = response.getBody();
         if (movie != null) {
             movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail());
             movie.setBackdropPath("https://image.tmdb.org/t/p/original" + movie.getBackdropPath());
-            movie.setReleaseDate(movie.getReleaseDate().substring(0, 4));
+
             String releaseDate = movie.getReleaseDate();
             movie.setReleaseDate((releaseDate != null && releaseDate.length() >= 4) ? releaseDate.substring(0, 4) : "");
-            Optional.ofNullable(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))
-                    .map(WatchedMoviesEntity::getStoppedAt)
-                    .ifPresent(movie::setStoppedAt);
+
+            if (userEntity != null) {
+                Optional.ofNullable(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))
+                        .map(WatchedMoviesEntity::getStoppedAt)
+                        .ifPresent(movie::setStoppedAt);
+            }
         }
+
         return movie;
     }
 
@@ -108,13 +126,17 @@ public class MovieService {
 
     public List<MovieModel> sortByMovies(SortByModel sortByModel, String token) throws JsonProcessingException {
         checkSortByDTO(sortByModel);
-        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+        String language = "en";
+        if (!StringUtil.isNullOrEmpty(token)) {
+            UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+            language = userEntity.getLanguage();
+        }
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + sortByModel.getSortBy() + "?language=" + userEntity.getLanguage() + "&page=" + sortByModel.getPage(),
+        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + sortByModel.getSortBy() + "?language=" + language + "&page=" + sortByModel.getPage(),
                 HttpMethod.GET,
                 entity,
                 String.class);
@@ -123,14 +145,18 @@ public class MovieService {
     }
 
     public List<GenreModel> getGenres(String token) throws JsonProcessingException {
+        String language = "en";
+        if (!StringUtil.isNullOrEmpty(token)) {
+            UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+            language = userEntity.getLanguage();
+        }
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
 
         ResponseEntity<GenresResponse> response = restTemplate.exchange(
-                "https://api.themoviedb.org/3/genre/movie/list?language=" + userEntity.getLanguage(),
+                "https://api.themoviedb.org/3/genre/movie/list?language=" + language,
                 HttpMethod.GET,
                 entity,
                 GenresResponse.class
@@ -141,13 +167,17 @@ public class MovieService {
 
     public List<MovieModel> searchMovies(SearchModel searchModel, String token) throws JsonProcessingException {
         checkSearchDTO(searchModel);
+        String language = "en";
+        if (!StringUtil.isNullOrEmpty(token)) {
+            UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+            language = userEntity.getLanguage();
+        }
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
 
-        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/search/movie?query=" + searchModel.getQuery() + "&language=" + userEntity.getLanguage() + "&primary_release_year=" + searchModel.getProductionYear() + "&page=" + searchModel.getPage(),
+        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/search/movie?query=" + searchModel.getQuery() + "&language=" + language + "&primary_release_year=" + searchModel.getProductionYear() + "&page=" + searchModel.getPage(),
                 HttpMethod.GET,
                 entity,
                 String.class);
@@ -162,9 +192,17 @@ public class MovieService {
 
         List<MovieModel> movies = objectMapper.convertValue(resultsNode, new TypeReference<>() {});
 
-        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+        UserEntity userEntity = null;
+
+        if (!StringUtil.isNullOrEmpty(token)) {
+            String username = jwtTokenUtil.extractUsername(token.substring(7));
+            userEntity = userRepository.findByUsername(username).orElse(null);
+        }
+
+        final UserEntity finalUserEntity = userEntity;
+
         return movies.stream()
-                .filter(movie ->  selectedGenreIds.isEmpty()
+                .filter(movie -> selectedGenreIds.isEmpty()
                         || (movie.getGenreIds() != null && !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)))
                 .filter(movie -> movie.getVoteAverage() != null && movie.getVoteAverage() >= minStars)
                 .peek(movie -> movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail()))
@@ -173,9 +211,13 @@ public class MovieService {
                                 ? movie.getReleaseDate().substring(0, 4)
                                 : ""
                 ))
-                .peek(movie -> Optional.ofNullable(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))
-                        .map(WatchedMoviesEntity::getStoppedAt)
-                        .ifPresent(movie::setStoppedAt))
+                .peek(movie -> {
+                    if (finalUserEntity != null) {
+                        Optional.ofNullable(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(finalUserEntity, movie.getId()))
+                                .map(WatchedMoviesEntity::getStoppedAt)
+                                .ifPresent(movie::setStoppedAt);
+                    }
+                })
                 .collect(Collectors.toList());
     }
 

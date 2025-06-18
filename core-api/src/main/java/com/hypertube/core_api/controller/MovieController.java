@@ -23,27 +23,27 @@ public class MovieController {
     }
 
     @GetMapping(path = "/{id}")
-    public MovieModel getMovie(@PathVariable Integer id, @RequestHeader("Authorization") String token) throws IOException {
+    public MovieModel getMovie(@PathVariable Integer id, @RequestHeader(value = "Authorization", required = false) String token) throws IOException {
         return this.movieService.getMovie(id, token);
     }
 
     @PostMapping("/watched")
-    public WatchedMoviesDTO addWatched(@RequestBody WatchedMoviesDTO watchedMoviesDTO, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+    public WatchedMoviesDTO addWatched(@RequestBody WatchedMoviesDTO watchedMoviesDTO, @RequestHeader(value = "Authorization") String token) throws JsonProcessingException {
         return this.movieService.addWatched(watchedMoviesDTO, token);
     }
 
     @PutMapping("/watched")
-    public WatchedMoviesDTO modifyWatched(@RequestBody WatchedMoviesDTO watchedMoviesDTO, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+    public WatchedMoviesDTO modifyWatched(@RequestBody WatchedMoviesDTO watchedMoviesDTO, @RequestHeader(value = "Authorization") String token) throws JsonProcessingException {
         return this.movieService.modifyWatched(watchedMoviesDTO, token);
     }
 
     @PostMapping(path = "/sort-by")
-    public List<MovieModel> sortByMovies(@RequestBody SortByModel sortByModel, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+    public List<MovieModel> sortByMovies(@RequestBody SortByModel sortByModel, @RequestHeader(value = "Authorization", required = false) String token) throws JsonProcessingException {
         return this.movieService.sortByMovies(sortByModel, token);
     }
 
     @PostMapping(path = "/search")
-    public List<MovieModel> searchMovies(@RequestBody SearchModel searchModel, @RequestHeader("Authorization") String token) throws JsonProcessingException {
+    public List<MovieModel> searchMovies(@RequestBody SearchModel searchModel, @RequestHeader(value = "Authorization", required = false) String token) throws JsonProcessingException {
         return this.movieService.searchMovies(searchModel, token);
     }
 
@@ -63,7 +63,7 @@ public class MovieController {
     }
 
     @GetMapping("/genres")
-    public List<GenreModel> getGenres(@RequestHeader("Authorization") String token) throws JsonProcessingException {
+    public List<GenreModel> getGenres(@RequestHeader(value = "Authorization", required = false) String token) throws JsonProcessingException {
         return this.movieService.getGenres(token);
     }
 }

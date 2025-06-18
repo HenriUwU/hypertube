@@ -10,6 +10,7 @@ import { MoviesService } from '../../services/movies.service';
 import { SearchMovie } from '../../models/movie.model';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import {Router, RouterOutlet} from "@angular/router";
 
 interface Language {
   name: string;
@@ -29,7 +30,6 @@ export class HeaderComponent implements OnInit {
   selectFormControl = new FormControl('', Validators.required);
   research!: SearchMovie;
   searchForm!: FormGroup;
-  isLog!: boolean;
 
   languages: Language[] = [
     {name: 'English', sound: 'Can I get some Burger ?'},
@@ -41,14 +41,14 @@ export class HeaderComponent implements OnInit {
 
   constructor(private movieService: MoviesService,
               private formBuilder: FormBuilder,
-              private authService: AuthService
+              private authService: AuthService,
+			  private router: Router
   ) {}
 
   ngOnInit(): void {
     this.searchForm = this.formBuilder.group({
       query: ['', Validators.required]
     })
-    this.isLog = this.authService.isLoggedIn();
   }
 
   search(): void {
@@ -58,7 +58,7 @@ export class HeaderComponent implements OnInit {
     else {
       this.searchForm.get('query')?.enable();
     }
-    
+
     if (this.searchForm.valid) {
       this.research = {
         query: this.searchForm.getRawValue().query,
@@ -69,6 +69,27 @@ export class HeaderComponent implements OnInit {
       console.log(this.research)
       this.movieService.search(this.research).subscribe(res => console.log(res));
     }
+  }
+
+  toHomepage():void{
+	  this.router.navigate(['/']).then();
+  }
+
+  isLog(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
+  logout(): void {
+    this.authService.logout();
+	  this.router.navigate(['/']).then();
+  }
+
+  login(): void {
+	  this.router.navigate(['auth', 'login']).then();
+  }
+
+  toProfile():void{
+	  this.router.navigate(['user', 'profile']).then();
   }
 
 }

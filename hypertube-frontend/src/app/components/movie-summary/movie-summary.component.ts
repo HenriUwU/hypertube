@@ -4,6 +4,7 @@ import { Movie, PersonModel } from '../../models/movie.model';
 import { NgFor, NgIf } from '@angular/common';
 import { TorrentService } from '../../services/torrent.service';
 import { Torrent } from '../../models/torrent.models';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-movie-summary',
@@ -19,28 +20,38 @@ export class MovieSummaryComponent implements OnInit {
   torrents! : Torrent[];
   magnet!: string;
 
-  constructor(private movieService: MovieService, private torrentService: TorrentService) {}
+  constructor(private movieService: MovieService, private torrentService: TorrentService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+          const id = params.get('id');
+          if (id) {
+            this.movieId = +id;
+            this.loadMovie();
+          }
+    });
+  }
+
+  loadMovie(){
     this.movieService.getMovieDataFromIdAsInterface(this.movieId).subscribe(
-          {
-            next: (data: Movie) => {
-              this.movie = data;
+      {
+        next: (data: Movie) => {
+          this.movie = data;
 
-              this.torrentService.searchTorrent(this.movie.title).subscribe(
-                {next: (data: Torrent[]) => {
-                  this.torrents = data;
-                  console.log(this.torrents);
-                },
-                error: (e) => {
-
-                }});
+          this.torrentService.searchTorrent(this.movie.title).subscribe(
+            {next: (data: Torrent[]) => {
+              this.torrents = data;
+              console.log(this.torrents);
             },
             error: (e) => {
-              console.error('Error fetching movie data:', e);
-            },
-            complete: () => {
+
             }});
+        },
+        error: (e) => {
+          console.error('Error fetching movie data:', e);
+        },
+        complete: () => {
+        }});
   }
 
   getMovieRuntime(): string {
