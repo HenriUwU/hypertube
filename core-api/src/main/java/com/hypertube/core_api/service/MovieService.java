@@ -1,5 +1,6 @@
 package com.hypertube.core_api.service;
 
+import ch.qos.logback.core.util.StringUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -107,14 +108,18 @@ public class MovieService {
     }
 
     public List<MovieModel> sortByMovies(SortByModel sortByModel, String token) throws JsonProcessingException {
+        String language = "en";
         checkSortByDTO(sortByModel);
-        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+        if (!StringUtil.isNullOrEmpty(token)) {
+            UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+            language = userEntity.getLanguage();
+        }
         HttpHeaders headers;
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + sortByModel.getSortBy() + "?language=" + userEntity.getLanguage() + "&page=" + sortByModel.getPage(),
+        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + sortByModel.getSortBy() + "?language=" + language + "&page=" + sortByModel.getPage(),
                 HttpMethod.GET,
                 entity,
                 String.class);
