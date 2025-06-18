@@ -26,6 +26,9 @@ public class MovieModel {
     @JsonProperty("poster_path")
     private String thumbnail;
 
+    @JsonProperty("backdrop_path")
+    private String backdropPath;
+
     @JsonProperty("genre_ids")
     private List<Integer> genreIds;
 
@@ -143,5 +146,13 @@ public class MovieModel {
 
     public void setImdbId(String imdbId) {
         this.imdbId = imdbId;
+    }
+
+    public String getBackdropPath() {
+        return backdropPath;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
     }
 }
