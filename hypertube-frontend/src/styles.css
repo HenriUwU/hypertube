@@ -1,32 +1,42 @@
 /*@import "https://fonts.googleapis.com/icon?family=Material+Icons";*/
 @import url('https://fonts.googleapis.com/css2?family=Borel&family=Open+Sans&display=swap');
 
+/** {*/
+/*  margin: 0;*/
+/*  padding: 0;*/
+/*  box-sizing: border-box;*/
+/*}*/
+
+/*body {*/
+/*  background-color: #153f2f;*/
+/*  !* font-family: "Open Sans", serif; *!*/
+/*  font-family: "Borel Regular", serif;*/
+/*  min-height: 100vh;*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  height: 100%;*/
+/*}*/
+
+/*html {*/
+/*  height: 100%;*/
+/*}*/
+
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
-body {
-  background-color: #153f2f;
-  /* font-family: "Open Sans", serif; */
-  font-family: "Borel Regular", serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	background-color: #153f2f;
+	/*font-family: "Open Sans", serif;*/
+	font-family: "Borel Regular", serif;
+	display: flex;
+	flex-direction: column;
 }
-
-html {
-  height: 100%;
-}
-
-/* @font-face {
-  font-family: Open Sans;
-  src: url("assets/fonts/Open_Sans/static/OpenSans-Regular.ttf") format('truetype');
-  font-weight: normal;
-  font-style: normal;
-} */
 
 @font-face {
   font-family: 'Borel Regular';
@@ -43,10 +53,10 @@ app-root {
 }
 
 .page-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding-top: 70px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	padding-top: 70px;
 }
 
 *::-webkit-scrollbar {

@@ -25,6 +25,7 @@ export interface Movie {
   vote_average: number;
   release_date: string;
   poster_path: string;
+  backdrop_path: string;
 
   runtime: number;
   genres: GenreModel[];
@@ -55,7 +56,7 @@ export interface GenreModel {
     id: number;
     name: string;
   }
-  
+
   export interface PersonModel {
     id: number;
     name: string;
@@ -63,18 +64,18 @@ export interface GenreModel {
     job?: string;
     character?: string;
   }
-  
+
   export interface WatchedMoviesDTO {
     userId: number;
     movieId: number;
     watchedAt: string;
   }
-  
+
   export interface Credits {
     cast: PersonModel[];
     crew: PersonModel[];
   }
-  
+
   export interface MovieDTO {
     id: number;
     title: string;
@@ -95,4 +96,4 @@ export interface GenreModel {
     page: number;
     genresIds: number[];
   }
-  
+

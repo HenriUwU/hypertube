@@ -1,34 +1,32 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { TorrentService } from '../../services/torrent.service';
-import { MatDivider } from '@angular/material/divider';
-import { Torrent } from '../../models/torrent.models';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {TorrentService} from '../../services/torrent.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import Hls from "hls.js";
-import { NgIf } from '@angular/common';
-import { TranslateService } from '../../services/translate.service';
+import {NgIf, NgOptimizedImage} from '@angular/common';
+import {TranslateService} from '../../services/translate.service';
 import {MovieService} from "../../services/movie.service";
 import {Subtitles} from "../../models/movie.model";
 
 
 @Component({
   selector: 'app-streaming',
-  imports: [MatDivider, MatProgressSpinnerModule, NgIf],
+	imports: [MatProgressSpinnerModule, NgIf, NgOptimizedImage],
   standalone: true,
   templateUrl: './streaming.component.html',
   styleUrl: './streaming.component.css'
 })
-export class StreamingComponent {
+export class StreamingComponent implements OnInit, AfterViewInit {
   @ViewChild('videoPlayer', {static: false}) videoPlayer!: ElementRef;
 
   videoUrl: string = '';
   loading: boolean = false;
   blankVideo: boolean = true;
-  @Input() videoTitle: string = 'The lion king';
-
+  @Input() videoTitle: string = 'minecraft';
+  @Input() backdrop_path: string = 'https://image.tmdb.org/t/p/original/rU9kRB3rBU5O7AMReZCiuIy7zmE.jpg';
+  @Input() magnet: string = 'magnet:?xt=urn:btih:837F5D78B6CA706A612892F9960A826B715461E7&dn=A+Minecraft+Movie+%282025%29+%5B1080p%5D+%5BWEBRip%5D+%5B5.1%5D+%5BYTS.MX%5D&tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2F47.ip-51-68-199.eu%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2780%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2730%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2920%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce';
 
   torrentOptions:any[] = [];
   private hash: string = '';
-  private magnet: string = '';
 
   textMap = new Map<string, string>([
     ["Select a torrent", "Select a torrent"],
@@ -39,27 +37,22 @@ export class StreamingComponent {
   }
 
   ngOnInit() {
-    this.translationService.autoTranslateTexts(this.textMap);
-    this.translationService.initializeLanguageListener(this.textMap);
+	  this.translationService.autoTranslateTexts(this.textMap);
+	  this.translationService.initializeLanguageListener(this.textMap);
+	  this.loading = true;
 
-    this.torrentService.searchTorrent(this.videoTitle).subscribe((response: Torrent[]) => {
-      this.torrentOptions = response;
-    }
-    );
-    this.loading = true; 
+	  // this.torrentService.searchTorrent(this.videoTitle).subscribe((response: Torrent[]) => {
+	  //   this.torrentOptions = response;
+	  // 	console.log(this.torrentOptions);
+	  // });
   }
 
-  onTorrentChange(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    if (!selectElement) {
-      return;
-    }
-    const selectedOption = selectElement.value;
-    if (!selectedOption) {
-      return;
-    }
+  ngAfterViewInit() {
+	  this.startStreaming()
+  }
+
+  startStreaming() {
     this.blankVideo = false;
-    this.magnet = selectedOption;
     this.loading = true;
     const videoEl: HTMLVideoElement = this.videoPlayer.nativeElement;
     Array.from(videoEl.querySelectorAll('track')).forEach(track => track.remove());
@@ -100,18 +93,16 @@ export class StreamingComponent {
           this.launchStreaming();
         } else {
           this.startTorrent();
-        }
-      },
+		}},
       (error) => {
         if (error.status === 403 || error.error === null) {
           console.log('Torrent not started, starting torrent...');
           this.startTorrent();
         } else {
           console.warn('Handled error while checking if torrent is started:', error.message || error);
-        }
-      }
-    );
+        }});
   }
+
   startTorrent() {
     this.torrentService.sendMagnet(this.magnet).subscribe((response: string) => {
       this.hash = response;
