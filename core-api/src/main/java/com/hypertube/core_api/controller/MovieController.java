@@ -28,12 +28,12 @@ public class MovieController {
     }
 
     @PostMapping("/watched")
-    public WatchedMoviesDTO addWatched(@RequestBody WatchedMoviesDTO watchedMoviesDTO, @RequestHeader(value = "Authorization", required = false) String token) throws JsonProcessingException {
+    public WatchedMoviesDTO addWatched(@RequestBody WatchedMoviesDTO watchedMoviesDTO, @RequestHeader(value = "Authorization") String token) throws JsonProcessingException {
         return this.movieService.addWatched(watchedMoviesDTO, token);
     }
 
     @PutMapping("/watched")
-    public WatchedMoviesDTO modifyWatched(@RequestBody WatchedMoviesDTO watchedMoviesDTO, @RequestHeader(value = "Authorization", required = false) String token) throws JsonProcessingException {
+    public WatchedMoviesDTO modifyWatched(@RequestBody WatchedMoviesDTO watchedMoviesDTO, @RequestHeader(value = "Authorization") String token) throws JsonProcessingException {
         return this.movieService.modifyWatched(watchedMoviesDTO, token);
     }
 
