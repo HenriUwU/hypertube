@@ -45,9 +45,11 @@ export class HomePageComponent implements OnInit {
   searchTerm: string = '';
   searchTerm$ = new Subject<string>();
   filterYear: string = "";
-  yearControl = new FormControl('');
+  yearControl = new FormControl();
   years: string[] = [];
+  lastYearLength = 0;
   filteredYears$: Observable<string[]> = new Observable<string[]>();
+  noMoreMovies: boolean = false;
 
   textMap = new Map<string, string>([
     ["popular", "popular"],
@@ -59,7 +61,8 @@ export class HomePageComponent implements OnInit {
     ["Search", "Search"],
     ["Production Year", "Production Year"],
     ["All", "All"],
-    ["e.g. 2022", "e.g. 2022"]
+    ["e.g. 2022", "e.g. 2022"],
+    ["No more movies to load.", "No more movies to load."]
   ])
 
 
@@ -67,6 +70,7 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.yearControl = new FormControl({ value: '', disabled: true });
     this.translateService.autoTranslateTexts(this.textMap);
     this.translateService.initializeLanguageListener(this.textMap);
     this.movieService.sortBy('popular', 1, [], 0).subscribe((data: any) => {
@@ -85,19 +89,38 @@ export class HomePageComponent implements OnInit {
       map((value: string | null) => this._filterYears(value || ''))
     );
 
-    this.yearControl.valueChanges.subscribe(value => {
-      this.filterYear = value || '';
-      this.onYearChange();
+    this.yearControl.valueChanges.subscribe(rawValue => {
+      const cleanValue = (rawValue || '').replace(/\D/g, '').slice(0, 4);
+
+      if (cleanValue !== rawValue) {
+        this.yearControl.setValue(cleanValue, { emitEvent: false });
+      }
+
+      this.filterYear = cleanValue;
+      const currentLength = cleanValue.length;
+      if ((currentLength === 4 && this.lastYearLength < 4) || (currentLength === 3 && this.lastYearLength === 4)) {
+        this.onYearChange();
+      }
+
+      this.lastYearLength = currentLength;
     });
 
     this.searchTerm$
       .pipe(debounceTime(300))
       .subscribe((search: string) => {
         this.searchTerm = search.trim();
-        if (this.searchTerm.length >= 3) {
-          this.currentPage = 1;
-          this.movies = [];
-          this.loadMovies();
+        this.currentPage = 1;
+        this.movies = [];
+        this.loadMovies();
+
+        if (this.searchTerm) {
+          if (this.yearControl.disabled) {
+            this.yearControl.enable({ emitEvent: false });
+          }
+        } else {
+          if (!this.yearControl.disabled) {
+            this.yearControl.disable({ emitEvent: false });
+          }
         }
       });
   }
@@ -107,11 +130,28 @@ export class HomePageComponent implements OnInit {
     this.currentPage = 1;
     this.loadMovies();
   }
-  
+
   onSearchInputFromEvent(event: Event): void {
     const target = event.target as HTMLInputElement | null;
     const value = target?.value || '';
     this.searchTerm$.next(value);
+  }
+
+  onSearchInput(value: string) {
+    this.searchTerm = value
+    this.movies = [];
+    this.currentPage = 1;
+    this.loadMovies();
+
+    if (this.searchTerm) {
+      if (this.yearControl.disabled) {
+        this.yearControl.enable({ emitEvent: false });
+      }
+    } else {
+      if (!this.yearControl.disabled) {
+        this.yearControl.disable({ emitEvent: false });
+      }
+    }
   }
 
   setMinStars(n: number) {
@@ -180,8 +220,10 @@ export class HomePageComponent implements OnInit {
       const data: any[] = await firstValueFrom<any[]>(source$);
       if (!data || data.length === 0) {
         console.log('No more movies to load');
+        this.noMoreMovies = true;
         return;
       }
+      this.noMoreMovies = false;
       this.movies = [...this.movies, ...data];
     } catch (error) {
       console.error('Error loading movies:', error);
