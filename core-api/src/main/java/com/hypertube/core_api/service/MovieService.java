@@ -76,7 +76,8 @@ public class MovieService {
         MovieModel movie = response.getBody();
         if (movie != null) {
             movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail());
-            movie.setReleaseDate(movie.getReleaseDate().substring(0, 4));
+            String releaseDate = movie.getReleaseDate();
+            movie.setReleaseDate((releaseDate != null && releaseDate.length() >= 4) ? releaseDate.substring(0, 4) : "");
             Optional.ofNullable(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))
                     .map(WatchedMoviesEntity::getStoppedAt)
                     .ifPresent(movie::setStoppedAt);

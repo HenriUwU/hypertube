@@ -48,3 +48,18 @@ app-root {
   flex-direction: column;
   padding-top: 70px;
 }
+
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #2c2c2c;
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #66bb6a;
+  border-radius: 4px;
+  border: 2px solid #2c2c2c;
+}

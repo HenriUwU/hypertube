@@ -31,7 +31,7 @@ export class MovieService {
     );
   }
 
-  search(query: string, page: number, genresIds: number[], minStars: number, productionYear: number | null): Observable<any> {
+  search(query: string, page: number, genresIds: number[], minStars: number, productionYear: string): Observable<any> {
     const body = {
       query: query,
       page: page,

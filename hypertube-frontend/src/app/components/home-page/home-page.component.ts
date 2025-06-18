@@ -1,14 +1,14 @@
 import {Component, HostListener, OnInit, ViewEncapsulation} from '@angular/core';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MovieService} from '../../services/movie.service';
-import {NgFor, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, NgFor, NgForOf, NgIf} from '@angular/common';
 import {ThumbnailComponent} from '../thumbnail/thumbnail.component';
-import {FormsModule} from '@angular/forms';
+import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDivider} from '@angular/material/divider';
-import {catchError, firstValueFrom, Observable, of} from 'rxjs';
+import {catchError, debounceTime, firstValueFrom, map, Observable, of, startWith, Subject} from 'rxjs';
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
 import {MatCheckboxModule} from "@angular/material/checkbox";
@@ -16,6 +16,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {GenreModel} from "../../models/movie.model";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {TranslateService} from "../../services/translate.service";
+import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
 
 
 @Component({
@@ -23,7 +24,7 @@ import {TranslateService} from "../../services/translate.service";
   standalone: true,
   imports: [
     MatMenuModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatProgressSpinnerModule, MatFormFieldModule,
-    NgFor, NgForOf, ThumbnailComponent, MatFormFieldModule, MatSelectModule, MatInputModule, FormsModule, MatDivider, MatTab, MatTabGroup, NgIf
+    NgFor, NgForOf, ThumbnailComponent, MatFormFieldModule, MatSelectModule, MatInputModule, FormsModule, MatDivider, MatTab, MatTabGroup, NgIf, MatAutocomplete, ReactiveFormsModule, MatAutocompleteTrigger, AsyncPipe
   ],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css'],
@@ -42,7 +43,11 @@ export class HomePageComponent implements OnInit {
   hoverIndex = -1;
   starsArray = new Array(10);
   searchTerm: string = '';
-  filterYear: number | null = null;
+  searchTerm$ = new Subject<string>();
+  filterYear: string = "";
+  yearControl = new FormControl('');
+  years: string[] = [];
+  filteredYears$: Observable<string[]> = new Observable<string[]>();
 
   textMap = new Map<string, string>([
     ["popular", "popular"],
@@ -52,7 +57,7 @@ export class HomePageComponent implements OnInit {
     ["Genres", "Genres"],
     ["Min. stars", "Min. stars"],
     ["Search", "Search"],
-    ["Year", "Year"],
+    ["Production Year", "Production Year"],
     ["All", "All"],
     ["e.g. 2022", "e.g. 2022"]
   ])
@@ -70,19 +75,43 @@ export class HomePageComponent implements OnInit {
     this.movieService.getGenres().subscribe((genres: GenreModel[]) => {
       this.genres = genres
     });
+
+    const startYear = 1900;
+    const endYear = new Date().getFullYear();
+    this.years = Array.from({length: endYear - startYear + 1}, (_, i) => (startYear + i).toString());
+
+    this.filteredYears$ = this.yearControl.valueChanges.pipe(
+      startWith(''),
+      map((value: string | null) => this._filterYears(value || ''))
+    );
+
+    this.yearControl.valueChanges.subscribe(value => {
+      this.filterYear = value || '';
+      this.onYearChange();
+    });
+
+    this.searchTerm$
+      .pipe(debounceTime(300))
+      .subscribe((search: string) => {
+        this.searchTerm = search.trim();
+        if (this.searchTerm.length >= 3) {
+          this.currentPage = 1;
+          this.movies = [];
+          this.loadMovies();
+        }
+      });
   }
 
   onYearChange() {
     this.movies = [];
     this.currentPage = 1;
-    this.loadMovies()
+    this.loadMovies();
   }
-
-  onSearchChange(value: string) {
-    this.searchTerm = value;
-    this.movies = [];
-    this.currentPage = 1;
-    this.loadMovies()
+  
+  onSearchInputFromEvent(event: Event): void {
+    const target = event.target as HTMLInputElement | null;
+    const value = target?.value || '';
+    this.searchTerm$.next(value);
   }
 
   setMinStars(n: number) {
@@ -188,5 +217,8 @@ export class HomePageComponent implements OnInit {
     this.loadMovies();
   }
 
-  protected readonly HTMLInputElement = HTMLInputElement;
+  private _filterYears(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.years.filter(year => year.toLowerCase().includes(filterValue));
+  }
 }

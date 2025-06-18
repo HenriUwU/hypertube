@@ -2,27 +2,25 @@
   <div class="search-and-year">
     <mat-form-field appearance="fill" class="search-field transparent-form-field">
       <mat-label>{{textMap.get('Search')}}</mat-label>
-      <input matInput [(ngModel)]="searchTerm" (input)="onSearchChange(searchTerm)" placeholder="Search movies..." />
-      <button *ngIf="searchTerm" matSuffix mat-icon-button aria-label="Clear" (click)="searchTerm=''; onSearchChange('')">
-        <mat-icon>close</mat-icon>
-      </button>
+      <input matInput (input)="onSearchInputFromEvent($event)" [value]="searchTerm" placeholder="Search movies..." />
     </mat-form-field>
 
-    <!-- <div class="year-filter" [class.disabled]="!searchTerm?.trim()"> -->
-    <div class="year-filter" [class.disabled]="!searchTerm.trim()">
-      <label>{{ textMap.get('Year') }}:</label>
+    <mat-form-field appearance="fill" class="production-year-select">
+      <mat-label>{{ textMap.get('Production Year') }}</mat-label>
       <input
-        type="number"
-        [(ngModel)]="filterYear"
-        (input)="onYearChange()"
-        [placeholder]="textMap.get('e.g. 2022')"
-        maxlength="4"
-        inputmode="numeric"
-        pattern="\d{4}"
-        [disabled]="!searchTerm.trim()"
-        />
-        <!-- [disabled]="!searchTerm?.trim()" -->
-    </div>
+        type="text"
+        matInput
+        [formControl]="yearControl"
+        [matAutocomplete]="auto"
+        placeholder="{{textMap.get('e.g. 2022')}}"
+      />
+      <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption>
+        <mat-option *ngFor="let year of filteredYears$ | async" [value]="year">
+          {{ year }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
   </div>
 
   <div class="spacer"></div>
