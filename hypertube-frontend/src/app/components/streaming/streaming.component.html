@@ -1,36 +1,22 @@
-<div class="streaming-select">
-    <select class="form-select" aria-label="Default select example" (change)="onTorrentChange($event)">
-        <option value="" disabled selected>{{textMap.get("Select a torrent")}}</option>
-        @for (opt of torrentOptions; track torrentOptions) {
-        <option value="{{opt.Magnet}}">{{opt.Name}}</option>
-        }
-    </select>
-</div>
-
-<mat-divider></mat-divider>
+<img *ngIf="loading" class="background-image" ngSrc="{{backdrop_path}}" fill alt="movie-backdrop">
 
 <div class="streaming-container">
-    <h1 class="movie-title">{{videoTitle}}</h1>
-    <div class="movie-container">
-        <div class="loading-container" [style.display]="!loading ? 'none' : 'flex'">
-            <mat-spinner class="loading-spinner"></mat-spinner>
-        </div>
+		<div class="loading-container" [style.display]="!loading ? 'none' : 'flex'">
+			<mat-spinner class="loading-spinner"></mat-spinner>
+		</div>
 
-        <div [style.display]="loading ? 'none' : 'block'">
-            <video
-            width="320"
-            height="180"
-            class="video-player"
-            #videoPlayer
-            controls
-            preload="auto"
-            autoplay
-            muted
-            >
-                <source [src]="videoUrl" type="application/vnd.apple.mpegurl">
-                {{textMap.get("Your browser does not support the video tag.")}}
-            </video>
-        </div>
+		<div [style.display]="loading ? 'none' : 'block'">
+			<video width="320" height="180" class="video-player" #videoPlayer controls preload="auto" autoplay muted>
+				<source [src]="videoUrl" type="application/vnd.apple.mpegurl">
+				{{textMap.get("Your browser does not support the video tag.")}}
+			</video>
+		</div>
 
-    </div>
+<!--	<div class="torrent-list">-->
+<!--		<div class="torrent-item" *ngFor="let torrent of torrentOptions" (click)="onTorrentChange(torrent.Magnet)" [class.selected]="torrent.Magnet === magnet">-->
+<!--			{{torrent.Name}}-->
+<!--			<br/>-->
+<!--			Seeders: {{torrent.Seeders}} | Size: {{torrent.Size}}-->
+<!--		</div>-->
+<!--	</div>-->
 </div>
