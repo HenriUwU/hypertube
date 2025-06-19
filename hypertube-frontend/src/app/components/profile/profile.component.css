@@ -8,11 +8,11 @@
 .profile-container {
     background-color: #1e1e1e;
     width: 50%;
-    border-radius: 2%;
     color: white;
     margin:  0 auto;
-    border: 10px solid #eac29f;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
     font-size: 1rem;
+    box-sizing: border-box;
 }
 
 .profile-title {
@@ -104,13 +104,17 @@
 }
 
 
-.profile-picture-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    height: 100%;
-    width: 100%;
+#profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    border: 3px solid #afbb80;
+    transition: 0.3s ease;
+}
+#profile-picture:hover {
+    opacity: 0.5;
 }
 
 .pp-container {
@@ -123,24 +127,6 @@
     width: 100%;
 }
 
-/* #profile-picture {
-    border-radius: 5%;
-    object-fit: fill;
-
-    width: 80%;
-    height: 80%;
-} */
-#profile-picture {
-    border-radius: 5%;
-    object-fit: cover;           /* meilleur rendu, préserve le ratio */
-    
-    max-width: 200px;            /* limite la largeur */
-    max-height: 200px;           /* limite la hauteur */
-    width: 100%;
-    height: auto;                /* conserve les proportions */
-}
-
-
 #language {
     width: 100%;
     background-color: #20242a;
@@ -152,16 +138,8 @@
     padding-top: 0.5em;
     padding-bottom: 0.5em;
 }
-
-#profile-picture-input-id {
-    border: 2px solid #afbb80;
-    border-radius: 5px;
-    border-color: #afbb80;
-    border-top: 2px solid #4f5642;
-    border-left: 2px solid #4f5642;
-
-    margin-bottom: 0.5em;
-    margin-top: 1em;
+#file-input{
+    display: none;
 }
 
 @media (max-width: 1600px) {
@@ -227,11 +205,11 @@
         padding: 1em;
     }
 
-    #profile-picture-input-id {
+    /* #profile-picture-input-id {
         width: 100%;
         margin-bottom: 0.5em;
         margin-top: 1em;
-    }
+    } */
 
     #language {
         width: 100%;

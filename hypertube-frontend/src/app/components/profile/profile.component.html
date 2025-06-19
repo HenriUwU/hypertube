@@ -1,4 +1,4 @@
-<div class="wrapper">
+    <div class="wrapper">
 <div class="profile-container">
     <div class="profile-title">
         <h1>{{textMap.get('profile')}}</h1>
@@ -29,13 +29,11 @@
                 <div class="right-column">
                     <div class="pp-container">
                         <div class="profile-picture-container">
-                            <img [src]="this.profileForm.value.profilePicture" alt="Profile Picture"
-                                id="profile-picture" />
-                        </div>
-                        <div class="profile-picture-input" *ngIf="!isReadOnly">
-                            <label for="profile-picture-input-id">{{textMap.get('Profile Picture')}}</label>
-                            <input id="profile-picture-input-id" type="file" (change)="onFileSelected($event)"
-                                [disabled]="this.isReadOnly" accept="image/*" />
+
+                            <label for="file-input">
+                                <img [src]="profilePictureUrl" alt="Photo de profil" class="profile-pic" id="profile-picture">
+                            </label>
+                            <input type="file" id="file-input" accept="image/*" (change)="onFileSelected($event)" [disabled]="isReadOnly">
                         </div>
                     </div>
                     <div class="language-container">

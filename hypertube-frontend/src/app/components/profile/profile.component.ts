@@ -39,15 +39,18 @@ export class ProfileComponent {
     ["Please select a valid image file", "Please select a valid image file"],
     ["Error", "Error"],
   ]);
-
+  
   @Input () userId: string = sessionStorage.getItem('id') ? sessionStorage.getItem('id')! : '0';
   isReadOnly: boolean = true;
-
+  
   private defaultProfilePicture = '../../../../assets/images/default_pp.svg' ;
-
+  
   languages = [
     { value: 'en', viewValue: 'English' },
-  ];
+  ];  
+  
+  // profilePictureUrl: string = this.defaultProfilePicture;
+  profilePictureUrl: string = this.defaultProfilePicture;
 
   constructor(private userService: UserService, private translateService: TranslateService,  private globalMessageService: GlobalMessageService,  private router: Router) {
   }
@@ -71,13 +74,30 @@ export class ProfileComponent {
         profilePicture: user.profilePicture ? user.profilePicture : this.defaultProfilePicture,
         language: user.language
       });
-
+      this.profilePictureUrl = user.profilePicture ? user.profilePicture : this.defaultProfilePicture;
       if (sessionStorage.getItem('id') !== this.userId) {
         this.isReadOnly = true;
       } else {
         this.isReadOnly = false;
       }
     });
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      if (!file.type.startsWith('image/')) {
+        this.globalMessageService.showMessage(this.textMap.get("Please select a valid image file") || "Please select a valid image file", false);
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.profilePictureUrl = e.target.result;
+        this.profileForm.patchValue({ profilePicture: e.target.result });
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   onSubmit() {
@@ -113,24 +133,6 @@ export class ProfileComponent {
       this.globalMessageService.showMessage(`${this.textMap.get('Error') || 'Error'}: ${error}`, false);
     }
     );
-  }
-
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    // accept only image files
-    if (!file || !file.type.startsWith('image/')) {
-      this.globalMessageService.showMessage(this.textMap.get('Please select a valid image file') || "Please select a valid image file", false);
-      return;
-    }
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.profileForm.patchValue({
-          profilePicture: e.target.result
-        });
-      };
-      reader.readAsDataURL(file);
-    }
   }
 
   getCurrentLanguage(): string {
