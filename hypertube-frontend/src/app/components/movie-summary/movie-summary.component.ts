@@ -5,8 +5,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { TorrentService } from '../../services/torrent.service';
 import { Torrent } from '../../models/torrent.models';
 import { ActivatedRoute } from '@angular/router';
-// import { map, Observable } from 'rxjs';
-// import { HttpClientModule } from '@angular/common/http';
+import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-movie-summary',
@@ -16,17 +15,17 @@ import { ActivatedRoute } from '@angular/router';
   imports: [NgFor, NgIf],
 })
 export class MovieSummaryComponent implements OnInit {
-  // HERE
   @Input() movieId : number = 950387;
   movie! : Movie;
   torrents! : Torrent[];
   magnet!: string;
-  trailerUrl: string | null = null;
+  trailerUrl!: SafeResourceUrl;
 
   constructor(
-    private movieService: MovieService, 
-    private torrentService: TorrentService, 
-    private route: ActivatedRoute
+    private movieService: MovieService,
+    private torrentService: TorrentService,
+    private route: ActivatedRoute,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -37,7 +36,7 @@ export class MovieSummaryComponent implements OnInit {
             this.loadMovie();
             this.movieService.getMovieTrailer(this.movieId).subscribe({
                 next: (url: string) => {
-                  this.trailerUrl = url;
+                  this.trailerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
                 },
                 error: (e) => {
                   console.error('Error fetching trailer:', e);

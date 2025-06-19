@@ -23,11 +23,17 @@
       <p><u>Crew:</u><em> {{ crewSummary }}</em></p>
     </div>
 
-    <div class="watch-trailer">
-      <a *ngIf="trailerUrl" [href]="trailerUrl" target="_blank" rel="noopener noreferrer">
-        See the trailer
-      </a>
-    </div>
+<!--    <div class="watch-trailer">-->
+<!--      <a *ngIf="trailerUrl" [href]="trailerUrl" target="_blank" rel="noopener noreferrer">-->
+<!--        See the trailer-->
+<!--      </a>-->
+<!--    </div>-->
+
+    <iframe
+      [src]="trailerUrl"
+      title="YouTube video"
+      allowfullscreen>
+    </iframe>
 
   </div>
 </div>
@@ -50,10 +56,10 @@
   </div>
 </div>
 
-<!-- prendre en input l'id du film 
+<!-- prendre en input l'id du film
 
   getMovieDataFromIdAsInterface(id: number): Observable<Movie> {
     return this.http.get<Movie>(`${this.apiUrlAuth}/${id.toString()}`).pipe();
-  } 
+  }
 
 -->
