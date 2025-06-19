@@ -1,16 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
-import {FormControl, Validators, FormsModule, ReactiveFormsModule, FormGroup, FormBuilder} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { MoviesService } from '../../services/movies.service';
-import { SearchMovie } from '../../models/movie.model';
-import { AuthService } from '../../services/auth.service';
-import { CommonModule } from '@angular/common';
-import {Router, RouterOutlet} from "@angular/router";
+import {MoviesService} from '../../services/movies.service';
+import {SearchMovie} from '../../models/movie.model';
+import {AuthService} from '../../services/auth.service';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {Router} from "@angular/router";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
+import {UserService} from "../../services/user.service";
+import {TranslateService} from "../../services/translate.service";
+import {TranslateModel} from "../../models/translate.model";
+import {UserModel} from "../../models/user.model";
+import {filter, interval, map, switchMap, take} from "rxjs";
 
 interface Language {
   name: string;
@@ -20,55 +27,42 @@ interface Language {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MatDividerModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatSelectModule, FormsModule, ReactiveFormsModule, MatInputModule, CommonModule],
+	imports: [MatDividerModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatSelectModule, FormsModule, ReactiveFormsModule, MatInputModule, CommonModule, MatMenuTrigger, MatMenu, MatMenuItem, MatAutocomplete, MatAutocompleteTrigger, NgOptimizedImage],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 
 export class HeaderComponent implements OnInit {
   languageControl = new FormControl<Language | null>(null, Validators.required);
-  selectFormControl = new FormControl('', Validators.required);
-  research!: SearchMovie;
-  searchForm!: FormGroup;
-
-  languages: Language[] = [
-    {name: 'English', sound: 'Can I get some Burger ?'},
-    {name: 'Francais', sound: 'Oui oui baguette'},
-    {name: 'Spanish', sound: 'Me gustas tus'},
-  ];
+  languages: TranslateModel[] = [];
+  selectedLanguage!: TranslateModel;
+  userInfos!: UserModel;
 
   query: any;
 
   constructor(private movieService: MoviesService,
               private formBuilder: FormBuilder,
               private authService: AuthService,
-			  private router: Router
+              private router: Router,
+              private userService: UserService,
+              private translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.searchForm = this.formBuilder.group({
-      query: ['', Validators.required]
-    })
-  }
+	this.translateService.availableLanguages().subscribe((data: TranslateModel[]) =>
+	  this.languages = data
+	);
 
-  search(): void {
-    if (!this.isLog) {
-      this.searchForm.get('query')?.disable();
-    }
-    else {
-      this.searchForm.get('query')?.enable();
-    }
-
-    if (this.searchForm.valid) {
-      this.research = {
-        query: this.searchForm.getRawValue().query,
-        page: 1,
-        genresIds: []
-      };
-
-      console.log(this.research)
-      this.movieService.search(this.research).subscribe(res => console.log(res));
-    }
+	interval(100)
+		.pipe(
+		  map(() => this.authService.getCurrentUserId()),
+		  filter((id): id is string => id != null),
+		  take(1),
+		  switchMap(id => this.userService.getUser(id))
+		)
+		.subscribe((data: UserModel) => {
+		  this.userInfos = data;
+		});
   }
 
   toHomepage():void{
@@ -90,6 +84,10 @@ export class HeaderComponent implements OnInit {
 
   toProfile():void{
 	  this.router.navigate(['user', 'profile']).then();
+  }
+
+  selectLanguage(language: TranslateModel): void {
+	  this.selectedLanguage = language;
   }
 
 }

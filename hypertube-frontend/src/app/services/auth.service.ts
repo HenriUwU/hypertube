@@ -50,6 +50,10 @@ export class AuthService {
     sessionStorage.removeItem(`token`);
   }
 
+  getCurrentUserId(): string | null {
+	  return sessionStorage.getItem(`id`);
+  }
+
   getToken(): string | null {
     return sessionStorage.getItem(`token`)
   }
