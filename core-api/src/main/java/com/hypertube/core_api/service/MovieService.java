@@ -225,7 +225,11 @@ public class MovieService {
         return commentMapper.map(commentRepository.getCommentEntitiesByMovieId(movieId));
     }
 
-    public List<SubtitleModel> getSubtitles(String imdbId) throws IOException {
+    public List<SubtitleModel> getSubtitles(String imdbId, String token) throws IOException {
+        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+        Locale locale = new Locale(userEntity.getLanguage());
+        String languageName = locale.getDisplayLanguage(Locale.ENGLISH).toLowerCase();
+
         List<SubtitleModel> subtitles = new ArrayList<>();
         String baseUrl = "https://yts-subs.com";
         String url = baseUrl + "/movie-imdb/" + imdbId;
@@ -244,8 +248,7 @@ public class MovieService {
             if (langCell == null) continue;
 
             String language = langCell.text().trim().toLowerCase();
-            if (!language.equals("french") && !language.equals("english")) continue;
-//&& !language.equals("english")
+            if (!language.equals(languageName) && !language.equals("english")) continue;
             Element linkElement = row.selectFirst("a[href^=/subtitles/]");
             if (linkElement == null) continue;
 

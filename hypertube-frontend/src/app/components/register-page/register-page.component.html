@@ -50,27 +50,27 @@
       <span>OR<br>register with<br><br></span>
     </div>
 
-    <div class="omniauth-buttons">
-      <a href="https://discord.com/oauth2/authorize?client_id=1332866171581632643&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A4200%2Fauth%2Fomniauth%2Fdiscord&scope=identify+email"
-        class="omniauth-btn">
-        <div class="logo-box">
-            <img ngSrc="assets/logos/discord-logo.svg" alt="Google Logo" width="1024" height="1045" />
-        </div>
-      </a>
-      <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-3d0b78d85d1720e444f1354145f582882a28378ec38a8c07fedc6bad0323ad89&redirect_uri=http%3A%2F%2Flocalhost%3A4200%2Fauth%2Fomniauth%2F42&response_type=code"
-        class="omniauth-btn">
-        <div class="logo-box">
-          <img ngSrc="assets/logos/42-logo.svg" alt="42 Logo" width="600" height="421" />
-        </div>
-      </a>
-      <a href="/auth/42" class="omniauth-btn">
-        <div class="logo-box">
-            <img ngSrc="assets/logos/github-logo.svg" alt="github Logo" width="1024" height="1024" />
-        </div>
-      </a>
-    </div>
+	  <div class="omniauth-buttons">
+		  <a href="https://discord.com/oauth2/authorize?client_id=1332866171581632643&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A4200%2Fauth%2Fomniauth%2Fdiscord&scope=identify+email"
+			 class="omniauth-btn">
+			  <div class="logo-box">
+				  <img ngSrc="assets/logos/discord-logo.svg" alt="Google Logo" width="1024" height="1045" />
+			  </div>
+		  </a>
+		  <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-3d0b78d85d1720e444f1354145f582882a28378ec38a8c07fedc6bad0323ad89&redirect_uri=http%3A%2F%2Flocalhost%3A4200%2Fauth%2Fomniauth%2F42&response_type=code"
+			 class="omniauth-btn">
+			  <div class="logo-box">
+				  <img ngSrc="assets/logos/42-logo.svg" alt="42 Logo" width="600" height="421" />
+			  </div>
+		  </a>
+		  <a href="https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=2339896657-sqbhcrhhj5nfq9dbisu3he7rajvkngv6.apps.googleusercontent.com&redirect_uri=http://localhost:4200/auth/omniauth/google&scope=email%20profile" class="omniauth-btn">
+			  <div class="logo-box">
+				  <img ngSrc="assets/logos/google-logo.svg" alt="Google Logo" width="1024" height="1024" />
+			  </div>
+		  </a>
+	  </div>
 
-    <div class="sign-in-text">Already have an 
+    <div class="sign-in-text">Already have an
       <span style="font-family: 'Borel', cursive;">account</span>
        ?
       <a class="sign-in-hyperlink" routerLink="/auth/login">Sign in now.</a>

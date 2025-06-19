@@ -80,13 +80,10 @@
   margin-top: 3%;
 }
 
-/* trailer, torrent list, play btn */
-
 .watch-container {
   display: flex;
   max-width: 1000px;
   margin: 10px auto;
-  padding: 20px;
   justify-content: space-between;
   flex-wrap: nowrap;
 }
@@ -144,6 +141,11 @@
   line-height: 1.5;
   box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
   transition: background-color 0.3s ease, transform 0.2s ease;
+  box-sizing: border-box;
+  width: 100%;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .torrent-item + .torrent-item {
@@ -156,9 +158,9 @@
 }
 
 .torrent-item.selected {
-  background-color: #d0ebff;
-  border-color: #3399ff;
-  color: #102a43;
+  background-color: #AFBB80;
+  border-color: #153f2f;
+  color: #153f2f;
 }
 
 .torrent-item:active {
@@ -186,6 +188,12 @@
   padding: 0.5rem;
   flex: 0.6 0.6 100%;
   cursor: pointer;
+}
+
+.play-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(100%);
 }
 
 @media (max-width: 600px) {
