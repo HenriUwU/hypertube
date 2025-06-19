@@ -12,7 +12,7 @@
   border-bottom: 3px solid #AFBB80;
   z-index: 1000;
   color: white;
-  
+
 }
 
 .header-left {
@@ -80,4 +80,13 @@
 .header-button:hover {
 	text-shadow: 1px 1px 2px #f0f0f0;
 	cursor: pointer;
+}
+
+.flag-icon {
+	height: 12px;
+	width: auto;
+	object-fit: contain;
+	vertical-align: middle;
+	margin-left: 8px;
+	aspect-ratio: auto;
 }
