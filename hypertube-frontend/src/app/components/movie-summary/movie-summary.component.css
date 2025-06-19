@@ -190,6 +190,12 @@
   cursor: pointer;
 }
 
+.play-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(100%);
+}
+
 @media (max-width: 600px) {
   .summary-container {
     flex-direction: column;

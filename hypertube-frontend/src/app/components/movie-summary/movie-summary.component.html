@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="play">
-        <button mat-flat-button class="play-btn" type="submit">
+        <button mat-flat-button class="play-btn" type="submit" [disabled]="!magnet">
             ▶ Play
         </button>
       </div>
@@ -52,10 +52,6 @@
   </div>
 </div>
 
-<!-- prendre en input l'id du film
-
-  getMovieDataFromIdAsInterface(id: number): Observable<Movie> {
-    return this.http.get<Movie>(`${this.apiUrlAuth}/${id.toString()}`).pipe();
-  }
-
--->
+<div class="comments">
+  <p>Comments</p>
+</div>
