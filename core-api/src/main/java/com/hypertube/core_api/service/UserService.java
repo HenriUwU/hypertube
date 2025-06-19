@@ -338,7 +338,7 @@ public class UserService implements UserDetailsService {
 
     private void sendResetPasswordEmail(String toEmail, String resetToken) {
         String subject = "Réinitialisation de votre mot de passe";
-        String resetUrl = "http://localhost:4200/auth/reset-password?token=" + resetToken;
+        String resetUrl = "http://localhost:4200/auth/forgot-password?token=" + resetToken;
 
         String body = "Bonjour,\n\n" +
                 "Vous avez demandé une réinitialisation de votre mot de passe.\n" +

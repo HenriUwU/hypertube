@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width-device-width, initial-scale=1.0">
-    <title>Hypertube</title>
-    <link rel="stylesheet" href="header.component.css">
-</head>
-
 <body>
     <header class="header">
         <div class="header-left">
@@ -16,10 +8,10 @@
         <div class="header-right">
 
 			<button mat-button [matMenuTriggerFor]="languageMenu" color="basic" class="menu-density">
-				<mat-icon>language</mat-icon> Language
+				<mat-icon>language</mat-icon>
+				{{ textMap.get('Language') }}
 				<mat-menu #languageMenu="matMenu">
 					<button mat-menu-item *ngFor="let language of languages" (click)="selectLanguage(language)">
-						<mat-icon>language</mat-icon>
 						{{ language.english_name }}
 						<img
 							[ngSrc]="language.flag"
@@ -33,11 +25,11 @@
 			</button>
 
 			<button *ngIf="isLog()" mat-button [matMenuTriggerFor]="userMenu" color="basic" class="menu-density">
-				<mat-icon>account_circle</mat-icon> {{ userInfos.username }}
+				<mat-icon>account_circle</mat-icon> {{ userInfos?.username }}
 				<mat-menu #userMenu="matMenu">
 					<button mat-menu-item (click)="toProfile()">
 						<mat-icon>settings</mat-icon>
-						Edit profile
+						{{ textMap.get('Edit Profile') }}
 					</button>
 					<button mat-menu-item (click)="logout()">
 						<mat-icon color="warn">logout</mat-icon>
