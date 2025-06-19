@@ -3,14 +3,15 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { Router } from '@angular/router';
 import { MovieService } from '../../services/movie.service';
 import { MovieThumbnail } from '../../models/movie.model';
-import { CommonModule } from '@angular/common';
+import { CommonModule, IMAGE_CONFIG } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import {animate, style, transition, trigger} from "@angular/animations";
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-thumbnail',
   standalone: true,
-  imports: [MatProgressBarModule, CommonModule, MatIconModule],
+  imports: [MatProgressBarModule, CommonModule, MatIconModule, NgOptimizedImage],
   templateUrl: './thumbnail.component.html',
   styleUrl: './thumbnail.component.css',
   animations: [

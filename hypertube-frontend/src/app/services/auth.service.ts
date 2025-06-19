@@ -80,6 +80,11 @@ export class AuthService {
   updatePassword(token: string, password: string): Observable<any> {
     const tokenBearer = this.getToken();
     const headers = { Authorization: `Bearer ${tokenBearer}`};
+
     return this.http.post(`${this.apiUrlAuth}/update-password?token=${token}`, password, { headers, responseType: 'text' as 'json'  });
+  }
+
+  updateForgotPassword(token: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrlAuth}/update-password?token=${token}`, password, { responseType: 'text' as 'json' });
   }
 }

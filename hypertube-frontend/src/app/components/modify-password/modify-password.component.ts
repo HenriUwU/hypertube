@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { TranslateService } from '../../services/translate.service';
 import { GlobalMessageService } from '../../services/global.message.service';
-;
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-password',
@@ -40,7 +40,7 @@ export class ModifyPasswordComponent {
     ["Password updated successfully!", "Password updated successfully!"],
   ]);
 
-  constructor(private authService: AuthService, private translateService: TranslateService, private globalMessageService: GlobalMessageService) { }
+  constructor(private authService: AuthService, private translateService: TranslateService, private globalMessageService: GlobalMessageService, private router: Router) { }
 
   ngOnInit(): void {
     this.translateService.autoTranslateTexts(this.textMap);
@@ -84,7 +84,7 @@ export class ModifyPasswordComponent {
       return { PasswordNoSpecialChar: true };
     }
 
-    if (!currentPassword) {
+    if (!currentPassword && !this.forgotPassword) {
       this.errorMessage = "Current password is required.";
       return { PasswordVerificationError: true };
     }
@@ -110,28 +110,57 @@ export class ModifyPasswordComponent {
   }
 
   onSubmit() {
-    const currentPassword = this.passwordForm.get('currentPassword')?.value;
-
-    if (!currentPassword ||  this.verifyCurrentPassword(currentPassword) === false){
-      this.errorMessage = "Current password is incorrect.";
-      return;
+    console.log("Form submitted with values:", this.passwordForm.value);
+    if (!this.forgotPassword) {
+      const currentPassword = this.passwordForm.get('currentPassword')?.value;
+      if (!currentPassword ||  this.verifyCurrentPassword(currentPassword) === false){
+        this.errorMessage = "Current password is incorrect.";
+        return;
+      }
     }
+    
 
     if (this.passwordForm.valid) {
       const password = this.passwordForm.get('password')?.value || '';
-      this.authService.updatePassword('', password).subscribe(
-        (response: any) => {
-          this.globalMessageService.showMessage(this.textMap.get("Password updated successfully!") || "Password updated successfully!", true);
-          this.successMessage = true;
-        },
-        (error: any) => {
-          this.errorMessage = 'Error updating password.';
-          this.successMessage = false;
+      // get token from the query params or session storage
+      if (this.forgotPassword) {
+        const token = new URLSearchParams(window.location.search).get('token') || '';
+        if (!token) {
+          this.errorMessage = 'Token is missing!';
+          return;
         }
-      );
+        this.authService.updateForgotPassword(token, password).subscribe(
+          (response: any) => {
+            this.globalMessageService.showMessage(this.textMap.get("Password updated successfully!") || "Password updated successfully!", true);
+            this.successMessage = true;
+          },
+          (error: any) => {
+            this.errorMessage = 'Error updating password.';
+            this.successMessage = false;
+          }
+        );
+      } else {
+        this.authService.updatePassword('', password).subscribe(
+          (response: any) => {
+            this.globalMessageService.showMessage(this.textMap.get("Password updated successfully!") || "Password updated successfully!", true);
+            this.successMessage = true;
+          },
+          (error: any) => {
+            this.errorMessage = 'Error updating password.';
+            this.successMessage = false;
+          }
+        );
+      }
     }
     else {
       this.errorMessage = 'Form is invalid!';
+    }
+
+    // redirect to login page after successful password update
+    if (this.successMessage) {
+      // setTimeout(() => {
+        this.router.navigate(['/']).then();
+      // }, 2000); // Redirect after 2 seconds
     }
   }
 

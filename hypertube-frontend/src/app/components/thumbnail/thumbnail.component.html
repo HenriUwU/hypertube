@@ -6,6 +6,12 @@
 
     <div class="thumbnail-image-container">
         <img [src]="movieThumbnail.poster_path" alt="{{ movieThumbnail.title }}" class="thumbnail-image" />
+        <!-- <img 
+            [ngSrc]="movieThumbnail.poster_path" 
+            alt="{{ movieThumbnail.title }}" 
+            class="thumbnail-image"
+            fill
+        /> -->
     </div>
 
     <div *ngIf="watchedMovie" class="thumbnail-watched">

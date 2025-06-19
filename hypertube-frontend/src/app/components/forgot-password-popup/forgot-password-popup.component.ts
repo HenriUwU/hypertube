@@ -18,7 +18,7 @@ export class ForgotPasswordPopupComponent {
     ["Please enter your email address to receive a reset password link.", "Please enter your email address to receive a reset password link."],
     ["Email Address", "Email Address"],
     ["Send reset link", "Send reset link"],
-    ["Reset link sent successfully", "Reset link sent successfully"],
+    ["Reset link sent successfully, check your emails", "Reset link sent successfully, check your emails."],
     ["Error sending reset link", "Error sending reset link"]
   ]);
 
@@ -52,6 +52,6 @@ export class ForgotPasswordPopupComponent {
         this.globalMessageService.showMessage(this.textMap.get("Error sending reset link") || "Error sending reset link", false);
       }
     });
-    this.globalMessageService.showMessage(this.textMap.get("Reset link sent successfully") || "Reset link sent successfully", true);
+    this.globalMessageService.showMessage(this.textMap.get("Reset link sent successfully, check your emails.") || "Reset link sent successfully, check your emails.", true);
   }
 }
