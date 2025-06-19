@@ -2,17 +2,15 @@ import {Component, OnInit} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MoviesService} from '../../services/movies.service';
-import {SearchMovie} from '../../models/movie.model';
 import {AuthService} from '../../services/auth.service';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {Router} from "@angular/router";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
-import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
 import {UserService} from "../../services/user.service";
 import {TranslateService} from "../../services/translate.service";
 import {TranslateModel} from "../../models/translate.model";
@@ -27,7 +25,7 @@ interface Language {
 @Component({
   selector: 'app-header',
   standalone: true,
-	imports: [MatDividerModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatSelectModule, FormsModule, ReactiveFormsModule, MatInputModule, CommonModule, MatMenuTrigger, MatMenu, MatMenuItem, MatAutocomplete, MatAutocompleteTrigger, NgOptimizedImage],
+  imports: [MatDividerModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatSelectModule, FormsModule, ReactiveFormsModule, MatInputModule, CommonModule, MatMenuTrigger, MatMenu, MatMenuItem, NgOptimizedImage],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
@@ -38,7 +36,11 @@ export class HeaderComponent implements OnInit {
   selectedLanguage!: TranslateModel;
   userInfos!: UserModel;
 
-  query: any;
+  textMap = new Map<string, string>([
+    ["Language", "Language"],
+    ["Edit Profile", "Edit Profile"]
+  ])
+
 
   constructor(private movieService: MoviesService,
               private formBuilder: FormBuilder,
@@ -49,24 +51,27 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-	this.translateService.availableLanguages().subscribe((data: TranslateModel[]) =>
-	  this.languages = data
-	);
+    this.translateService.availableLanguages().subscribe((data: TranslateModel[]) =>
+      this.languages = data
+    );
 
-	interval(100)
-		.pipe(
-		  map(() => this.authService.getCurrentUserId()),
-		  filter((id): id is string => id != null),
-		  take(1),
-		  switchMap(id => this.userService.getUser(id))
-		)
-		.subscribe((data: UserModel) => {
-		  this.userInfos = data;
-		});
+    this.translateService.autoTranslateTexts(this.textMap);
+    this.translateService.initializeLanguageListener(this.textMap);
+
+    interval(100)
+      .pipe(
+        map(() => this.authService.getCurrentUserId()),
+        filter((id): id is string => id != null),
+        take(1),
+        switchMap(id => this.userService.getUser(id))
+      )
+      .subscribe((data: UserModel) => {
+        this.userInfos = data;
+      });
   }
 
   toHomepage():void{
-	  this.router.navigate(['/']).then();
+    this.router.navigate(['/']).then();
   }
 
   isLog(): boolean {
@@ -75,19 +80,19 @@ export class HeaderComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
-	  this.router.navigate(['/']).then();
+    this.router.navigate(['/']).then();
   }
 
   login(): void {
-	  this.router.navigate(['auth', 'login']).then();
+    this.router.navigate(['auth', 'login']).then();
   }
 
   toProfile():void{
-	  this.router.navigate(['user', 'profile']).then();
+    this.router.navigate(['user', 'profile']).then();
   }
 
   selectLanguage(language: TranslateModel): void {
-	  this.selectedLanguage = language;
+    this.selectedLanguage = language;
   }
 
 }
