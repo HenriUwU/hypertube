@@ -5,17 +5,17 @@
 
   <div class="movie-info">
     <div class="title">
-      <h1 class="movie-title">{{movie.title}}</h1>
-      <p class="movie-note">{{movie.vote_average}} / 10 &#9733;</p>
+      <h1 class="movie-title">{{ movie.title }}</h1>
+      <p class="movie-note">{{ movie.vote_average }} / 10 &#9733;</p>
     </div>
 
     <div class="time">
-      <p class="runtime"><strong>{{getMovieRuntime()}}</strong></p>
-      <p class="release-date"><strong>{{movie.release_date}}</strong></p>
+      <p class="runtime"><strong>{{ getMovieRuntime() }}</strong></p>
+      <p class="release-date"><strong>{{ movie.release_date }}</strong></p>
     </div>
 
     <div class="synopsis">
-      <p class="synopsis">{{movie.overview}}</p>
+      <p class="synopsis">{{ movie.overview }}</p>
     </div>
 
     <div class="people">
@@ -27,33 +27,35 @@
 
 <div class="trailer-container">
   <div class="watch-container">
-    <div class="trailer">
-      <p>Trailer</p>
+    <div class="left-side">
+      <iframe
+        [src]="trailerUrl"
+        title="YouTube video"
+        allowfullscreen>
+      </iframe>
     </div>
-  
-    <div class="torrent-list">
-          <div class="torrent-item" *ngFor="let torrent of torrents" (click)="selectTorrent(torrent.Magnet)" [class.selected]="torrent.Magnet === magnet">
-              {{torrent.Name}}
-              <br/>
-              Seeders: {{torrent.Seeders}} | Size: {{torrent.Size}}
-          </div>
+    
+    <div class="right-side">
+      <div class="torrent-list">
+        <div class="torrent-item" *ngFor="let torrent of torrents" (click)="selectTorrent(torrent.Magnet)" [class.selected]="torrent.Magnet === magnet">
+          {{torrent.Name}}
+          <br/>
+          Seeders: {{torrent.Seeders}} | Size: {{torrent.Size}}
+        </div>
+      </div>
+      <div class="play">
+        <button mat-flat-button class="play-btn" type="submit">
+            ▶ Play
+        </button>
+      </div>
     </div>
   </div>
-
-  <div class="play">
-    <button mat-flat-button class="play-btn" type="submit">
-        ▶ Play
-    </button>
-  </div>
-
-  
-
 </div>
 
-<!-- prendre en input l'id du film 
+<!-- prendre en input l'id du film
 
   getMovieDataFromIdAsInterface(id: number): Observable<Movie> {
     return this.http.get<Movie>(`${this.apiUrlAuth}/${id.toString()}`).pipe();
-  } 
+  }
 
 -->

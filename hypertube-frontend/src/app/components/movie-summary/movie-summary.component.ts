@@ -5,6 +5,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { TorrentService } from '../../services/torrent.service';
 import { Torrent } from '../../models/torrent.models';
 import { ActivatedRoute } from '@angular/router';
+import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-movie-summary',
@@ -14,13 +15,18 @@ import { ActivatedRoute } from '@angular/router';
   imports: [NgFor, NgIf],
 })
 export class MovieSummaryComponent implements OnInit {
-  // HERE
   @Input() movieId : number = 950387;
   movie! : Movie;
   torrents! : Torrent[];
   magnet!: string;
+  trailerUrl!: SafeResourceUrl;
 
-  constructor(private movieService: MovieService, private torrentService: TorrentService, private route: ActivatedRoute) {}
+  constructor(
+    private movieService: MovieService,
+    private torrentService: TorrentService,
+    private route: ActivatedRoute,
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -28,8 +34,19 @@ export class MovieSummaryComponent implements OnInit {
           if (id) {
             this.movieId = +id;
             this.loadMovie();
-          }
+            this.movieService.getMovieTrailer(this.movieId).subscribe({
+                next: (url: string) => {
+                  this.trailerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+                },
+                error: (e) => {
+                  console.error('Error fetching trailer:', e);
+                },
+                complete: () => {
+                }
+        });
+      }
     });
+
   }
 
   loadMovie(){
@@ -37,6 +54,7 @@ export class MovieSummaryComponent implements OnInit {
       {
         next: (data: Movie) => {
           this.movie = data;
+          this.movie.vote_average = Math.round(this.movie.vote_average * 10) / 10;
 
           this.torrentService.searchTorrent(this.movie.title).subscribe(
             {next: (data: Torrent[]) => {
@@ -86,5 +104,4 @@ export class MovieSummaryComponent implements OnInit {
   selectTorrent(magnet: string): void {
     this.magnet = magnet;
   }
-
 }

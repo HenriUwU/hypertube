@@ -55,4 +55,10 @@ export class MovieService {
       map((response: GenreModel[]) => response)
     )
   }
+
+  getMovieTrailer(movieId: number): Observable<string> {
+    return this.http.get<{ link: string }>(`${this.apiUrlAuth}/${movieId}/trailer`).pipe(
+      map(response => response.link)
+    );
+  }
 }

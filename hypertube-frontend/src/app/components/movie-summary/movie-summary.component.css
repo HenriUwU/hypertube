@@ -83,15 +83,40 @@
 /* trailer, torrent list, play btn */
 
 .watch-container {
-  background-color: brown;
+  /* background-color: brown; */
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  /* flex-wrap: wrap; */
+  /* align-items: flex-start; */
   max-width: 900px;
   margin: 40px auto;
   padding: 20px;
   justify-content: space-between;
   gap: 20px;
+  flex-wrap: nowrap;
+}
+
+.left-side {
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* gap: 1rem; */
+  flex: 1 1 55%;
+  max-width: 55%;
+}
+
+.left-side iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+  border-radius: 8px;
+  background-color: black;
+}
+
+.right-side {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 0 0 35%;
+  max-width: 35%;
 }
 
 .trailer {
@@ -102,59 +127,16 @@
   color: white;
 }
 
-/* .torrent-list {
-    flex: 1;
-    max-height: 400px;
-    max-width: 400px;
-    overflow-y: auto;
-    border: 2px solid #eac29f;
-    padding-left: 0.1rem;
-    margin-top: 5vh;
-    margin-left: 8vh;
-    background-color: #20242a;
-    border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.4);
-}
-
-.torrent-item {
-    padding: 0.75rem 1rem;
-    cursor: pointer;
-    border: 1px solid #eac29f;
-    background: #eac29f;
-    color: #20242a;
-    border-radius: 8px;
-    font-family: monospace;
-    line-height: 1.5;
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.torrent-item:hover {
-    background-color: #fff3e0;
-    transform: scale(1.01);
-}
-
-.torrent-item.selected {
-    background-color: #d0ebff;
-    border-color: #3399ff;
-    color: #102a43;
-}
-
-.torrent-item:active {
-    transform: scale(0.98);
-    opacity: 0.9;
-} */
-
 .torrent-list {
   flex: 0.5 0.5 35%;
   max-height: 400px;
-  max-width: 100%;
-  width: 400px;
+  /* max-width: 100%; */
+  /* width: 400px; */
   overflow-y: auto;
-  border: 2px solid #eac29f;
+  border: 2px solid black;
   padding: 0.5rem 1rem;
-  margin-top: 5vh;
-  margin-left: 8vh;
+  /* margin-top: 5vh; */
+  /* margin-left: 8vh; */
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0,0,0,0.4);
   background-color: #20242a;
