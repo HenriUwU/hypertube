@@ -7,7 +7,7 @@
         </div>
         <div class="header-right">
 
-			<button mat-button [matMenuTriggerFor]="languageMenu" color="basic" class="menu-density">
+			<button *ngIf="isLog()" mat-button [matMenuTriggerFor]="languageMenu" color="basic" class="menu-density">
 				<mat-icon>language</mat-icon>
 				{{ textMap.get('Language') }}
 				<mat-menu #languageMenu="matMenu">
