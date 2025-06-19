@@ -12,32 +12,43 @@
             <div class="header-button">
                 <h1 (click)="toHomepage()">Hypertube</h1>
             </div>
-            <li class="language">
-                <img src="../../../assets/images/language.svg">
-                <span>language</span>
-                <!-- <a href="#">language</a> -->
-            </li>
-            <!-- <select class="form-select form-select-sm">
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-                <option value="es">Español</option>
-            </select> -->
-            <!-- profile if logged -->
         </div>
         <div class="header-right">
-            <!-- <form [formGroup]="searchForm">
-                <div class="search">
-                    <input type="text" placeholder="Search..." formControlName="query" (keydown.enter)="search()">
-                </div>
-            </form>
-            <li class="login"><a href="#">log out</a></li> -->
-            <div class="header-button" *ngIf="isLog()" (click)="toProfile()">profile</div>
-            <div *ngIf="isLog()" class="is-log" (click)="logout()">
-				<div class="header-button">logout</div>
-            </div>
-			<div *ngIf="!isLog()" (click)="login()">
-				<div class="header-button">login</div>
-			</div>
+
+			<button mat-button [matMenuTriggerFor]="languageMenu" color="basic" class="menu-density">
+				<mat-icon>language</mat-icon> Language
+				<mat-menu #languageMenu="matMenu">
+					<button mat-menu-item *ngFor="let language of languages" (click)="selectLanguage(language)">
+						<mat-icon>language</mat-icon>
+						{{ language.english_name }}
+						<img
+							[ngSrc]="language.flag"
+							alt="{{ language.english_name }} flag"
+							width="16"
+							height="12"
+							style="margin-left: 8px; object-fit: cover; vertical-align: middle;"
+						/>
+					</button>
+				</mat-menu>
+			</button>
+
+			<button *ngIf="isLog()" mat-button [matMenuTriggerFor]="userMenu" color="basic" class="menu-density">
+				<mat-icon>account_circle</mat-icon> {{ userInfos.username }}
+				<mat-menu #userMenu="matMenu">
+					<button mat-menu-item (click)="toProfile()">
+						<mat-icon>settings</mat-icon>
+						Edit profile
+					</button>
+					<button mat-menu-item (click)="logout()">
+						<mat-icon color="warn">logout</mat-icon>
+						<span [ngStyle]="{'color': '#F44336'}">Logout</span>
+					</button>
+				</mat-menu>
+			</button>
+
+			<button *ngIf="!isLog()" mat-button (click)="login()">
+				Login
+			</button>
         </div>
     </header>
 </body>
