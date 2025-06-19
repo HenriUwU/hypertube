@@ -3,7 +3,7 @@
   flex-wrap: wrap;
   gap: 20px;
   align-items: flex-start;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 40px auto;
   padding: 20px;
   border: 10px solid #eac29f;
@@ -83,24 +83,21 @@
 /* trailer, torrent list, play btn */
 
 .watch-container {
-  /* background-color: brown; */
   display: flex;
-  /* flex-wrap: wrap; */
-  /* align-items: flex-start; */
-  max-width: 900px;
-  margin: 40px auto;
+  max-width: 1000px;
+  margin: 10px auto;
   padding: 20px;
   justify-content: space-between;
-  gap: 20px;
   flex-wrap: nowrap;
 }
 
 .left-side {
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* gap: 1rem; */
-  flex: 1 1 55%;
-  max-width: 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1 1 60%;
+  max-width: 60%;
 }
 
 .left-side iframe {
@@ -114,29 +111,23 @@
 .right-side {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  flex: 0 0 35%;
-  max-width: 35%;
+  flex: 0 0 38%;
+  max-width: 38%;
 }
 
 .trailer {
-  flex: 1 1 55%;
-  max-width: 55%;
+  flex: 1 1 70%;
+  max-width: 70%;
   min-width: 280px;
-  background-color: #000;
   color: white;
 }
 
 .torrent-list {
-  flex: 0.5 0.5 35%;
-  max-height: 400px;
-  /* max-width: 100%; */
-  /* width: 400px; */
+  flex: 0.6 0.6 100%;
+  max-height: 270px;
   overflow-y: auto;
   border: 2px solid black;
   padding: 0.5rem 1rem;
-  /* margin-top: 5vh; */
-  /* margin-left: 8vh; */
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0,0,0,0.4);
   background-color: #20242a;
@@ -180,31 +171,20 @@
   outline-offset: 2px;
 }
 
-@media (max-width: 480px) {
-  .torrent-list {
-    max-width: 100%;
-    margin-left: 2vh;
-    max-height: 300px;
-  }
-}
-
 .play {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  align-items: flex-start;
   justify-content: center;
-  margin-bottom: 2%;
 }
 
 .play-btn {
   background-color: #20242a !important;
   color: whitesmoke !important;
-  margin-top: 1rem;
+  margin-top: 0.2rem;
   border-color: #AFBB80;
   border-radius: 8px;
   font-weight: bold;
   padding: 0.5rem;
+  flex: 0.6 0.6 100%;
   cursor: pointer;
 }
 
