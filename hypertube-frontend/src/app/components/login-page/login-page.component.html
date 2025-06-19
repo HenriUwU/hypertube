@@ -17,8 +17,11 @@
         <button mat-icon-button matSuffix (click)="hide = !hide">
           <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
-        <mat-hint class="forgot-password">
+        <!-- <mat-hint class="forgot-password">
           <a class="forgot-password-hyperlink" routerLink="/auth/forgot-password">Forgot password?</a>
+        </mat-hint> -->
+        <mat-hint class="forgot-password">
+          <a class="forgot-password-hyperlink" (click)="openForgotPasswordPopup()" style="cursor:pointer;">Forgot password?</a>
         </mat-hint>
       </mat-form-field>
 

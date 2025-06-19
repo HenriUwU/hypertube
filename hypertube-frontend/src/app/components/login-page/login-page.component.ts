@@ -9,6 +9,9 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
+import {MatDialogModule, MatDialog} from '@angular/material/dialog';
+import { ForgotPasswordPopupComponent } from '../forgot-password-popup/forgot-password-popup.component';
+
 
 @Component({
   selector: 'app-login-page',
@@ -20,7 +23,8 @@ import {MatButtonModule} from "@angular/material/button";
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDialogModule
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css',
@@ -46,7 +50,9 @@ export class LoginPageComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
               private router: Router,
-              private globalMessageService: GlobalMessageService) { }
+              private globalMessageService: GlobalMessageService,
+              private dialog: MatDialog
+) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -69,5 +75,11 @@ export class LoginPageComponent implements OnInit {
     } else {
       this.globalMessageService.showMessage('Please fill out all required fields.', false);
     }
+  }
+
+  openForgotPasswordPopup(): void {
+    this.dialog.open(ForgotPasswordPopupComponent, {
+      width: '400px'
+    });
   }
 }
