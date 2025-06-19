@@ -5,6 +5,8 @@ import { NgFor, NgIf } from '@angular/common';
 import { TorrentService } from '../../services/torrent.service';
 import { Torrent } from '../../models/torrent.models';
 import { ActivatedRoute } from '@angular/router';
+// import { map, Observable } from 'rxjs';
+// import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-movie-summary',
@@ -19,8 +21,13 @@ export class MovieSummaryComponent implements OnInit {
   movie! : Movie;
   torrents! : Torrent[];
   magnet!: string;
+  trailerUrl: string | null = null;
 
-  constructor(private movieService: MovieService, private torrentService: TorrentService, private route: ActivatedRoute) {}
+  constructor(
+    private movieService: MovieService, 
+    private torrentService: TorrentService, 
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -28,8 +35,19 @@ export class MovieSummaryComponent implements OnInit {
           if (id) {
             this.movieId = +id;
             this.loadMovie();
-          }
+            this.movieService.getMovieTrailer(this.movieId).subscribe({
+                next: (url: string) => {
+                  this.trailerUrl = url;
+                },
+                error: (e) => {
+                  console.error('Error fetching trailer:', e);
+                },
+                complete: () => {
+                }
+        });
+      }
     });
+
   }
 
   loadMovie(){
@@ -87,5 +105,4 @@ export class MovieSummaryComponent implements OnInit {
   selectTorrent(magnet: string): void {
     this.magnet = magnet;
   }
-
 }

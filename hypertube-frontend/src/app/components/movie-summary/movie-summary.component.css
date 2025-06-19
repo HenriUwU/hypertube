@@ -80,6 +80,35 @@
   margin-top: 3%;
 }
 
+.watch-trailer {
+  font-family: "Open Sans", serif;
+  text-align: justify;
+  color: whitesmoke;
+  font-size: 0.8rem;
+  margin-top: 3%;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.watch-trailer a {
+  color: whitesmoke;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.watch-trailer a:visited {
+  color: #AFBB80;
+  border-bottom-color: transparent;
+}
+
+.watch-trailer a:hover,
+.watch-trailer a:focus {
+  color: whitesmoke;
+  border-bottom-color: whitesmoke;
+  outline: none;
+}
+
 /* trailer, torrent list, play btn */
 
 .watch-container {
@@ -205,6 +234,19 @@
     max-height: 300px;
   }
 }
+
+/* .trailer {
+  margin: 20px auto;
+  max-width: 560px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.no-trailer {
+  text-align: center;
+  font-style: italic;
+  color: #777;
+  margin-top: 20px;
+} */
 
 .play {
   display: flex;

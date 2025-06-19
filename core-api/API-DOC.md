@@ -277,7 +277,7 @@ http://localhost:8080/
 ]
 ```
 
-#### `GET /movies/{tmdb_id}/trailer`
+#### `GET /movies/{movie_id}/trailer`
 - **Description :** Renvoie un lien du trailer dans la langue de l'utilisateur ou Anglais si pas de resultat
 - **Auth requise :** ✅ Oui
 - **Réponse :**
