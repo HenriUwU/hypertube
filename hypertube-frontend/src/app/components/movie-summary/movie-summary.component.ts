@@ -37,6 +37,7 @@ export class MovieSummaryComponent implements OnInit {
       {
         next: (data: Movie) => {
           this.movie = data;
+          this.movie.vote_average = Math.round(this.movie.vote_average * 10) / 10;
 
           this.torrentService.searchTorrent(this.movie.title).subscribe(
             {next: (data: Torrent[]) => {
