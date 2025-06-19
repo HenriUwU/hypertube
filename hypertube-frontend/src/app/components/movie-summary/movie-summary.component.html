@@ -22,37 +22,33 @@
       <p><u>Cast:</u><em> {{ castSummary }}</em></p>
       <p><u>Crew:</u><em> {{ crewSummary }}</em></p>
     </div>
-
-<!--    <div class="watch-trailer">-->
-<!--      <a *ngIf="trailerUrl" [href]="trailerUrl" target="_blank" rel="noopener noreferrer">-->
-<!--        See the trailer-->
-<!--      </a>-->
-<!--    </div>-->
-
-    <iframe
-      [src]="trailerUrl"
-      title="YouTube video"
-      allowfullscreen>
-    </iframe>
-
   </div>
 </div>
 
 <div class="trailer-container">
-  <!-- <div class="watch-container">
-    <div class="torrent-list">
-          <div class="torrent-item" *ngFor="let torrent of torrents" (click)="selectTorrent(torrent.Magnet)" [class.selected]="torrent.Magnet === magnet">
-              {{torrent.Name}}
-              <br/>
-              Seeders: {{torrent.Seeders}} | Size: {{torrent.Size}}
-          </div>
+  <div class="watch-container">
+    <div class="left-side">
+      <iframe
+        [src]="trailerUrl"
+        title="YouTube video"
+        allowfullscreen>
+      </iframe>
     </div>
-  </div> -->
-
-  <div class="play">
-    <button mat-flat-button class="play-btn" type="submit">
-        ▶ Play
-    </button>
+    
+    <div class="right-side">
+      <div class="torrent-list">
+        <div class="torrent-item" *ngFor="let torrent of torrents" (click)="selectTorrent(torrent.Magnet)" [class.selected]="torrent.Magnet === magnet">
+          {{torrent.Name}}
+          <br/>
+          Seeders: {{torrent.Seeders}} | Size: {{torrent.Size}}
+        </div>
+      </div>
+      <div class="play">
+        <button mat-flat-button class="play-btn" type="submit">
+            ▶ Play
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 
