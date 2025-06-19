@@ -5,6 +5,7 @@ import { UserService } from '../../services/user.service';
 import { UserModel } from '../../models/user.model';
 import { TranslateService } from '../../services/translate.service';
 import { GlobalMessageService } from '../../services/global.message.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -48,7 +49,7 @@ export class ProfileComponent {
     { value: 'en', viewValue: 'English' },
   ];
 
-  constructor(private userService: UserService, private translateService: TranslateService,  private globalMessageService: GlobalMessageService) {
+  constructor(private userService: UserService, private translateService: TranslateService,  private globalMessageService: GlobalMessageService,  private router: Router) {
   }
 
   ngOnInit() {
@@ -139,5 +140,9 @@ export class ProfileComponent {
       return this.languages.find(lang => lang.value === language)?.viewValue || 'English';
     }
     return 'English';
+  }
+
+  modifyPassword(): void {
+	  this.router.navigate(['user', 'modify-password']).then();
   }
 }

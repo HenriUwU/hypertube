@@ -22,7 +22,7 @@
                     <label for="firstname">{{textMap.get('First Name')}}: </label>
                     <input id="firstname" type="text" formControlName="firstname" [readonly]="this.isReadOnly" />
                     <br />
-                    <button type="submit" id="submitButton">{{textMap.get('Change Password')}}</button>
+                    <button type="submit" id="submitButton" (click)="modifyPassword()">{{textMap.get('Change Password')}}</button>
 
                 </div>
 
