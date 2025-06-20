@@ -89,8 +89,11 @@ public class MovieService {
 
         MovieModel movie = response.getBody();
         if (movie != null) {
-            movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail());
-            movie.setBackdropPath("https://image.tmdb.org/t/p/original" + movie.getBackdropPath());
+            if (movie.getThumbnail() != null)
+                movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail());
+
+            if (movie.getBackdropPath() != null)
+                movie.setBackdropPath("https://image.tmdb.org/t/p/original" + movie.getBackdropPath());
 
             String releaseDate = movie.getReleaseDate();
             movie.setReleaseDate((releaseDate != null && releaseDate.length() >= 4) ? releaseDate.substring(0, 4) : "");
@@ -99,6 +102,24 @@ public class MovieService {
                 Optional.ofNullable(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, movie.getId()))
                         .map(WatchedMoviesEntity::getStoppedAt)
                         .ifPresent(movie::setStoppedAt);
+            }
+
+            if (movie.getCredits() != null) {
+                if (movie.getCredits().cast != null) {
+                    for (PersonModel person : movie.getCredits().cast) {
+                        if (person.getProfilePath() != null) {
+                            person.setProfilePath("https://image.tmdb.org/t/p/original" + person.getProfilePath());
+                        }
+                    }
+                }
+
+                if (movie.getCredits().crew != null) {
+                    for (PersonModel person : movie.getCredits().crew) {
+                        if (person.getProfilePath() != null) {
+                            person.setProfilePath("https://image.tmdb.org/t/p/original" + person.getProfilePath());
+                        }
+                    }
+                }
             }
         }
 

@@ -60,9 +60,9 @@ export interface GenreModel {
   export interface PersonModel {
     id: number;
     name: string;
-    role?: string;
-    job?: string;
     character?: string;
+    job?: string;
+    profile_path?: string;
   }
 
   export interface WatchedMoviesDTO {

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MovieService} from '../../services/movie.service';
 import {Movie, PersonModel} from '../../models/movie.model';
 import {NgFor, NgIf} from '@angular/common';
@@ -15,22 +15,28 @@ import {MatButton} from "@angular/material/button";
   styleUrl: './movie-summary.component.css',
 	imports: [NgFor, NgIf, MatButton],
 })
-export class MovieSummaryComponent implements OnInit {
+export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('castContainer') castContainerRef!: ElementRef;
+  @ViewChild('crewContainer') crewContainerRef!: ElementRef;
   @Input() movieId : number = 950387;
   movie! : Movie;
   torrents! : Torrent[];
   magnet!: string;
   trailerUrl!: SafeResourceUrl;
+  castIndex = 0;
+  crewIndex = 0;
+  visibleCount = 8;
 
   constructor(
     private movieService: MovieService,
     private torrentService: TorrentService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-	private router: Router,
+	  private router: Router,
   ) {}
 
   ngOnInit(): void {
+    window.addEventListener('resize', this.updateVisibleCount.bind(this));
     this.route.paramMap.subscribe(params => {
           const id = params.get('id');
           if (id) {
@@ -50,6 +56,14 @@ export class MovieSummaryComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.updateVisibleCount();
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.updateVisibleCount.bind(this));
+  }
+
   loadMovie(){
     this.movieService.getMovieDataFromIdAsInterface(this.movieId).subscribe(
       {
@@ -65,6 +79,7 @@ export class MovieSummaryComponent implements OnInit {
             error: (e) => {
 
             }});
+            setTimeout(() => this.updateVisibleCount(), 0);
         },
         error: (e) => {
           console.error('Error fetching movie data:', e);
@@ -82,42 +97,41 @@ export class MovieSummaryComponent implements OnInit {
 	return '---'
   }
 
-  getFirstFiveCast(): PersonModel[] | null {
-	  if (this.movie?.credits) {
-		  return this.movie.credits.cast.slice(0, 5) || [];
-	  }
-	  return null;
+  getVisibleCast(): PersonModel[] {
+    return this.movie.credits.cast.slice(this.castIndex, this.castIndex + this.visibleCount);
   }
 
-  get castSummary(): string | null {
-	  const firstFiveCast = this.getFirstFiveCast();
-	  if (firstFiveCast) {
-		  return firstFiveCast
-			  .map(p => p.name + (p.character ? ` as ${p.character}` : ''))
-			  .join(', ');
-	  }
-	  return null;
+  getVisibleCrew(): PersonModel[] {
+    return this.movie.credits.crew.slice(this.crewIndex, this.crewIndex + this.visibleCount);
   }
 
-  getFirstFiveCrew(): PersonModel[] | null {
-	  if (this.movie?.credits) {
-		  return this.movie.credits.crew.slice(0, 5) || [];
-	  }
-	  return null;
+  scrollCast(direction: number): void {
+    const newIndex = this.castIndex + direction * this.visibleCount;
+    if (newIndex >= 0 && newIndex < this.movie.credits.cast.length) {
+      this.castIndex = newIndex;
+    }
   }
 
-  get crewSummary(): string {
-	  const firstFiveCrew = this.getFirstFiveCrew()
-	  if (firstFiveCrew) {
-		  return firstFiveCrew
-			  .map(p => p.name + (p.character ? ` as ${p.character}` : ''))
-			  .join(', ');
-	  }
-	  return '';
+  scrollCrew(direction: number): void {
+    const newIndex = this.crewIndex + direction * this.visibleCount;
+    if (newIndex >= 0 && newIndex < this.movie.credits.crew.length) {
+      this.crewIndex = newIndex;
+    }
   }
 
   selectTorrent(magnet: string): void {
     this.magnet = magnet;
+  }
+
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    img.src = 'assets/images/person-notfound.svg';
+  }
+
+  getImageUrl(path: string | undefined): string {
+    if (path)
+      return path
+    return 'assets/images/person-notfound.svg';
   }
 
   getGenreString(): string | null {
@@ -137,4 +151,16 @@ export class MovieSummaryComponent implements OnInit {
 	  }).then();
   }
 
+  updateVisibleCount(): void {
+    setTimeout(() => {
+      const container = this.castContainerRef?.nativeElement as HTMLElement;
+      if (!container) return;
+
+      const containerWidth = container.offsetWidth;
+      const cardWidth = 100;
+
+      const count = Math.floor(containerWidth / cardWidth);
+      this.visibleCount = Math.max(1, count);
+    });
+  }
 }

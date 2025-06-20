@@ -11,6 +11,7 @@ public class PersonModel {
     private Integer id;
     private String name;
     private String character;
+    private String job;
 
     @JsonProperty("profile_path")
     private String profilePath;

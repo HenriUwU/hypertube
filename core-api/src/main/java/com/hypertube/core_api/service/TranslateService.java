@@ -141,6 +141,7 @@ public class TranslateService {
                     languageList.add(languageModel);
                 }
             }
+            languageList.sort(Comparator.comparing(LanguageModel::getEnglishName, Comparator.nullsLast(String::compareToIgnoreCase)));
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
