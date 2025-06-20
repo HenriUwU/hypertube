@@ -24,8 +24,8 @@
 				</mat-menu>
 			</button>
 
-			<button *ngIf="isLog()" mat-button [matMenuTriggerFor]="userMenu" color="basic" class="menu-density">
-				<mat-icon>account_circle</mat-icon> {{ userInfos?.username }}
+			<button *ngIf="isLog() && userInfos" mat-button [matMenuTriggerFor]="userMenu" color="basic" class="menu-density">
+				<mat-icon>account_circle</mat-icon> {{ userInfos.username }}
 				<mat-menu #userMenu="matMenu">
 					<button mat-menu-item (click)="toProfile()">
 						<mat-icon>settings</mat-icon>
