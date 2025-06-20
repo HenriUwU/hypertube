@@ -56,6 +56,15 @@
   padding: 10px;
 }
 
+.movie-info .genres {
+  font-family: "Open Sans", serif;
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  color: grey;
+  margin-bottom: 1px;
+}
+
 .movie-info .time {
   font-family: "Open Sans", serif;
   font-size: 0.8rem;
