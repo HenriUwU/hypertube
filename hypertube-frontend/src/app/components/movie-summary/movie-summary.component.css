@@ -266,3 +266,8 @@
     margin-bottom: 1rem;
   }
 }
+
+.comments .mat-divider {
+    border-top-color: #AFBB80;
+    padding: 1rem;
+}
