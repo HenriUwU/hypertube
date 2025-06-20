@@ -140,6 +140,7 @@
   margin: 10px auto;
   justify-content: space-between;
   flex-wrap: nowrap;
+  margin-bottom: 100px;
 }
 
 .left-side {
@@ -267,7 +268,19 @@
   }
 }
 
-.comments .mat-divider {
+.comments-container .mat-divider {
     border-top-color: #AFBB80;
+    position: relative;
     padding: 1rem;
+    left: 2%;
+    width: 96%;
 }
+
+/* .comments-container .mat-divider::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;   
+  right: 10%;    
+  border-top: 2px solid #AFBB80;
+} */
