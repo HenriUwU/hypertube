@@ -10,6 +10,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDialogModule, MatDialog} from '@angular/material/dialog';
+import {TranslateService} from '../../services/translate.service';
 import { ForgotPasswordPopupComponent } from '../forgot-password-popup/forgot-password-popup.component';
 
 
@@ -47,14 +48,27 @@ export class LoginPageComponent implements OnInit {
   loginForm!: FormGroup;
   hide: boolean = true;
 
+  textMap = new Map<string, string>([
+    ["Login", "Login"],
+    ["Username", "Username"],
+    ["Password", "Password"],
+    ["Forgot Password?", "Forgot Password?"],
+    ["Login Button", "Login"],
+    ["Invalid username or password. Please try again.", "Invalid username or password. Please try again."],
+    ["Please fill out all required fields.", "Please fill out all required fields."]
+  ]);
+
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
               private router: Router,
               private globalMessageService: GlobalMessageService,
-              private dialog: MatDialog
+              private dialog: MatDialog,
+              private translationService: TranslateService
 ) { }
 
   ngOnInit(): void {
+    this.translationService.autoTranslateTexts(this.textMap);
+	  this.translationService.initializeLanguageListener(this.textMap);
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
