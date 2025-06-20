@@ -9,64 +9,6 @@
 	opacity: 70%;
 }
 
-/*.torrent-list {*/
-/*	flex: 1;*/
-/*	max-height: 400px;*/
-/*	max-width: 700px;*/
-/*	overflow-y: auto;*/
-/*	border: 2px solid #eac29f;*/
-/*	padding-left: 1rem;*/
-/*	margin-top: 5vh;*/
-/*	margin-left: 8vh;*/
-/*	background-color: #20242a;*/
-/*	border-radius: 12px;*/
-/*	box-shadow: 0 0 15px rgba(0,0,0,0.4);*/
-/*}*/
-
-/*.torrent-item {*/
-/*	padding: 0.75rem 1rem;*/
-/*	cursor: pointer;*/
-/*	border: 1px solid #eac29f;*/
-/*	background: #eac29f;*/
-/*	color: #20242a;*/
-/*	border-radius: 8px;*/
-/*	font-family: monospace;*/
-/*	line-height: 1.5;*/
-/*	box-shadow: 2px 2px 6px rgba(0,0,0,0.3);*/
-/*	transition: background-color 0.2s ease, transform 0.1s ease;*/
-/*}*/
-
-/*.torrent-item:hover {*/
-/*	background-color: #fff3e0;*/
-/*	transform: scale(1.01);*/
-/*}*/
-
-/*.torrent-item.selected {*/
-/*	background-color: #d0ebff;*/
-/*	border-color: #3399ff;*/
-/*	color: #102a43;*/
-/*}*/
-
-/*.torrent-item:active {*/
-/*	transform: scale(0.98);*/
-/*	opacity: 0.9;*/
-/*}*/
-
-/*.torrent-list::-webkit-scrollbar {*/
-/*	width: 8px;*/
-/*}*/
-
-/*.torrent-list::-webkit-scrollbar-track {*/
-/*	background: #2c2c2c;*/
-/*	border-radius: 4px;*/
-/*}*/
-
-/*.torrent-list::-webkit-scrollbar-thumb {*/
-/*	background-color: #66bb6a;*/
-/*	border-radius: 4px;*/
-/*	border: 2px solid #2c2c2c;*/
-/*}*/
-
 .video-player {
 	width: 100vw;
 	height: calc(100vh - 140px);

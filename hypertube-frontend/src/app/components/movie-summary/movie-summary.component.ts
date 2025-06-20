@@ -1,10 +1,10 @@
-import { Component, Input, OnInit  } from '@angular/core';
-import { MovieService } from '../../services/movie.service';
-import { Movie, PersonModel } from '../../models/movie.model';
-import { NgFor, NgIf } from '@angular/common';
-import { TorrentService } from '../../services/torrent.service';
-import { Torrent } from '../../models/torrent.models';
-import { ActivatedRoute } from '@angular/router';
+import {Component, Input, OnInit} from '@angular/core';
+import {MovieService} from '../../services/movie.service';
+import {Movie, PersonModel} from '../../models/movie.model';
+import {NgFor} from '@angular/common';
+import {TorrentService} from '../../services/torrent.service';
+import {Torrent} from '../../models/torrent.models';
+import {ActivatedRoute, Router} from '@angular/router';
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 
 @Component({
@@ -12,7 +12,7 @@ import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
   standalone: true,
   templateUrl: './movie-summary.component.html',
   styleUrl: './movie-summary.component.css',
-  imports: [NgFor, NgIf],
+  imports: [NgFor],
 })
 export class MovieSummaryComponent implements OnInit {
   @Input() movieId : number = 950387;
@@ -25,7 +25,8 @@ export class MovieSummaryComponent implements OnInit {
     private movieService: MovieService,
     private torrentService: TorrentService,
     private route: ActivatedRoute,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+	private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -108,4 +109,15 @@ export class MovieSummaryComponent implements OnInit {
   getGenreString(): string {
     return this.movie.genres.map(genre => genre.name).join(' - ');
   }
+
+  stream(): void {
+	  this.router.navigate(['/stream'], {
+		  queryParams: {
+			  title: this.movie.title,
+			  backdrop: this.movie.backdrop_path,
+			  magnet: this.magnet
+		  }
+	  }).then();
+  }
+
 }

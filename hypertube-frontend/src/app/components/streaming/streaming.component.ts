@@ -6,6 +6,7 @@ import {NgIf, NgOptimizedImage} from '@angular/common';
 import {TranslateService} from '../../services/translate.service';
 import {MovieService} from "../../services/movie.service";
 import {Subtitles} from "../../models/movie.model";
+import {ActivatedRoute} from "@angular/router";
 
 
 @Component({
@@ -21,11 +22,10 @@ export class StreamingComponent implements OnInit, AfterViewInit {
   videoUrl: string = '';
   loading: boolean = false;
   blankVideo: boolean = true;
-  @Input() videoTitle: string = 'minecraft';
-  @Input() backdrop_path: string = 'https://image.tmdb.org/t/p/original/rU9kRB3rBU5O7AMReZCiuIy7zmE.jpg';
-  @Input() magnet: string = 'magnet:?xt=urn:btih:837F5D78B6CA706A612892F9960A826B715461E7&dn=A+Minecraft+Movie+%282025%29+%5B1080p%5D+%5BWEBRip%5D+%5B5.1%5D+%5BYTS.MX%5D&tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2F47.ip-51-68-199.eu%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2780%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2730%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2920%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce';
+  @Input() videoTitle!: string;
+  @Input() backdrop_path!: string;
+  @Input() magnet!: string;
 
-  torrentOptions:any[] = [];
   private hash: string = '';
 
   textMap = new Map<string, string>([
@@ -33,7 +33,10 @@ export class StreamingComponent implements OnInit, AfterViewInit {
     ["Your browser does not support the video tag.", "Your browser does not support the video tag."],
   ]);
 
-  constructor(private torrentService: TorrentService, private translationService: TranslateService, private movieService: MovieService) {
+  constructor(private torrentService: TorrentService,
+			  private translationService: TranslateService,
+			  private movieService: MovieService,
+			  private route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -41,10 +44,11 @@ export class StreamingComponent implements OnInit, AfterViewInit {
 	  this.translationService.initializeLanguageListener(this.textMap);
 	  this.loading = true;
 
-	  // this.torrentService.searchTorrent(this.videoTitle).subscribe((response: Torrent[]) => {
-	  //   this.torrentOptions = response;
-	  // 	console.log(this.torrentOptions);
-	  // });
+	  this.route.queryParams.subscribe(params => {
+		  this.videoTitle = params['title'];
+		  this.backdrop_path = params['backdrop'];
+		  this.magnet = params['magnet'];
+	  });
   }
 
   ngAfterViewInit() {

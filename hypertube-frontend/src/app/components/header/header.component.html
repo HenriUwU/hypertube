@@ -11,7 +11,7 @@
 				<mat-icon>language</mat-icon>
 				{{ textMap.get('Language') }}
 				<mat-menu #languageMenu="matMenu">
-					<button mat-menu-item *ngFor="let language of languages" (click)="selectLanguage(language)">
+					<button mat-menu-item *ngFor="let language of languages" (click)="updateCurrentLanguage(language)">
 						{{ language.english_name }}
 						<img
 							[ngSrc]="language.flag"

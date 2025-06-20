@@ -21,4 +21,5 @@ export class UserService {
     // return this.httpClient.put<UserModel>(`${this.apiUrlUser}`, user);
     return this.httpClient.put<any>(`${this.apiUrlUser}`, user);
   }
+
 }

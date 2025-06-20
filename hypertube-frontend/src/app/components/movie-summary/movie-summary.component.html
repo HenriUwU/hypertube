@@ -38,7 +38,7 @@
         allowfullscreen>
       </iframe>
     </div>
-    
+
     <div class="right-side">
       <div class="torrent-list">
         <div class="torrent-item" *ngFor="let torrent of torrents" (click)="selectTorrent(torrent.Magnet)" [class.selected]="torrent.Magnet === magnet">
@@ -48,7 +48,7 @@
         </div>
       </div>
       <div class="play">
-        <button mat-flat-button class="play-btn" type="submit" [disabled]="!magnet">
+        <button mat-flat-button class="play-btn" type="submit" (click)="stream()" [disabled]="!magnet">
             ▶ Play
         </button>
       </div>
