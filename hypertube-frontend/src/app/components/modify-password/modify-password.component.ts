@@ -110,7 +110,6 @@ export class ModifyPasswordComponent {
   }
 
   onSubmit() {
-    console.log("Form submitted with values:", this.passwordForm.value);
     if (!this.forgotPassword) {
       const currentPassword = this.passwordForm.get('currentPassword')?.value;
       if (!currentPassword ||  this.verifyCurrentPassword(currentPassword) === false){
