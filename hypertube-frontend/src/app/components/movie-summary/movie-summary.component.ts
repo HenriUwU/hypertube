@@ -104,4 +104,8 @@ export class MovieSummaryComponent implements OnInit {
   selectTorrent(magnet: string): void {
     this.magnet = magnet;
   }
+
+  getGenreString(): string {
+    return this.movie.genres.map(genre => genre.name).join(' - ');
+  }
 }

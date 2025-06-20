@@ -9,6 +9,10 @@
       <p class="movie-note">{{ movie.vote_average }} / 10 &#9733;</p>
     </div>
 
+    <div class="genres">
+      <p><em> {{ getGenreString() }}</em></p>
+    </div>
+
     <div class="time">
       <p class="runtime"><strong>{{ getMovieRuntime() }}</strong></p>
       <p class="release-date"><strong>{{ movie.release_date }}</strong></p>
