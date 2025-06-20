@@ -1,18 +1,19 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MovieService} from '../../services/movie.service';
 import {Movie, PersonModel} from '../../models/movie.model';
-import {NgFor} from '@angular/common';
+import {NgFor, NgIf} from '@angular/common';
 import {TorrentService} from '../../services/torrent.service';
 import {Torrent} from '../../models/torrent.models';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-movie-summary',
   standalone: true,
   templateUrl: './movie-summary.component.html',
   styleUrl: './movie-summary.component.css',
-  imports: [NgFor],
+	imports: [NgFor, NgIf, MatButton],
 })
 export class MovieSummaryComponent implements OnInit {
   @Input() movieId : number = 950387;
@@ -26,7 +27,7 @@ export class MovieSummaryComponent implements OnInit {
     private torrentService: TorrentService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-	private router: Router
+	private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -47,7 +48,6 @@ export class MovieSummaryComponent implements OnInit {
         });
       }
     });
-
   }
 
   loadMovie(){
@@ -74,40 +74,57 @@ export class MovieSummaryComponent implements OnInit {
   }
 
   getMovieRuntime(): string {
-    if (this.movie.runtime == 0){
-      return '---'
-    }
-    const hours = Math.floor(this.movie.runtime / 60);
-    const minutes = this.movie.runtime % 60;
-    return `${hours}h ${minutes}m`;
+	if (this.movie?.runtime && this.movie?.runtime != 0) {
+		const hours = Math.floor(this.movie?.runtime / 60);
+		const minutes = this.movie.runtime % 60;
+		return `${hours}h ${minutes}m`;
+	}
+	return '---'
   }
 
-  getFirstFiveCast(): PersonModel[] {
-    return this.movie.credits.cast.slice(0, 5) || [];
+  getFirstFiveCast(): PersonModel[] | null {
+	  if (this.movie?.credits) {
+		  return this.movie.credits.cast.slice(0, 5) || [];
+	  }
+	  return null;
   }
 
-  get castSummary(): string {
-    return this.getFirstFiveCast()
-      .map(p => p.name + (p.character ? ` as ${p.character}` : ''))
-      .join(', ');
+  get castSummary(): string | null {
+	  const firstFiveCast = this.getFirstFiveCast();
+	  if (firstFiveCast) {
+		  return firstFiveCast
+			  .map(p => p.name + (p.character ? ` as ${p.character}` : ''))
+			  .join(', ');
+	  }
+	  return null;
   }
 
-  getFirstFiveCrew(): PersonModel[] {
-    return this.movie.credits.crew.slice(0, 5) || [];
+  getFirstFiveCrew(): PersonModel[] | null {
+	  if (this.movie?.credits) {
+		  return this.movie.credits.crew.slice(0, 5) || [];
+	  }
+	  return null;
   }
 
   get crewSummary(): string {
-    return this.getFirstFiveCrew()
-      .map(p => p.name + (p.character ? ` as ${p.character}` : ''))
-      .join(', ');
+	  const firstFiveCrew = this.getFirstFiveCrew()
+	  if (firstFiveCrew) {
+		  return firstFiveCrew
+			  .map(p => p.name + (p.character ? ` as ${p.character}` : ''))
+			  .join(', ');
+	  }
+	  return '';
   }
 
   selectTorrent(magnet: string): void {
     this.magnet = magnet;
   }
 
-  getGenreString(): string {
-    return this.movie.genres.map(genre => genre.name).join(' - ');
+  getGenreString(): string | null {
+	  if (this.movie?.genres) {
+		  return this.movie.genres.map(genre => genre.name).join(' - ');
+	  }
+	  return null
   }
 
   stream(): void {
