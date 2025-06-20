@@ -39,16 +39,16 @@ export class ProfileComponent {
     ["Please select a valid image file", "Please select a valid image file"],
     ["Error", "Error"],
   ]);
-  
+
   @Input () userId: string = sessionStorage.getItem('id') ? sessionStorage.getItem('id')! : '0';
   isReadOnly: boolean = true;
-  
+
   private defaultProfilePicture = '../../../../assets/images/default_pp.svg' ;
-  
+
   languages = [
     { value: 'en', viewValue: 'English' },
-  ];  
-  
+  ];
+
   // profilePictureUrl: string = this.defaultProfilePicture;
   profilePictureUrl: string = this.defaultProfilePicture;
 
@@ -75,11 +75,7 @@ export class ProfileComponent {
         language: user.language
       });
       this.profilePictureUrl = user.profilePicture ? user.profilePicture : this.defaultProfilePicture;
-      if (sessionStorage.getItem('id') !== this.userId) {
-        this.isReadOnly = true;
-      } else {
-        this.isReadOnly = false;
-      }
+      this.isReadOnly = sessionStorage.getItem('id') !== this.userId;
     });
   }
 
@@ -123,7 +119,7 @@ export class ProfileComponent {
         profilePicture: response.profilePicture ? response.profilePicture : this.defaultProfilePicture,
         language: response.language
       });
-      if (response.token && response.token !== null) {
+      if (response.token) {
         sessionStorage.setItem(`token`, response.token);
       }
       this.translateService.updateLanguage(response.language? response.language : 'en');

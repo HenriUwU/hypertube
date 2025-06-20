@@ -1,12 +1,12 @@
 <div class="summary-container">
   <div class="poster">
-     <img src="{{movie.poster_path}}" alt="poster">
+     <img src="{{movie?.poster_path}}" alt="poster">
   </div>
 
   <div class="movie-info">
     <div class="title">
-      <h1 class="movie-title">{{ movie.title }}</h1>
-      <p class="movie-note">{{ movie.vote_average }} / 10 &#9733;</p>
+      <h1 class="movie-title">{{ movie?.title }}</h1>
+      <p class="movie-note">{{ movie?.vote_average }} / 10 &#9733;</p>
     </div>
 
     <div class="genres">
@@ -15,11 +15,11 @@
 
     <div class="time">
       <p class="runtime"><strong>{{ getMovieRuntime() }}</strong></p>
-      <p class="release-date"><strong>{{ movie.release_date }}</strong></p>
+      <p class="release-date"><strong>{{ movie?.release_date }}</strong></p>
     </div>
 
     <div class="synopsis">
-      <p class="synopsis">{{ movie.overview }}</p>
+      <p class="synopsis">{{ movie?.overview }}</p>
     </div>
 
     <div class="people">
@@ -33,12 +33,13 @@
   <div class="watch-container">
     <div class="left-side">
       <iframe
-        [src]="trailerUrl"
-        title="YouTube video"
-        allowfullscreen>
+		  *ngIf="trailerUrl"
+		  [src]="trailerUrl"
+		  title="YouTube video"
+		  allowfullscreen>
       </iframe>
     </div>
-    
+
     <div class="right-side">
       <div class="torrent-list">
         <div class="torrent-item" *ngFor="let torrent of torrents" (click)="selectTorrent(torrent.Magnet)" [class.selected]="torrent.Magnet === magnet">
@@ -48,7 +49,7 @@
         </div>
       </div>
       <div class="play">
-        <button mat-flat-button class="play-btn" type="submit" [disabled]="!magnet">
+        <button mat-flat-button class="play-btn" type="submit" (click)="stream()" [disabled]="!magnet">
             ▶ Play
         </button>
       </div>

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
-import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -31,7 +31,6 @@ interface Language {
 })
 
 export class HeaderComponent implements OnInit {
-  languageControl = new FormControl<Language | null>(null, Validators.required);
   languages: TranslateModel[] = [];
   selectedLanguage!: TranslateModel;
   userInfos!: UserModel;
@@ -50,50 +49,51 @@ export class HeaderComponent implements OnInit {
               private translateService: TranslateService
   ) {}
 
-  ngOnInit(): void {
-    this.translateService.availableLanguages().subscribe((data: TranslateModel[]) =>
-      this.languages = data
-    );
+	ngOnInit(): void {
+	  this.translateService.availableLanguages().subscribe((data: TranslateModel[]) =>
+		  this.languages = data
+	  );
 
-    this.translateService.autoTranslateTexts(this.textMap);
-    this.translateService.initializeLanguageListener(this.textMap);
+	  this.translateService.autoTranslateTexts(this.textMap);
+	  this.translateService.initializeLanguageListener(this.textMap);
 
-    interval(100)
-      .pipe(
-        map(() => this.authService.getCurrentUserId()),
-        filter((id): id is string => id != null),
-        take(1),
-        switchMap(id => this.userService.getUser(id))
-      )
-      .subscribe((data: UserModel) => {
-        this.userInfos = data;
-      });
+	  interval(100)
+		  .pipe(map(() => this.authService.getCurrentUserId()),
+			  filter((id): id is string => id != null),
+			  take(1),
+			  switchMap(id => this.userService.getUser(id)))
+		  .subscribe((data: UserModel) => {
+			  this.userInfos = data;
+		  });
+	}
+
+	toHomepage():void{
+	  this.router.navigate(['/']).then();
+	}
+
+	isLog(): boolean {
+	  return this.authService.isLoggedIn();
+	}
+
+	logout(): void {
+	  this.authService.logout();
+	  this.router.navigate(['/']).then();
+	}
+
+	login(): void {
+	  this.router.navigate(['auth', 'login']).then();
+	}
+
+	toProfile():void{
+	  this.router.navigate(['user', 'profile']).then();
+	}
+
+  updateCurrentLanguage(language: TranslateModel) {
+    this.userInfos.language = language.iso_639_1;
+    this.userService.updateUser(this.userInfos).subscribe((data) => {
+      this.userInfos.language = data.language
+      this.translateService.updateLanguage(this.userInfos.language)
+    });
   }
-
-  toHomepage():void{
-    this.router.navigate(['/']).then();
-  }
-
-  isLog(): boolean {
-    return this.authService.isLoggedIn();
-  }
-
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/']).then();
-  }
-
-  login(): void {
-    this.router.navigate(['auth', 'login']).then();
-  }
-
-  toProfile():void{
-    this.router.navigate(['user', 'profile']).then();
-  }
-
-  selectLanguage(language: TranslateModel): void {
-    this.selectedLanguage = language;
-  }
-
 }
 
