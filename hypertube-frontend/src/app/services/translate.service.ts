@@ -55,6 +55,10 @@ export class TranslateService {
     window.dispatchEvent(event);
   }
 
+  getLanguage(): string {
+    return sessionStorage.getItem('language') || 'en';
+  }
+
   initializeLanguageListener(textMap: Map<string, string>): void {
     window.addEventListener('storage', (event) => {
       if (event.storageArea === sessionStorage && event.key === 'language') {
