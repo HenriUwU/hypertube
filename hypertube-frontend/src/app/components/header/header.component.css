@@ -12,11 +12,9 @@
   border-bottom: 3px solid #AFBB80;
   z-index: 1000;
   color: white;
-
 }
 
 .header-left {
-  /* background-color: purple; */
   display: flex;
   gap: 1.5rem;
 }
@@ -26,6 +24,7 @@
   align-items: center;
   font-weight: bold;
   margin: 0;
+  white-space: nowrap;
 }
 
 .language img {
@@ -46,9 +45,8 @@
 }
 
 .header-right {
-  /* background-color: pink; */
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 1.5rem;
 }
 
@@ -73,13 +71,13 @@ button[mat-button]:hover {
 
 .not-log {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 1.5rem;
 }
 
 .is-log {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 1.5rem;
 }
 
@@ -97,15 +95,96 @@ button[mat-button]:hover {
 }
 
 .header-button:hover {
-	text-shadow: 1px 1px 2px #f0f0f0;
-	cursor: pointer;
+  text-shadow: 1px 1px 2px #f0f0f0;
+  cursor: pointer;
 }
 
 .flag-icon {
-	height: 12px;
-	width: auto;
-	object-fit: contain;
-	vertical-align: middle;
-	margin-left: 8px;
-	aspect-ratio: auto;
+  height: 12px;
+  width: auto;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-left: 8px;
+  aspect-ratio: auto;
+}
+
+/* Tablet styles */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 1rem;
+    height: 60px;
+  }
+  
+  .header-left h1 {
+    font-size: 1.3rem;
+  }
+  
+  .header-right {
+    gap: 1rem;
+  }
+  
+  button[mat-button] {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 480px) {
+  .header {
+    padding: 0 0.5rem;
+    height: 50px;
+  }
+  
+  .header-left {
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .header-left h1 {
+    font-size: 1.1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .header-right {
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+  
+  button[mat-button] {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    min-width: auto;
+  }
+  
+  /* Hide text in buttons, keep only icons */
+  button[mat-button] span:not(.mat-icon) {
+    display: none;
+  }
+  
+  /* Show only icons on mobile */
+  button[mat-button] mat-icon {
+    margin: 0;
+  }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 320px) {
+  .header {
+    padding: 0 0.25rem;
+  }
+  
+  .header-left h1 {
+    font-size: 1rem;
+  }
+  
+  .header-right {
+    gap: 0.25rem;
+  }
+  
+  button[mat-button] {
+    padding: 3px 6px;
+  }
 }
