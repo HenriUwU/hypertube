@@ -22,32 +22,21 @@
                     <label for="firstname">{{textMap.get('First Name')}}: </label>
                     <input id="firstname" type="text" formControlName="firstname" [readonly]="this.isReadOnly" />
                     <br />
-                    <button type="submit" id="submitButton" (click)="modifyPassword()">{{textMap.get('Change Password')}}</button>
-
+                    
                 </div>
-
+                
                 <div class="right-column">
                     <div class="pp-container">
                         <div class="profile-picture-container">
-
+                            
                             <label for="file-input">
                                 <img [src]="profilePictureUrl" alt="Photo de profil" class="profile-pic" id="profile-picture">
                             </label>
                             <input type="file" id="file-input" accept="image/*" (change)="onFileSelected($event)" [disabled]="isReadOnly">
                         </div>
                     </div>
-                    <div class="language-container">
-                        <label for="language">{{textMap.get('Language')}}:</label>
-                        <br />
-                        <ng-container *ngIf="isReadOnly; else editableSelect">
-                            <span id="language">{{ getCurrentLanguage() }}</span>
-                        </ng-container>
-                        <ng-template #editableSelect>
-                            <select id="language" formControlName="language">
-                                <option *ngFor="let lang of languages" [value]="lang.value">{{ lang.viewValue }}
-                                </option>
-                            </select>
-                        </ng-template>
+                    <div class="modify-password-container" *ngIf="!isReadOnly">
+                        <button type="submit" id="submitButton" (click)="modifyPassword()">{{textMap.get('Change Password')}}</button>
                     </div>
                 </div>
 
