@@ -22,7 +22,6 @@ export class ProfileComponent {
     lastname: new FormControl(''),
     firstname: new FormControl(''),
     profilePicture: new FormControl(''),
-    language: new FormControl('English')
   });
 
   textMap = new Map<string, string>([
@@ -44,11 +43,6 @@ export class ProfileComponent {
   isReadOnly: boolean = true;
 
   private defaultProfilePicture = '../../../../assets/images/default_pp.svg' ;
-
-  languages = [
-    { value: 'en', viewValue: 'English' },
-  ];
-
   // profilePictureUrl: string = this.defaultProfilePicture;
   profilePictureUrl: string = this.defaultProfilePicture;
 
@@ -59,20 +53,12 @@ export class ProfileComponent {
     this.translateService.autoTranslateTexts(this.textMap);
     this.translateService.initializeLanguageListener(this.textMap);
 
-    this.translateService.availableLanguages().subscribe((response) => {
-      response.forEach((lang: any) => {
-        this.languages.push({ value: lang.iso_639_1, viewValue: lang.english_name });
-      });
-    }
-    );
     this.userService.getUser(this.userId).subscribe((user) => {
       this.profileForm.patchValue({
         email: user.email,
         username: user.username,
         lastname: user.lastName,
         firstname: user.firstName,
-        profilePicture: user.profilePicture ? user.profilePicture : this.defaultProfilePicture,
-        language: user.language
       });
       this.profilePictureUrl = user.profilePicture ? user.profilePicture : this.defaultProfilePicture;
       this.isReadOnly = sessionStorage.getItem('id') !== this.userId;
@@ -100,13 +86,15 @@ export class ProfileComponent {
     if (this.profileForm.invalid) {
       return;
     }
+    const language = this.translateService.getLanguage();
+
     const updatedUser: UserModel = {
       id: parseInt(this.userId),
       username: this.profileForm.value.username!,
       email: this.profileForm.value.email!,
       firstName: this.profileForm.value.firstname!,
       lastName: this.profileForm.value.lastname!,
-      language: this.profileForm.value.language!,
+      language: language,
       profilePicture: this.profileForm.value.profilePicture!
     };
 
@@ -117,7 +105,6 @@ export class ProfileComponent {
         lastname: response.lastName,
         firstname: response.firstName,
         profilePicture: response.profilePicture ? response.profilePicture : this.defaultProfilePicture,
-        language: response.language
       });
       if (response.token) {
         sessionStorage.setItem(`token`, response.token);
@@ -129,15 +116,6 @@ export class ProfileComponent {
       this.globalMessageService.showMessage(`${this.textMap.get('Error') || 'Error'}: ${error}`, false);
     }
     );
-  }
-
-  getCurrentLanguage(): string {
-    const language = this.profileForm.get('language')?.value;
-    if (language) {
-
-      return this.languages.find(lang => lang.value === language)?.viewValue || 'English';
-    }
-    return 'English';
   }
 
   modifyPassword(): void {

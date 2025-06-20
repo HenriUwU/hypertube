@@ -22,11 +22,51 @@
 	  <p class="synopsis">{{ movie.overview }}</p>
 	</div>
 
-    <div class="people">
-      <p><u>Cast:</u><em> {{ castSummary }}</em></p>
-      <p><u>Crew:</u><em> {{ crewSummary }}</em></p>
-    </div>
   </div>
+
+  <div class="credits">
+    <div class="label">Casting</div>
+    <div class="people-line">
+      <div class="scroll-wrapper">
+        <button class="scroll-btn left" (click)="scrollCast(-1)" [disabled]="castIndex === 0">&#10094;</button>
+
+        <div class="person-list" #castContainer>
+          <div *ngFor="let person of getVisibleCast()" class="person-card">
+            <img [src]="getImageUrl(person.profile_path)" (error)="onImageError($event)" alt="{{ person.name }}">
+            <div class="info">
+              <strong>{{ person.name }}</strong>
+              <div class="role" *ngIf="person.character">{{ person.character }}</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="scroll-btn right"
+                (click)="scrollCast(1)"
+                [disabled]="castIndex + visibleCount >= movie.credits.cast.length">&#10095;</button>
+      </div>
+    </div>
+
+    <div class="label">Crew</div>
+    <div class="people-line">
+      <div class="scroll-wrapper">
+        <button class="scroll-btn left" (click)="scrollCrew(-1)" [disabled]="crewIndex === 0">&#10094;</button>
+
+        <div class="person-list" #crewContainer>
+          <div *ngFor="let person of getVisibleCrew()" class="person-card">
+            <img [src]="getImageUrl(person.profile_path)" (error)="onImageError($event)" alt="{{ person.name }}">
+            <div class="info">
+              <strong>{{ person.name }}</strong>
+              <div class="role" *ngIf="person.job">{{ person.job }}</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="scroll-btn right"
+                (click)="scrollCrew(1)"
+                [disabled]="crewIndex + visibleCount >= movie.credits.crew.length">&#10095;</button>
+      </div>
+    </div>
+    </div>
 </div>
 
 <div class="trailer-container">
@@ -41,7 +81,13 @@
     </div>
 
     <div class="right-side">
-      <div class="torrent-list">
+      <div class="spinner" *ngIf="!torrents && loadingTorrents">
+        <mat-spinner class="loading-spinner"></mat-spinner>
+      </div>
+      <div class="torrent-list" *ngIf="!loadingTorrents && !torrents">
+
+      </div>
+      <div class="torrent-list" *ngIf="torrents">
         <div class="torrent-item" *ngFor="let torrent of torrents" (click)="selectTorrent(torrent.Magnet)" [class.selected]="torrent.Magnet === magnet">
           {{torrent.Name}}
           <br/>
