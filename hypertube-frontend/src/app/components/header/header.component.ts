@@ -27,7 +27,7 @@ interface Language {
   standalone: true,
   imports: [MatDividerModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatSelectModule, FormsModule, ReactiveFormsModule, MatInputModule, CommonModule, MatMenuTrigger, MatMenu, MatMenuItem, NgOptimizedImage],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrl: './header.component.css',
 })
 
 export class HeaderComponent implements OnInit {
@@ -37,7 +37,9 @@ export class HeaderComponent implements OnInit {
 
   textMap = new Map<string, string>([
     ["Language", "Language"],
-    ["Edit Profile", "Edit Profile"]
+    ["Edit Profile", "Edit Profile"],
+	["Logout", "Logout"],
+	["Login", "Login"]
   ])
 
 

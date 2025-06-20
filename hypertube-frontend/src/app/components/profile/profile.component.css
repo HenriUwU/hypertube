@@ -149,9 +149,13 @@
     margin-top: 1em;
 }
 
-/* --- Responsive Design --- */
 
-/* Tablet View */
+.modify-password-container{
+    display: flex;
+    justify-content: center;
+    margin-top: 2em;
+}
+/* --- Responsive Design --- */
 @media (max-width: 1024px) {
     .wrapper {
         padding: 1em;
@@ -161,17 +165,43 @@
         width: 90%;
     }
 
-    .form-boxes {
-        flex-direction: column;
-        gap: 2em;
+    .form-container {
+        display: grid;
+        /* Define the layout areas for a logical flow */
+        grid-template-areas:
+            "pic"
+            "inputs"
+            "change-pwd"
+            "save";
+        gap: 2em; /* Spacing between elements */
     }
 
-    .right-column {
-        order: -1; /* Move profile picture to the top */
+    /* Make children of these elements part of the parent grid */
+    .form-boxes, .right-column {
+        display: contents;
+    }
+
+    /* Assign each part of the form to its designated area */
+    .pp-container {
+        grid-area: pic;
+    }
+
+    .left-column {
+        grid-area: inputs;
+    }
+
+    .modify-password-container {
+        grid-area: change-pwd;
+        margin-top: 0; /* Reset margin for grid layout */
+    }
+
+    .form-button {
+        grid-area: save;
+        margin-top: 0; /* Reset margin for grid layout */
     }
 }
 
-/* Mobile View */
+/* Mobile View Specifics */
 @media (max-width: 600px) {
     .wrapper {
         padding: 0;
@@ -195,10 +225,7 @@
 
     .form-container {
         padding: 0 1.5em 1.5em;
-    }
-
-    .form-boxes {
-        gap: 1.5em;
+        gap: 1.5em; /* Tighter spacing for mobile */
     }
 
     #profile-picture {

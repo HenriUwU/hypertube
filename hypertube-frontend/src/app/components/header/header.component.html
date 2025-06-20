@@ -1,46 +1,44 @@
-<body>
-    <header class="header">
-        <div class="header-left">
-            <div class="header-button">
-                <h1 (click)="toHomepage()">Hypertube</h1>
-            </div>
+<div class="header">
+    <div class="header-left">
+        <div class="header-button">
+            <h1 (click)="toHomepage()">Hypertube</h1>
         </div>
-        <div class="header-right">
+    </div>
+    <div class="header-right">
 
-			<button *ngIf="isLog()" mat-button [matMenuTriggerFor]="languageMenu" color="basic" class="menu-density">
-				<mat-icon>language</mat-icon>
-				{{ textMap.get('Language') }}
-				<mat-menu #languageMenu="matMenu">
-					<button mat-menu-item *ngFor="let language of languages" (click)="updateCurrentLanguage(language)">
-						{{ language.english_name }}
-						<img
-							[ngSrc]="language.flag"
-							alt="{{ language.english_name }} flag"
-							width="16"
-							height="12"
-							style="margin-left: 8px; object-fit: cover; vertical-align: middle;"
-						/>
-					</button>
-				</mat-menu>
-			</button>
+        <button *ngIf="isLog()" mat-button [matMenuTriggerFor]="languageMenu" color="basic" class="menu-density">
+            <mat-icon>language</mat-icon>
+            {{ textMap.get('Language') }}
+            <mat-menu #languageMenu="matMenu">
+                <button mat-menu-item *ngFor="let language of languages" (click)="updateCurrentLanguage(language)">
+                    {{ language.english_name }}
+                    <img
+                        [ngSrc]="language.flag"
+                        alt="{{ language.english_name }} flag"
+                        width="16"
+                        height="12"
+                        style="margin-left: 8px; object-fit: cover; vertical-align: middle;"
+                    />
+                </button>
+            </mat-menu>
+        </button>
 
-			<button *ngIf="isLog()" mat-button [matMenuTriggerFor]="userMenu" color="basic" class="menu-density">
-				<mat-icon>account_circle</mat-icon> {{ userInfos?.username }}
-				<mat-menu #userMenu="matMenu">
-					<button mat-menu-item (click)="toProfile()">
-						<mat-icon>settings</mat-icon>
-						{{ textMap.get('Edit Profile') }}
-					</button>
-					<button mat-menu-item (click)="logout()">
-						<mat-icon color="warn">logout</mat-icon>
-						<span [ngStyle]="{'color': '#F44336'}">Logout</span>
-					</button>
-				</mat-menu>
-			</button>
+        <button *ngIf="isLog() && userInfos" mat-button [matMenuTriggerFor]="userMenu" color="basic" class="menu-density">
+            <mat-icon>account_circle</mat-icon> {{ userInfos.username }}
+            <mat-menu #userMenu="matMenu">
+                <button mat-menu-item (click)="toProfile()">
+                    <mat-icon>settings</mat-icon>
+                    {{ textMap.get('Edit Profile') }}
+                </button>
+                <button mat-menu-item (click)="logout()">
+                    <mat-icon color="warn">logout</mat-icon>
+                    <span [ngStyle]="{'color': '#F44336'}">{{ textMap.get('Logout') }}</span>
+                </button>
+            </mat-menu>
+        </button>
 
-			<button *ngIf="!isLog()" mat-button (click)="login()">
-				Login
-			</button>
-        </div>
-    </header>
-</body>
+        <button *ngIf="!isLog()" mat-button (click)="login()" class="mat-button-base">
+			{{ textMap.get('Login') || 'Login' }}
+        </button>
+    </div>
+</div>

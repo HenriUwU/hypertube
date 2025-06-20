@@ -1,12 +1,12 @@
-<div class="summary-container">
+<div class="summary-container" *ngIf="movie">
   <div class="poster">
-     <img src="{{movie?.poster_path}}" alt="poster">
+     <img src="{{movie.poster_path}}" alt="poster">
   </div>
 
   <div class="movie-info">
     <div class="title">
-      <h1 class="movie-title">{{ movie?.title }}</h1>
-      <p class="movie-note">{{ movie?.vote_average }} / 10 &#9733;</p>
+      <h1 class="movie-title">{{ movie.title }}</h1>
+      <p class="movie-note">{{ movie.vote_average }} / 10 &#9733;</p>
     </div>
 
     <div class="genres">
@@ -15,12 +15,12 @@
 
     <div class="time">
       <p class="runtime"><strong>{{ getMovieRuntime() }}</strong></p>
-      <p class="release-date"><strong>{{ movie?.release_date }}</strong></p>
+      <p class="release-date"><strong>{{ movie.release_date }}</strong></p>
     </div>
 
-    <div class="synopsis">
-      <p class="synopsis">{{ movie?.overview }}</p>
-    </div>
+	<div>
+	  <p class="synopsis">{{ movie.overview }}</p>
+	</div>
 
     <div class="people">
       <p><u>Cast:</u><em> {{ castSummary }}</em></p>
