@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MovieService} from '../../services/movie.service';
 import {Movie, PersonModel} from '../../models/movie.model';
 import {NgFor, NgIf} from '@angular/common';
