@@ -23,6 +23,7 @@ export class MovieSummaryComponent implements OnInit {
   torrents! : Torrent[];
   magnet!: string;
   trailerUrl!: SafeResourceUrl;
+  loadingTorrents: boolean = false;
 
   constructor(
     private movieService: MovieService,
@@ -58,14 +59,14 @@ export class MovieSummaryComponent implements OnInit {
         next: (data: Movie) => {
           this.movie = data;
           this.movie.vote_average = Math.round(this.movie.vote_average * 10) / 10;
-
+		  this.loadingTorrents = true;
           this.torrentService.searchTorrent(this.movie.title).subscribe(
             {next: (data: Torrent[]) => {
               this.torrents = data;
-              console.log(this.torrents);
+			  this.loadingTorrents = false;
             },
             error: (e) => {
-
+				this.loadingTorrents = false;
             }});
         },
         error: (e) => {

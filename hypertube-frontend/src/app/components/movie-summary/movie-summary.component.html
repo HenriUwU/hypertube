@@ -41,7 +41,7 @@
     </div>
 
     <div class="right-side">
-      <div class="spinner" *ngIf="!torrents">
+      <div class="spinner" *ngIf="!torrents && loadingTorrents">
         <mat-spinner class="loading-spinner"></mat-spinner>
       </div>
       <div class="torrent-list" *ngIf="torrents">
