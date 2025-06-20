@@ -148,4 +148,14 @@ mat-form-field {
     flex-direction: row;
     font-size: 0.85rem;
   }
+
+  .omniauth-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .omniauth-btn {
+    max-width: 100%;
+    width: 100%;
+  }
 }
