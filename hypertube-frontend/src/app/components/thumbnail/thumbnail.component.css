@@ -16,10 +16,18 @@
   border-radius: 5%;
   margin: 0.5vw;
   overflow: hidden;
+  
+  /* Animations */
+  transition: all 0.3s ease-in-out;
+  transform: scale(1);
+  cursor: pointer;
+  animation: fadeInUp 0.6s ease-out;
 }
 
 .thumbnail-container:hover {
-  box-shadow: 0 4px 15px #eac29f;
+  box-shadow: 0 8px 25px rgba(234, 194, 159, 0.6);
+  transform: scale(1.05);
+  border-color: #f5d4a9;
 }
 
 .thumbnail-image {
@@ -28,37 +36,62 @@
   object-fit: contain;
   border-radius: 5%;
   border: solid black;
+  
+  /* Animation pour l'image */
+  transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+}
+
+.thumbnail-container:hover .thumbnail-image {
+  transform: scale(1.1);
+  filter: brightness(1.1);
 }
 
 .thumbnail-image-container {
   flex-grow: 1;
-  /*width: 100%;*/
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   margin-top: 2%;
-  margin-bottom: 2%;
-  height: 80%;
+  margin-bottom: 1%;
+  height: 75%;
 }
 
 .thumbnail-title {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 500;
     text-align: center;
     color: white;
-    height: 10%;
+    height: 12%;
     width: 100%;
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    
+    /* Animation pour le titre */
+    transition: color 0.3s ease-in-out, font-size 0.3s ease-in-out;
+}
+
+.thumbnail-container:hover .thumbnail-title {
+    color: #eac29f;
+    font-size: 0.95rem;
 }
 
 .mat-mdc-progress-bar {
     --mdc-linear-progress-active-indicator-color: red;
     --mdc-linear-progress-track-color: grey;
-    /* padding-left: 1%; */
-    /* padding-right: 1%; */
+    
+    /* Animation pour la barre de progression */
+    transition: opacity 0.3s ease-in-out;
+}
+
+.thumbnail-container:hover .mat-mdc-progress-bar {
+    opacity: 0.8;
 }
 
 .thumbnail-quick-info {
@@ -69,8 +102,115 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1vh;
+    padding: 0 5%;
 
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    
+    /* Animation pour les infos rapides */
+    transition: color 0.3s ease-in-out;
+}
+
+.thumbnail-container:hover .thumbnail-quick-info {
+    color: #eac29f;
+}
+
+/* Media queries pour mobile */
+@media (max-width: 768px) {
+  .thumbnail-container {
+    width: 40vw;
+    height: 35vh;
+    min-width: 140px;
+    min-height: 250px;
+    border-width: 0.5vh;
+    margin: 0.3vw;
+  }
+  
+  .thumbnail-title {
+    font-size: 0.75rem;
+    height: 20%;
+    line-height: 1.2;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    padding: 0 4%;
+  }
+  
+  .thumbnail-container:hover .thumbnail-title {
+    font-size: 0.8rem;
+  }
+  
+  .thumbnail-quick-info {
+    font-size: 0.55rem;
+    height: 10%;
+  }
+  
+  .thumbnail-image-container {
+    height: 70%;
+  }
+  
+  /* Réduire les animations sur mobile pour de meilleures performances */
+  .thumbnail-container:hover {
+    transform: scale(1.02);
+  }
+  
+  .thumbnail-container:hover .thumbnail-image {
+    transform: scale(1.05);
+  }
+}
+
+@media (max-width: 480px) {
+  .thumbnail-container {
+    width: 44vw;
+    height: 32vh;
+    min-width: 130px;
+    min-height: 220px;
+    border-width: 2px;
+    margin: 0.5vw;
+  }
+  
+  .thumbnail-title {
+    font-size: 0.65rem;
+    height: 25%;
+    line-height: 1.1;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    padding: 2% 2%;
+    text-align: center;
+  }
+  
+  .thumbnail-container:hover .thumbnail-title {
+    font-size: 0.7rem;
+  }
+  
+  .thumbnail-quick-info {
+    font-size: 0.45rem;
+    height: 12%;
+    margin-bottom: 0.5vh;
+  }
+  
+  .thumbnail-image-container {
+    height: 63%;
+    margin-top: 1%;
+    margin-bottom: 0%;
+  }
+  
+  /* Désactiver certaines animations sur très petits écrans */
+  .thumbnail-container:hover {
+    transform: scale(1.01);
+  }
+  
+  .thumbnail-container:hover .thumbnail-image {
+    transform: scale(1.02);
+  }
 }
