@@ -41,7 +41,10 @@
     </div>
 
     <div class="right-side">
-      <div class="torrent-list">
+      <div class="spinner" *ngIf="!torrents">
+        <mat-spinner class="loading-spinner"></mat-spinner>
+      </div>
+      <div class="torrent-list" *ngIf="torrents">
         <div class="torrent-item" *ngFor="let torrent of torrents" (click)="selectTorrent(torrent.Magnet)" [class.selected]="torrent.Magnet === magnet">
           {{torrent.Name}}
           <br/>

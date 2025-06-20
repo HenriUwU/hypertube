@@ -1,6 +1,7 @@
 package com.hypertube.core_api.service;
 
 import com.hypertube.core_api.model.TorrentModel;
+import org.apache.tika.utils.StringUtils;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,13 +28,60 @@ public class TorrentService {
 	}
 
 	public List<TorrentModel> searchTorrent(String searchTerm) {
-		ResponseEntity<List<TorrentModel>> responseEntity = restTemplate.exchange(
+		ResponseEntity<List<TorrentModel>> responseEntity1 = restTemplate.exchange(
 				"http://torrent-scraping:3001/api/piratebay/" + searchTerm,
 				HttpMethod.GET,
 				HttpEntity.EMPTY,
-				new ParameterizedTypeReference<List<TorrentModel>>() {}
+                new ParameterizedTypeReference<>() {}
 		);
-		return responseEntity.getBody();
+
+		ResponseEntity<List<TorrentModel>> responseEntity2 = restTemplate.exchange(
+				"http://torrent-scraping:3001/api/nyaasi/" + searchTerm,
+				HttpMethod.GET,
+				HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {}
+		);
+
+		ResponseEntity<List<TorrentModel>> responseEntity3 = restTemplate.exchange(
+				"http://torrent-scraping:3001/api/glodls/" + searchTerm,
+				HttpMethod.GET,
+				HttpEntity.EMPTY,
+				new ParameterizedTypeReference<>() {}
+		);
+
+		List<TorrentModel> combinedResults = new ArrayList<>();
+		combinedResults.addAll(Optional.ofNullable(responseEntity1.getBody()).orElse(Collections.emptyList()));
+		combinedResults.addAll(Optional.ofNullable(responseEntity2.getBody()).orElse(Collections.emptyList()));
+		combinedResults.addAll(Optional.ofNullable(responseEntity3.getBody()).orElse(Collections.emptyList()));
+
+		if (combinedResults.isEmpty()) {
+			ResponseEntity<List<TorrentModel>> responseEntity4 = restTemplate.exchange(
+					"http://torrent-scraping:3001/api/all/" + searchTerm,
+					HttpMethod.GET,
+					HttpEntity.EMPTY,
+					new ParameterizedTypeReference<>() {}
+			);
+			combinedResults.addAll(Optional.ofNullable(responseEntity4.getBody()).orElse(Collections.emptyList()));
+		}
+
+		combinedResults.sort((a, b) -> {
+			int seedersA = parseIntSafe(a.getSeeders());
+			int seedersB = parseIntSafe(b.getSeeders());
+			return Integer.compare(seedersB, seedersA);
+		});
+
+		return combinedResults;
+	}
+
+	private int parseIntSafe(String value) {
+		if (StringUtils.isBlank(value)) {
+			return -1;
+		}
+		try {
+			return Integer.parseInt(value.trim());
+		} catch (NumberFormatException e) {
+			return -1;
+		}
 	}
 
 	public String startDownload(TorrentModel torrentModel) {
@@ -42,7 +93,7 @@ public class TorrentService {
 		String jsonPayload = "{\"magnet\":\"" + torrentModel.getMagnet() + "\"}";
 		HttpEntity<String> entity = new HttpEntity<>(jsonPayload, headers);
 
-		ResponseEntity<String> responseEntity = restTemplate.exchange(
+		restTemplate.exchange(
 				"http://torrent-downloader:5001/download",
 				HttpMethod.POST,
 				entity,

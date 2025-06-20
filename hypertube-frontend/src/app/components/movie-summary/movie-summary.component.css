@@ -101,8 +101,7 @@
   .poster img {
     width: 100%;
     max-width: 300px;
-    margin-bottom: 20px;
-    margin: 0 auto;
+	  margin: 0 auto;
     border-width: 2px;
   }
 
@@ -185,6 +184,26 @@
   background-color: #20242a;
 }
 
+.spinner {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	flex: 0.6 0.6 100%;
+	max-height: 270px;
+	overflow-y: auto;
+	border: 2px solid black;
+	padding: 0.5rem 1rem;
+	border-radius: 12px;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+	background-color: #20242a;
+
+	.loading-spinner {
+		--mdc-circular-progress-active-indicator-color: #AFBB80;
+	}
+}
+
+
 .torrent-item {
   padding: 0.75rem 1rem;
   cursor: pointer;
@@ -257,7 +276,7 @@
     max-width: 100%;
     padding: 0 1rem;
   }
-  
+
   .left-side, .right-side {
     max-width: 100% !important;
     flex: none !important;
@@ -280,7 +299,7 @@
   content: "";
   position: absolute;
   top: 0;
-  left: 10%;   
-  right: 10%;    
+  left: 10%;
+  right: 10%;
   border-top: 2px solid #AFBB80;
 } */

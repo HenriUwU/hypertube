@@ -8,13 +8,14 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 import {MatButton} from "@angular/material/button";
 import {MatDividerModule} from "@angular/material/divider"
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-movie-summary',
   standalone: true,
   templateUrl: './movie-summary.component.html',
   styleUrl: './movie-summary.component.css',
-	imports: [NgFor, NgIf, MatButton, MatDividerModule],
+	imports: [NgFor, NgIf, MatButton, MatDividerModule, MatProgressSpinner],
 })
 export class MovieSummaryComponent implements OnInit {
   @Input() movieId : number = 950387;
