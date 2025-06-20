@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {MovieService} from '../../services/movie.service';
 import {Movie, PersonModel} from '../../models/movie.model';
 import {NgFor, NgIf} from '@angular/common';
@@ -7,13 +7,15 @@ import {Torrent} from '../../models/torrent.models';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 import {MatButton} from "@angular/material/button";
+import {MatDividerModule} from "@angular/material/divider"
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-movie-summary',
   standalone: true,
   templateUrl: './movie-summary.component.html',
   styleUrl: './movie-summary.component.css',
-	imports: [NgFor, NgIf, MatButton],
+	imports: [NgFor, NgIf, MatButton, MatDividerModule, MatProgressSpinner],
 })
 export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('castContainer') castContainerRef!: ElementRef;
@@ -23,6 +25,7 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
   torrents! : Torrent[];
   magnet!: string;
   trailerUrl!: SafeResourceUrl;
+  loadingTorrents: boolean = false;
   castIndex = 0;
   crewIndex = 0;
   visibleCount = 8;
@@ -70,14 +73,14 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
         next: (data: Movie) => {
           this.movie = data;
           this.movie.vote_average = Math.round(this.movie.vote_average * 10) / 10;
-
+		  this.loadingTorrents = true;
           this.torrentService.searchTorrent(this.movie.title).subscribe(
             {next: (data: Torrent[]) => {
               this.torrents = data;
-              console.log(this.torrents);
+			  this.loadingTorrents = false;
             },
             error: (e) => {
-
+				this.loadingTorrents = false;
             }});
             setTimeout(() => this.updateVisibleCount(), 0);
         },
