@@ -1,7 +1,7 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, map} from "rxjs";
-import { CommentDTO } from '../models/movie.model';
+import { CommentDTO } from '../models/comment.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +12,12 @@ export class CommentService {
   constructor(private http: HttpClient) {
   }
 
-  postComment(comment: CommentDTO): Observable<any> {
-    return this.http.post<CommentDTO>(`${this.apiUrlComments}`, comment, {
+  postComment(movieId: number, content: string): Observable<CommentDTO> {
+    const body = {
+      movieId: movieId,
+      content: content
+    };
+    return this.http.post<CommentDTO>(`${this.apiUrlComments}`, body, {
     }).pipe(
       map((response: CommentDTO) => response)
     );
@@ -24,21 +28,21 @@ export class CommentService {
     });
   }
 
-  // deleteComment(commentId: number): Observable<void> {
-  //   return this.http.delete<void>(`${this.apiUrlComments}/${commentId}`, {
-  //     headers: this.getAuthHeaders()
-  //   });
-  // }
+  deleteComment(commentId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrlComments}/${commentId}`, {
+      // headers: this.getAuthHeaders()
+    });
+  }
 
-  // likeComment(commentId: number): Observable<CommentDTO> {
-  //   return this.http.post<CommentDTO>(`${this.apiUrlComments}/like/${commentId}`, {}, {
-  //     headers: this.getAuthHeaders()
-  //   });
-  // }
+  likeComment(commentId: number): Observable<CommentDTO> {
+    return this.http.post<CommentDTO>(`${this.apiUrlComments}/like/${commentId}`, {}, {
+      // headers: this.getAuthHeaders()
+    });
+  }
 
-  // unlikeComment(commentId: number): Observable<CommentDTO> {
-  //   return this.http.delete<CommentDTO>(`${this.apiUrlComments}/unlike/${commentId}`, {
-  //     headers: this.getAuthHeaders()
-  //   });
-  // }
+  unlikeComment(commentId: number): Observable<CommentDTO> {
+    return this.http.delete<CommentDTO>(`${this.apiUrlComments}/unlike/${commentId}`, {
+      // headers: this.getAuthHeaders()
+    });
+  }
 }
