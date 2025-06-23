@@ -54,7 +54,28 @@ export interface WatchedMoviesDTO {
   watchedAt: string;
 }
 
-export interface Credits {
-  cast: PersonModel[];
-  crew: PersonModel[];
-}
+  export interface Credits {
+    cast: PersonModel[];
+    crew: PersonModel[];
+  }
+
+  export interface MovieDTO {
+    id: number;
+    title: string;
+    overview: string;
+    rating: number;
+    releaseDate: string;
+    thumbnail: string;
+    genreIds: number[];
+    runtime: number;
+    genres: GenreModel[];
+    credits: Credits;
+    subtitles: Record<string, string>;
+    watchedMovies: WatchedMoviesDTO;
+  }
+
+  export interface SearchMovie {
+    query: string;
+    page: number;
+    genresIds: number[];
+  }
