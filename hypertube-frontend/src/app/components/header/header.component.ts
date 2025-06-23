@@ -6,7 +6,6 @@ import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {MoviesService} from '../../services/movies.service';
 import {AuthService} from '../../services/auth.service';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {Router} from "@angular/router";
@@ -43,8 +42,7 @@ export class HeaderComponent implements OnInit {
   ])
 
 
-  constructor(private movieService: MoviesService,
-              private formBuilder: FormBuilder,
+  constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
               private router: Router,
               private userService: UserService,

@@ -7,36 +7,20 @@ import { CommentDTO } from '../models/movie.model';
   providedIn: 'root'
 })
 export class CommentService {
-  private apiUrlComments = 'https://localhost:8080/comment';
+  private apiUrlComments = 'http://localhost:8080/comment';
 
   constructor(private http: HttpClient) {
   }
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-  }
-
-  getComments(movieId: number): Observable<CommentDTO[]> {
-    // return this.http.get<CommentDTO[]>(`${this.apiUrlComments}/${movieId}`, {
-    //   headers: this.getAuthHeaders()
-    // });
-    return this.http.get<CommentDTO[]>(`${this.apiUrlComments}/${movieId}`);
-  }
-
   postComment(comment: CommentDTO): Observable<any> {
-    return this.http.post<any>(`${this.apiUrlComments}`, comment, {
-      // headers: this.getAuthHeaders()
+    return this.http.post<CommentDTO>(`${this.apiUrlComments}`, comment, {
     }).pipe(
-      map((response: any) => response)
+      map((response: CommentDTO) => response)
     );
   }
 
   updateComment(comment: CommentDTO): Observable<CommentDTO> {
     return this.http.put<CommentDTO>(`${this.apiUrlComments}`, comment, {
-      headers: this.getAuthHeaders()
     });
   }
 

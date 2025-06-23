@@ -34,7 +34,7 @@ export class CommentsComponent {
   }
 
   loadComments() {
-    this.commentService.getComments(this.movieId).subscribe(comments => {
+    this.movieService.getComments(this.movieId).subscribe(comments => {
       this.comments = comments;
     });
   }
