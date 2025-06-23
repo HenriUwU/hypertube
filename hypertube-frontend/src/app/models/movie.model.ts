@@ -1,22 +1,5 @@
 import { Time } from "@angular/common";
 
-// export interface GenreModel {
-//   id: number;
-//   name: string;
-// }
-
-// interface PersonModel {
-//   id: number;
-//   name: string;
-//   character: string;
-//   profilePath: string;
-// }
-
-// interface Credits {
-//   cast: PersonModel[];
-//   crew: PersonModel[];
-// }
-
 export interface Movie {
   id: number;
   title: string;
@@ -55,21 +38,21 @@ export interface Subtitles {
 export interface GenreModel {
     id: number;
     name: string;
-  }
+}
 
-  export interface PersonModel {
-    id: number;
-    name: string;
-    character?: string;
-    job?: string;
-    profile_path?: string;
-  }
+export interface PersonModel {
+  id: number;
+  name: string;
+  character?: string;
+  job?: string;
+  profile_path?: string;
+}
 
-  export interface WatchedMoviesDTO {
-    userId: number;
-    movieId: number;
-    watchedAt: string;
-  }
+export interface WatchedMoviesDTO {
+  userId: number;
+  movieId: number;
+  watchedAt: string;
+}
 
   export interface Credits {
     cast: PersonModel[];
@@ -95,20 +78,4 @@ export interface GenreModel {
     query: string;
     page: number;
     genresIds: number[];
-  }
-
-  // export interface CommentDTO {
-  //   id: number;
-  //   movieId: number;
-  //   userId: number;
-  //   content: string;
-  //   like: number;
-  // }
-
-  export interface CommentDTO {
-    // id: number;
-    movieId: number;
-    // userId: number;
-    content: string;
-    // like: number;
   }

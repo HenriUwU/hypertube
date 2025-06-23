@@ -199,7 +199,7 @@ input[type='number']::-webkit-inner-spin-button {
   box-sizing: border-box;
 }
 
-@media (max-width: 1250px) {
+@media (max-width: 1520px) {
   .homepage-controls {
     flex-direction: column;
     align-items: stretch;
