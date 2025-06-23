@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {map, min, Observable} from 'rxjs';
-import {GenreModel, Movie, Subtitles} from '../models/movie.model';
+import {CommentDTO, GenreModel, Movie, Subtitles} from '../models/movie.model';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +53,12 @@ export class MovieService {
   getGenres(): Observable<GenreModel[]> {
     return this.http.get<GenreModel[]>(`${this.apiUrlAuth}/genres`).pipe(
       map((response: GenreModel[]) => response)
+    )
+  }
+
+  getComments(movieId: number): Observable<CommentDTO[]> {
+    return this.http.get<CommentDTO[]>(`${this.apiUrlAuth}/${movieId}/comments`).pipe(
+      map((response: CommentDTO[]) => response)
     )
   }
 

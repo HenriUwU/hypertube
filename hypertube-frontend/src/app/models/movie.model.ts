@@ -97,3 +97,10 @@ export interface GenreModel {
     genresIds: number[];
   }
 
+  export interface CommentDTO {
+    movieId: number;
+    userId: number;
+    content: string;
+    like: number;
+  }
+
