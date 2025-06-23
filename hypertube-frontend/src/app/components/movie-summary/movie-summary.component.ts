@@ -149,7 +149,8 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
 		  queryParams: {
 			  title: this.movie.title,
 			  backdrop: this.movie.backdrop_path,
-			  magnet: this.magnet
+			  magnet: this.magnet,
+        movieId: this.movieId
 		  }
 	  }).then();
   }

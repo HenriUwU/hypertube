@@ -129,23 +129,22 @@ public class MovieService {
         return movie;
     }
 
-    public WatchedMoviesDTO addWatched(WatchedMoviesDTO watchedMoviesDTO, String token) {
+    public WatchedMoviesDTO upsertWatchedMovie(WatchedMoviesDTO watchedMoviesDTO, String token) {
         checkWatchedMoviesDTO(watchedMoviesDTO);
-        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
-        WatchedMoviesEntity entity = watchedMoviesMapper.map(watchedMoviesDTO);
-        entity.setUser(userEntity);
-        return watchedMoviesMapper.map(watchedMoviesRepository.save(entity));
-    }
 
-    public WatchedMoviesDTO modifyWatched(WatchedMoviesDTO watchedMoviesDTO, String token) {
-        checkWatchedMoviesDTO(watchedMoviesDTO);
-        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
-        WatchedMoviesEntity watchedMoviesEntity = watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, watchedMoviesDTO.getMovieId());
-        if (watchedMoviesEntity == null) {
-            throw new EntityNotFoundException("Watched movie not found");
+        String username = jwtTokenUtil.extractUsername(token.substring(7));
+        UserEntity userEntity = userRepository.findByUsername(username).orElseThrow();
+
+        WatchedMoviesEntity existingEntity = watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(userEntity, watchedMoviesDTO.getMovieId());
+
+        if (existingEntity != null) {
+            existingEntity.setStoppedAt(watchedMoviesDTO.getStoppedAt());
+            return watchedMoviesMapper.map(watchedMoviesRepository.save(existingEntity));
+        } else {
+            WatchedMoviesEntity newEntity = watchedMoviesMapper.map(watchedMoviesDTO);
+            newEntity.setUser(userEntity);
+            return watchedMoviesMapper.map(watchedMoviesRepository.save(newEntity));
         }
-        watchedMoviesEntity.setStoppedAt(watchedMoviesDTO.getStoppedAt());
-        return watchedMoviesMapper.map(watchedMoviesRepository.save(watchedMoviesEntity));
     }
 
     public List<MovieModel> sortByMovies(SortByModel sortByModel, String token) throws JsonProcessingException {

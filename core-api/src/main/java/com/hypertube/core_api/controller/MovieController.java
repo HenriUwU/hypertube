@@ -29,12 +29,7 @@ public class MovieController {
 
     @PostMapping("/watched")
     public WatchedMoviesDTO addWatched(@RequestBody WatchedMoviesDTO watchedMoviesDTO, @RequestHeader(value = "Authorization") String token) throws JsonProcessingException {
-        return this.movieService.addWatched(watchedMoviesDTO, token);
-    }
-
-    @PutMapping("/watched")
-    public WatchedMoviesDTO modifyWatched(@RequestBody WatchedMoviesDTO watchedMoviesDTO, @RequestHeader(value = "Authorization") String token) throws JsonProcessingException {
-        return this.movieService.modifyWatched(watchedMoviesDTO, token);
+        return this.movieService.upsertWatchedMovie(watchedMoviesDTO, token);
     }
 
     @PostMapping(path = "/sort-by")

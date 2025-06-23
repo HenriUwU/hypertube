@@ -43,7 +43,8 @@ export class ThumbnailComponent implements OnInit {
     release_date: 0,
     poster_path: this.defaultProfilePicture,
     runtime: 0,
-    stoppedAt: { hours: 0, minutes: 0 },
+    // stoppedAt: { hours: 0, minutes: 0 },
+    stoppedAt: '',
     genres: [],
     vote_average: 0
   };
@@ -102,8 +103,14 @@ export class ThumbnailComponent implements OnInit {
       return 0;
     }
     const totalMinutes = this.movieThumbnail.runtime;
-    const visualizedMinutes = this.movieThumbnail.stoppedAt.hours * 60 + this.movieThumbnail.stoppedAt.minutes;
-    return (visualizedMinutes / totalMinutes) * 100;
+    const [hours, minutes] = this.movieThumbnail.stoppedAt.split(':').map(Number);
+    const watchedMinutes = hours * 60 + minutes;
+    if (totalMinutes === 0) {
+      return 0;
+    }
+    const res = Math.min((watchedMinutes / totalMinutes) * 100, 100);
+    console.log(`Total Minutes: ${totalMinutes}, Watched Minutes: ${watchedMinutes}, Percentage: ${res}`);
+    return res;
   }
 
   getGenreByIdx(idx: number): string {

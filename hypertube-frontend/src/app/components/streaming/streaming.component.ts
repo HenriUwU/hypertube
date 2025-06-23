@@ -25,6 +25,7 @@ export class StreamingComponent implements OnInit, AfterViewInit {
   @Input() videoTitle!: string;
   @Input() backdrop_path!: string;
   @Input() magnet!: string;
+  @Input() movieId!: number;
 
   private hash: string = '';
 
@@ -48,11 +49,25 @@ export class StreamingComponent implements OnInit, AfterViewInit {
 		  this.videoTitle = params['title'];
 		  this.backdrop_path = params['backdrop'];
 		  this.magnet = params['magnet'];
+      this.movieId = params['movieId'];
 	  });
   }
 
   ngAfterViewInit() {
 	  this.startStreaming()
+  }
+
+  // on destroy, keep the timestamp of the video
+  ngOnDestroy() {
+    const videoElem: HTMLVideoElement = this.videoPlayer.nativeElement;
+    if (videoElem) {
+      const currentTime = videoElem.currentTime;
+      const stoppedAt = new Date(currentTime * 1000).toISOString().substr(11, 8);
+      this.movieService.saveWatched(this.movieId, stoppedAt).subscribe({
+        next: () => console.log('Watched time updated successfully'),
+        error: (error) => console.error('Error updating watched time:', error)
+      });
+    }
   }
 
   startStreaming() {
