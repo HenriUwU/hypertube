@@ -10,12 +10,17 @@
     </form>
 
     <div class="comment" *ngFor="let comment of comments">
+      <div class="user-profile">
+        <a [routerLink]="['/profil', comment.userId]" class="author-link">
+          {{ comment.username }}
+        </a>
+      </div>
       <p>{{comment.content}}</p>
-      <!-- <div class="comment-actions">
+      <div class="comment-actions">
         <button (click)="likeComment(comment.id)">👍</button>
         <button (click)="unlikeComment(comment.id)">👎</button>
         <button (click)="deleteComment(comment.id)">🗑️</button>
-      </div> -->
+      </div>
     </div>
   </div>
 </div>

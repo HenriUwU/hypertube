@@ -108,7 +108,7 @@ export interface GenreModel {
   export interface CommentDTO {
     // id: number;
     movieId: number;
-    // userId: number;
+    userId: number;
     content: string;
-    // like: number;
+    like: number;
   }

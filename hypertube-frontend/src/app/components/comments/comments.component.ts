@@ -5,7 +5,7 @@ import {MovieService} from '../../services/movie.service';
 import {CommentDTO} from '../../models/movie.model';
 import {NgFor, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import { UserService } from '../../services/user.service';
+// import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 
 
@@ -20,7 +20,7 @@ export class CommentsComponent {
   @Input() movieId : number = 950387;
   comments! : CommentDTO[];
   // newComment: CommentDTO = {id: 0, movieId: 0, userId: 0, content: '', like: 0};
-  newComment: CommentDTO = {movieId: 0, content: ''};
+  newComment: CommentDTO = {movieId: 0, userId: 0, content: '', like: 0};
 
   constructor(
     private commentService: CommentService,
@@ -50,23 +50,23 @@ export class CommentsComponent {
     });
   }
 
-  // likeComment(commentId: number) {
-  //   this.commentService.likeComment(commentId).subscribe(updatedComment => {
-  //     const index = this.comments.findIndex(c => c.id === commentId);
-  //     if (index !== -1) this.comments[index] = updatedComment;
-  //   });
-  // }
+  likeComment(commentId: number) {
+    this.commentService.likeComment(commentId).subscribe(updatedComment => {
+      // const index = this.comments.findIndex(c => c.id === commentId);
+      // if (index !== -1) this.comments[index] = updatedComment;
+    });
+  }
 
-  // unlikeComment(commentId: number) {
-  //   this.commentService.unlikeComment(commentId).subscribe(updatedComment => {
-  //     const index = this.comments.findIndex(c => c.id === commentId);
-  //     if (index !== -1) this.comments[index] = updatedComment;
-  //   });
-  // }
+  unlikeComment(commentId: number) {
+    this.commentService.unlikeComment(commentId).subscribe(updatedComment => {
+      // const index = this.comments.findIndex(c => c.id === commentId);
+      // if (index !== -1) this.comments[index] = updatedComment;
+    });
+  }
 
-  // deleteComment(commentId: number) {
-  //   this.commentService.deleteComment(commentId).subscribe(() => {
-  //     this.comments = this.comments.filter(c => c.id !== commentId);
-  //   });
-  // }
+  deleteComment(commentId: number) {
+    this.commentService.deleteComment(commentId).subscribe(() => {
+      // this.comments = this.comments.filter(c => c.id !== commentId);
+    });
+  }
 }
