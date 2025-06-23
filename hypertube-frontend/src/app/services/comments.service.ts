@@ -1,17 +1,15 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from "rxjs";
+import {BehaviorSubject, Observable, map} from "rxjs";
 import { CommentDTO } from '../models/movie.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentService {
-  private apiUrlComments = 'https://localhost:8080/summary';
-  private currentUserSubject: BehaviorSubject<string | null>;
+  private apiUrlComments = 'https://localhost:8080/comment';
 
   constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<string | null>(sessionStorage.getItem('token'))
   }
 
   private getAuthHeaders(): HttpHeaders {
@@ -21,33 +19,42 @@ export class CommentService {
     });
   }
 
-  postComment(comment: CommentDTO): Observable<CommentDTO> {
-    return this.http.post<CommentDTO>(`${this.apiUrlComments}/comment`, comment, {
-      headers: this.getAuthHeaders()
-    });
+  getComments(movieId: number): Observable<CommentDTO[]> {
+    // return this.http.get<CommentDTO[]>(`${this.apiUrlComments}/${movieId}`, {
+    //   headers: this.getAuthHeaders()
+    // });
+    return this.http.get<CommentDTO[]>(`${this.apiUrlComments}/${movieId}`);
+  }
+
+  postComment(comment: CommentDTO): Observable<any> {
+    return this.http.post<any>(`${this.apiUrlComments}`, comment, {
+      // headers: this.getAuthHeaders()
+    }).pipe(
+      map((response: any) => response)
+    );
   }
 
   updateComment(comment: CommentDTO): Observable<CommentDTO> {
-    return this.http.put<CommentDTO>(`${this.apiUrlComments}/comment`, comment, {
+    return this.http.put<CommentDTO>(`${this.apiUrlComments}`, comment, {
       headers: this.getAuthHeaders()
     });
   }
 
-  deleteComment(commentId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrlComments}/comment/${commentId}`, {
-      headers: this.getAuthHeaders()
-    });
-  }
+  // deleteComment(commentId: number): Observable<void> {
+  //   return this.http.delete<void>(`${this.apiUrlComments}/${commentId}`, {
+  //     headers: this.getAuthHeaders()
+  //   });
+  // }
 
-  likeComment(commentId: number): Observable<CommentDTO> {
-    return this.http.post<CommentDTO>(`${this.apiUrlComments}/comment/like/${commentId}`, {}, {
-      headers: this.getAuthHeaders()
-    });
-  }
+  // likeComment(commentId: number): Observable<CommentDTO> {
+  //   return this.http.post<CommentDTO>(`${this.apiUrlComments}/like/${commentId}`, {}, {
+  //     headers: this.getAuthHeaders()
+  //   });
+  // }
 
-  unlikeComment(commentId: number): Observable<CommentDTO> {
-    return this.http.delete<CommentDTO>(`${this.apiUrlComments}/comment/unlike/${commentId}`, {
-      headers: this.getAuthHeaders()
-    });
-  }
+  // unlikeComment(commentId: number): Observable<CommentDTO> {
+  //   return this.http.delete<CommentDTO>(`${this.apiUrlComments}/unlike/${commentId}`, {
+  //     headers: this.getAuthHeaders()
+  //   });
+  // }
 }

@@ -1,22 +1,21 @@
 <div class="comments-container">
   <p>Comments</p>
   <mat-divider></mat-divider>
+  <div class="my-comment">
+    <form (ngSubmit)="submitComment()" class="comment-form" #commentForm="ngForm">
+      <textarea [(ngModel)]="newComment.content" name="content"
+        placeholder="Write your comment here..." required rows="4"
+        #content="ngModel"></textarea>
+      <button type="submit" [disabled]="!newComment.content.trim()">Send</button>
+    </form>
 
-  <!-- <div class="comment-input-bubble">
-    <textarea
-      [(ngModel)]="newComment"
-      placeholder="Write your comment..."
-      rows="3"
-      (keydown.enter)="submitComment($event)"
-    ></textarea>
-    <button class="submit-btn" (click)="submitComment()">Send</button>
-  </div> -->
-
-  <!-- <div class="comments-list">
-    <div *ngFor="let comment of comments" class="comment-bubble">
-      <p>{{ comment.text }}</p>
-      <span class="comment-author">— {{ comment.author }}</span>
+    <div class="comment" *ngFor="let comment of comments">
+      <p>{{comment.content}}</p>
+      <!-- <div class="comment-actions">
+        <button (click)="likeComment(comment.id)">👍</button>
+        <button (click)="unlikeComment(comment.id)">👎</button>
+        <button (click)="deleteComment(comment.id)">🗑️</button>
+      </div> -->
     </div>
-  </div> -->
-
+  </div>
 </div>
