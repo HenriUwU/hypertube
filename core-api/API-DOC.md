@@ -23,7 +23,6 @@ Bienvenue dans la documentation de l’API **Hypertube**.
       - [`POST /movies/tmdb-search`](#post-moviessearch)
       - [`GET /movies/{movie_id}/comments`](#get-moviesmovie_idcomments)
       - [`POST /movies/watched`](#post-movieswatched)
-      - [`PUT /movies/watched`](#put-movieswatched)
       - [`GET /movies/{tmdb_id}/subtitles`](#get-moviestmdb_idsubtitles)
       - [`GET /movies/{tmdb_id}/trailer`](#get-moviestmdb_idtrailer)
     - [Commentaires: /comment](#commentaires-comment)
@@ -268,13 +267,6 @@ http://localhost:8080/
 }
 ```
 - **Réponse `WatchedMoviesDTO`:**
-
-#### `PUT /movies/watched`
-- **Description :** Met a jour le temps ou l'utilisateur s'est arreter de regarder le film
-- **Auth requise :** ✅ Oui
-- **Body `WatchedMoviesDTO`:**
-- **Réponse `WatchedMoviesDTO`:**
-
 
 #### `GET /movies/{tmdb_id}/subtitles`
 - **Description :** Recupere les sous-titres associe au tmdb_id
