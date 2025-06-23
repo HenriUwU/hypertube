@@ -10,7 +10,9 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -118,6 +120,14 @@ public class TorrentService {
 				Thread.currentThread().interrupt();
 				throw new RuntimeException("Interrupted while waiting for playlist", e);
 			}
+		}
+
+		Path lastAccessFilePath = Paths.get("/torrents", hash, "last_access.txt");
+
+		try {
+			Files.writeString(lastAccessFilePath, Instant.now().toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to write last access file", e);
 		}
 
 		String urlPath = "/torrents/" + hash + "/hls/playlist.m3u8";
