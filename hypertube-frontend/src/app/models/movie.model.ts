@@ -25,7 +25,8 @@ export interface MovieThumbnail {
   release_date: number;
   poster_path: string;
   runtime: number;
-  stoppedAt: Time;
+  // stoppedAt: Time;
+  stoppedAt: string;
   genres: GenreModel[];
   vote_average: number;
 }

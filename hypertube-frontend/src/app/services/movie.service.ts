@@ -91,14 +91,4 @@ export class MovieService {
       map((response: any) => response)
     );
   }
-
-  updateWatched(movieId: number, stoppedAt: string): Observable<any> {
-    const body = {
-      movieId: movieId,
-      stoppedAt: stoppedAt
-    };
-    return this.http.put(`${this.apiUrlMovies}/watched`, body).pipe(
-      map((response: any) => response)
-    );
-  }
 }

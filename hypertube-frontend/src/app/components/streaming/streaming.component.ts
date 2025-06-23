@@ -63,8 +63,7 @@ export class StreamingComponent implements OnInit, AfterViewInit {
     if (videoElem) {
       const currentTime = videoElem.currentTime;
       const stoppedAt = new Date(currentTime * 1000).toISOString().substr(11, 8);
-      // this.movieService.saveWatched(this.movieId, stoppedAt).subscribe({
-      this.movieService.updateWatched(this.movieId, stoppedAt).subscribe({
+      this.movieService.saveWatched(this.movieId, stoppedAt).subscribe({
         next: () => console.log('Watched time updated successfully'),
         error: (error) => console.error('Error updating watched time:', error)
       });

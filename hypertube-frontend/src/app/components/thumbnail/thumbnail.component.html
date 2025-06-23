@@ -4,18 +4,14 @@
         {{ movieThumbnail.title }}
     </h1>
 
-    <div class="thumbnail-image-container">
-        <img [src]="movieThumbnail.poster_path" alt="{{ movieThumbnail.title }}" class="thumbnail-image" />
-        <!-- <img 
-            [ngSrc]="movieThumbnail.poster_path" 
-            alt="{{ movieThumbnail.title }}" 
-            class="thumbnail-image"
-            fill
-        /> -->
-    </div>
-
-    <div *ngIf="watchedMovie" class="thumbnail-watched">
-        <mat-progress-bar mode="determinate" value="{{ getVisualizedTimeAsPercent() }}"></mat-progress-bar>
+    <div class="image-container-box">
+        <div class="thumbnail-image-container">
+            <img [src]="movieThumbnail.poster_path" alt="{{ movieThumbnail.title }}" class="thumbnail-image" />
+        </div>
+    
+        <div *ngIf="watchedMovie" class="thumbnail-watched">
+            <mat-progress-bar mode="determinate" value="{{ getVisualizedTimeAsPercent() }}"></mat-progress-bar>
+        </div>
     </div>
 
     <div class=" thumbnail-quick-info">
