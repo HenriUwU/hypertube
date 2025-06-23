@@ -53,6 +53,9 @@ public class MovieService {
     @Value("${tmdb.bearer-token}")
     private String tmdbToken;
 
+    @Value("${omdb.omdb.api-key}")
+    private String omdbApiKey;
+
     public MovieService(CommentRepository commentRepository, CommentMapper commentMapper, WatchedMoviesRepository watchedMoviesRepository, UserRepository userRepository, JwtTokenUtil jwtTokenUtil, WatchedMoviesMapper watchedMoviesMapper) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
@@ -162,7 +165,12 @@ public class MovieService {
                 entity,
                 String.class);
 
-        return sortMovieByGenre(response, sortByModel.getGenresIds(), sortByModel.getMinStars(), token);
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(response.getBody());
+        JsonNode resultsNode = rootNode.path("results");
+        List<MovieModel> movies = objectMapper.convertValue(resultsNode, new TypeReference<>() {});
+
+        return sortMovieByGenre(movies, sortByModel.getGenresIds(), sortByModel.getMinStars(), token);
     }
 
     public List<GenreModel> getGenres(String token) throws JsonProcessingException {
@@ -186,7 +194,7 @@ public class MovieService {
     }
 
 
-    public List<MovieModel> searchMovies(SearchModel searchModel, String token) throws JsonProcessingException {
+    public List<MovieModel> searchTMDbMovies(SearchModel searchModel, String token) throws JsonProcessingException {
         checkSearchDTO(searchModel);
         String language = "en";
         if (!StringUtil.isNullOrEmpty(token)) {
@@ -203,16 +211,62 @@ public class MovieService {
                 entity,
                 String.class);
 
-        return sortMovieByGenre(response, searchModel.getGenresIds(), searchModel.getMinStars(), token);
-    }
-
-    private List<MovieModel> sortMovieByGenre(ResponseEntity<String> response, List<Integer> selectedGenreIds, Integer minStars, String token) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(response.getBody());
         JsonNode resultsNode = rootNode.path("results");
-
         List<MovieModel> movies = objectMapper.convertValue(resultsNode, new TypeReference<>() {});
 
+        return sortMovieByGenre(movies, searchModel.getGenresIds(), searchModel.getMinStars(), token);
+    }
+
+    public List<MovieModel> searchOMDbMovies(SearchModel searchModel, String token) throws JsonProcessingException {
+        List<MovieModel> movieResults = new ArrayList<>();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "http://www.omdbapi.com/?apikey=" + omdbApiKey + "&s=" + searchModel.getQuery(),
+                HttpMethod.GET,
+                entity,
+                String.class
+        );
+
+        String body = response.getBody();
+        ObjectMapper mapper = new ObjectMapper();
+
+        JsonNode root = mapper.readTree(body);
+        JsonNode searchResults = root.path("Search");
+
+        if (searchResults.isArray()) {
+            for (JsonNode result : searchResults) {
+                String imdbID = result.path("imdbID").asText();
+                movieResults.addAll(getTmdbMovieByImdbId(imdbID));
+            }
+        } else {
+            throw new EntityNotFoundException("Movie not found");
+        }
+        return sortMovieByGenre(movieResults, searchModel.getGenresIds(), searchModel.getMinStars(), token);
+    }
+
+    private List<MovieModel> getTmdbMovieByImdbId(String imdbId) throws JsonProcessingException {
+        HttpHeaders headers;
+        headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + this.tmdbToken);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> tmdbResponse = restTemplate.exchange(
+                "https://api.themoviedb.org/3/find/" + imdbId + "?external_source=imdb_id",
+                HttpMethod.GET,
+                entity,
+                String.class
+        );
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(tmdbResponse.getBody());
+        JsonNode resultsNode = rootNode.path("movie_results");
+        return objectMapper.convertValue(resultsNode, new TypeReference<ArrayList<MovieModel>>() {});
+    }
+
+    private List<MovieModel> sortMovieByGenre(List<MovieModel> movies, List<Integer> selectedGenreIds, Integer minStars, String token) throws JsonProcessingException {
         UserEntity userEntity = null;
 
         if (!StringUtil.isNullOrEmpty(token)) {

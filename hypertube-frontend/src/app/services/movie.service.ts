@@ -31,7 +31,7 @@ export class MovieService {
     );
   }
 
-  search(query: string, page: number, genresIds: number[], minStars: number, productionYear: string): Observable<any> {
+  tmdbSearch(query: string, page: number, genresIds: number[], minStars: number, productionYear: string): Observable<any> {
     const body = {
       query: query,
       page: page,
@@ -39,7 +39,20 @@ export class MovieService {
       minStars: minStars,
       productionYear: productionYear
     };
-    return this.http.post<Movie[]>(`${this.apiUrlAuth}/search`, body).pipe(
+    return this.http.post<Movie[]>(`${this.apiUrlAuth}/tmdb-search`, body).pipe(
+      map((response: any) => response)
+    );
+  }
+
+  omdbSearch(query: string, page: number, genresIds: number[], minStars: number, productionYear: string): Observable<any> {
+    const body = {
+      query: query,
+      page: page,
+      genresIds: genresIds,
+      minStars: minStars,
+      productionYear: productionYear
+    };
+    return this.http.post<Movie[]>(`${this.apiUrlAuth}/omdb-search`, body).pipe(
       map((response: any) => response)
     );
   }

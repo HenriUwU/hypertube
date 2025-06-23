@@ -20,7 +20,7 @@ Bienvenue dans la documentation de l’API **Hypertube**.
     - [Movies: /movies](#movies-movies)
       - [`GET /movies/{movie_id}`](#get-moviesmovie_id)
       - [`POST /movies/sort-by`](#post-moviessort-by)
-      - [`POST /movies/search`](#post-moviessearch)
+      - [`POST /movies/tmdb-search`](#post-moviessearch)
       - [`GET /movies/{movie_id}/comments`](#get-moviesmovie_idcomments)
       - [`POST /movies/watched`](#post-movieswatched)
       - [`PUT /movies/watched`](#put-movieswatched)
@@ -201,7 +201,7 @@ http://localhost:8080/
 ```
 - **Réponse `List<MovieDTO>`:**
 - 
-#### `POST /movies/search`
+#### `POST /movies/tmdb-search`
 
 - **Description :** Renvoie une liste de film trier par la recherche et les genres
 - **Auth requise :** ✅ Oui
@@ -209,6 +209,24 @@ http://localhost:8080/
 ```json
 {
     "query": "Batman",
+    "genresIds": [15, 600],
+    "minStars": 8,
+    "page": 1,
+    "genresIds": []
+}
+```
+- **Réponse `List<MovieDTO>`:**
+
+#### `POST /movies/omdb-search`
+
+- **Description :** Renvoie une liste de film trier par la recherche et les genres
+- **Auth requise :** ✅ Oui
+- **Body SearchModel:**
+```json
+{
+    "query": "Batman",
+    "genresIds": [15, 600],
+    "minStars": 8,
     "page": 1,
     "genresIds": []
 }
