@@ -7,9 +7,11 @@
         <div class="form-container">
             <div class="form-boxes">
                 <div class="left-column">
-                    <label for="email">{{textMap.get('Email Address')}}: </label>
-                    <input id="email" type="email" formControlName="email" [readonly]="this.isReadOnly" />
-                    <br />
+                    <div *ngIf="!isReadOnly">
+                        <label for="email">{{textMap.get('Email Address')}}: </label>
+                        <input id="email" type="email" formControlName="email" [readonly]="this.isReadOnly" />
+                        <br />
+                    </div>
 
                     <label for="username">{{textMap.get('Username')}}: </label>
                     <input id="username" type="text" formControlName="username" [readonly]="this.isReadOnly" />

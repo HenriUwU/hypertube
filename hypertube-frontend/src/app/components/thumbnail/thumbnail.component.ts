@@ -67,6 +67,7 @@ export class ThumbnailComponent implements OnInit {
       {
         next: (data: MovieThumbnail) => {
           this.movieThumbnail = data;
+          console.log('Movie data fetched successfully:', this.movieThumbnail);
           this.watchedMovie = this.movieThumbnail.stoppedAt !== null;
           if (this.movieThumbnail.poster_path == this.fileNotFoundIMDB){
             this.movieThumbnail.poster_path = this.defaultProfilePicture;
@@ -102,8 +103,12 @@ export class ThumbnailComponent implements OnInit {
       return 0;
     }
     const totalMinutes = this.movieThumbnail.runtime;
+    console.log(`Total ffminutes: ${totalMinutes}`);
     const visualizedMinutes = this.movieThumbnail.stoppedAt.hours * 60 + this.movieThumbnail.stoppedAt.minutes;
-    return (visualizedMinutes / totalMinutes) * 100;
+    const res = (visualizedMinutes / totalMinutes) * 100;
+    console.log(`Total minutes: ${res}`);
+    // return (visualizedMinutes / totalMinutes) * 100;
+    return res;
   }
 
   getGenreByIdx(idx: number): string {
