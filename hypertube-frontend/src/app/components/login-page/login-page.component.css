@@ -92,6 +92,8 @@ mat-form-field {
 
 .logo-box img {
   height: 24px;
+  /* height: auto; */
+  width: auto;
 }
 
 .option {
