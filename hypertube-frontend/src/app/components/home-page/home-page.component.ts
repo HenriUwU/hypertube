@@ -50,6 +50,8 @@ export class HomePageComponent implements OnInit {
   lastYearLength = 0;
   filteredYears$: Observable<string[]> = new Observable<string[]>();
   noMoreMovies: boolean = false;
+  searchSourceControl= new FormControl();
+  searchSource: 'omdb' | 'tmdb' = 'tmdb';
 
   textMap = new Map<string, string>([
     ["popular", "popular"],
@@ -62,7 +64,8 @@ export class HomePageComponent implements OnInit {
     ["Production Year", "Production Year"],
     ["All", "All"],
     ["e.g. 2022", "e.g. 2022"],
-    ["No more movies to load.", "No more movies to load."]
+    ["No more movies to load.", "No more movies to load."],
+    ["Source", "Source"]
   ])
 
 
@@ -70,6 +73,11 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.searchSourceControl = new FormControl({ value: 'tmdb', disabled: true });
+    this.searchSourceControl.valueChanges.subscribe((val: 'omdb' | 'tmdb') => {
+      this.onSearchSourceChange(val);
+    });
+
     this.yearControl = new FormControl({ value: '', disabled: true });
     this.translateService.autoTranslateTexts(this.textMap);
     this.translateService.initializeLanguageListener(this.textMap);
@@ -113,19 +121,34 @@ export class HomePageComponent implements OnInit {
         this.movies = [];
         this.loadMovies();
 
-        if (this.searchTerm) {
+        const shouldEnable = !!this.searchTerm;
+
+        if (shouldEnable) {
           if (this.yearControl.disabled) {
             this.yearControl.enable({ emitEvent: false });
+          }
+          if (this.searchSourceControl.disabled) {
+            this.searchSourceControl.enable({ emitEvent: false });
           }
         } else {
           if (!this.yearControl.disabled) {
             this.yearControl.disable({ emitEvent: false });
+          }
+          if (!this.searchSourceControl.disabled) {
+            this.searchSourceControl.disable({ emitEvent: false });
           }
         }
       });
   }
 
   onYearChange() {
+    this.movies = [];
+    this.currentPage = 1;
+    this.loadMovies();
+  }
+
+  onSearchSourceChange(newSource: 'omdb' | 'tmdb') {
+    this.searchSource = newSource;
     this.movies = [];
     this.currentPage = 1;
     this.loadMovies();
@@ -138,18 +161,26 @@ export class HomePageComponent implements OnInit {
   }
 
   onSearchInput(value: string) {
-    this.searchTerm = value
+    this.searchTerm = value.trim();
     this.movies = [];
     this.currentPage = 1;
     this.loadMovies();
 
-    if (this.searchTerm) {
+    const shouldEnable = !!this.searchTerm;
+
+    if (shouldEnable) {
       if (this.yearControl.disabled) {
         this.yearControl.enable({ emitEvent: false });
+      }
+      if (this.searchSourceControl.disabled) {
+        this.searchSourceControl.enable({ emitEvent: false });
       }
     } else {
       if (!this.yearControl.disabled) {
         this.yearControl.disable({ emitEvent: false });
+      }
+      if (!this.searchSourceControl.disabled) {
+        this.searchSourceControl.disable({ emitEvent: false });
       }
     }
   }
@@ -203,12 +234,24 @@ export class HomePageComponent implements OnInit {
       let source$: Observable<any>;
 
       if (this.searchTerm && this.searchTerm.trim() !== '') {
-        source$ = this.movieService.search(this.searchTerm, this.currentPage, Array.from(this.selectedGenreIds), this.minStars, this.filterYear).pipe(
-          catchError((error) => {
-            console.error('Error loading movies:', error);
-            return of([]);
-          })
-        );
+        if (this.searchSource == "tmdb") {
+          source$ = this.movieService.tmdbSearch(this.searchTerm, this.currentPage, Array.from(this.selectedGenreIds), this.minStars, this.filterYear).pipe(
+            catchError((error) => {
+              console.error('Error loading movies:', error);
+              return of([]);
+            })
+          );
+        } else if (this.searchSource == "omdb") {
+          console.log("omdb")
+          source$ = this.movieService.omdbSearch(this.searchTerm, this.currentPage, Array.from(this.selectedGenreIds), this.minStars, this.filterYear).pipe(
+            catchError((error) => {
+              console.error('Error loading movies:', error);
+              return of([]);
+            })
+          );
+        } else {
+          throw new Error('Invalid search source');
+        }
       } else {
         source$ = this.movieService.sortBy(this.selectSortingOpt, this.currentPage, Array.from(this.selectedGenreIds), this.minStars).pipe(
           catchError((error) => {

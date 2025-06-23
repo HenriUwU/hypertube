@@ -42,9 +42,14 @@ public class MovieController {
         return this.movieService.sortByMovies(sortByModel, token);
     }
 
-    @PostMapping(path = "/search")
-    public List<MovieModel> searchMovies(@RequestBody SearchModel searchModel, @RequestHeader(value = "Authorization", required = false) String token) throws JsonProcessingException {
-        return this.movieService.searchMovies(searchModel, token);
+    @PostMapping(path = "/tmdb-search")
+    public List<MovieModel> searchTMDbMovies(@RequestBody SearchModel searchModel, @RequestHeader(value = "Authorization", required = false) String token) throws JsonProcessingException {
+        return this.movieService.searchTMDbMovies(searchModel, token);
+    }
+
+    @PostMapping(path = "/omdb-search")
+    public List<MovieModel> searchOMDbMovies(@RequestBody SearchModel searchModel, @RequestHeader(value = "Authorization", required = false) String token) throws JsonProcessingException {
+        return this.movieService.searchOMDbMovies(searchModel, token);
     }
 
     @GetMapping(path = "/{id}/comments")
