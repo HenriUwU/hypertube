@@ -3,18 +3,18 @@
   <mat-divider></mat-divider>
   <div class="my-comment">
     <form (ngSubmit)="submitComment()" class="comment-form" #commentForm="ngForm">
-      <textarea [(ngModel)]="newComment.content" name="content"
+      <textarea [(ngModel)]="commentContent" name="content"
         placeholder="Write your comment here..." required rows="4"
         #content="ngModel"></textarea>
-      <button type="submit" [disabled]="!newComment.content.trim()">Send</button>
+      <button type="submit" [disabled]="!commentContent.trim()">Send</button>
     </form>
 
     <div class="comment" *ngFor="let comment of comments">
-      <div class="user-profile">
+      <!-- <div class="user-profile">
         <a [routerLink]="['/profil', comment.userId]" class="author-link">
           {{ comment.username }}
         </a>
-      </div>
+      </div> -->
       <p>{{comment.content}}</p>
       <div class="comment-actions">
         <button (click)="likeComment(comment.id)">👍</button>

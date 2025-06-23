@@ -1,7 +1,7 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, map} from "rxjs";
-import { CommentDTO } from '../models/movie.model';
+import { CommentDTO } from '../models/comment.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +12,12 @@ export class CommentService {
   constructor(private http: HttpClient) {
   }
 
-  postComment(comment: CommentDTO): Observable<any> {
-    return this.http.post<CommentDTO>(`${this.apiUrlComments}`, comment, {
+  postComment(movieId: number, content: string): Observable<CommentDTO> {
+    const body = {
+      movieId: movieId,
+      content: content
+    };
+    return this.http.post<CommentDTO>(`${this.apiUrlComments}`, body, {
     }).pipe(
       map((response: CommentDTO) => response)
     );
