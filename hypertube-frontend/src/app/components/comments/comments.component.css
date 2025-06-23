@@ -67,6 +67,21 @@
   box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
 }
 
+.user-profile {
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+}
+
+.author-link {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.author-link:hover {
+  text-decoration: underline;
+}
+
 .actions {
   margin-top: 0.7rem;
   display: flex;

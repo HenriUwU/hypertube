@@ -7,10 +7,12 @@ import {FormsModule} from '@angular/forms';
 // import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { CommentDTO } from '../../models/comment.model';
+import {RouterModule} from '@angular/router';
+
 
 @Component({
   selector: 'app-comments',
-  imports: [MatDividerModule, NgFor, NgIf, FormsModule],
+  imports: [MatDividerModule, NgFor, NgIf, FormsModule, RouterModule],
   standalone: true,
   templateUrl: './comments.component.html',
   styleUrl: './comments.component.css'
@@ -19,7 +21,6 @@ export class CommentsComponent {
   @Input() movieId : number = 950387;
   comments! : CommentDTO[];
   commentContent: string = '';
-  // newComment: CommentDTO = {id: 0, movieId: 0, userId: 0, content: '', like: 0};
 
   constructor(
     private commentService: CommentService,
@@ -65,5 +66,9 @@ export class CommentsComponent {
     this.commentService.deleteComment(commentId).subscribe(() => {
       // this.comments = this.comments.filter(c => c.id !== commentId);
     });
+  }
+
+  isMyComment(comment: CommentDTO): boolean {
+  return comment.user.id === Number(this.authService.getCurrentUserId());
   }
 }
