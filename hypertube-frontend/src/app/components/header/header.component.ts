@@ -38,7 +38,9 @@ export class HeaderComponent implements OnInit {
     ["Language", "Language"],
     ["Edit Profile", "Edit Profile"],
 	["Logout", "Logout"],
-	["Login", "Login"]
+	["Login", "Login"],
+	["Profile", "Profile"],
+	["Users", "Users"],
   ])
 
 
@@ -88,11 +90,16 @@ export class HeaderComponent implements OnInit {
 	  this.router.navigate(['user', 'profile']).then();
 	}
 
+	toUsers():void{
+	  this.router.navigate(['user', 'users']).then();
+	}
+
   updateCurrentLanguage(language: TranslateModel) {
     this.userInfos.language = language.iso_639_1;
     this.userService.updateUser(this.userInfos).subscribe((data) => {
-      this.userInfos.language = data.language
-      this.translateService.updateLanguage(this.userInfos.language)
+    	this.userInfos.language = data.language
+    	this.translateService.updateLanguage(this.userInfos.language)
+		// window.location.reload();
     });
   }
 }

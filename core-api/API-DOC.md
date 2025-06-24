@@ -14,6 +14,7 @@ Bienvenue dans la documentation de l’API **Hypertube**.
       - [`POST /auth/update-password?token={token}`](#post-authupdate-passwordtokentoken)
       - [`POST /auth/old-password-verify`](#post-authold-password-verify)
     - [Utilisateur: /user](#utilisateur-user)
+      - [`GET /user`](#get-user)
       - [`GET /user/{id}`](#get-userid)
       - [`PUT /user`](#put-user)
       - [`DELETE /user/{id}`](#delete-userid)
@@ -100,6 +101,12 @@ http://localhost:8080/
 ```
 ### Utilisateur: /user
 
+#### `GET /user`
+
+- **Description :** Récupère tout les utilisateurs
+- **Auth requise :** ✅ Oui
+- **Réponse `List<UserDTO>`:**
+
 #### `GET /user/{id}`
 
 - **Description :** Récupère un utilisateur par son ID
@@ -116,6 +123,7 @@ http://localhost:8080/
     "profilePicture": null
 }
 ```
+
 #### `PUT /user`
 - **Description :** Met a jour un utilisateur
 - **Auth requise :** ✅ Oui

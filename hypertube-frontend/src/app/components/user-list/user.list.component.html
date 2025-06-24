@@ -1,0 +1,14 @@
+<div class="user-list-container">
+  <div *ngFor="let user of users">
+    <div class="user-item">
+      <img [src]="getProfilePictureUrl(user)" alt="{{ user.username }}" class="user-avatar">
+      <span class="user-name">{{ user.username }}</span>
+      <!-- <button class="btn btn-primary" (click)="toProfile(user.id)">View Details</button> -->
+      <button  mat-button (click)="toProfile(user.id)" class="mat-button-base">
+			  {{ textMap.get('View Details') || 'View Details' }}
+      </button>
+
+    </div>
+  </div>
+
+</div>

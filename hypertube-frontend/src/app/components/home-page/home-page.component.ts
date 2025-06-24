@@ -17,6 +17,7 @@ import {GenreModel} from "../../models/movie.model";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {TranslateService} from "../../services/translate.service";
 import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
+import {AuthService} from "../../services/auth.service";
 
 
 @Component({
@@ -69,7 +70,7 @@ export class HomePageComponent implements OnInit {
   ])
 
 
-  constructor(private movieService: MovieService, private translateService: TranslateService) {
+  constructor(private movieService: MovieService, private translateService: TranslateService, private authService: AuthService) {
   }
 
   ngOnInit() {
@@ -242,7 +243,6 @@ export class HomePageComponent implements OnInit {
             })
           );
         } else if (this.searchSource == "omdb") {
-          console.log("omdb")
           source$ = this.movieService.omdbSearch(this.searchTerm, this.currentPage, Array.from(this.selectedGenreIds), this.minStars, this.filterYear).pipe(
             catchError((error) => {
               console.error('Error loading movies:', error);
@@ -288,6 +288,10 @@ export class HomePageComponent implements OnInit {
 
   @HostListener('window:scroll', [])
   async onScroll(): Promise<void> {
+    if (this.searchSource == "omdb") {
+      this.noMoreMovies = true;
+      return;
+    }
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100 && !this.isLoading) {
       this.currentPage++;
       if (this.currentPage % 5 === 0) { // load a batch each 20 y offset scroll
@@ -305,5 +309,9 @@ export class HomePageComponent implements OnInit {
   private _filterYears(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.years.filter(year => year.toLowerCase().includes(filterValue));
+  }
+
+  isLogged(): boolean {
+    return this.authService.isLoggedIn();
   }
 }

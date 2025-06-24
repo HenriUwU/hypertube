@@ -61,6 +61,17 @@ export class ThumbnailComponent implements OnInit {
 
   ngOnInit(): void {
       this.fillMovieThumbnail(this.movieId);
+      this.autoUpdateLanguage();
+  }
+
+  autoUpdateLanguage(): void {
+    window.addEventListener('storage', (event) => {
+      if (event.storageArea === sessionStorage && event.key === 'language') {
+        setTimeout(() => {
+          this.fillMovieThumbnail(this.movieId);
+        }, 100); // Delay to ensure the language change is processed
+      }
+    });
   }
 
   fillMovieThumbnail(movieId: number): void {

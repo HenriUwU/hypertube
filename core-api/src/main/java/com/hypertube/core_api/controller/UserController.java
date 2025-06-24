@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -21,6 +22,11 @@ public class UserController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Integer id) {
         return ResponseEntity.ok(userService.getUser(id));
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<UserDTO>> getUsers() {
+        return ResponseEntity.ok(userService.getUsers());
     }
 
     @PutMapping()

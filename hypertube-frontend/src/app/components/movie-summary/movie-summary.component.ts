@@ -40,6 +40,29 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     window.addEventListener('resize', this.updateVisibleCount.bind(this));
+    this.getData();
+    this.autoUpdateLanguage();
+  }
+
+  autoUpdateLanguage(): void {
+    window.addEventListener('storage', (event) => {
+      if (event.storageArea === sessionStorage && event.key === 'language') {
+        setTimeout(() => {
+          this.getData();
+        }, 100); // Delay to ensure the language change is processed
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.updateVisibleCount();
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.updateVisibleCount.bind(this));
+  }
+
+  getData(): void {
     this.route.paramMap.subscribe(params => {
           const id = params.get('id');
           if (id) {
@@ -57,14 +80,6 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       }
     });
-  }
-
-  ngAfterViewInit(): void {
-    this.updateVisibleCount();
-  }
-
-  ngOnDestroy(): void {
-    window.removeEventListener('resize', this.updateVisibleCount.bind(this));
   }
 
   loadMovie(){
