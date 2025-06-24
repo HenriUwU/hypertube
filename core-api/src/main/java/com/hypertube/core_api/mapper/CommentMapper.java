@@ -6,6 +6,7 @@ import com.hypertube.core_api.repository.CommentRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class})
@@ -22,4 +23,5 @@ public abstract class CommentMapper {
     public CommentEntity map(Integer id) {
         return commentRepository.findById(id).orElse(null);
     }
+    public Integer mapCommentEntityToId(CommentEntity comment) { return comment.getId(); }
 }

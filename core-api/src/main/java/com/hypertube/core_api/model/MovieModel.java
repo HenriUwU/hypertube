@@ -39,6 +39,8 @@ public class MovieModel {
 
     private Time stoppedAt;
 
+    private String englishTitle;
+
     public static class Credits {
         public List<PersonModel> cast;
         public List<PersonModel> crew;
@@ -154,5 +156,13 @@ public class MovieModel {
 
     public void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
+    }
+
+    public String getEnglishTitle() {
+        return englishTitle;
+    }
+
+    public void setEnglishTitle(String englishTitle) {
+        this.englishTitle = englishTitle;
     }
 }

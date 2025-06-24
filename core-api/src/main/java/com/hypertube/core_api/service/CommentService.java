@@ -13,6 +13,8 @@ import com.hypertube.core_api.repository.CommentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CommentService {
 
@@ -65,7 +67,6 @@ public class CommentService {
         UserDTO user =  userService.getUserByToken(token);
         CommentEntity comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
-        userService.verifyUser(comment.getUser().getId(), token);
 
         CommentLikesDTO commentLikesDTO = new CommentLikesDTO();
         commentLikesDTO.setCommentId(commentId);
@@ -89,10 +90,18 @@ public class CommentService {
         return commentMapper.map(commentRepository.save(comment));
     }
 
+    public List<CommentLikesDTO> getCommentLikes(CommentEntity commentEntity) {
+        if (commentEntity != null) {
+            return this.commentLikesMapper.map(commentLikesRepository.getCommentLikesEntitiesByCommentId(commentEntity));
+        }
+        return null;
+    }
+
     private void checkCommentDTO(CommentDTO commentDTO) {
         if (commentDTO.getMovieId() == null)
             throw new IllegalArgumentException("Movie id cannot be null");
         if (commentDTO.getContent() == null)
             throw new IllegalArgumentException("Content cannot be null");
     }
+
 }

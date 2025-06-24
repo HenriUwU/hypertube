@@ -4,17 +4,15 @@ import com.hypertube.core_api.dto.UserDTO;
 import com.hypertube.core_api.entity.UserEntity;
 import com.hypertube.core_api.repository.UserRepository;
 import org.apache.tika.Tika;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.Base64;
 import java.util.List;
-
-import org.mapstruct.AfterMapping;
-import org.mapstruct.MappingTarget;
 
 
 @Mapper(componentModel = "spring")
@@ -38,6 +36,7 @@ public abstract class UserMapper {
     public UserEntity IntegerToUserEntity(Integer userId) {
         return this.userRepository.findById(userId).orElse(null);
     }
+    public Integer UserEntityToInteger(UserEntity userEntity) { return userEntity.getId(); }
 
     @Named("base64ToBlob")
     public Blob base64ToBlob(String base64) {

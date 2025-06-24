@@ -17,6 +17,7 @@ import com.hypertube.core_api.repository.UserRepository;
 import com.hypertube.core_api.repository.WatchedMoviesRepository;
 import com.hypertube.core_api.security.JwtTokenUtil;
 import jakarta.persistence.EntityNotFoundException;
+import org.apache.tika.utils.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -90,8 +91,11 @@ public class MovieService {
         );
 
         MovieModel movie = response.getBody();
+        if (movie != null &&  !StringUtils.isBlank(movie.getTitle())) {
+            movie.setEnglishTitle(movie.getTitle());
+        }
 
-        if (movie != null && (movie.getOverview() == null || movie.getOverview().trim().isEmpty()) && !language.equals("en")) {
+        if (movie != null && !language.equals("en")) {
             ResponseEntity<MovieModel> fallbackResponse = restTemplate.exchange(
                     "https://api.themoviedb.org/3/movie/" + movieId + "?language=en",
                     HttpMethod.GET,
@@ -99,8 +103,13 @@ public class MovieService {
                     MovieModel.class
             );
             MovieModel fallbackMovie = fallbackResponse.getBody();
-            if (fallbackMovie != null && fallbackMovie.getOverview() != null) {
-                movie.setOverview(fallbackMovie.getOverview());
+            if (fallbackMovie != null) {
+                if (!StringUtils.isBlank(fallbackMovie.getOverview())) {
+                    movie.setOverview(fallbackMovie.getOverview());
+                }
+                if (!StringUtils.isBlank(fallbackMovie.getTitle())) {
+                    movie.setEnglishTitle(fallbackMovie.getTitle());
+                }
             }
         }
 

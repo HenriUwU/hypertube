@@ -2,8 +2,8 @@ package com.hypertube.core_api.controller;
 
 import com.hypertube.core_api.dto.CommentDTO;
 import com.hypertube.core_api.dto.CommentLikesDTO;
+import com.hypertube.core_api.entity.CommentEntity;
 import com.hypertube.core_api.service.CommentService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,4 +43,10 @@ public class CommentController {
     public CommentDTO unlikeComment(@PathVariable Integer commentId, @RequestHeader("Authorization") String token) {
         return this.commentService.unlikeComment(commentId, token);
     }
+
+    @GetMapping("/{id}/likes")
+    public List<CommentLikesDTO> getCommentLikes(@PathVariable CommentEntity id) {
+        return this.commentService.getCommentLikes(id);
+    }
+
 }
