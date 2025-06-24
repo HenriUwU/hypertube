@@ -70,7 +70,6 @@ public class MovieService {
         String language = "en";
         UserEntity userEntity = null;
 
-
         if (!StringUtil.isNullOrEmpty(token)) {
             String username = jwtTokenUtil.extractUsername(token.substring(7));
             userEntity = userRepository.findByUsername(username).orElse(null);
@@ -91,6 +90,20 @@ public class MovieService {
         );
 
         MovieModel movie = response.getBody();
+
+        if (movie != null && (movie.getOverview() == null || movie.getOverview().trim().isEmpty()) && !language.equals("en")) {
+            ResponseEntity<MovieModel> fallbackResponse = restTemplate.exchange(
+                    "https://api.themoviedb.org/3/movie/" + movieId + "?language=en",
+                    HttpMethod.GET,
+                    entity,
+                    MovieModel.class
+            );
+            MovieModel fallbackMovie = fallbackResponse.getBody();
+            if (fallbackMovie != null && fallbackMovie.getOverview() != null) {
+                movie.setOverview(fallbackMovie.getOverview());
+            }
+        }
+
         if (movie != null) {
             if (movie.getThumbnail() != null)
                 movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail());
@@ -125,7 +138,6 @@ public class MovieService {
                 }
             }
         }
-
         return movie;
     }
 

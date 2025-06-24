@@ -99,6 +99,7 @@ export class HeaderComponent implements OnInit {
     this.userService.updateUser(this.userInfos).subscribe((data) => {
       this.userInfos.language = data.language
       this.translateService.updateLanguage(this.userInfos.language)
+      window.location.reload();
     });
   }
 }

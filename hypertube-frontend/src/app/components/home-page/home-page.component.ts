@@ -243,7 +243,6 @@ export class HomePageComponent implements OnInit {
             })
           );
         } else if (this.searchSource == "omdb") {
-          console.log("omdb")
           source$ = this.movieService.omdbSearch(this.searchTerm, this.currentPage, Array.from(this.selectedGenreIds), this.minStars, this.filterYear).pipe(
             catchError((error) => {
               console.error('Error loading movies:', error);
@@ -289,6 +288,10 @@ export class HomePageComponent implements OnInit {
 
   @HostListener('window:scroll', [])
   async onScroll(): Promise<void> {
+    if (this.searchSource == "omdb") {
+      this.noMoreMovies = true;
+      return;
+    }
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100 && !this.isLoading) {
       this.currentPage++;
       if (this.currentPage % 5 === 0) { // load a batch each 20 y offset scroll
