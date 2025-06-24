@@ -97,9 +97,9 @@ export class HeaderComponent implements OnInit {
   updateCurrentLanguage(language: TranslateModel) {
     this.userInfos.language = language.iso_639_1;
     this.userService.updateUser(this.userInfos).subscribe((data) => {
-      this.userInfos.language = data.language
-      this.translateService.updateLanguage(this.userInfos.language)
-      window.location.reload();
+    	this.userInfos.language = data.language
+    	this.translateService.updateLanguage(this.userInfos.language)
+		// window.location.reload();
     });
   }
 }
