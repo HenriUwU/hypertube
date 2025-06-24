@@ -11,7 +11,6 @@ import {RouterModule} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import { UserModel } from '../../models/user.model';
 
-
 @Component({
   selector: 'app-comments',
   imports: [MatDividerModule, NgFor, NgIf, FormsModule, RouterModule],
@@ -107,4 +106,20 @@ export class CommentsComponent {
   isMyComment(comment: CommentDTO): boolean {
   return comment.user.id === Number(this.authService.getCurrentUserId());
   }
+  
+  // /comment/id/like 
+  // {commentId/liked bool}
+
+  formatDateTime(datetime: string): string {
+    const date = new Date(datetime);
+    return date.toLocaleString('fr-FR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
 }
+
+

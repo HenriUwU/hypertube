@@ -4,8 +4,9 @@ export interface CommentDTO {
   id: number;
   movieId: number;
   user: UserModel;
-  content: String;
+  content: string;
   likes: number;
-  createdAt: String;
-  updatedAt: String;
+  createdAt: string;
+  updatedAt: string;
 }
+
