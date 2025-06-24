@@ -1,26 +1,57 @@
 <div class="comments-container">
-  <p>Comments</p>
-  <mat-divider></mat-divider>
-  <div class="my-comment">
-    <form (ngSubmit)="submitComment()" class="comment-form" #commentForm="ngForm">
-      <textarea [(ngModel)]="commentContent" name="content"
-        placeholder="Write your comment here..." required rows="4"
-        #content="ngModel"></textarea>
-      <button type="submit" [disabled]="!commentContent.trim()">Send</button>
-    </form>
+  <h3>Comments</h3>
 
-    <div class="comment" *ngFor="let comment of comments">
-      <div class="user-profile">
-        <a [routerLink]="['/profil', comment.user.id]" class="author-link">
-          {{ comment.user.username }}
-        </a>
-      </div>
-      <p>{{comment.content}}</p>
-      <div class="comment-actions">
-        <button (click)="likeComment(comment.id)">👍</button>
-        <button (click)="unlikeComment(comment.id)">👎</button>
-        <button (click)="deleteComment(comment.id)">🗑️</button>
+  <form (ngSubmit)="submitComment()" #commentForm="ngForm" class="comment-form">
+    <mat-divider></mat-divider>
+    <div class="comment-header">
+       <strong>{{currentUser.username}}</strong>
+    </div>
+    <textarea [(ngModel)]="commentContent" name="content" required rows="4"
+              placeholder="Write your comment here..."
+              #content="ngModel"></textarea>
+    <!-- <mat-divider></mat-divider> -->
+    <div class="submit-button">
+      <button type="submit" [disabled]="!commentContent.trim()">Send</button>
+    </div>
+  </form>
+
+  <hr />
+
+  <div *ngFor="let comment of comments" class="comment-block">
+    <div class="comment-header">
+      <a [routerLink]="['/profil', comment.user.id]" class="author-link">
+        <strong>{{comment.user.username}}</strong>
+      </a>
+      <div class="comment-date">
+        {{comment.createdAt}}
       </div>
     </div>
+    <mat-divider></mat-divider>
+    <p class="comment-content">{{comment.content}}</p>
+
+    <div class="comment-actions">
+      <ng-container *ngIf="comment.user.id === currentUser.id; else otherUserActions">
+        <!-- <button (click)="editComment(comment)">Modify</button> -->
+        <!-- <button (click)="toggleLike(comment)"> -->
+          <!-- {{comment.likedByCurrentUser ? '♡' : '♥'}}</button> -->
+           <button (click)="likeComment(comment.id)">♥</button>
+        <!-- <button (click)="unlikeComment(comment.id)">♡</button> -->
+      </ng-container>
+      <ng-template #otherUserActions>
+        <button (click)="likeComment(comment.id)">♥</button>
+        <!-- <button (click)="unlikeComment(comment.id)">♡</button> -->
+      </ng-template>
+    </div>
+    <!-- <hr /> -->
   </div>
 </div>
+
+
+<!-- 
+TODO:
+- bouton modifier
+- bouton like-(click) plein, unlike-(reclick) vide
+- lien vers profil de l'utilisateur
+- date/heure du commentaire
+- bouton pour envoyer le commentaire
+-->
