@@ -13,8 +13,11 @@ import com.hypertube.core_api.repository.CommentLikesRepository;
 import com.hypertube.core_api.repository.CommentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import com.hypertube.core_api.service.CommentService;
+import org.springframework.http.ResponseEntity;
 
-import java.util.List;
+import java.util.*;
+
 
 @Service
 public class CommentService {
@@ -98,13 +101,15 @@ public class CommentService {
         return null;
     }
 
-    public boolean hasCurrentUserLikeComment(Integer commentId, String token) {
+    public ResponseEntity<Map<String, String>> hasCurrentUserLikeComment(Integer commentId, String token) {
         CommentEntity comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
         UserDTO user = userService.getUserByToken(token);
         UserEntity userEntity = userMapper.map(user);
-
-        return this.commentLikesRepository.getCommentLikesEntityByCommentIdAndUserId(comment, userEntity) != null;
+        
+        Map<String, String> map = new HashMap<>();
+        map.put("liked", String.valueOf(this.commentLikesRepository.getCommentLikesEntityByCommentIdAndUserId(comment, userEntity) != null));
+        return ResponseEntity.ok(map);
     }
 
     private void checkCommentDTO(CommentDTO commentDTO) {

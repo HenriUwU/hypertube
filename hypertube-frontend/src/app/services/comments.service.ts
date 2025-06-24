@@ -30,19 +30,24 @@ export class CommentService {
 
   deleteComment(commentId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrlComments}/${commentId}`, {
-      // headers: this.getAuthHeaders()
     });
   }
 
   likeComment(commentId: number): Observable<CommentDTO> {
     return this.http.post<CommentDTO>(`${this.apiUrlComments}/like/${commentId}`, {}, {
-      // headers: this.getAuthHeaders()
     });
   }
 
   unlikeComment(commentId: number): Observable<CommentDTO> {
     return this.http.delete<CommentDTO>(`${this.apiUrlComments}/unlike/${commentId}`, {
-      // headers: this.getAuthHeaders()
     });
+  }
+
+  isLiked(commentId: number): Observable<boolean> {
+    return this.http.get<{liked: string}>(`${this.apiUrlComments}/${commentId}/liked`).pipe(
+      map(response => {
+        return response.liked === 'true';
+      })
+    );
   }
 }

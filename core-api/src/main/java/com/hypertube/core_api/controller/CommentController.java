@@ -4,9 +4,10 @@ import com.hypertube.core_api.dto.CommentDTO;
 import com.hypertube.core_api.dto.CommentLikesDTO;
 import com.hypertube.core_api.entity.CommentEntity;
 import com.hypertube.core_api.service.CommentService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -50,7 +51,7 @@ public class CommentController {
     }
 
     @GetMapping("/{commentId}/liked")
-    public boolean likedComment(@PathVariable Integer commentId, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Map<String, String>> likedComment(@PathVariable Integer commentId, @RequestHeader("Authorization") String token) {
         return this.commentService.hasCurrentUserLikeComment(commentId, token);
     }
 
