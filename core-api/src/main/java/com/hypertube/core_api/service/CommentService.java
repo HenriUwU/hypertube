@@ -3,6 +3,7 @@ package com.hypertube.core_api.service;
 import com.hypertube.core_api.dto.CommentDTO;
 import com.hypertube.core_api.dto.CommentLikesDTO;
 import com.hypertube.core_api.dto.UserDTO;
+import com.hypertube.core_api.entity.UserEntity;
 import com.hypertube.core_api.mapper.CommentLikesMapper;
 import com.hypertube.core_api.mapper.CommentMapper;
 import com.hypertube.core_api.mapper.UserMapper;
@@ -95,6 +96,15 @@ public class CommentService {
             return this.commentLikesMapper.map(commentLikesRepository.getCommentLikesEntitiesByCommentId(commentEntity));
         }
         return null;
+    }
+
+    public boolean hasCurrentUserLikeComment(Integer commentId, String token) {
+        CommentEntity comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+        UserDTO user = userService.getUserByToken(token);
+        UserEntity userEntity = userMapper.map(user);
+
+        return this.commentLikesRepository.getCommentLikesEntityByCommentIdAndUserId(comment, userEntity) != null;
     }
 
     private void checkCommentDTO(CommentDTO commentDTO) {
