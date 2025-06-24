@@ -18,7 +18,7 @@ export class VerifyEmailComponent implements OnInit {
   isSuccess: boolean = false;
   isLoading: boolean = false;
 
-  textMap = new Map<string, string>([
+  tradMap = new Map<string, string>([
     ["Verification successful!", "Verification successful!"],
     ["Verification failed.", "Verification failed."],
     ["No token provided.", "No token provided."],
@@ -29,8 +29,8 @@ export class VerifyEmailComponent implements OnInit {
   constructor(private route: ActivatedRoute, private authService: AuthService, private translateService: TranslateService) {}
 
   ngOnInit(): void {
-    // this.translateService.autoTranslateTexts(this.textMap);
-    // this.translateService.initializeLanguageListener(this.textMap);
+    // this.translateService.autoTranslateTexts(this.tradMap);
+    // this.translateService.initializeLanguageListener(this.tradMap);
     
     const token = this.route.snapshot.queryParamMap.get('token');
     
@@ -43,13 +43,13 @@ export class VerifyEmailComponent implements OnInit {
           this.isLoading = false;
         },
         error: (err: HttpErrorResponse) => {
-          this.message = err.error?.message || this.textMap.get("Verification failed.");
+          this.message = err.error?.message || this.tradMap.get("Verification failed.");
           this.isSuccess = false;
           this.isLoading = false;
         }
       });
     } else {
-      this.message = this.textMap.get("No token provided.") || "No token provided."; 
+      this.message = this.tradMap.get("No token provided.") || "No token provided."; 
       this.isSuccess = false;
     }
   }

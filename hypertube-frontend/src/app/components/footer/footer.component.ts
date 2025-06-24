@@ -11,7 +11,7 @@ import { TranslateService } from "../../services/translate.service"
   styleUrl: './footer.component.css'
 })
 export class FooterComponent {
-  textMap = new Map<string, string>([
+  tradMap = new Map<string, string>([
     ["Developped by", "Developped by"],
     ["and", "and"],
     ["using", "using"]
@@ -20,8 +20,8 @@ export class FooterComponent {
   }
 
   ngOnInit() {
-    this.translateService.autoTranslateTexts(this.textMap);
-    this.translateService.initializeLanguageListener(this.textMap);
+    this.translateService.autoTranslateTexts(this.tradMap);
+    this.translateService.initializeLanguageListener(this.tradMap);
   }
 
 }

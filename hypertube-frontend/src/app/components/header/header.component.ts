@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit {
   selectedLanguage!: TranslateModel;
   userInfos!: UserModel;
 
-  textMap = new Map<string, string>([
+  tradMap = new Map<string, string>([
     ["Language", "Language"],
     ["Edit Profile", "Edit Profile"],
 	["Logout", "Logout"],
@@ -56,8 +56,8 @@ export class HeaderComponent implements OnInit {
 		  this.languages = data
 	  );
 
-	  this.translateService.autoTranslateTexts(this.textMap);
-	  this.translateService.initializeLanguageListener(this.textMap);
+	  this.translateService.autoTranslateTexts(this.tradMap);
+	  this.translateService.initializeLanguageListener(this.tradMap);
 
 	  interval(100)
 		  .pipe(map(() => this.authService.getCurrentUserId()),

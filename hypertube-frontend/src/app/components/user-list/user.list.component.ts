@@ -21,7 +21,7 @@ export class UserListComponent implements OnInit {
   }
 
   users: UserModel[] = []
-  textMap = new Map<string, string>([
+  tradMap = new Map<string, string>([
     ["View Profile", "View Profile"],
   ]);
 
@@ -29,8 +29,8 @@ export class UserListComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.translateService.autoTranslateTexts(this.textMap);
-    this.translateService.initializeLanguageListener(this.textMap);
+    this.translateService.autoTranslateTexts(this.tradMap);
+    this.translateService.initializeLanguageListener(this.tradMap);
 
     this.userService.getAllUsers().subscribe({
       next: (users: UserModel[]) => {

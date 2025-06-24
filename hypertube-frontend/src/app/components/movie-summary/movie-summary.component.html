@@ -72,12 +72,19 @@
 <div class="trailer-container">
   <div class="watch-container">
     <div class="left-side">
-      <iframe
-		  *ngIf="trailerUrl"
-		  [src]="trailerUrl"
-		  title="YouTube video"
-		  allowfullscreen>
-      </iframe>
+      <ng-container *ngIf="trailerUrl; else noTrailer">
+        <iframe
+          [src]="trailerUrl"
+          title="YouTube video"
+          allowfullscreen>
+        </iframe>
+      </ng-container>
+
+      <ng-template #noTrailer>
+        <div class="no-trailer">
+          <p>🎬 {{ tradMap.get('The trailer is not available for this movie.') }}</p>
+        </div>
+      </ng-template>
     </div>
 
     <div class="right-side">
@@ -96,7 +103,7 @@
       </div>
       <div class="play">
         <button mat-flat-button class="play-btn" type="submit" (click)="stream()" [disabled]="!magnet">
-            ▶ Play
+            ▶ {{ tradMap.get('Play') }}
         </button>
       </div>
     </div>

@@ -54,7 +54,7 @@ export class HomePageComponent implements OnInit {
   searchSourceControl= new FormControl();
   searchSource: 'omdb' | 'tmdb' = 'tmdb';
 
-  textMap = new Map<string, string>([
+  tradMap = new Map<string, string>([
     ["popular", "popular"],
     ["top rated", "top rated"],
     ["now playing", "now playing"],
@@ -80,8 +80,8 @@ export class HomePageComponent implements OnInit {
     });
 
     this.yearControl = new FormControl({ value: '', disabled: true });
-    this.translateService.autoTranslateTexts(this.textMap);
-    this.translateService.initializeLanguageListener(this.textMap);
+    this.translateService.autoTranslateTexts(this.tradMap);
+    this.translateService.initializeLanguageListener(this.tradMap);
     this.movieService.sortBy('popular', 1, [], 0).subscribe((data: any) => {
       this.movies = data;
     });

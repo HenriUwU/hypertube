@@ -49,4 +49,9 @@ public class CommentController {
         return this.commentService.getCommentLikes(id);
     }
 
+    @GetMapping("/{commentId}/liked")
+    public boolean likedComment(@PathVariable Integer commentId, @RequestHeader("Authorization") String token) {
+        return this.commentService.hasCurrentUserLikeComment(commentId, token);
+    }
+
 }

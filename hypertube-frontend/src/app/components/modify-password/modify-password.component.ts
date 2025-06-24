@@ -32,7 +32,7 @@ export class ModifyPasswordComponent {
   successMessage: boolean = false;
   private _errorMessage: string = '';
 
-  textMap = new Map<string, string>([
+  tradMap = new Map<string, string>([
     ["Current Password", "Current Password"],
     ["New Password", "New Password"],
     ["Confirm New Password", "Confirm New Password"],
@@ -43,8 +43,8 @@ export class ModifyPasswordComponent {
   constructor(private authService: AuthService, private translateService: TranslateService, private globalMessageService: GlobalMessageService, private router: Router) { }
 
   ngOnInit(): void {
-    this.translateService.autoTranslateTexts(this.textMap);
-    this.translateService.initializeLanguageListener(this.textMap);
+    this.translateService.autoTranslateTexts(this.tradMap);
+    this.translateService.initializeLanguageListener(this.tradMap);
   }
 
   confirmPasswordValidator(control: AbstractControl): ValidationErrors | null {
@@ -130,7 +130,7 @@ export class ModifyPasswordComponent {
         }
         this.authService.updateForgotPassword(token, password).subscribe(
           (response: any) => {
-            this.globalMessageService.showMessage(this.textMap.get("Password updated successfully!") || "Password updated successfully!", true);
+            this.globalMessageService.showMessage(this.tradMap.get("Password updated successfully!") || "Password updated successfully!", true);
             this.successMessage = true;
           },
           (error: any) => {
@@ -141,7 +141,7 @@ export class ModifyPasswordComponent {
       } else {
         this.authService.updatePassword('', password).subscribe(
           (response: any) => {
-            this.globalMessageService.showMessage(this.textMap.get("Password updated successfully!") || "Password updated successfully!", true);
+            this.globalMessageService.showMessage(this.tradMap.get("Password updated successfully!") || "Password updated successfully!", true);
             this.successMessage = true;
           },
           (error: any) => {
