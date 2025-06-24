@@ -89,7 +89,7 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
           this.movie = data;
           this.movie.vote_average = Math.round(this.movie.vote_average * 10) / 10;
 		  this.loadingTorrents = true;
-          this.torrentService.searchTorrent(this.movie.title).subscribe(
+          this.torrentService.searchTorrent(this.movie.englishTitle).subscribe(
             {next: (data: Torrent[]) => {
               this.torrents = data;
 			  this.loadingTorrents = false;

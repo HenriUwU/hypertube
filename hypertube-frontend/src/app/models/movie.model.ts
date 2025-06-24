@@ -3,6 +3,7 @@ import { Time } from "@angular/common";
 export interface Movie {
   id: number;
   title: string;
+  englishTitle: string;
   overview: string;
 
   vote_average: number;
