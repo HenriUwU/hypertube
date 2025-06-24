@@ -9,6 +9,7 @@ import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 import {MatButton} from "@angular/material/button";
 import {CommentsComponent} from '../comments/comments.component';
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {TranslateService} from "../../services/translate.service";
 
 @Component({
   selector: 'app-movie-summary',
@@ -29,10 +30,15 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
   castIndex = 0;
   crewIndex = 0;
   visibleCount = 8;
+  tradMap = new Map<string, string>([
+    ["Play", "Play"],
+    ["The trailer is not available for this movie.", "The trailer is not available for this movie."]
+  ])
 
   constructor(
     private movieService: MovieService,
     private torrentService: TorrentService,
+    private translateService: TranslateService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
 	  private router: Router,
@@ -42,6 +48,8 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     window.addEventListener('resize', this.updateVisibleCount.bind(this));
     this.getData();
     this.autoUpdateLanguage();
+    this.translateService.autoTranslateTexts(this.tradMap);
+    this.translateService.initializeLanguageListener(this.tradMap);
   }
 
   autoUpdateLanguage(): void {
@@ -73,7 +81,6 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
                   this.trailerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
                 },
                 error: (e) => {
-                  console.error('Error fetching trailer:', e);
                 },
                 complete: () => {
                 }

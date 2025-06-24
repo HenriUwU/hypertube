@@ -315,6 +315,13 @@
   filter: grayscale(100%);
 }
 
+.no-trailer {
+  padding: 20px;
+  text-align: center;
+  font-style: italic;
+  color: #888;
+}
+
 @media (max-width: 768px) {
   .watch-container {
     flex-direction: column;

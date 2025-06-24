@@ -29,7 +29,7 @@ export class StreamingComponent implements OnInit, AfterViewInit {
 
   private hash: string = '';
 
-  textMap = new Map<string, string>([
+  tradMap = new Map<string, string>([
     ["Select a torrent", "Select a torrent"],
     ["Your browser does not support the video tag.", "Your browser does not support the video tag."],
   ]);
@@ -41,8 +41,8 @@ export class StreamingComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-	  this.translationService.autoTranslateTexts(this.textMap);
-	  this.translationService.initializeLanguageListener(this.textMap);
+	  this.translationService.autoTranslateTexts(this.tradMap);
+	  this.translationService.initializeLanguageListener(this.tradMap);
 	  this.loading = true;
 
 	  this.route.queryParams.subscribe(params => {

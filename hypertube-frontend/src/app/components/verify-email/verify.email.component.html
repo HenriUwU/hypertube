@@ -1,6 +1,6 @@
 <div class="message-container">
   <div class="message-box">
     <h2 [ngClass]="isSuccess ? 'success' : 'error'">{{ message }}</h2>
-    <p class="message" *ngIf="message">{{ isSuccess ? textMap.get('Verification successful!') : textMap.get('Please check your email link or try again later.')}}</p>
+    <p class="message" *ngIf="message">{{ isSuccess ? tradMap.get('Verification successful!') : tradMap.get('Please check your email link or try again later.')}}</p>
   </div>
 </div>

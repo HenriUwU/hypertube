@@ -32,14 +32,14 @@ export class TranslateService {
     return this.translateStrings(text, 'en', sessionStorage.getItem('language') ? sessionStorage.getItem('language')! : 'en')
   }
 
-  autoTranslateTexts(textMap: Map<string, string>): void{
-    const texts: string[] = Array.from(textMap.keys());
+  autoTranslateTexts(tradMap: Map<string, string>): void{
+    const texts: string[] = Array.from(tradMap.keys());
     const sourceLang = "en";
     const targetLang = sessionStorage.getItem('language') ? sessionStorage.getItem('language')! : 'en';
 
     this.translateStrings(texts, sourceLang, targetLang).subscribe((translations: string[]) => {
       translations.forEach((translation, index) => {
-        textMap.set(texts[index], translation);
+        tradMap.set(texts[index], translation);
       });
     });
   }
@@ -59,13 +59,13 @@ export class TranslateService {
     return sessionStorage.getItem('language') || 'en';
   }
 
-  initializeLanguageListener(textMap: Map<string, string>): void {
+  initializeLanguageListener(tradMap: Map<string, string>): void {
     window.addEventListener('storage', (event) => {
       if (event.storageArea === sessionStorage && event.key === 'language') {
-        const texts: string[] = Array.from(textMap.keys());
+        const texts: string[] = Array.from(tradMap.keys());
         this.autoTranslate(texts).subscribe((translations: string[]) => {
           translations.forEach((translation, index) => {
-            textMap.set(texts[index], translation);
+            tradMap.set(texts[index], translation);
           });
         });
       }

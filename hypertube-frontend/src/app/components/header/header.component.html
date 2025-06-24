@@ -8,7 +8,7 @@
 
         <button *ngIf="isLog()" mat-button [matMenuTriggerFor]="languageMenu" color="basic" class="menu-density">
             <mat-icon>language</mat-icon>
-            {{ textMap.get('Language') }}
+            {{ tradMap.get('Language') }}
             <mat-menu #languageMenu="matMenu">
                 <button mat-menu-item *ngFor="let language of languages" (click)="updateCurrentLanguage(language)">
                     {{ language.english_name }}
@@ -28,21 +28,21 @@
             <mat-menu #userMenu="matMenu">
                 <button mat-menu-item (click)="toProfile()">
                     <mat-icon>settings</mat-icon>
-                    {{ textMap.get('Edit Profile') }}
+                    {{ tradMap.get('Edit Profile') }}
                 </button>
                 <button mat-menu-item (click)="toUsers()">
                     <mat-icon>person</mat-icon>
-                    {{ textMap.get('Users') }}
+                    {{ tradMap.get('Users') }}
                 </button>
                 <button mat-menu-item (click)="logout()">
                     <mat-icon color="warn">logout</mat-icon>
-                    <span [ngStyle]="{'color': '#F44336'}">{{ textMap.get('Logout') }}</span>
+                    <span [ngStyle]="{'color': '#F44336'}">{{ tradMap.get('Logout') }}</span>
                 </button>
             </mat-menu>
         </button>
 
         <button *ngIf="!isLog()" mat-button (click)="login()" class="mat-button-base">
-			{{ textMap.get('Login') || 'Login' }}
+			{{ tradMap.get('Login') || 'Login' }}
         </button>
     </div>
 </div>

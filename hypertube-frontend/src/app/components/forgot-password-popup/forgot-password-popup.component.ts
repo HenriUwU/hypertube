@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 export class ForgotPasswordPopupComponent {
   // Tis componennt is used to display a popup for asking a mail address to send a reset password link
 
-  textMap = new Map<string, string>([
+  tradMap = new Map<string, string>([
     ["Please enter your email address to receive a reset password link.", "Please enter your email address to receive a reset password link."],
     ["Email Address", "Email Address"],
     ["Send reset link", "Send reset link"],
@@ -32,14 +32,14 @@ export class ForgotPasswordPopupComponent {
   }
 
   NgOnInit(){
-    this.translateService.autoTranslateTexts(this.textMap);
-    this.translateService.initializeLanguageListener(this.textMap);
+    this.translateService.autoTranslateTexts(this.tradMap);
+    this.translateService.initializeLanguageListener(this.tradMap);
   }
 
   onSubmit() {
 
     if (!this.email || this.email.trim() === '') {
-      this.globalMessageService.showMessage(this.textMap.get("Please enter a valid email address") || "Please enter a valid email address", false);
+      this.globalMessageService.showMessage(this.tradMap.get("Please enter a valid email address") || "Please enter a valid email address", false);
       return;
     }
     console.log("Sending reset link to:", this.email);
@@ -49,9 +49,9 @@ export class ForgotPasswordPopupComponent {
       },
       error: (error) => {
         console.error("Error sending reset link:", error);
-        this.globalMessageService.showMessage(this.textMap.get("Error sending reset link") || "Error sending reset link", false);
+        this.globalMessageService.showMessage(this.tradMap.get("Error sending reset link") || "Error sending reset link", false);
       }
     });
-    this.globalMessageService.showMessage(this.textMap.get("Reset link sent successfully, check your emails.") || "Reset link sent successfully, check your emails.", true);
+    this.globalMessageService.showMessage(this.tradMap.get("Reset link sent successfully, check your emails.") || "Reset link sent successfully, check your emails.", true);
   }
 }

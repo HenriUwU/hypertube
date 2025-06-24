@@ -1,7 +1,7 @@
 <div *ngIf="isLogged()" class="homepage-controls">
   <div class="search-and-year">
     <mat-form-field appearance="fill" class="search-field transparent-form-field">
-      <mat-label>{{textMap.get('Search')}}</mat-label>
+      <mat-label>{{tradMap.get('Search')}}</mat-label>
       <input matInput (input)="onSearchInputFromEvent($event)" [value]="searchTerm" placeholder="Search movies..." />
       <button *ngIf="searchTerm" matSuffix mat-icon-button aria-label="Clear" (click)="onSearchInput('')">
         <mat-icon>close</mat-icon>
@@ -9,7 +9,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="source-select transparent-form-field">
-      <mat-label>{{ textMap.get('Source') || 'Source' }}</mat-label>
+      <mat-label>{{ tradMap.get('Source') || 'Source' }}</mat-label>
       <mat-select [formControl]="searchSourceControl">
         <mat-option value="tmdb">TMDb</mat-option>
         <mat-option value="omdb">OMDb</mat-option>
@@ -17,13 +17,13 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="production-year-select">
-      <mat-label>{{ textMap.get('Production Year') }}</mat-label>
+      <mat-label>{{ tradMap.get('Production Year') }}</mat-label>
       <input
         type="text"
         matInput
         [formControl]="yearControl"
         [matAutocomplete]="auto"
-        placeholder="{{textMap.get('e.g. 2022')}}"
+        placeholder="{{tradMap.get('e.g. 2022')}}"
       />
       <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption>
         <mat-option *ngFor="let year of filteredYears$ | async" [value]="year">
@@ -37,11 +37,11 @@
   <div class="spacer"></div>
 
   <mat-tab-group class="sort-tab-group" (selectedIndexChange)="onSortChangeIndex($event)">
-    <mat-tab *ngFor="let opt of sortingOptions" [label]="textMap.get(formatLabel(opt)) ?? formatLabel(opt)"></mat-tab>
+    <mat-tab *ngFor="let opt of sortingOptions" [label]="tradMap.get(formatLabel(opt)) ?? formatLabel(opt)"></mat-tab>
   </mat-tab-group>
 
   <div class="star-rating-filter">
-    <label>{{textMap.get('Min. stars')}}</label>
+    <label>{{tradMap.get('Min. stars')}}</label>
     <div class="stars">
     <span
       *ngFor="let star of starsArray; let i = index"
@@ -56,7 +56,7 @@
   </div>
 
   <button mat-button [matMenuTriggerFor]="filterMenu">
-    {{textMap.get('Genres')}}
+    {{tradMap.get('Genres')}}
     <mat-icon>filter_alt</mat-icon>
   </button>
 
@@ -69,7 +69,7 @@
           [disableRipple]="true"
           (click)="$event.stopPropagation()"
         >
-          {{textMap.get('All')}}
+          {{tradMap.get('All')}}
         </mat-checkbox>
       </div>
 
@@ -98,6 +98,6 @@
   </div>
 
   <div *ngIf="noMoreMovies" class="no-more-movies-message">
-    {{ textMap.get('No more movies to load.') || 'No more movies to load.' }}
+    {{ tradMap.get('No more movies to load.') || 'No more movies to load.' }}
   </div>
 </div>

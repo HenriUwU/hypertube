@@ -24,7 +24,7 @@ export class ProfileComponent {
     profilePicture: new FormControl(''),
   });
 
-  textMap = new Map<string, string>([
+  tradMap = new Map<string, string>([
     ["Email Address", "Email Address"],
     ["Username", "Username"],
     ["Last Name", "Last Name"],
@@ -54,8 +54,8 @@ export class ProfileComponent {
   }
 
   ngOnInit() {
-    this.translateService.autoTranslateTexts(this.textMap);
-    this.translateService.initializeLanguageListener(this.textMap);
+    this.translateService.autoTranslateTexts(this.tradMap);
+    this.translateService.initializeLanguageListener(this.tradMap);
     this.route.queryParams.subscribe(params => {
       this.userId = params['userId'] || this.userId;
     });
@@ -78,7 +78,7 @@ export class ProfileComponent {
     if (input.files && input.files[0]) {
       const file = input.files[0];
       if (!file.type.startsWith('image/')) {
-        this.globalMessageService.showMessage(this.textMap.get("Please select a valid image file") || "Please select a valid image file", false);
+        this.globalMessageService.showMessage(this.tradMap.get("Please select a valid image file") || "Please select a valid image file", false);
         return;
       }
       const reader = new FileReader();
@@ -118,10 +118,10 @@ export class ProfileComponent {
         sessionStorage.setItem(`token`, response.token);
       }
       this.translateService.updateLanguage(response.language? response.language : 'en');
-      this.globalMessageService.showMessage(this.textMap.get("Profile updated successfully") || "Profile updated successfully", true);
+      this.globalMessageService.showMessage(this.tradMap.get("Profile updated successfully") || "Profile updated successfully", true);
     }
     , (error) => {
-      this.globalMessageService.showMessage(`${this.textMap.get('Error') || 'Error'}: ${error}`, false);
+      this.globalMessageService.showMessage(`${this.tradMap.get('Error') || 'Error'}: ${error}`, false);
     }
     );
   }
