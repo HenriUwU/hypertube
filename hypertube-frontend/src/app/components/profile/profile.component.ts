@@ -5,7 +5,7 @@ import { UserService } from '../../services/user.service';
 import { UserModel } from '../../models/user.model';
 import { TranslateService } from '../../services/translate.service';
 import { GlobalMessageService } from '../../services/global.message.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -46,12 +46,19 @@ export class ProfileComponent {
   // profilePictureUrl: string = this.defaultProfilePicture;
   profilePictureUrl: string = this.defaultProfilePicture;
 
-  constructor(private userService: UserService, private translateService: TranslateService,  private globalMessageService: GlobalMessageService,  private router: Router) {
+  constructor(private userService: UserService,
+    private translateService: TranslateService, 
+    private globalMessageService: GlobalMessageService, 
+    private router: Router,
+    private route: ActivatedRoute) {
   }
 
   ngOnInit() {
     this.translateService.autoTranslateTexts(this.textMap);
     this.translateService.initializeLanguageListener(this.textMap);
+    this.route.queryParams.subscribe(params => {
+      this.userId = params['userId'] || this.userId;
+    });
 
     this.userService.getUser(this.userId).subscribe((user) => {
       this.profileForm.patchValue({
@@ -63,6 +70,7 @@ export class ProfileComponent {
       this.profilePictureUrl = user.profilePicture ? user.profilePicture : this.defaultProfilePicture;
       this.isReadOnly = sessionStorage.getItem('id') !== this.userId;
     });
+
   }
 
   onFileSelected(event: Event): void {

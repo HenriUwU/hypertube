@@ -12,6 +12,7 @@ import {ModifyPasswordComponent} from './components/modify-password/modify-passw
 import {ForgotPasswordComponent} from './components/forgot-password/forgot-password.component';
 import {AuthCallbackGoogleComponent} from "./components/auth-callback-components/auth.callback.google.component";
 import { MovieSummaryComponent } from './components/movie-summary/movie-summary.component';
+import { UserListComponent } from './components/user-list/user.list.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +36,7 @@ export const routes: Routes = [
     children: [
       {path: 'profile', component: ProfileComponent},
       {path: 'modify-password', component: ModifyPasswordComponent},
+      {path: 'users', component: UserListComponent},
     ]
   },
   {

@@ -22,4 +22,8 @@ export class UserService {
     return this.httpClient.put<any>(`${this.apiUrlUser}`, user);
   }
 
+  getAllUsers(): Observable<UserModel[]> {
+    return this.httpClient.get<UserModel[]>(`${this.apiUrlUser}`);
+  }
+
 }

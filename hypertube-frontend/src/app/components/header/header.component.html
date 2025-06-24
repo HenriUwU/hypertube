@@ -30,6 +30,10 @@
                     <mat-icon>settings</mat-icon>
                     {{ textMap.get('Edit Profile') }}
                 </button>
+                <button mat-menu-item (click)="toUsers()">
+                    <mat-icon>person</mat-icon>
+                    {{ textMap.get('Users') }}
+                </button>
                 <button mat-menu-item (click)="logout()">
                     <mat-icon color="warn">logout</mat-icon>
                     <span [ngStyle]="{'color': '#F44336'}">{{ textMap.get('Logout') }}</span>

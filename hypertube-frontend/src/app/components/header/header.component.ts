@@ -38,7 +38,9 @@ export class HeaderComponent implements OnInit {
     ["Language", "Language"],
     ["Edit Profile", "Edit Profile"],
 	["Logout", "Logout"],
-	["Login", "Login"]
+	["Login", "Login"],
+	["Profile", "Profile"],
+	["Users", "Users"],
   ])
 
 
@@ -86,6 +88,10 @@ export class HeaderComponent implements OnInit {
 
 	toProfile():void{
 	  this.router.navigate(['user', 'profile']).then();
+	}
+
+	toUsers():void{
+	  this.router.navigate(['user', 'users']).then();
 	}
 
   updateCurrentLanguage(language: TranslateModel) {
