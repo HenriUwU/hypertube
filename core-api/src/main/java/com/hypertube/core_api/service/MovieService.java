@@ -308,7 +308,6 @@ public class MovieService {
         String baseUrl = "https://yts-subs.com";
         String url = baseUrl + "/movie-imdb/" + imdbId;
 
-        // Load the main subtitle page
         Document doc = Jsoup.connect(url)
                 .timeout(10000)
                 .userAgent("Mozilla/5.0")

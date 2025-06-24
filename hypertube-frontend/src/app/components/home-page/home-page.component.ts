@@ -17,6 +17,7 @@ import {GenreModel} from "../../models/movie.model";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {TranslateService} from "../../services/translate.service";
 import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
+import {AuthService} from "../../services/auth.service";
 
 
 @Component({
@@ -69,7 +70,7 @@ export class HomePageComponent implements OnInit {
   ])
 
 
-  constructor(private movieService: MovieService, private translateService: TranslateService) {
+  constructor(private movieService: MovieService, private translateService: TranslateService, private authService: AuthService) {
   }
 
   ngOnInit() {
@@ -305,5 +306,9 @@ export class HomePageComponent implements OnInit {
   private _filterYears(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.years.filter(year => year.toLowerCase().includes(filterValue));
+  }
+
+  isLogged(): boolean {
+    return this.authService.isLoggedIn();
   }
 }

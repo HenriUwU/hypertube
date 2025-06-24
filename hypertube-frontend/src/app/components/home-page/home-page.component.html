@@ -1,4 +1,4 @@
-<div class="homepage-controls">
+<div *ngIf="isLogged()" class="homepage-controls">
   <div class="search-and-year">
     <mat-form-field appearance="fill" class="search-field transparent-form-field">
       <mat-label>{{textMap.get('Search')}}</mat-label>

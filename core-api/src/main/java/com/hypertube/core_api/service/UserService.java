@@ -103,6 +103,11 @@ public class UserService implements UserDetailsService {
         return userMapper.map(userRepository.findById(id).orElse(null));
     }
 
+    @Transactional
+    public List<UserDTO> getUsers() {
+        return userMapper.map((List<UserEntity>) userRepository.findAll());
+    }
+
     public void register(UserEntity user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);

@@ -11,6 +11,8 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Base64;
+import java.util.List;
+
 import org.mapstruct.AfterMapping;
 import org.mapstruct.MappingTarget;
 
@@ -24,16 +26,14 @@ public abstract class UserMapper {
     @Mapping(source = "profilePicture", target = "profilePicture", qualifiedByName = "blobToBase64")
     public abstract UserDTO map(UserEntity entity);
 
+    public abstract List<UserDTO> map(List<UserEntity> entities);
+
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "fortyTwoEid", ignore = true)
     @Mapping(target = "discordEid", ignore = true)
     @Mapping(source = "profilePicture", target = "profilePicture", qualifiedByName = "base64ToBlob")
     public abstract UserEntity map(UserDTO dto);
-
-    public Integer UserEntityToInteger(UserEntity userEntity) {
-        return userEntity.getId();
-    }
 
     public UserEntity IntegerToUserEntity(Integer userId) {
         return this.userRepository.findById(userId).orElse(null);
