@@ -8,7 +8,7 @@
 
         <button *ngIf="isLog()" mat-button [matMenuTriggerFor]="languageMenu" color="basic" class="menu-density">
             <mat-icon>language</mat-icon>
-            {{ tradMap.get('Language') }}
+            {{ tradMap.get('Languages') }}
             <mat-menu #languageMenu="matMenu">
                 <button mat-menu-item *ngFor="let language of languages" (click)="updateCurrentLanguage(language)">
                     {{ language.english_name }}

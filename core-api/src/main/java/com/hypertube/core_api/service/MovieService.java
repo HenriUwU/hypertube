@@ -338,7 +338,9 @@ public class MovieService {
         boolean userLangExists = Files.isDirectory(userLangDir);
 
         if (englishExists && userLangExists) {
-            for (String lang : List.of(userLang, "english")) {
+            List<String> langs = userLang.equals("english") ? List.of("english") : List.of(userLang, "english");
+
+            for (String lang : langs) {
                 Path langDir = baseDir.resolve(lang);
                 try (Stream<Path> stream = Files.walk(langDir)) {
                     List<Path> vttFiles = stream

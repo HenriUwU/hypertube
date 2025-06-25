@@ -1,11 +1,11 @@
-import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {TorrentService} from '../../services/torrent.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import Hls from "hls.js";
 import {NgIf, NgOptimizedImage} from '@angular/common';
 import {TranslateService} from '../../services/translate.service';
 import {MovieService} from "../../services/movie.service";
-import {Movie, Subtitles} from "../../models/movie.model";
+import {Subtitles} from "../../models/movie.model";
 import {ActivatedRoute} from "@angular/router";
 
 
@@ -26,6 +26,7 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() movieId!: number;
   @Input() backdropPath!: string;
   @Input() imdbId!: string;
+  @Input() filmStoppedAt!: string;
 
   private hash: string = '';
 
@@ -50,6 +51,7 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.movieId = params['movieId'];
       this.backdropPath = params['backdropPath'];
       this.imdbId = params['imdbId'];
+      this.filmStoppedAt = params['filmStoppedAt']
     });
   }
 
@@ -78,7 +80,7 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.movieService.getSubtitles(this.imdbId).subscribe(
       (response: Subtitles[]) => {
         if (response.length > 0) {
-          response.forEach((sub, index) => {
+          response.forEach((sub) => {
             if (sub.url) {
               const trackEl = document.createElement('track');
               trackEl.kind = 'subtitles';
@@ -149,12 +151,23 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   hlsConversion(videoUrl: string, video: HTMLVideoElement) {
     if (Hls.isSupported()) {
-      const hls = new Hls();
+      const hls = new Hls({
+        startPosition: 0,
+        maxBufferLength: 60,
+        maxMaxBufferLength: 120,
+        liveSyncDurationCount: 999998, // désactive auto-synchro
+        liveMaxLatencyDurationCount: 999999, // idem
+        backBufferLength: 90 // garde un peu de buffer derrière
+      });
+
       hls.loadSource(videoUrl);
       hls.attachMedia(video);
+
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play().then();
+        video.currentTime = 0; // force début
+        video.play().catch(err => console.warn('Autoplay failed:', err));
       });
+
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = videoUrl;
       video.addEventListener('loadedmetadata', () => {
@@ -162,5 +175,46 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
   }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    const video = this.videoPlayer?.nativeElement;
+    if (!video) return;
+
+    const key = event.key.toLowerCase();
+
+    // Empêche le comportement natif **si la vidéo a le focus**
+    if (key === ' ' && document.activeElement === video) {
+      event.preventDefault();
+    }
+
+    switch (key) {
+      case 'f':
+        if (document.fullscreenElement) {
+          document.exitFullscreen().catch((err: string) => console.warn('Exit fullscreen error:', err));
+        } else {
+          video.requestFullscreen().catch((err: string) => console.warn('Fullscreen error:', err));
+        }
+        break;
+
+      case 'arrowright':
+        video.currentTime += 10;
+        break;
+
+      case 'arrowleft':
+        video.currentTime -= 10;
+        break;
+
+      case ' ':
+        // Ici, lecture/pause manuelle (on a déjà preventDefault plus haut si nécessaire)
+        if (video.paused) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+        break;
+    }
+  }
+
 
 }
