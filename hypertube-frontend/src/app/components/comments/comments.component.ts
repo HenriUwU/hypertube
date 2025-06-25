@@ -2,17 +2,19 @@ import {Component, Input, OnInit} from '@angular/core';
 import {MatDividerModule} from "@angular/material/divider"
 import {CommentService} from '../../services/comments.service';
 import {MovieService} from '../../services/movie.service';
-import {NgFor} from '@angular/common';
+import {NgFor, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
 import {CommentDTO} from '../../models/comment.model';
 import {RouterModule} from '@angular/router';
 import {UserService} from '../../services/user.service';
-import {UserModel} from '../../models/user.model';
+import { UserModel } from '../../models/user.model';
+import {Observable} from "rxjs";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-comments',
-  imports: [MatDividerModule, NgFor, FormsModule, RouterModule],
+  imports: [MatDividerModule, NgFor, NgIf, FormsModule, RouterModule],
   standalone: true,
   templateUrl: './comments.component.html',
   styleUrl: './comments.component.css'
@@ -28,8 +30,9 @@ export class CommentsComponent implements OnInit {
   constructor(
     private commentService: CommentService,
     private movieService: MovieService,
-    private authService: AuthService,
     private userService: UserService,
+    private router: Router,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -67,6 +70,7 @@ export class CommentsComponent implements OnInit {
 
     this.comments.forEach(comment => {
       this.commentService.isLiked(comment.id).subscribe(isLiked => {
+        console.log(`Comment ID: ${comment.id}, Liked: ${isLiked}`);
         this.likedStatus[comment.id] = isLiked;
       });
     });
@@ -120,6 +124,10 @@ export class CommentsComponent implements OnInit {
       minute: '2-digit'
     });
   }
+
+  toProfile(userId: number): void {
+    this.router.navigate(['user', 'profile'], {
+      queryParams: { userId: String(userId) }
+    }).then();
+  }
 }
-
-
