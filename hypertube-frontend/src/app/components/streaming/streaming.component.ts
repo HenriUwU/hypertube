@@ -5,7 +5,7 @@ import Hls from "hls.js";
 import {NgIf, NgOptimizedImage} from '@angular/common';
 import {TranslateService} from '../../services/translate.service';
 import {MovieService} from "../../services/movie.service";
-import {Movie, Subtitles} from "../../models/movie.model";
+import {Subtitles} from "../../models/movie.model";
 import {ActivatedRoute} from "@angular/router";
 
 
@@ -181,10 +181,17 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
     const video = this.videoPlayer?.nativeElement;
     if (!video) return;
 
-    switch (event.key.toLowerCase()) {
+    const key = event.key.toLowerCase();
+
+    // Empêche le comportement natif **si la vidéo a le focus**
+    if (key === ' ' && document.activeElement === video) {
+      event.preventDefault();
+    }
+
+    switch (key) {
       case 'f':
         if (document.fullscreenElement) {
-          document.exitFullscreen().catch((err:string) => console.warn('Exit fullscreen error:', err));
+          document.exitFullscreen().catch((err: string) => console.warn('Exit fullscreen error:', err));
         } else {
           video.requestFullscreen().catch((err: string) => console.warn('Fullscreen error:', err));
         }
@@ -199,6 +206,7 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
 
       case ' ':
+        // Ici, lecture/pause manuelle (on a déjà preventDefault plus haut si nécessaire)
         if (video.paused) {
           video.play().catch(() => {});
         } else {
@@ -207,5 +215,6 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
     }
   }
+
 
 }

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit {
   userInfos!: UserModel;
 
   tradMap = new Map<string, string>([
-    ["Language", "Language"],
+    ["Languages", "Languages"],
     ["Edit Profile", "Edit Profile"],
     ["Logout", "Logout"],
     ["Login", "Login"],
