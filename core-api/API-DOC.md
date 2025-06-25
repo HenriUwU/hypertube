@@ -8,6 +8,7 @@ Bienvenue dans la documentation de l’API **Hypertube**.
     - [Authentification: /auth](#authentification-auth)
       - [`POST /auth/register`](#post-authregister)
       - [`POST /auth/login`](#post-authlogin)
+      - [`GET /auth/omniauth`](#get-authomniauth)
       - [`GET /auth/verify-email?token={token}`](#get-authverify-emailtokentoken)
       - [`GET /auth/forgot-password?email={email}`](#get-authforgot-passwordemailemail)
       - [`GET /auth/reset-password?token={token}`](#get-authreset-passwordtokentoken)
@@ -57,6 +58,15 @@ http://localhost:8080/
 - **Auth requise :** ❌​ Non
 - **Body UserEntity:**
 
+#### `GET /auth/omniauth`
+
+- **Description :** Renvoie true si un utilisateur est connecte depuis une omniauth
+- **Response:**
+```json
+{
+    "response": "true"
+}
+```
 
 #### `GET /auth/verify-email?token={token}`
 
@@ -99,6 +109,7 @@ http://localhost:8080/
     "response": "true"
 }
 ```
+
 ### Utilisateur: /user
 
 #### `GET /user`

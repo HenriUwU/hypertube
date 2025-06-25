@@ -32,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping(path = "/omniauth/42")
-    public ResponseEntity<Map<String, String>> omniauth(@RequestBody String code) throws Exception {
+    public ResponseEntity<Map<String, String>> omniauthFortyTwo(@RequestBody String code) throws Exception {
         return userService.omniauthFortyTwo(code);
     }
 
@@ -91,4 +91,8 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
     }
 
+    @GetMapping("/omniauth")
+    public ResponseEntity<Map<String, String>> omniauth(@RequestHeader(value = "Authorization") String token) {
+        return this.userService.omniauth(token);
+    }
 }

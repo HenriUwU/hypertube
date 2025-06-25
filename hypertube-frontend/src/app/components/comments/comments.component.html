@@ -1,5 +1,5 @@
 <div *ngIf="comments" class="comments-container">
-  <h3>Comments</h3>
+  <h3>{{tradMap.get('Comments')}}</h3>
 
   <form (ngSubmit)="submitComment()" #commentForm="ngForm" class="comment-form">
     <mat-divider></mat-divider>
@@ -7,11 +7,11 @@
        <strong>{{currentUser.username}}</strong>
     </div>
     <textarea [(ngModel)]="commentContent" name="content" required rows="3"
-              maxlength="250" placeholder="Write your comment here..."
+              maxlength="250" placeholder="{{tradMap.get('Write your comment here...')}}"
               #content="ngModel"></textarea>
     <div class="char-count">{{getCharCount()}} / 250</div>
     <div class="submit-button">
-      <button type="submit" [disabled]="!commentContent.trim()">Send</button>
+      <button type="submit" [disabled]="!commentContent.trim()">{{tradMap.get('Send')}}</button>
     </div>
   </form>
 
@@ -38,8 +38,8 @@
         <textarea [(ngModel)]="commentEdited" rows="3" 
         maxlength="250" class="edit-area"></textarea>
         <div class="edit-actions">
-          <button (click)="saveComment(comment)">Save</button>
-          <button (click)="cancelEdit(comment)">Cancel</button>
+          <button (click)="saveComment(comment)">{{tradMap.get('Save')}}</button>
+          <button (click)="cancelEdit(comment)">{{tradMap.get('Cancel')}}</button>
         </div>
       </div>
     </div>

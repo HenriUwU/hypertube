@@ -465,5 +465,16 @@ public class UserService implements UserDetailsService {
         response.put("token", jwtTokenUtil.generateToken(name));
         return ResponseEntity.ok(response);
     }
+
+    public ResponseEntity<Map<String, String>> omniauth(String token) {
+        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+
+        Map<String, String> map = new HashMap<>();
+        if (userEntity.getDiscordEid() == null && userEntity.getGoogleEid() == null && userEntity.getFortyTwoEid() == null)
+            map.put("response", "false");
+        else
+            map.put("response", "true");
+        return ResponseEntity.ok(map);
+    }
 }
 
