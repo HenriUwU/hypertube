@@ -17,6 +17,7 @@ import com.hypertube.core_api.repository.UserRepository;
 import com.hypertube.core_api.repository.WatchedMoviesRepository;
 import com.hypertube.core_api.security.JwtTokenUtil;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.apache.tika.utils.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -308,6 +309,7 @@ public class MovieService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public List<CommentDTO> getComments(Integer movieId) {
         return commentMapper.map(commentRepository.getCommentEntitiesByMovieId(movieId));
     }

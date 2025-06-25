@@ -2,18 +2,17 @@ import {Component, Input, OnInit} from '@angular/core';
 import {MatDividerModule} from "@angular/material/divider"
 import {CommentService} from '../../services/comments.service';
 import {MovieService} from '../../services/movie.service';
-import {NgFor, NgIf} from '@angular/common';
+import {NgFor} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
 import {CommentDTO} from '../../models/comment.model';
 import {RouterModule} from '@angular/router';
 import {UserService} from '../../services/user.service';
-import { UserModel } from '../../models/user.model';
-import {Observable} from "rxjs";
+import {UserModel} from '../../models/user.model';
 
 @Component({
   selector: 'app-comments',
-  imports: [MatDividerModule, NgFor, NgIf, FormsModule, RouterModule],
+  imports: [MatDividerModule, NgFor, FormsModule, RouterModule],
   standalone: true,
   templateUrl: './comments.component.html',
   styleUrl: './comments.component.css'
@@ -68,7 +67,6 @@ export class CommentsComponent implements OnInit {
 
     this.comments.forEach(comment => {
       this.commentService.isLiked(comment.id).subscribe(isLiked => {
-        console.log(`Comment ID: ${comment.id}, Liked: ${isLiked}`);
         this.likedStatus[comment.id] = isLiked;
       });
     });
