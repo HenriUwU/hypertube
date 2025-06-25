@@ -30,20 +30,14 @@
     <p class="comment-content">{{comment.content}}</p>
 
     <div class="comment-actions">
-      <ng-container *ngIf="comment.user.id === currentUser.id; else otherUserActions">
         <!-- <button (click)="editComment(comment)">Modify</button> -->
-         <button (click)="toggleLike(comment)">{{ likedStatus[comment.id] ? '♡' : '♥' }}</button>
-      </ng-container>
-      <ng-template #otherUserActions>
-        <button (click)="likeComment(comment.id)">♥</button>
-      </ng-template>
+         <button (click)="toggleLike(comment)">{{ likedStatus[comment.id] ? '♥' : '♡'}}</button>
     </div>
-    <!-- <hr /> -->
   </div>
 </div>
 
 
-<!-- 
+<!--
 TODO:
 - bouton modifier
 - bouton like-(click) plein, unlike-(reclick) vide

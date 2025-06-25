@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {MatDividerModule} from "@angular/material/divider"
 import {CommentService} from '../../services/comments.service';
 import {MovieService} from '../../services/movie.service';
@@ -19,7 +19,7 @@ import {Observable} from "rxjs";
   styleUrl: './comments.component.css'
 })
 
-export class CommentsComponent {
+export class CommentsComponent implements OnInit {
   @Input() movieId : number = 950387;
   comments! : CommentDTO[];
   commentContent: string = '';
@@ -108,20 +108,9 @@ export class CommentsComponent {
     });
   }
 
-  isLiked(comment: CommentDTO): boolean {
-    console.log("IN")
-    this.commentService.isLiked(comment.id).subscribe(isLiked => {
-      return isLiked;
-    });
-    return false;
-  }
-
   isMyComment(comment: CommentDTO): boolean {
     return comment.user.id === Number(this.authService.getCurrentUserId());
   }
-  
-  // /comment/id/like 
-  // {commentId}/liked bool
 
   formatDateTime(datetime: string): string {
     const date = new Date(datetime);
