@@ -31,21 +31,18 @@ interface Language {
 
 export class HeaderComponent implements OnInit {
   languages: TranslateModel[] = [];
-  selectedLanguage!: TranslateModel;
   userInfos!: UserModel;
 
   tradMap = new Map<string, string>([
     ["Language", "Language"],
     ["Edit Profile", "Edit Profile"],
-	["Logout", "Logout"],
-	["Login", "Login"],
-	["Profile", "Profile"],
-	["Users", "Users"],
+    ["Logout", "Logout"],
+    ["Login", "Login"],
+    ["Profile", "Profile"],
+    ["Users", "Users"],
   ])
 
-
-  constructor(private formBuilder: FormBuilder,
-              private authService: AuthService,
+  constructor(private authService: AuthService,
               private router: Router,
               private userService: UserService,
               private translateService: TranslateService
@@ -87,7 +84,11 @@ export class HeaderComponent implements OnInit {
 	}
 
 	toProfile():void{
-	  this.router.navigate(['user', 'profile']).then();
+    this.router.navigate(['user', 'profile'], {
+      queryParams: {
+        userId: String(this.authService.getCurrentUserId())
+      }
+    }).then();
 	}
 
 	toUsers():void{
@@ -99,7 +100,6 @@ export class HeaderComponent implements OnInit {
     this.userService.updateUser(this.userInfos).subscribe((data) => {
     	this.userInfos.language = data.language
     	this.translateService.updateLanguage(this.userInfos.language)
-		// window.location.reload();
     });
   }
 }
