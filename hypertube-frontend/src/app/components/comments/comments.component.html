@@ -6,9 +6,10 @@
     <div class="comment-header">
        <strong>{{currentUser.username}}</strong>
     </div>
-    <textarea [(ngModel)]="commentContent" name="content" required rows="4"
-              placeholder="Write your comment here..."
+    <textarea [(ngModel)]="commentContent" name="content" required rows="3"
+              maxlength="250" placeholder="Write your comment here..."
               #content="ngModel"></textarea>
+    <div class="char-count">{{getCharCount()}} / 250</div>
     <div class="submit-button">
       <button type="submit" [disabled]="!commentContent.trim()">Send</button>
     </div>
@@ -34,14 +35,15 @@
       <div *ngIf="isMyComment(comment)" class="comment-edit">
         <button (click)="editComment(comment)" class="edit-button">🖉</button>
         <div *ngIf="isEditing === comment.id">
-          <textarea [(ngModel)]="commentEdited" rows="3"></textarea>
+          <textarea [(ngModel)]="commentEdited" rows="3" 
+                    maxlength="250" class="edit-area"></textarea>
           <div class="comment-actions">
             <button (click)="saveComment(comment)">Save</button>
             <button (click)="cancelEdit(comment)">Cancel</button>
           </div>
         </div>
       </div>
-      <button (click)="toggleLike(comment)" class="comment-like">{{likedStatus[comment.id] ? '♥' : '♡'}}</button>
+      <button (click)="toggleLike(comment)" class="comment-like">{{likedStatus[comment.id] ? '♥' : '♡'}} {{comment.likes}}</button>
     </div>
   </div>
 </div>
@@ -49,5 +51,5 @@
 
 <!--
 TODO:
-- afficher le nombre de likes
+- faire en sorte que les commentaires soient triés par type de preference (les plus récents en premier)
 -->

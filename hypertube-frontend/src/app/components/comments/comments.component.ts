@@ -155,4 +155,8 @@ export class CommentsComponent implements OnInit {
       queryParams: { userId: String(userId) }
     }).then();
   }
+
+  getCharCount(): number {
+    return this.commentContent ? this.commentContent.length : 0;
+  }
 }
