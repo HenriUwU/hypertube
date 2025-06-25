@@ -119,17 +119,33 @@
   justify-content: flex-end;
 }
 
-.actions button,
-.comment-actions button {
+.comment-like, .edit-button {
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 1.28rem;
-  color: #b22222;
   font-weight: 600;
   transition: color 0.2s ease;
   padding: 0 0.25rem;
+  line-height: 1;
+  vertical-align: middle;
+  display: inline-block;
 }
+
+.comment-like {
+  font-size: 1.3rem;
+  color: #b22222;
+}
+
+.edit-button {
+  font-size: 0.95rem;
+  color: #007bff;
+}
+
+.edit-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 
 .actions button:hover,
 .comment-actions button:hover {
