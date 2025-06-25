@@ -1,4 +1,4 @@
-<div class="comments-container">
+<div *ngIf="comments" class="comments-container">
   <h3>Comments</h3>
 
   <form (ngSubmit)="submitComment()" #commentForm="ngForm" class="comment-form">
@@ -29,7 +29,7 @@
     <mat-divider></mat-divider>
 
     <p *ngIf="isEditing !== comment.id" class="comment-content">{{comment.content}}</p>
-    
+
     <div class="comment-actions">
       <div *ngIf="isMyComment(comment)" class="comment-edit">
         <button (click)="editComment(comment)" class="edit-button">🖉</button>
