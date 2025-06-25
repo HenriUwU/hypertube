@@ -52,14 +52,16 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
     this.translateService.initializeLanguageListener(this.tradMap);
   }
 
+  private storageEventHandler = (event: StorageEvent) => {
+    if (event.storageArea === sessionStorage && event.key === 'language') {
+      setTimeout(() => {
+        this.getData();
+      }, 100);
+    }
+  };
+
   autoUpdateLanguage(): void {
-    window.addEventListener('storage', (event) => {
-      if (event.storageArea === sessionStorage && event.key === 'language') {
-        setTimeout(() => {
-          this.getData();
-        }, 100); // Delay to ensure the language change is processed
-      }
-    });
+    window.addEventListener('storage', this.storageEventHandler);
   }
 
   ngAfterViewInit(): void {

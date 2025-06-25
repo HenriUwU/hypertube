@@ -38,6 +38,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -320,60 +321,110 @@ public class MovieService {
     }
 
     public List<SubtitleModel> getSubtitles(String imdbId, String token) throws IOException {
-        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
+        UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7)))
+                .orElseThrow();
         Locale locale = new Locale(userEntity.getLanguage());
-        String languageName = locale.getDisplayLanguage(Locale.ENGLISH).toLowerCase();
+        String userLang = locale.getDisplayLanguage(Locale.ENGLISH).toLowerCase();
 
         List<SubtitleModel> subtitles = new ArrayList<>();
+        int subtitles_cnt = 1;
+        int maxPerLang = 5;
+
+        Path baseDir = Paths.get("/torrents/subs", imdbId);
+        Path englishDir = baseDir.resolve("english");
+        Path userLangDir = baseDir.resolve(userLang);
+
+        boolean englishExists = Files.isDirectory(englishDir);
+        boolean userLangExists = Files.isDirectory(userLangDir);
+
+        if (englishExists && userLangExists) {
+            for (String lang : List.of(userLang, "english")) {
+                Path langDir = baseDir.resolve(lang);
+                try (Stream<Path> stream = Files.walk(langDir)) {
+                    List<Path> vttFiles = stream
+                            .filter(p -> Files.isRegularFile(p) && p.toString().toLowerCase().endsWith(".vtt"))
+                            .limit(maxPerLang)
+                            .collect(Collectors.toList());
+
+                    for (Path filePath : vttFiles) {
+                        String title = "sub-" + subtitles_cnt + "-" + lang;
+                        subtitles.add(new SubtitleModel(title, lang, filePath.toString()));
+                        subtitles_cnt++;
+                    }
+                }
+            }
+            return subtitles;
+        }
+
+        if (!englishExists) Files.createDirectories(englishDir);
+        if (!userLangExists) Files.createDirectories(userLangDir);
+
         String baseUrl = "https://yts-subs.com";
         String url = baseUrl + "/movie-imdb/" + imdbId;
-
-        Document doc = Jsoup.connect(url)
-                .timeout(10000)
-                .userAgent("Mozilla/5.0")
-                .get();
-
+        Document doc = Jsoup.connect(url).timeout(10000).userAgent("Mozilla/5.0").get();
         Elements rows = doc.select("table.other-subs tbody tr");
 
-        int subtitles_cnt = 1;
+        Map<String, Integer> langCounter = new HashMap<>();
+        langCounter.put(userLang, 0);
+        langCounter.put("english", 0);
+
         for (Element row : rows) {
             Element langCell = row.selectFirst(".sub-lang");
             if (langCell == null) continue;
 
-            String language = langCell.text().trim().toLowerCase();
-            if (!language.equals(languageName) && !language.equals("english")) continue;
+            String lang = langCell.text().trim().toLowerCase();
+            if (!lang.equals(userLang) && !lang.equals("english")) continue;
+
+            if (langCounter.get(lang) >= maxPerLang) continue;
+
             Element linkElement = row.selectFirst("a[href^=/subtitles/]");
             if (linkElement == null) continue;
 
             String detailHref = linkElement.attr("href");
             String detailUrl = baseUrl + detailHref;
-
-            Document detailDoc = Jsoup.connect(detailUrl)
-                    .timeout(10000)
-                    .userAgent("Mozilla/5.0")
-                    .get();
+            Document detailDoc = Jsoup.connect(detailUrl).timeout(10000).userAgent("Mozilla/5.0").get();
 
             Element downloadButton = detailDoc.selectFirst("#btn-download-subtitle");
             if (downloadButton == null) continue;
 
             String encodedLink = downloadButton.attr("data-link");
-
-            List<Path> subtitleFiles = downloadSubtitle(encodedLink, imdbId);
+            List<Path> subtitleFiles = downloadSubtitle(encodedLink, imdbId, lang);
 
             for (Path filePath : subtitleFiles) {
-                if (!Files.exists(filePath))
-                    continue;
+                if (!Files.exists(filePath)) continue;
 
                 String fileUrl = filePath.toString();
-                if (subtitles.stream().anyMatch(subtitle -> subtitle.getUrl().equals(fileUrl)))
-                    continue;
+                if (subtitles.stream().anyMatch(s -> s.getUrl().equals(fileUrl))) continue;
 
-                String title = "sub-" + subtitles_cnt + "-" + language;
-                subtitles.add(new SubtitleModel(title, language, filePath.toString()));
+                String title = "sub-" + subtitles_cnt + "-" + lang;
+                subtitles.add(new SubtitleModel(title, lang, fileUrl));
                 subtitles_cnt++;
+
+                langCounter.put(lang, langCounter.get(lang) + 1);
+                if (langCounter.get(lang) >= maxPerLang)
+                    break;
             }
+
+            if (langCounter.get(userLang) >= maxPerLang && langCounter.get("english") >= maxPerLang)
+                break;
         }
+
         return subtitles;
+    }
+
+    private Path getUniquePath(Path path) {
+        Path parent = path.getParent();
+        String baseName = com.google.common.io.Files.getNameWithoutExtension(path.getFileName().toString());
+        String extension = com.google.common.io.Files.getFileExtension(path.getFileName().toString());
+
+        int index = 1;
+        Path uniquePath = path;
+        while (Files.exists(uniquePath)) {
+            String newName = baseName + "_" + index + (extension.isEmpty() ? "" : "." + extension);
+            uniquePath = parent.resolve(newName);
+            index++;
+        }
+        return uniquePath;
     }
 
     public ResponseEntity<Map<String, String>> getTrailers(Integer id, String token) {
@@ -416,10 +467,10 @@ public class MovieService {
                 .orElse(null);
     }
 
-    private List<Path> downloadSubtitle(String encodedLink, String imdb_id) throws IOException {
+    private List<Path> downloadSubtitle(String encodedLink, String imdb_id, String language) throws IOException {
         String downloadUrl = new String(Base64.getDecoder().decode(encodedLink), StandardCharsets.UTF_8);
         String fileName = Paths.get(new URL(downloadUrl).getPath()).getFileName().toString();
-        Path outputDir = Paths.get("/torrents/subs/" + imdb_id);
+        Path outputDir = Paths.get("/torrents/subs", imdb_id, language);
         Files.createDirectories(outputDir);
         Path zipPath = outputDir.resolve(fileName);
 
@@ -432,26 +483,32 @@ public class MovieService {
             ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null) {
                 Path extractedPath = outputDir.resolve(entry.getName());
-
                 if (entry.isDirectory()) {
                     Files.createDirectories(extractedPath);
                 } else {
                     Files.createDirectories(extractedPath.getParent());
-                    Files.copy(zis, extractedPath, StandardCopyOption.REPLACE_EXISTING);
 
-                    if (extractedPath.toString().toLowerCase().endsWith(".srt")) {
-                        Path vttPath = replaceExtension(extractedPath, ".vtt");
-                        if (convertSrtToVtt(extractedPath, vttPath))
+                    Path finalPath = getUniquePath(extractedPath);
+                    Files.copy(zis, finalPath, StandardCopyOption.REPLACE_EXISTING);
+
+                    if (finalPath.toString().toLowerCase().endsWith(".srt")) {
+                        Path vttPath = replaceExtension(finalPath, ".vtt");
+                        if (convertSrtToVtt(finalPath, vttPath)) {
                             extractedFiles.add(vttPath);
-                    } else if (extractedPath.toString().toLowerCase().endsWith(".txt")) {
-                        Path vttPath = replaceExtension(extractedPath, ".vtt");
-                        if (convertTxtToVtt(extractedPath, vttPath, 25.0))
+                            Files.deleteIfExists(finalPath);
+                        }
+                    } else if (finalPath.toString().toLowerCase().endsWith(".txt")) {
+                        Path vttPath = replaceExtension(finalPath, ".vtt");
+                        if (convertTxtToVtt(finalPath, vttPath, 25.0)) {
                             extractedFiles.add(vttPath);
+                            Files.deleteIfExists(finalPath);
+                        }
                     }
                 }
                 zis.closeEntry();
             }
         }
+
         Files.deleteIfExists(zipPath);
         return extractedFiles;
     }
