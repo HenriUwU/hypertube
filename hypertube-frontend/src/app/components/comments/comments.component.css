@@ -150,7 +150,8 @@ h3 {
 }
 
 .comment-like,
-.edit-button {
+.edit-button,
+.delete-button {
   border: none;
   background: none;
   cursor: pointer;

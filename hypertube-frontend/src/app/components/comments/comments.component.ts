@@ -10,7 +10,7 @@ import {RouterModule} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import { UserModel } from '../../models/user.model';
 import {Observable} from "rxjs";
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-comments',
@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
 })
 
 export class CommentsComponent implements OnInit {
-  @Input() movieId : number = 950387;
+  @Input() movieId!: number;
   comments! : CommentDTO[];
   commentContent: string = '';
   currentUser!: UserModel;
@@ -35,6 +35,7 @@ export class CommentsComponent implements OnInit {
     private movieService: MovieService,
     private userService: UserService,
     private router: Router,
+    private route: ActivatedRoute,
     private authService: AuthService,
   ) {}
 
