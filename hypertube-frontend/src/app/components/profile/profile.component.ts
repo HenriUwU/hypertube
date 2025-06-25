@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { UserModel } from '../../models/user.model';
@@ -14,7 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
 
   profileForm = new FormGroup({
     email: new FormControl(''),
@@ -43,12 +43,11 @@ export class ProfileComponent {
   isReadOnly: boolean = true;
 
   private defaultProfilePicture = '../../../../assets/images/default_pp.svg' ;
-  // profilePictureUrl: string = this.defaultProfilePicture;
   profilePictureUrl: string = this.defaultProfilePicture;
 
   constructor(private userService: UserService,
-    private translateService: TranslateService, 
-    private globalMessageService: GlobalMessageService, 
+    private translateService: TranslateService,
+    private globalMessageService: GlobalMessageService,
     private router: Router,
     private route: ActivatedRoute) {
   }
@@ -58,19 +57,8 @@ export class ProfileComponent {
     this.translateService.initializeLanguageListener(this.tradMap);
     this.route.queryParams.subscribe(params => {
       this.userId = params['userId'] || this.userId;
+      this.loadProfile()
     });
-
-    this.userService.getUser(this.userId).subscribe((user) => {
-      this.profileForm.patchValue({
-        email: user.email,
-        username: user.username,
-        lastname: user.lastName,
-        firstname: user.firstName,
-      });
-      this.profilePictureUrl = user.profilePicture ? user.profilePicture : this.defaultProfilePicture;
-      this.isReadOnly = sessionStorage.getItem('id') !== this.userId;
-    });
-
   }
 
   onFileSelected(event: Event): void {
@@ -88,6 +76,19 @@ export class ProfileComponent {
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  loadProfile() {
+    this.userService.getUser(this.userId).subscribe((user) => {
+      this.profileForm.patchValue({
+        email: user.email,
+        username: user.username,
+        lastname: user.lastName,
+        firstname: user.firstName,
+      });
+      this.profilePictureUrl = user.profilePicture ? user.profilePicture : this.defaultProfilePicture;
+      this.isReadOnly = sessionStorage.getItem('id') !== this.userId;
+    });
   }
 
   onSubmit() {
