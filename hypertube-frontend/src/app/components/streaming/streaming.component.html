@@ -1,14 +1,15 @@
 <img *ngIf="loading" class="background-image" ngSrc="{{backdrop_path}}" fill alt="movie-backdrop">
 
 <div class="streaming-container">
-		<div class="loading-container" [style.display]="!loading ? 'none' : 'flex'">
-			<mat-spinner class="loading-spinner"></mat-spinner>
-		</div>
+  <div class="loading-container" [style.display]="!loading ? 'none' : 'flex'">
+    <mat-spinner class="loading-spinner"></mat-spinner>
+    <p class="loading-message">Loading torrent, please wait...</p>
+  </div>
 
-		<div [style.display]="loading ? 'none' : 'block'">
-			<video width="320" height="180" class="video-player" #videoPlayer controls preload="auto" autoplay muted>
-				<source [src]="videoUrl" type="application/vnd.apple.mpegurl">
-				{{tradMap.get("Your browser does not support the video tag.")}}
-			</video>
-		</div>
+  <div [style.display]="loading ? 'none' : 'block'">
+    <video width="320" height="180" class="video-player" #videoPlayer controls preload="auto" autoplay muted>
+      <source [src]="videoUrl" type="application/vnd.apple.mpegurl">
+      {{tradMap.get("Your browser does not support the video tag.")}}
+    </video>
+  </div>
 </div>
