@@ -41,12 +41,12 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-	  this.translationService.autoTranslateTexts(this.tradMap);
-	  this.translationService.initializeLanguageListener(this.tradMap);
-	  this.loading = true;
+    this.translationService.autoTranslateTexts(this.tradMap);
+    this.translationService.initializeLanguageListener(this.tradMap);
+    this.loading = true;
 
-	  this.route.queryParams.subscribe(params => {
-		  this.magnet = params['magnet'];
+    this.route.queryParams.subscribe(params => {
+      this.magnet = params['magnet'];
       this.movieId = params['movieId'];
       this.backdropPath = params['backdropPath'];
       this.imdbId = params['imdbId'];
@@ -54,7 +54,7 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.startStreaming()
+    this.startStreaming();
   }
 
   ngOnDestroy() {
@@ -106,7 +106,6 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.torrentService.isTorrentStarted(this.magnet).subscribe(
       (response: string) => {
         this.hash = response;
-        console.log('Torrent hash:', this.hash);
         if (this.hash) {
           this.launchStreaming();
         } else {

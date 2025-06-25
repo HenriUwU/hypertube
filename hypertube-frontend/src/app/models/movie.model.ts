@@ -5,7 +5,7 @@ export interface Movie {
   title: string;
   englishTitle: string;
   overview: string;
-  imdbId: string;
+  imdb_id: string;
 
   vote_average: number;
   release_date: string;

@@ -43,7 +43,6 @@ export class CommentsComponent implements OnInit {
     const id: string = this.authService.getCurrentUserId()!;
     this.userService.getUser(id).subscribe({
       next: (user) => {
-        console.log('Current user:', user);
         this.currentUser = user;
         this.loadComments();
       },
@@ -74,7 +73,6 @@ export class CommentsComponent implements OnInit {
 
     this.comments.forEach(comment => {
       this.commentService.isLiked(comment.id).subscribe(isLiked => {
-        console.log(`Comment ID: ${comment.id}, Liked: ${isLiked}`);
         this.likedStatus[comment.id] = isLiked;
       });
     });
