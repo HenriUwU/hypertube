@@ -91,7 +91,9 @@ public class MovieService {
         );
 
         MovieModel movie = response.getBody();
-
+        if (movie != null && !StringUtils.isBlank(movie.getTitle())) {
+            movie.setEnglishTitle(movie.getTitle());
+        }
         if (movie != null && (movie.getOverview() == null || movie.getOverview().trim().isEmpty()) && !language.equals("en")) {
             ResponseEntity<MovieModel> fallbackResponse = restTemplate.exchange(
                     "https://api.themoviedb.org/3/movie/" + movieId + "?language=en",
@@ -102,6 +104,9 @@ public class MovieService {
             MovieModel fallbackMovie = fallbackResponse.getBody();
             if (fallbackMovie != null && fallbackMovie.getOverview() != null) {
                 movie.setOverview(fallbackMovie.getOverview());
+            }
+            if (fallbackMovie != null && !StringUtils.isBlank(fallbackMovie.getTitle())) {
+                movie.setEnglishTitle(fallbackMovie.getTitle());
             }
         }
 
