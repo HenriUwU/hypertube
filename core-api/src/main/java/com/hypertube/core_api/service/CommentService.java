@@ -86,7 +86,6 @@ public class CommentService {
         CommentEntity comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
         UserDTO user = userService.getUserByToken(token);
-        userService.verifyUser(comment.getUser().getId(), token);
 
         CommentLikesEntity commentLike =  commentLikesRepository.getCommentLikesEntityByCommentIdAndUserId(comment, userMapper.map(user));
         commentLikesRepository.delete(commentLike);
