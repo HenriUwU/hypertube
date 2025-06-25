@@ -3,6 +3,7 @@ package com.hypertube.core_api.mapper;
 import com.hypertube.core_api.dto.UserDTO;
 import com.hypertube.core_api.entity.UserEntity;
 import com.hypertube.core_api.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.apache.tika.Tika;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -25,12 +25,23 @@
         {{formatDateTime(comment.createdAt)}}
       </div>
     </div>
-    <mat-divider></mat-divider>
-    <p class="comment-content">{{comment.content}}</p>
 
+    <mat-divider></mat-divider>
+
+    <p *ngIf="isEditing !== comment.id" class="comment-content">{{comment.content}}</p>
+    
     <div class="comment-actions">
-        <!-- <button (click)="editComment(comment)">Modify</button> -->
-         <button (click)="toggleLike(comment)">{{ likedStatus[comment.id] ? '♥' : '♡'}}</button>
+      <div *ngIf="isMyComment(comment)" class="comment-edit">
+        <button (click)="editComment(comment)" class="edit-button">🖉</button>
+        <div *ngIf="isEditing === comment.id">
+          <textarea [(ngModel)]="commentEdited" rows="3"></textarea>
+          <div class="comment-actions">
+            <button (click)="saveComment(comment)">Save</button>
+            <button (click)="cancelEdit(comment)">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <button (click)="toggleLike(comment)" class="comment-like">{{likedStatus[comment.id] ? '♥' : '♡'}}</button>
     </div>
   </div>
 </div>
@@ -38,6 +49,5 @@
 
 <!--
 TODO:
-- bouton modifier
-- bouton pour envoyer le commentaire
+- afficher le nombre de likes
 -->
