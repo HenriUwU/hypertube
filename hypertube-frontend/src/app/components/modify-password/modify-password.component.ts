@@ -46,6 +46,17 @@ export class ModifyPasswordComponent {
   ngOnInit(): void {
     this.translateService.autoTranslateTexts(this.tradMap);
     this.translateService.initializeLanguageListener(this.tradMap);
+
+    this.authService.isOmniauthSession().subscribe({
+      next: (isOmniAuth) => {
+        if (isOmniAuth){
+          this.router.navigate(['/']).then();
+        }
+      },
+      error: (error) => {
+        console.log("Error checking omniauth session:", error);
+      }
+    });
   }
 
   confirmPasswordValidator(control: AbstractControl): ValidationErrors | null {

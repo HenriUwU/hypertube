@@ -6,6 +6,7 @@ import { UserModel } from '../../models/user.model';
 import { TranslateService } from '../../services/translate.service';
 import { GlobalMessageService } from '../../services/global.message.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -44,10 +45,12 @@ export class ProfileComponent implements OnInit {
 
   private defaultProfilePicture = '../../../../assets/images/default_pp.svg' ;
   profilePictureUrl: string = this.defaultProfilePicture;
+  omniAuthSession: boolean = false;
 
   constructor(private userService: UserService,
     private translateService: TranslateService,
     private globalMessageService: GlobalMessageService,
+    private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute) {
   }
@@ -59,6 +62,16 @@ export class ProfileComponent implements OnInit {
       this.userId = params['userId'] || this.userId;
       this.loadProfile()
     });
+
+    this.authService.isOmniauthSession().subscribe({
+      next: (isOmniAuth) => {
+        this.omniAuthSession = isOmniAuth;
+      },
+      error: (error) => {
+        this.omniAuthSession = false;
+      }
+    });
+
   }
 
   onFileSelected(event: Event): void {

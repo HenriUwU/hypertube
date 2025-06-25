@@ -37,7 +37,7 @@
                             <input type="file" id="file-input" accept="image/*" (change)="onFileSelected($event)" [disabled]="isReadOnly">
                         </div>
                     </div>
-                    <div class="modify-password-container" *ngIf="!isReadOnly">
+                    <div class="modify-password-container" *ngIf="!isReadOnly && !omniAuthSession">
                         <button type="submit" id="submitButton" (click)="modifyPassword()">{{tradMap.get('Change Password')}}</button>
                     </div>
                 </div>
