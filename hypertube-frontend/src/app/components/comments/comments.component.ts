@@ -26,6 +26,9 @@ export class CommentsComponent implements OnInit {
   commentContent: string = '';
   currentUser!: UserModel;
   likedStatus: { [commentId: string]: boolean } = {};
+  isEditing: number = 0;;
+  commentBeforeEdit!: string;
+  commentEdited!: string
 
   constructor(
     private commentService: CommentService,
@@ -102,6 +105,28 @@ export class CommentsComponent implements OnInit {
 
       this.likedStatus[commentId] = false;
     });
+  }
+
+  editComment(comment: CommentDTO) {
+    this.isEditing = comment.id;
+    this.commentBeforeEdit = comment.content;
+    this.commentEdited = comment.content;
+  }
+
+  saveComment(comment: CommentDTO) {
+    let editedContent = comment;
+    editedContent.content = this.commentEdited;
+    this.commentService.updateComment(editedContent).subscribe(updatedComment => {
+      const index = this.comments.findIndex(c => c.id === comment.id);
+      if (index !== -1) this.comments[index] = updatedComment;
+
+      this.isEditing = 0;
+    });
+  }
+
+  cancelEdit(comment: CommentDTO) {
+    this.isEditing = 0;
+    this.commentEdited = this.commentBeforeEdit;
   }
 
   deleteComment(commentId: number) {
