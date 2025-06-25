@@ -21,9 +21,9 @@ import {TranslateService} from "../../services/translate.service";
 export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('castContainer') castContainerRef!: ElementRef;
   @ViewChild('crewContainer') crewContainerRef!: ElementRef;
-  @Input() movieId : number = 950387;
-  movie! : Movie;
-  torrents! : Torrent[];
+  @Input() movieId!: number;
+  movie!: Movie;
+  torrents!: Torrent[];
   magnet!: string;
   trailerUrl!: SafeResourceUrl;
   loadingTorrents: boolean = false;

@@ -1,16 +1,15 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {MatDividerModule} from "@angular/material/divider"
-import {CommentService} from '../../services/comments.service';
-import {MovieService} from '../../services/movie.service';
-import {NgFor, NgIf} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {AuthService} from '../../services/auth.service';
-import {CommentDTO} from '../../models/comment.model';
-import {RouterModule} from '@angular/router';
-import {UserService} from '../../services/user.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { MatDividerModule } from "@angular/material/divider"
+import { CommentService } from '../../services/comments.service';
+import { MovieService } from '../../services/movie.service';
+import { NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { CommentDTO } from '../../models/comment.model';
+import { UserService } from '../../services/user.service';
 import { UserModel } from '../../models/user.model';
-import {Observable} from "rxjs";
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import {TranslateService} from "../../services/translate.service";
 
 @Component({
   selector: 'app-comments',
@@ -21,7 +20,7 @@ import { Router } from '@angular/router';
 })
 
 export class CommentsComponent implements OnInit {
-  @Input() movieId : number = 950387;
+  @Input() movieId!: number;
   comments! : CommentDTO[];
   commentContent: string = '';
   currentUser!: UserModel;
@@ -29,16 +28,27 @@ export class CommentsComponent implements OnInit {
   isEditing: number = 0;
   commentBeforeEdit!: string;
   commentEdited!: string
+  tradMap = new Map<string, string>([
+    ["Comments", "Comments"],
+    ["Write your comment here...", "Write your comment here..."],
+    ["Send", "Send"],
+    ["Save", "Save"],
+    ["Cancel", "Cancel"]
+  ])
 
   constructor(
     private commentService: CommentService,
     private movieService: MovieService,
     private userService: UserService,
     private router: Router,
+    private route: ActivatedRoute,
+    private translateService: TranslateService,
     private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
+    this.translateService.autoTranslateTexts(this.tradMap);
+    this.translateService.initializeLanguageListener(this.tradMap);
     const id: string = this.authService.getCurrentUserId()!;
     this.userService.getUser(id).subscribe({
       next: (user) => {
@@ -105,6 +115,10 @@ export class CommentsComponent implements OnInit {
     });
   }
 
+  isMyComment(comment: CommentDTO): boolean {
+    return comment.user.id === Number(this.authService.getCurrentUserId());
+  }
+
   editComment(comment: CommentDTO) {
     this.isEditing = comment.id;
     this.commentBeforeEdit = comment.content;
@@ -117,7 +131,6 @@ export class CommentsComponent implements OnInit {
     this.commentService.updateComment(editedContent).subscribe(updatedComment => {
       const index = this.comments.findIndex(c => c.id === comment.id);
       if (index !== -1) this.comments[index] = updatedComment;
-
       this.isEditing = 0;
     });
   }
@@ -133,8 +146,10 @@ export class CommentsComponent implements OnInit {
     });
   }
 
-  isMyComment(comment: CommentDTO): boolean {
-    return comment.user.id === Number(this.authService.getCurrentUserId());
+  toProfile(userId: number): void {
+    this.router.navigate(['user', 'profile'], {
+      queryParams: { userId: String(userId) }
+    }).then();
   }
 
   formatDateTime(datetime: string): string {
@@ -146,12 +161,6 @@ export class CommentsComponent implements OnInit {
       hour: '2-digit',
       minute: '2-digit'
     });
-  }
-
-  toProfile(userId: number): void {
-    this.router.navigate(['user', 'profile'], {
-      queryParams: { userId: String(userId) }
-    }).then();
   }
 
   getCharCount(): number {

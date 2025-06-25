@@ -70,11 +70,13 @@ export class AuthService {
     return this.http.get(`${this.apiUrlAuth}/reset-password?token=${token}`);
   }
 
-  verifyCurrentPassword(password: string): Observable<any> {
+  verifyCurrentPassword(password: string): Observable<boolean> {
     const token = this.getToken();
     const headers = { Authorization: `Bearer ${token}` };
-
-    return this.http.post(`${this.apiUrlAuth}/old-password-verify`, password, { headers, responseType: 'text' as 'json'  });
+    return this.http.post<{ response: string }>(`${this.apiUrlAuth}/old-password-verify`, password, {  headers  }).pipe
+      (map((response: any) => {
+        return response.response === "true" || response.response === true;
+  }));
   }
 
   updatePassword(token: string, password: string): Observable<any> {

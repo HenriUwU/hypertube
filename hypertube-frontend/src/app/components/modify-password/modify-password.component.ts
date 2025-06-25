@@ -38,6 +38,7 @@ export class ModifyPasswordComponent {
     ["Confirm New Password", "Confirm New Password"],
     ["Update", "Update"],
     ["Password updated successfully!", "Password updated successfully!"],
+    ["Current password is incorrect.", "Current password is incorrect."],
   ]);
 
   constructor(private authService: AuthService, private translateService: TranslateService, private globalMessageService: GlobalMessageService, private router: Router) { }
@@ -91,29 +92,37 @@ export class ModifyPasswordComponent {
     return null;    
   }
 
-  verifyCurrentPassword(currentPassword: string): boolean {
-      const verifCurrent = this.authService.verifyCurrentPassword(currentPassword).subscribe({
-      next: (response: any) => {
-        if (response.reposnse === false) {
-          this.errorMessage = "Current password is incorrect.";
-          return false;
+verifyCurrentPassword(currentPassword: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.authService.verifyCurrentPassword(currentPassword).subscribe({
+        next: (response: boolean) => {
+          if (response === false) {
+            this.errorMessage = "Current password is incorrect.";
+            this.globalMessageService.showMessage(this.tradMap.get("Current password is incorrect.") || "Current password is incorrect.", false);
+            resolve(false);
+          } else {
+            console.log("Current password is correct.");
+            resolve(true);
+          }
+        },
+        error: (_) => {
+          this.errorMessage = "An error occurred while verifying the current password.";
+          resolve(false);
         }
-        return true;
-      },
-      error: (_) => {
-        this.errorMessage = "An error occurred while verifying the current password.";
-        return false;
-      }
+      });
     });
-
-    return true
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (!this.forgotPassword) {
       const currentPassword = this.passwordForm.get('currentPassword')?.value;
-      if (!currentPassword ||  this.verifyCurrentPassword(currentPassword) === false){
-        this.errorMessage = "Current password is incorrect.";
+      if (!currentPassword) {
+        this.errorMessage = "Current password is required.";
+        return;
+      }
+      
+      const isPasswordValid = await this.verifyCurrentPassword(currentPassword);
+      if (!isPasswordValid) {
         return;
       }
     }

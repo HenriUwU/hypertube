@@ -1,5 +1,6 @@
 package com.hypertube.core_api.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hypertube.core_api.entity.UserEntity;
 import com.hypertube.core_api.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping(path = "/omniauth/42")
-    public ResponseEntity<Map<String, String>> omniauth(@RequestBody String code) throws Exception {
+    public ResponseEntity<Map<String, String>> omniauthFortyTwo(@RequestBody String code) throws Exception {
         return userService.omniauthFortyTwo(code);
     }
 
@@ -61,8 +62,15 @@ public class AuthController {
     }
 
     @PostMapping("/old-password-verify")
-    public ResponseEntity<Map<String, String>> oldPasswordVerify(@RequestBody String oldPassword, @RequestHeader("Authorization") String token) {
-        return this.userService.oldPasswordVerify(oldPassword, token);
+    public ResponseEntity<Map<String, String>> oldPasswordVerify(@RequestBody String body, @RequestHeader("Authorization") String token) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map jsonMap = objectMapper.readValue(body, Map.class);
+            String oldPassword = jsonMap.get("oldPassword").toString();
+            return this.userService.oldPasswordVerify(oldPassword, token);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Invalid JSON"));
+        }
     }
 
     @PostMapping("/update-password")
@@ -83,4 +91,8 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
     }
 
+    @GetMapping("/omniauth")
+    public ResponseEntity<Map<String, String>> omniauth(@RequestHeader(value = "Authorization") String token) {
+        return this.userService.omniauth(token);
+    }
 }
