@@ -11,8 +11,8 @@
 
 .video-player {
 	width: 100vw;
-	height: calc(100vh - 110px);
-	background-color: #20242a;
+	height: calc(100vh - 105px);
+	background-color: black;
 	object-fit: contain;
 }
 
