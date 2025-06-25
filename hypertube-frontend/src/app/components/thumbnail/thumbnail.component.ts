@@ -96,7 +96,6 @@ export class ThumbnailComponent implements OnInit {
   }
 
   onClick(): void {
-    console.log('Thumbnail clicked, redirecting to summay/', this.movieThumbnail.id);
     this.router.navigate(['/summary', this.movieThumbnail.id]).then();
   }
 
@@ -120,7 +119,6 @@ export class ThumbnailComponent implements OnInit {
       return 0;
     }
     const res = Math.min((watchedMinutes / totalMinutes) * 100, 100);
-    console.log(`Total Minutes: ${totalMinutes}, Watched Minutes: ${watchedMinutes}, Percentage: ${res}`);
     return res;
   }
 

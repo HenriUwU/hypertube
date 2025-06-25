@@ -170,10 +170,10 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
   stream(): void {
 	  this.router.navigate(['/stream'], {
 		  queryParams: {
-			  title: this.movie.title,
-			  backdrop: this.movie.backdrop_path,
 			  magnet: this.magnet,
-        movieId: this.movieId
+        movieId: this.movie.id,
+        backdropPath: this.movie.backdrop_path,
+        imdbId: this.movie.imdbId
 		  }
 	  }).then();
   }

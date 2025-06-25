@@ -26,7 +26,7 @@ export class CommentsComponent implements OnInit {
   commentContent: string = '';
   currentUser!: UserModel;
   likedStatus: { [commentId: string]: boolean } = {};
-  isEditing: number = 0;;
+  isEditing: number = 0;
   commentBeforeEdit!: string;
   commentEdited!: string
 

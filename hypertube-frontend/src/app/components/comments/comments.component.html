@@ -1,4 +1,4 @@
-<div class="comments-container">
+<div *ngIf="comments" class="comments-container">
   <h3>Comments</h3>
 
   <form (ngSubmit)="submitComment()" #commentForm="ngForm" class="comment-form">
@@ -28,21 +28,20 @@
 
     <mat-divider></mat-divider>
 
-    <div *ngIf="isMyComment(comment)" class="comment-edit">
-      <button (click)="editComment(comment)" class="edit-button">Modify</button>
-      <div *ngIf="isEditing === comment.id">
-        <textarea [(ngModel)]="commentEdited" rows="3"></textarea>
-        <div class="comment-actions">
-          <button (click)="saveComment(comment)">Save</button>
-          <button (click)="cancelEdit(comment)">Cancel</button>
-        </div>
-      </div>
-    </div>
-
     <p *ngIf="isEditing !== comment.id" class="comment-content">{{comment.content}}</p>
 
     <div class="comment-actions">
-         <button (click)="toggleLike(comment)">{{likedStatus[comment.id] ? '♥' : '♡'}}</button>
+      <div *ngIf="isMyComment(comment)" class="comment-edit">
+        <button (click)="editComment(comment)" class="edit-button">🖉</button>
+        <div *ngIf="isEditing === comment.id">
+          <textarea [(ngModel)]="commentEdited" rows="3"></textarea>
+          <div class="comment-actions">
+            <button (click)="saveComment(comment)">Save</button>
+            <button (click)="cancelEdit(comment)">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <button (click)="toggleLike(comment)" class="comment-like">{{likedStatus[comment.id] ? '♥' : '♡'}}</button>
     </div>
   </div>
 </div>
@@ -50,6 +49,5 @@
 
 <!--
 TODO:
-- bouton pour envoyer le commentaire
 - afficher le nombre de likes
 -->
