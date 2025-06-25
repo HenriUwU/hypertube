@@ -45,30 +45,57 @@ def start_transcoding(torrent_hash):
 		os.makedirs(output_dir, exist_ok=True)
 		output_file = os.path.join(output_dir, "playlist.m3u8")
 
+# 		command = [
+# 			"ffmpeg",
+# 			"-analyzeduration", "100M",
+# 			"-probesize", "100M",
+# 			"-i", str(input_path),
+# 			"-c:v", "libx264",
+# 			"-preset", "fast",
+# 			"-crf", "23",
+# 			"-pix_fmt", "yuv420p",
+# 			"-movflags", "+faststart",
+# 			"-c:a", "aac",
+# 			"-b:a", "128k",
+# 			"-ar", "48000",
+# 			"-ac", "2",
+# 			"-start_number", "0",
+# 			"-hls_time", "12",
+# 			"-hls_list_size", "0",
+# 			"-hls_playlist_type", "event",
+# 			"-force_key_frames", "expr:gte(t,n_forced*12)",
+# 			"-max_muxing_queue_size", "2048",
+# 			"-f", "hls",
+# 			"-hls_flags", "independent_segments+append_list",
+# 			str(output_file)
+# 		]
+
 		command = [
-			"ffmpeg",
-			"-analyzeduration", "100M",
-			"-probesize", "100M",
-			"-i", str(input_path),
-			"-c:v", "libx264",
-			"-preset", "fast",
-			"-crf", "23",
-			"-pix_fmt", "yuv420p",
-			"-movflags", "+faststart",
-			"-c:a", "aac",
-			"-b:a", "128k",
-			"-ar", "48000",
-			"-ac", "2",
-			"-start_number", "0",
-			"-hls_time", "12",
-			"-hls_list_size", "0",
-			"-hls_playlist_type", "event",
-			"-force_key_frames", "expr:gte(t,n_forced*12)",
-			"-max_muxing_queue_size", "2048",
-			"-f", "hls",
-			"-hls_flags", "independent_segments+append_list",
-			str(output_file)
-		]
+            "ffmpeg",
+            "-analyzeduration", "100M",
+            "-probesize", "100M",
+            "-i", str(input_path),
+            "-c:v", "libx264",
+            "-preset", "fast",
+            "-crf", "23",
+            "-pix_fmt", "yuv420p",
+            "-movflags", "+faststart",
+            "-g", "48",  # keyframe interval = 2s for 24fps
+            "-keyint_min", "48",
+            "-sc_threshold", "0",
+            "-c:a", "aac",
+            "-b:a", "128k",
+            "-ar", "48000",
+            "-ac", "2",
+            "-start_number", "0",
+            "-hls_time", "4",  # shorter segments for better buffering
+            "-hls_list_size", "0",
+            "-hls_playlist_type", "event",
+            "-max_muxing_queue_size", "2048",
+            "-f", "hls",
+            "-hls_flags", "independent_segments+append_list",
+            str(output_file)
+        ]
 
 		subprocess.run(command, check=True)
 		print(f"HLS transcoding complete: {output_file}")
