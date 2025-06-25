@@ -16,11 +16,6 @@ import {TranslateModel} from "../../models/translate.model";
 import {UserModel} from "../../models/user.model";
 import {filter, interval, map, switchMap, take} from "rxjs";
 
-interface Language {
-  name: string;
-  sound: string;
-}
-
 @Component({
   selector: 'app-header',
   standalone: true,

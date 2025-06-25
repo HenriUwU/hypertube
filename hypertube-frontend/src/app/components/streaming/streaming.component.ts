@@ -80,7 +80,7 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.movieService.getSubtitles(this.imdbId).subscribe(
       (response: Subtitles[]) => {
         if (response.length > 0) {
-          response.forEach((sub, index) => {
+          response.forEach((sub) => {
             if (sub.url) {
               const trackEl = document.createElement('track');
               trackEl.kind = 'subtitles';
