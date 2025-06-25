@@ -97,11 +97,12 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
         next: (data: Movie) => {
           this.movie = data;
           this.movie.vote_average = Math.round(this.movie.vote_average * 10) / 10;
-		  this.loadingTorrents = true;
+		      this.loadingTorrents = true;
+          console.log(this.movie);
           this.torrentService.searchTorrent(this.movie.englishTitle).subscribe(
             {next: (data: Torrent[]) => {
               this.torrents = data;
-			  this.loadingTorrents = false;
+			        this.loadingTorrents = false;
             },
             error: (e) => {
 				this.loadingTorrents = false;
@@ -171,10 +172,10 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
   stream(): void {
 	  this.router.navigate(['/stream'], {
 		  queryParams: {
-			  title: this.movie.title,
-			  backdrop: this.movie.backdrop_path,
 			  magnet: this.magnet,
-        movieId: this.movieId
+        movieId: this.movie.id,
+        backdropPath: this.movie.backdrop_path,
+        imdbId: this.movie.imdbId
 		  }
 	  }).then();
   }

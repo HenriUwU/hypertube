@@ -91,6 +91,7 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
+    @Transactional
     public UserDTO getUserByToken(String token) {
         String username = jwtTokenUtil.extractUsername(token.substring(7));
         return userMapper.map(userRepository.findByUsername(username)
@@ -140,6 +141,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    @Transactional
     public UserDTO updateUser(UserDTO user) {
         if (user.getId() == null) {
             throw new RuntimeException("Id can not be null");

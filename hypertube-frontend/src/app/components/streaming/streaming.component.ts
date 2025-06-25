@@ -1,11 +1,11 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {TorrentService} from '../../services/torrent.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import Hls from "hls.js";
 import {NgIf, NgOptimizedImage} from '@angular/common';
 import {TranslateService} from '../../services/translate.service';
 import {MovieService} from "../../services/movie.service";
-import {Subtitles} from "../../models/movie.model";
+import {Movie, Subtitles} from "../../models/movie.model";
 import {ActivatedRoute} from "@angular/router";
 
 
@@ -16,16 +16,16 @@ import {ActivatedRoute} from "@angular/router";
   templateUrl: './streaming.component.html',
   styleUrl: './streaming.component.css'
 })
-export class StreamingComponent implements OnInit, AfterViewInit {
+export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('videoPlayer', {static: false}) videoPlayer!: ElementRef;
 
   videoUrl: string = '';
   loading: boolean = false;
   blankVideo: boolean = true;
-  @Input() videoTitle!: string;
-  @Input() backdrop_path!: string;
   @Input() magnet!: string;
   @Input() movieId!: number;
+  @Input() backdropPath!: string;
+  @Input() imdbId!: string;
 
   private hash: string = '';
 
@@ -46,18 +46,17 @@ export class StreamingComponent implements OnInit, AfterViewInit {
 	  this.loading = true;
 
 	  this.route.queryParams.subscribe(params => {
-		  this.videoTitle = params['title'];
-		  this.backdrop_path = params['backdrop'];
 		  this.magnet = params['magnet'];
       this.movieId = params['movieId'];
-	  });
+      this.backdropPath = params['backdropPath'];
+      this.imdbId = params['imdbId'];
+    });
   }
 
   ngAfterViewInit() {
-	  this.startStreaming()
+    this.startStreaming()
   }
 
-  // on destroy, keep the timestamp of the video
   ngOnDestroy() {
     const videoElem: HTMLVideoElement = this.videoPlayer.nativeElement;
     if (videoElem) {
@@ -76,7 +75,7 @@ export class StreamingComponent implements OnInit, AfterViewInit {
     const videoEl: HTMLVideoElement = this.videoPlayer.nativeElement;
     Array.from(videoEl.querySelectorAll('track')).forEach(track => track.remove());
 
-    this.movieService.getSubtitles("tt13186482").subscribe(
+    this.movieService.getSubtitles(this.imdbId).subscribe(
       (response: Subtitles[]) => {
         if (response.length > 0) {
           response.forEach((sub, index) => {

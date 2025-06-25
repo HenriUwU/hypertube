@@ -10,6 +10,7 @@ import {RouterModule} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import { UserModel } from '../../models/user.model';
 import {Observable} from "rxjs";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-comments',
@@ -25,12 +26,16 @@ export class CommentsComponent implements OnInit {
   commentContent: string = '';
   currentUser!: UserModel;
   likedStatus: { [commentId: string]: boolean } = {};
+  isEditing: number = 0;
+  commentBeforeEdit!: string;
+  commentEdited!: string
 
   constructor(
     private commentService: CommentService,
     private movieService: MovieService,
-    private authService: AuthService,
     private userService: UserService,
+    private router: Router,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -102,6 +107,28 @@ export class CommentsComponent implements OnInit {
     });
   }
 
+  editComment(comment: CommentDTO) {
+    this.isEditing = comment.id;
+    this.commentBeforeEdit = comment.content;
+    this.commentEdited = comment.content;
+  }
+
+  saveComment(comment: CommentDTO) {
+    let editedContent = comment;
+    editedContent.content = this.commentEdited;
+    this.commentService.updateComment(editedContent).subscribe(updatedComment => {
+      const index = this.comments.findIndex(c => c.id === comment.id);
+      if (index !== -1) this.comments[index] = updatedComment;
+
+      this.isEditing = 0;
+    });
+  }
+
+  cancelEdit(comment: CommentDTO) {
+    this.isEditing = 0;
+    this.commentEdited = this.commentBeforeEdit;
+  }
+
   deleteComment(commentId: number) {
     this.commentService.deleteComment(commentId).subscribe(() => {
       this.comments = this.comments.filter(c => c.id !== commentId);
@@ -122,6 +149,14 @@ export class CommentsComponent implements OnInit {
       minute: '2-digit'
     });
   }
+
+  toProfile(userId: number): void {
+    this.router.navigate(['user', 'profile'], {
+      queryParams: { userId: String(userId) }
+    }).then();
+  }
+
+  getCharCount(): number {
+    return this.commentContent ? this.commentContent.length : 0;
+  }
 }
-
-

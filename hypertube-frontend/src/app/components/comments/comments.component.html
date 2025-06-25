@@ -1,5 +1,4 @@
-<div class="comments-container" *ngIf="currentUser">
-
+<div *ngIf="comments" class="comments-container">
   <h3>Comments</h3>
 
   <form (ngSubmit)="submitComment()" #commentForm="ngForm" class="comment-form">
@@ -7,10 +6,10 @@
     <div class="comment-header">
        <strong>{{currentUser.username}}</strong>
     </div>
-    <textarea [(ngModel)]="commentContent" name="content" required rows="4"
-              placeholder="Write your comment here..."
+    <textarea [(ngModel)]="commentContent" name="content" required rows="3"
+              maxlength="250" placeholder="Write your comment here..."
               #content="ngModel"></textarea>
-    <!-- <mat-divider></mat-divider> -->
+    <div class="char-count">{{getCharCount()}} / 250</div>
     <div class="submit-button">
       <button type="submit" [disabled]="!commentContent.trim()">Send</button>
     </div>
@@ -20,19 +19,31 @@
 
   <div *ngFor="let comment of comments" class="comment-block">
     <div class="comment-header">
-      <a [routerLink]="['/profil', comment.user.id]" class="author-link">
+      <a (click)="toProfile(comment.user.id)" class="author-link">
         <strong>{{comment.user.username}}</strong>
       </a>
       <div class="comment-date">
         {{formatDateTime(comment.createdAt)}}
       </div>
     </div>
+
     <mat-divider></mat-divider>
-    <p class="comment-content">{{comment.content}}</p>
+
+    <p *ngIf="isEditing !== comment.id" class="comment-content">{{comment.content}}</p>
 
     <div class="comment-actions">
-        <!-- <button (click)="editComment(comment)">Modify</button> -->
-         <button (click)="toggleLike(comment)">{{ likedStatus[comment.id] ? '♥' : '♡'}}</button>
+      <div *ngIf="isMyComment(comment)" class="comment-edit">
+        <button (click)="editComment(comment)" class="edit-button">🖉</button>
+        <div *ngIf="isEditing === comment.id">
+          <textarea [(ngModel)]="commentEdited" rows="3" 
+                    maxlength="250" class="edit-area"></textarea>
+          <div class="comment-actions">
+            <button (click)="saveComment(comment)">Save</button>
+            <button (click)="cancelEdit(comment)">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <button (click)="toggleLike(comment)" class="comment-like">{{likedStatus[comment.id] ? '♥' : '♡'}} {{comment.likes}}</button>
     </div>
   </div>
 </div>
@@ -40,9 +51,5 @@
 
 <!--
 TODO:
-- bouton modifier
-- bouton like-(click) plein, unlike-(reclick) vide
-- lien vers profil de l'utilisateur
-- date/heure du commentaire
-- bouton pour envoyer le commentaire
+- faire en sorte que les commentaires soient triés par type de preference (les plus récents en premier)
 -->
