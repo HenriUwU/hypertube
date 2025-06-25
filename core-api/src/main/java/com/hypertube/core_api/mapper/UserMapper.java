@@ -3,7 +3,6 @@ package com.hypertube.core_api.mapper;
 import com.hypertube.core_api.dto.UserDTO;
 import com.hypertube.core_api.entity.UserEntity;
 import com.hypertube.core_api.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import org.apache.tika.Tika;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -55,17 +54,28 @@ public abstract class UserMapper {
 
     @Named("blobToBase64")
     public String blobToBase64(Blob blob) {
-        if (blob != null) {
-            try {
-                byte[] bytes = blob.getBytes(1, (int) blob.length());
-                String base64 = Base64.getEncoder().encodeToString(bytes);
-                Tika tika = new Tika();
-                String mimeType = tika.detect(bytes);
-                return "data:" + mimeType + ";base64," + base64;
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to convert Blob to base64", e);
-            }
+        if (blob == null) {
+            return null;
         }
-        return null;
+
+        try (var is = blob.getBinaryStream()) {
+            if (is == null) {
+                return null;
+            }
+            byte[] bytes = is.readAllBytes();
+
+            if (bytes.length == 0) {
+                return null;
+            }
+
+            String base64 = Base64.getEncoder().encodeToString(bytes);
+            Tika tika = new Tika();
+            String mimeType = tika.detect(bytes);
+            return "data:" + mimeType + ";base64," + base64;
+
+        } catch (Exception e) {
+            return null;
+        }
     }
+
 }
