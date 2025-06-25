@@ -9,7 +9,6 @@
     <textarea [(ngModel)]="commentContent" name="content" required rows="4"
               placeholder="Write your comment here..."
               #content="ngModel"></textarea>
-    <!-- <mat-divider></mat-divider> -->
     <div class="submit-button">
       <button type="submit" [disabled]="!commentContent.trim()">Send</button>
     </div>
@@ -19,7 +18,7 @@
 
   <div *ngFor="let comment of comments" class="comment-block">
     <div class="comment-header">
-      <a [routerLink]="['/profil', comment.user.id]" class="author-link">
+      <a (click)="toProfile(comment.user.id)" class="author-link">
         <strong>{{comment.user.username}}</strong>
       </a>
       <div class="comment-date">
@@ -40,8 +39,5 @@
 <!--
 TODO:
 - bouton modifier
-- bouton like-(click) plein, unlike-(reclick) vide
-- lien vers profil de l'utilisateur
-- date/heure du commentaire
 - bouton pour envoyer le commentaire
 -->

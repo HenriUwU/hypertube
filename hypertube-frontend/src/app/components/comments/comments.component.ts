@@ -10,6 +10,7 @@ import {RouterModule} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import { UserModel } from '../../models/user.model';
 import {Observable} from "rxjs";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-comments',
@@ -29,8 +30,9 @@ export class CommentsComponent implements OnInit {
   constructor(
     private commentService: CommentService,
     private movieService: MovieService,
-    private authService: AuthService,
     private userService: UserService,
+    private router: Router,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -122,6 +124,10 @@ export class CommentsComponent implements OnInit {
       minute: '2-digit'
     });
   }
+
+  toProfile(userId: number): void {
+    this.router.navigate(['user', 'profile'], {
+      queryParams: { userId: String(userId) }
+    }).then();
+  }
 }
-
-
