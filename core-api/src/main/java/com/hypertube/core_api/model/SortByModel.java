@@ -10,6 +10,7 @@ public class SortByModel {
 	private List<Integer> genresIds;
 	private Integer page;
 	private Integer minStars;
+	private String productionYear;
 
 	public List<Integer> getGenresIds() {
 		return genresIds;
@@ -41,5 +42,13 @@ public class SortByModel {
 
 	public void setMinStars(Integer minStars) {
 		this.minStars = minStars;
+	}
+
+	public String getProductionYear() {
+		return productionYear;
+	}
+
+	public void setProductionYear(String productionYear) {
+		this.productionYear = productionYear;
 	}
 }

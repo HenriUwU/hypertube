@@ -230,7 +230,7 @@ http://localhost:8080/
     "genresIds": [15, 600],
     "minStars": 8,
     "page": 1,
-    "genresIds": []
+    "productionYear": "2025"
 }
 ```
 - **Réponse `List<MovieDTO>`:**
@@ -246,7 +246,7 @@ http://localhost:8080/
     "genresIds": [15, 600],
     "minStars": 8,
     "page": 1,
-    "genresIds": []
+    "productionYear": "2025"
 }
 ```
 - **Réponse `List<MovieDTO>`:**

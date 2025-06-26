@@ -189,7 +189,7 @@ public class MovieService {
         JsonNode resultsNode = rootNode.path("results");
         List<MovieModel> movies = objectMapper.convertValue(resultsNode, new TypeReference<>() {});
 
-        return sortMovieByGenre(movies, sortByModel.getGenresIds(), sortByModel.getMinStars(), token);
+        return sortMovieByGenre(movies, sortByModel.getGenresIds(), sortByModel.getMinStars(), sortByModel.getProductionYear(), token);
     }
 
     public List<GenreModel> getGenres(String token) throws JsonProcessingException {
@@ -235,7 +235,7 @@ public class MovieService {
         JsonNode resultsNode = rootNode.path("results");
         List<MovieModel> movies = objectMapper.convertValue(resultsNode, new TypeReference<>() {});
 
-        return sortMovieByGenre(movies, searchModel.getGenresIds(), searchModel.getMinStars(), token);
+        return sortMovieByGenre(movies, searchModel.getGenresIds(), searchModel.getMinStars(), searchModel.getProductionYear(), token);
     }
 
     public List<MovieModel> searchOMDbMovies(SearchModel searchModel, String token) throws JsonProcessingException {
@@ -262,9 +262,9 @@ public class MovieService {
                 movieResults.addAll(getTmdbMovieByImdbId(imdbID));
             }
         } else {
-            throw new EntityNotFoundException("Movie not found");
+            return movieResults;
         }
-        return sortMovieByGenre(movieResults, searchModel.getGenresIds(), searchModel.getMinStars(), token);
+        return sortMovieByGenre(movieResults, searchModel.getGenresIds(), searchModel.getMinStars(), searchModel.getProductionYear(), token);
     }
 
     private List<MovieModel> getTmdbMovieByImdbId(String imdbId) throws JsonProcessingException {
@@ -285,7 +285,7 @@ public class MovieService {
         return objectMapper.convertValue(resultsNode, new TypeReference<ArrayList<MovieModel>>() {});
     }
 
-    private List<MovieModel> sortMovieByGenre(List<MovieModel> movies, List<Integer> selectedGenreIds, Integer minStars, String token) throws JsonProcessingException {
+    private List<MovieModel> sortMovieByGenre(List<MovieModel> movies, List<Integer> selectedGenreIds, Integer minStars, String productionYear, String token) throws JsonProcessingException {
         UserEntity userEntity = null;
 
         if (!StringUtil.isNullOrEmpty(token)) {
@@ -305,6 +305,7 @@ public class MovieService {
                                 ? movie.getReleaseDate().substring(0, 4)
                                 : ""
                 ))
+                .filter(movie -> StringUtil.isNullOrEmpty(productionYear) || productionYear.equals(movie.getReleaseDate()))
                 .peek(movie -> {
                     if (finalUserEntity != null) {
                         Optional.ofNullable(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(finalUserEntity, movie.getId()))
@@ -613,6 +614,8 @@ public class MovieService {
             throw new IllegalArgumentException("Page cannot be negative or zero");
         if (sortByDTO.getGenresIds() == null)
             throw new IllegalArgumentException("genresIds cannot be null");
+        if (sortByDTO.getProductionYear() == null)
+            throw new IllegalArgumentException("productionYear cannot be null");
     }
 
     private void checkSearchDTO(SearchModel searchDTO) {
@@ -624,6 +627,8 @@ public class MovieService {
             throw new IllegalArgumentException("Page cannot be negative or zero");
         if (searchDTO.getGenresIds() == null)
             throw new IllegalArgumentException("genresIds cannot be null");
+        if (searchDTO.getProductionYear() == null)
+            throw new IllegalArgumentException("productionYear cannot be null");
     }
 
     private void checkWatchedMoviesDTO(WatchedMoviesDTO watchedMoviesDTO) {
