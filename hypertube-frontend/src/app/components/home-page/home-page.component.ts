@@ -238,14 +238,14 @@ export class HomePageComponent implements OnInit {
         if (this.searchSource == "tmdb") {
           source$ = this.movieService.tmdbSearch(this.searchTerm, this.currentPage, Array.from(this.selectedGenreIds), this.minStars, this.filterYear).pipe(
             catchError((error) => {
-              console.error('Error loading movies:', error);
+              console.log('Error loading movies:', error);
               return of([]);
             })
           );
         } else if (this.searchSource == "omdb") {
           source$ = this.movieService.omdbSearch(this.searchTerm, this.currentPage, Array.from(this.selectedGenreIds), this.minStars, this.filterYear).pipe(
             catchError((error) => {
-              console.error('Error loading movies:', error);
+              console.log('Error loading movies:', error);
               return of([]);
             })
           );
@@ -255,7 +255,7 @@ export class HomePageComponent implements OnInit {
       } else {
         source$ = this.movieService.sortBy(this.selectSortingOpt, this.currentPage, Array.from(this.selectedGenreIds), this.minStars).pipe(
           catchError((error) => {
-            console.error('Error loading movies:', error);
+            console.log('Error loading movies:', error);
             return of([]);
           })
         );
@@ -269,7 +269,7 @@ export class HomePageComponent implements OnInit {
       this.noMoreMovies = false;
       this.movies = [...this.movies, ...data];
     } catch (error) {
-      console.error('Error loading movies:', error);
+      console.log('Error loading movies:', error);
     } finally {
       this.isLoading = false;
     }

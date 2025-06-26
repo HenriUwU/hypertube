@@ -66,7 +66,7 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
       const stoppedAt = new Date(currentTime * 1000).toISOString().substr(11, 8);
       this.movieService.saveWatched(this.movieId, stoppedAt).subscribe({
         next: () => console.log('Watched time updated successfully'),
-        error: (error) => console.error('Error updating watched time:', error)
+        error: (error) => console.log('Error updating watched time:', error)
       });
     }
   }
@@ -131,7 +131,7 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   launchStreaming() {
     if (!this.hash) {
-      console.error('Error: hash is not defined');
+      console.log('Error: hash is not defined');
       return;
     }
     this.torrentService.getTorrentPath(this.hash).subscribe((response: string) => {
@@ -142,10 +142,10 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
         const video = this.videoPlayer.nativeElement;
         this.hlsConversion(this.videoUrl, video);
       } else {
-        console.error('Error: videoUrl is empty');
+        console.log('Error: videoUrl is empty');
       }
     }, (error) => {
-      console.error('Error fetching torrent path:', error);
+      console.log('Error fetching torrent path:', error);
     });
   }
 
