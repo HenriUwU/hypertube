@@ -77,8 +77,8 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
     const videoEl: HTMLVideoElement = this.videoPlayer.nativeElement;
     Array.from(videoEl.querySelectorAll('track')).forEach(track => track.remove());
 
-    this.movieService.getSubtitles(this.imdbId).subscribe(
-      (response: Subtitles[]) => {
+    this.movieService.getSubtitles(this.imdbId).subscribe({
+      next: (response: Subtitles[]) => {
         if (response.length > 0) {
           response.forEach((sub) => {
             if (sub.url) {
@@ -100,26 +100,30 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
           }, 500);
         }
       },
-      (error) => {
+      error: (error) => {
         console.log('Subtitle fetch error:', error);
       }
+    }
     );
 
-    this.torrentService.isTorrentStarted(this.magnet).subscribe(
-      (response: string) => {
+    this.torrentService.isTorrentStarted(this.magnet).subscribe({
+      next: (response: string) => {
         this.hash = response;
         if (this.hash) {
           this.launchStreaming();
         } else {
           this.startTorrent();
-		}},
-      (error) => {
+        }
+      },
+      error: (error) => {
         if (error.status === 403 || error.error === null) {
           console.log('Torrent not started, starting torrent...');
           this.startTorrent();
         } else {
           console.warn('Handled error while checking if torrent is started:', error.message || error);
-        }});
+        }
+      }
+    });
   }
 
   startTorrent() {
