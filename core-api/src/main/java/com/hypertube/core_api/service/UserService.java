@@ -33,6 +33,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -220,6 +225,7 @@ public class UserService implements UserDetailsService {
             user.setLastName(lastName);
             user.setPassword(token);
             user.setDiscordEid(eidDiscord);
+            user.setEmailVerify(true);
             userRepository.save(user);
 
             jwt.put("id", user.getId().toString());
@@ -255,6 +261,7 @@ public class UserService implements UserDetailsService {
             String email = jsonNode.get("email").asText();
             String firstName = jsonNode.get("first_name").asText();
             String lastName = jsonNode.get("last_name").asText();
+            String picture = jsonNode.get("image").get("link").asText();
 
             user.setUsername(username);
             user.setEmail(email);
@@ -262,6 +269,8 @@ public class UserService implements UserDetailsService {
             user.setLastName(lastName);
             user.setPassword(token);
             user.setFortyTwoEid(eid42);
+            user.setEmailVerify(true);
+            saveImageFromInternetLink(picture, user);
             userRepository.save(user);
 
             jwt.put("id", user.getId().toString());
@@ -459,6 +468,8 @@ public class UserService implements UserDetailsService {
         userEntity.setUsername(name);
         userEntity.setPassword(passwordEncoder.encode(googleEid));
         userEntity.setGoogleEid(googleEid);
+        userEntity.setEmailVerify(true);
+        saveImageFromInternetLink(picture, userEntity);
         userRepository.save(userEntity);
 
         response.put("id", userEntity.getId().toString());
@@ -466,6 +477,23 @@ public class UserService implements UserDetailsService {
         return ResponseEntity.ok(response);
     }
 
+    private void saveImageFromInternetLink(String picture, UserEntity userEntity) {
+        try {
+            URL url = new URL(picture);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            try (InputStream is = url.openStream()) {
+                byte[] buffer = new byte[8192];
+                int n;
+                while ((n = is.read(buffer)) != -1) {
+                    baos.write(buffer, 0, n);
+                }
+            }
+            byte[] imageBytes = baos.toByteArray();
+            Blob profilePictureBlob = new SerialBlob(imageBytes);
+            userEntity.setProfilePicture(profilePictureBlob);
+        } catch (Exception e) {
+        }
+    }
     public ResponseEntity<Map<String, String>> omniauth(String token) {
         UserEntity userEntity = userRepository.findByUsername(jwtTokenUtil.extractUsername(token.substring(7))).orElseThrow();
 
