@@ -40,6 +40,10 @@
                     <div class="modify-password-container" *ngIf="!isReadOnly && !omniAuthSession">
                         <button type="submit" id="submitButton" (click)="modifyPassword()">{{tradMap.get('Change Password')}}</button>
                     </div>
+                    <!-- add a delete button -->
+                    <div class="delete-account-container" *ngIf="!isReadOnly">
+                        <button type="button" id="deleteButton" (click)="deleteUser()">{{tradMap.get('Delete Account')}}</button>
+                    </div>
                 </div>
 
             </div>

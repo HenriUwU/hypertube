@@ -38,6 +38,8 @@ export class ProfileComponent implements OnInit {
     ["Profile updated successfully", "Profile updated successfully"],
     ["Please select a valid image file", "Please select a valid image file"],
     ["Error", "Error"],
+    ["Profile deleted successfully", "Profile deleted successfully"],
+    ["Delete Account", "Delete Account"],
   ]);
 
   @Input () userId: string = sessionStorage.getItem('id') ? sessionStorage.getItem('id')! : '0';
@@ -142,5 +144,18 @@ export class ProfileComponent implements OnInit {
 
   modifyPassword(): void {
 	  this.router.navigate(['user', 'modify-password']).then();
+  }
+
+  deleteUser(): void {
+    this.userService.deleteUser(this.userId).subscribe({
+      next: () => {
+        this.globalMessageService.showMessage(this.tradMap.get("Profile deleted successfully") || "Profile deleted successfully", true);
+        sessionStorage.clear();
+        this.router.navigate(['/']).then();
+      },
+      error: (error) => {
+        this.globalMessageService.showMessage(this.tradMap.get("Failed to delete profile") || "Failed to delete profile", false);
+      }
+    });
   }
 }

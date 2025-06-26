@@ -155,6 +155,36 @@
     justify-content: center;
     margin-top: 2em;
 }
+
+.delete-account-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1em;
+}
+
+#deleteButton {
+    color: black;
+    background-color: #afbb80;
+    border: none;
+    border-radius: 5px;
+    padding: 1em 4em;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    white-space: nowrap;
+}
+
+#deleteButton:hover:not(:disabled) {
+    background-color: #c3d191;
+    transform: translateY(-2px);
+}
+
+#deleteButton:disabled {
+    background-color: #5a6141;
+    cursor: not-allowed;
+}
+
 /* --- Responsive Design --- */
 @media (max-width: 1024px) {
     .wrapper {
@@ -172,6 +202,7 @@
             "pic"
             "inputs"
             "change-pwd"
+            "delete-acc"
             "save";
         gap: 2em; /* Spacing between elements */
     }
@@ -192,6 +223,11 @@
 
     .modify-password-container {
         grid-area: change-pwd;
+        margin-top: 0; /* Reset margin for grid layout */
+    }
+
+    .delete-account-container {
+        grid-area: delete-acc;
         margin-top: 0; /* Reset margin for grid layout */
     }
 
@@ -234,6 +270,11 @@
     }
 
     #submitButton {
+        width: 100%;
+        padding: 1em;
+    }
+
+    #deleteButton {
         width: 100%;
         padding: 1em;
     }
