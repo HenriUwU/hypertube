@@ -48,6 +48,7 @@ export class AuthService {
   logout(): void {
     sessionStorage.removeItem(`id`);
     sessionStorage.removeItem(`token`);
+    sessionStorage.setItem(`language`, "en")
   }
 
   getCurrentUserId(): string | null {
