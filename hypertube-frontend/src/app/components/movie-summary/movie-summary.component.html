@@ -76,7 +76,10 @@
         <iframe
           [src]="trailerUrl"
           title="YouTube video"
-          allowfullscreen>
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"
+          sandbox="allow-scripts allow-same-origin allow-presentation">
         </iframe>
       </ng-container>
 
