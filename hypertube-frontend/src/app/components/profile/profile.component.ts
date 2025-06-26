@@ -39,6 +39,7 @@ export class ProfileComponent implements OnInit {
     ["Please select a valid image file", "Please select a valid image file"],
     ["Error", "Error"],
     ["Profile deleted successfully", "Profile deleted successfully"],
+    ["Failed to delete profile", "Failed to delete profile"],
     ["Delete Account", "Delete Account"],
   ]);
 
@@ -150,7 +151,8 @@ export class ProfileComponent implements OnInit {
     this.userService.deleteUser(this.userId).subscribe({
       next: () => {
         this.globalMessageService.showMessage(this.tradMap.get("Profile deleted successfully") || "Profile deleted successfully", true);
-        sessionStorage.clear();
+        // Properly logout and clear user state
+        this.authService.logout(); // This will now also clear the user service
         this.router.navigate(['/']).then();
       },
       error: (error) => {
