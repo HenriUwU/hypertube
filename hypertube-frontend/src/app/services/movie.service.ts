@@ -20,12 +20,13 @@ export class MovieService {
     return this.http.get<Movie>(`${this.apiUrlMovies}/${id.toString()}`).pipe();
   }
 
-  sortBy(sortBy: string, page: number, genresIds: number[], minStars: number): Observable<any> {
+  sortBy(sortBy: string, page: number, genresIds: number[], minStars: number, productionYear: string): Observable<any> {
     const body = {
       sortBy: sortBy,
       page: page,
       genresIds: genresIds,
       minStars: minStars,
+      productionYear: productionYear
     };
     return this.http.post<Movie[]>(`${this.apiUrlMovies}/sort-by`, body).pipe(
       map((response: any) => response)
@@ -53,6 +54,7 @@ export class MovieService {
       minStars: minStars,
       productionYear: productionYear
     };
+    console.log(body)
     return this.http.post<Movie[]>(`${this.apiUrlMovies}/omdb-search`, body).pipe(
       map((response: any) => response)
     );

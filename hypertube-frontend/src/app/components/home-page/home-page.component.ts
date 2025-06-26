@@ -79,10 +79,10 @@ export class HomePageComponent implements OnInit {
       this.onSearchSourceChange(val);
     });
 
-    this.yearControl = new FormControl({ value: '', disabled: true });
+    this.yearControl = new FormControl('');
     this.translateService.autoTranslateTexts(this.tradMap);
     this.translateService.initializeLanguageListener(this.tradMap);
-    this.movieService.sortBy('popular', 1, [], 0).subscribe((data: any) => {
+    this.movieService.sortBy('popular', 1, [], 0, "").subscribe((data: any) => {
       this.movies = data;
     });
     this.movieService.getGenres().subscribe((genres: GenreModel[]) => {
@@ -107,7 +107,7 @@ export class HomePageComponent implements OnInit {
 
       this.filterYear = cleanValue;
       const currentLength = cleanValue.length;
-      if ((currentLength === 4 && this.lastYearLength < 4) || (currentLength === 3 && this.lastYearLength === 4)) {
+      if ((currentLength === 4 && this.lastYearLength < 4) || currentLength === 0) {
         this.onYearChange();
       }
 
@@ -121,24 +121,6 @@ export class HomePageComponent implements OnInit {
         this.currentPage = 1;
         this.movies = [];
         this.loadMovies();
-
-        const shouldEnable = !!this.searchTerm;
-
-        if (shouldEnable) {
-          if (this.yearControl.disabled) {
-            this.yearControl.enable({ emitEvent: false });
-          }
-          if (this.searchSourceControl.disabled) {
-            this.searchSourceControl.enable({ emitEvent: false });
-          }
-        } else {
-          if (!this.yearControl.disabled) {
-            this.yearControl.disable({ emitEvent: false });
-          }
-          if (!this.searchSourceControl.disabled) {
-            this.searchSourceControl.disable({ emitEvent: false });
-          }
-        }
       });
   }
 
@@ -253,7 +235,7 @@ export class HomePageComponent implements OnInit {
           throw new Error('Invalid search source');
         }
       } else {
-        source$ = this.movieService.sortBy(this.selectSortingOpt, this.currentPage, Array.from(this.selectedGenreIds), this.minStars).pipe(
+        source$ = this.movieService.sortBy(this.selectSortingOpt, this.currentPage, Array.from(this.selectedGenreIds), this.minStars, this.filterYear).pipe(
           catchError((error) => {
             console.error('Error loading movies:', error);
             return of([]);
