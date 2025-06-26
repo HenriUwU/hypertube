@@ -62,7 +62,7 @@ export class RegisterPageComponent implements OnInit {
 
   passwordValidator(control: AbstractControl): ValidationErrors | null {
     const password = control.value;
-    
+
     if (!password) {
       return null;
     }
@@ -71,22 +71,22 @@ export class RegisterPageComponent implements OnInit {
     if (password.length < 6 || password.length > 40) {
       return { passwordLength: true };
     }
-    
+
     // Check if there is at least one uppercase letter
     if (!/[A-Z]/.test(password)) {
       return { passwordNoUppercase: true };
     }
-    
+
     // Check if there is at least one lowercase letter
     if (!/[a-z]/.test(password)) {
       return { passwordNoLowercase: true };
     }
-    
+
     // Check if there is at least one number
     if (!/\d/.test(password)) {
       return { passwordNoNumber: true };
     }
-    
+
     // Check if there is at least one special character
     if (!/[!@#$%^&*]/.test(password)) {
       return { passwordNoSpecialChar: true };
@@ -100,7 +100,7 @@ export class RegisterPageComponent implements OnInit {
       this.authService.register(this.registerForm.value).subscribe({
         next: () => {
           sessionStorage.setItem('language', 'en');
-          this.globalMessageService.showMessage('You\'re registered successfully! Redirecting to login...', true);
+          this.globalMessageService.showMessage('Registration successful. A verification email has been sent to your inbox.', true);
           this.router.navigate(['auth/login']).then()
         },
         error: () => {

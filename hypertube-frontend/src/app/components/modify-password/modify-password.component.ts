@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors, FormsModule, ReactiveFormsModule } from '@angular/forms';
 // import { BrowserModule } from '@angular/platform-browser'
 import { CommonModule } from '@angular/common';
@@ -9,16 +9,16 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-password',
-  imports: [ 
+  imports: [
     CommonModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
     FormsModule
    ],
   standalone: true,
   templateUrl: './modify-password.component.html',
   styleUrl: './modify-password.component.css'
 })
-export class ModifyPasswordComponent {
+export class ModifyPasswordComponent implements OnInit {
 
   @Input() forgotPassword: boolean = false;
 
@@ -28,7 +28,7 @@ export class ModifyPasswordComponent {
     confirmPassword: new FormControl<string>('', [Validators.required]),
   },{ validators: (control) => this.confirmPasswordValidator(control) });
 
-  
+
   successMessage: boolean = false;
   private _errorMessage: string = '';
 
@@ -48,17 +48,19 @@ export class ModifyPasswordComponent {
     this.translateService.autoTranslateTexts(this.tradMap);
     this.translateService.initializeLanguageListener(this.tradMap);
 
-    this.authService.isOmniauthSession().subscribe({
-      next: (isOmniAuth) => {
-        if (isOmniAuth){
-          this.router.navigate(['/']).then();
-          this.globalMessageService.showMessage(this.tradMap.get("You are not allowed to change your password while logged in via OmniAuth.") || "You are not allowed to change your password while logged in via OmniAuth.", false);
+    if (!this.forgotPassword) {
+      this.authService.isOmniauthSession().subscribe({
+        next: (isOmniAuth) => {
+          if (isOmniAuth) {
+            this.router.navigate(['/']).then();
+            this.globalMessageService.showMessage(this.tradMap.get("You are not allowed to change your password while logged in via OmniAuth.") || "You are not allowed to change your password while logged in via OmniAuth.", false);
+          }
+        },
+        error: (error) => {
+          console.log("Error checking omniauth session:", error);
         }
-      },
-      error: (error) => {
-        console.log("Error checking omniauth session:", error);
-      }
-    });
+      });
+    }
   }
 
   confirmPasswordValidator(control: AbstractControl): ValidationErrors | null {
@@ -102,7 +104,7 @@ export class ModifyPasswordComponent {
       this.errorMessage = "Current password is required.";
       return { PasswordVerificationError: true };
     }
-    return null;    
+    return null;
   }
 
 verifyCurrentPassword(currentPassword: string): Promise<boolean> {
@@ -133,13 +135,13 @@ verifyCurrentPassword(currentPassword: string): Promise<boolean> {
         this.errorMessage = "Current password is required.";
         return;
       }
-      
+
       const isPasswordValid = await this.verifyCurrentPassword(currentPassword);
       if (!isPasswordValid) {
         return;
       }
     }
-    
+
 
     if (this.passwordForm.valid) {
       const password = this.passwordForm.get('password')?.value || '';
@@ -150,45 +152,40 @@ verifyCurrentPassword(currentPassword: string): Promise<boolean> {
           this.errorMessage = 'Token is missing!';
           return;
         }
-        this.authService.updateForgotPassword(token, password).subscribe(
-          (response: any) => {
+        this.authService.updateForgotPassword(token, password).subscribe({
+          next: () => {
             this.globalMessageService.showMessage(this.tradMap.get("Password updated successfully!") || "Password updated successfully!", true);
             this.successMessage = true;
+            this.router.navigate(['/auth/login']).then();
           },
-          (error: any) => {
+          error: () => {
             this.errorMessage = 'Error updating password.';
             this.successMessage = false;
           }
-        );
+        });
       } else {
-        this.authService.updatePassword('', password).subscribe(
-          (response: any) => {
+        this.authService.updatePassword('', password).subscribe({
+          next: () => {
             this.globalMessageService.showMessage(this.tradMap.get("Password updated successfully!") || "Password updated successfully!", true);
             this.successMessage = true;
+            this.router.navigate(['/auth/login']).then();
           },
-          (error: any) => {
+          error: () => {
             this.errorMessage = 'Error updating password.';
             this.successMessage = false;
           }
-        );
+        });
       }
     }
     else {
       this.errorMessage = 'Form is invalid!';
-    }
-
-    // redirect to login page after successful password update
-    if (this.successMessage) {
-      // setTimeout(() => {
-        this.router.navigate(['/']).then();
-      // }, 2000); // Redirect after 2 seconds
     }
   }
 
   get errorMessage(): string {
     return this._errorMessage;
   }
-  
+
   set errorMessage(value: string) {
     this.translateService.autoTranslate([value]).subscribe((translations: string[]) => {
           translations.forEach((translation, index) => {

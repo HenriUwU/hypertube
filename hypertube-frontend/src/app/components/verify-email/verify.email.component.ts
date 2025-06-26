@@ -29,27 +29,28 @@ export class VerifyEmailComponent implements OnInit {
   constructor(private route: ActivatedRoute, private authService: AuthService, private translateService: TranslateService) {}
 
   ngOnInit(): void {
-    // this.translateService.autoTranslateTexts(this.tradMap);
-    // this.translateService.initializeLanguageListener(this.tradMap);
-    
+    this.translateService.autoTranslateTexts(this.tradMap);
+    this.translateService.initializeLanguageListener(this.tradMap);
+
     const token = this.route.snapshot.queryParamMap.get('token');
-    
+
+    console.log(token)
     if (token) {
       this.isLoading = true;
       this.authService.verifyEmail(token).subscribe({
-        next: (response: string) => {
-          this.message = response;
+        next: () => {
+          this.message = this.tradMap.get("Verification successful!") || "Verification successful!";
           this.isSuccess = true;
           this.isLoading = false;
         },
-        error: (err: HttpErrorResponse) => {
-          this.message = err.error?.message || this.tradMap.get("Verification failed.");
+        error: () => {
+          this.message = this.tradMap.get("Verification failed.") || "Verification failed.";
           this.isSuccess = false;
           this.isLoading = false;
         }
       });
     } else {
-      this.message = this.tradMap.get("No token provided.") || "No token provided."; 
+      this.message = this.tradMap.get("No token provided.") || "No token provided.";
       this.isSuccess = false;
     }
   }

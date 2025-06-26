@@ -43,7 +43,7 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                    .requestMatchers("/auth/**", "torrents/**", "/movies/**", "/translate/**").permitAll()
+                    .requestMatchers("/auth/**", "torrents/**", "/movies/**", "/translate/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
             .anyRequest().authenticated())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
