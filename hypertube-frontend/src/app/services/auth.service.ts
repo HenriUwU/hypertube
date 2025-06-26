@@ -90,4 +90,14 @@ export class AuthService {
   updateForgotPassword(token: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrlAuth}/update-password?token=${token}`, password, { responseType: 'text' as 'json' });
   }
+
+  isOmniauthSession(): Observable<boolean> {
+    const tokenBearer = this.getToken();
+    const headers = { Authorization: `Bearer ${tokenBearer}`};
+
+    return this.http.get<{ response: string }>(`${this.apiUrlAuth}/omniauth`, { headers}).pipe
+      (map((response: any) => {
+        return response.response === "true" || response.response === true;
+  }));
+  }
 }

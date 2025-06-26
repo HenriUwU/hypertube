@@ -39,6 +39,7 @@ export class ModifyPasswordComponent {
     ["Update", "Update"],
     ["Password updated successfully!", "Password updated successfully!"],
     ["Current password is incorrect.", "Current password is incorrect."],
+    ["You are not allowed to change your password while logged in via OmniAuth.", "You are not allowed to change your password while logged in via OmniAuth."],
   ]);
 
   constructor(private authService: AuthService, private translateService: TranslateService, private globalMessageService: GlobalMessageService, private router: Router) { }
@@ -46,6 +47,18 @@ export class ModifyPasswordComponent {
   ngOnInit(): void {
     this.translateService.autoTranslateTexts(this.tradMap);
     this.translateService.initializeLanguageListener(this.tradMap);
+
+    this.authService.isOmniauthSession().subscribe({
+      next: (isOmniAuth) => {
+        if (isOmniAuth){
+          this.router.navigate(['/']).then();
+          this.globalMessageService.showMessage(this.tradMap.get("You are not allowed to change your password while logged in via OmniAuth.") || "You are not allowed to change your password while logged in via OmniAuth.", false);
+        }
+      },
+      error: (error) => {
+        console.log("Error checking omniauth session:", error);
+      }
+    });
   }
 
   confirmPasswordValidator(control: AbstractControl): ValidationErrors | null {
