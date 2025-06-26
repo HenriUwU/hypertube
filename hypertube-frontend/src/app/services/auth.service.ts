@@ -98,7 +98,8 @@ export class AuthService {
   verifyCurrentPassword(password: string): Observable<boolean> {
     const token = this.getToken();
     const headers = { Authorization: `Bearer ${token}` };
-    return this.http.post<{ response: string }>(`${this.apiUrlAuth}/old-password-verify`, password, {  headers  }).pipe
+    const body = { "oldPassword": password };
+    return this.http.post<{ response: string }>(`${this.apiUrlAuth}/old-password-verify`, body, {headers}).pipe
       (map((response: any) => {
         return response.response === "true" || response.response === true;
   }));
