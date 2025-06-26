@@ -158,10 +158,9 @@ public class UserService implements UserDetailsService {
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setLanguage(user.getLanguage());
+
         if (user.getProfilePicture() != null && !user.getProfilePicture().isEmpty()) {
             existingUser.setProfilePicture(userMapper.base64ToBlob(user.getProfilePicture()));
-        } else {
-            existingUser.setProfilePicture(null);
         }
 
         UserDTO updatedUser = userMapper.map(userRepository.save(existingUser));
