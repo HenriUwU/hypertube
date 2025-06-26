@@ -45,9 +45,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
 	ngOnInit(): void {
-	  this.translateService.availableLanguages().subscribe((data: TranslateModel[]) =>
-		  this.languages = data
-	  );
+	  this.translateService.availableLanguages().subscribe({
+		  next: (data: TranslateModel[]) => {
+			  this.languages = data;
+		  },
+		  error: (error) => {
+			  this.languages = [
+				  { iso_639_1: 'en', flag: 'https://flagcdn.com/w80/us.png', english_name: 'English' },
+			  ];
+		  }
+	  });
 
 	  this.translateService.autoTranslateTexts(this.tradMap);
 	  this.translateService.initializeLanguageListener(this.tradMap);

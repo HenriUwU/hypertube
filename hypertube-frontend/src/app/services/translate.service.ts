@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { TranslateModel } from '../models/translate.model';
 
 @Injectable({
@@ -13,7 +13,13 @@ export class TranslateService {
 
   availableLanguages(): Observable<TranslateModel[]> {
     return this.http.get(`${this.apiUrlAuth}/lang`).pipe(
-      map((response: any) => response)
+      map((response: any) => response),
+      catchError((error) => {
+        // console.log('Error fetching available languages:', error);
+        return of([
+          { iso_639_1: 'en', flag: 'https://flagcdn.com/w80/us.png', english_name: 'English' },
+        ]);
+      })
     );
   }
 
@@ -24,7 +30,11 @@ export class TranslateService {
       target: target
     };
     return this.http.post<any>(`${this.apiUrlAuth}`, body).pipe(
-      map((response: any) => response.translations)
+      map((response: any) => response.translations),
+      catchError((error) => {
+        // console.log('Error translating strings:', error);
+        return of(text);
+      })
     );
   }
 
@@ -37,10 +47,15 @@ export class TranslateService {
     const sourceLang = "en";
     const targetLang = sessionStorage.getItem('language') ? sessionStorage.getItem('language')! : 'en';
 
-    this.translateStrings(texts, sourceLang, targetLang).subscribe((translations: string[]) => {
-      translations.forEach((translation, index) => {
-        tradMap.set(texts[index], translation);
-      });
+    this.translateStrings(texts, sourceLang, targetLang).subscribe({
+      next: (translations: string[]) => {
+        translations.forEach((translation, index) => {
+          tradMap.set(texts[index], translation);
+        });
+      },
+      error: (error) => {
+        // console.log('Error in autoTranslateTexts:', error);
+      }
     });
   }
 
@@ -63,10 +78,15 @@ export class TranslateService {
     window.addEventListener('storage', (event) => {
       if (event.storageArea === sessionStorage && event.key === 'language') {
         const texts: string[] = Array.from(tradMap.keys());
-        this.autoTranslate(texts).subscribe((translations: string[]) => {
-          translations.forEach((translation, index) => {
-            tradMap.set(texts[index], translation);
-          });
+        this.autoTranslate(texts).subscribe({
+          next: (translations: string[]) => {
+            translations.forEach((translation, index) => {
+              tradMap.set(texts[index], translation);
+            });
+          },
+          error: (error) => {
+            // console.log('Error in language listener translation:', error);
+          }
         });
       }
     });
