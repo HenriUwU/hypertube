@@ -124,15 +124,15 @@ public class UserService implements UserDetailsService {
         tokenEntity.setExpiryDate(LocalDateTime.now().plusDays(1));
         tokenEntity.setType(TokenType.EMAIL_VERIFICATION);
         tokenRepository.save(tokenEntity);
-//        sendVerificationEmail(user.getEmail(), token);
+        sendVerificationEmail(user.getEmail(), token);
     }
 
     public ResponseEntity<Map<String, String>> login(UserEntity user) {
         UserEntity dbUser = userRepository.findByUsername(user.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
 
-//        if (!dbUser.isEmailVerify())
-//            throw new RuntimeException("Email verify failed");
+        if (!dbUser.isEmailVerify())
+            throw new RuntimeException("Email verify failed");
 
         if (passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
             String token = jwtTokenUtil.generateToken(user.getUsername());
@@ -307,17 +307,20 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(userId);
     }
 
-    public ResponseEntity<String> verifyEmail(String token) {
+    public ResponseEntity<Map<String, String>> verifyEmail(String token) {
         TokenEntity tokenEntity = tokenRepository.findByToken(token);
+        Map<String, String> map = new HashMap<>();
         if (tokenEntity == null || tokenEntity.getExpiryDate().isBefore(LocalDateTime.now())) {
-            return ResponseEntity.badRequest().body("Invalid or expired token");
+            map.put("response", "Invalid or expired token");
+            return ResponseEntity.badRequest().body(map);
         }
 
         UserEntity user = tokenEntity.getUser();
         user.setEmailVerify(true);
         userRepository.save(user);
         tokenRepository.delete(tokenEntity);
-        return ResponseEntity.ok("Email verified successfully");
+        map.put("response", "Email verified successfully");
+        return ResponseEntity.ok(map);
     }
 
     private void sendVerificationEmail(String toEmail, String verificationToken) {
