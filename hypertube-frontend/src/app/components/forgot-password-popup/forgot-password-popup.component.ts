@@ -48,7 +48,7 @@ export class ForgotPasswordPopupComponent {
         // this.handleSuccess();
       },
       error: (error) => {
-        console.error("Error sending reset link:", error);
+        console.log("Error sending reset link:", error);
         this.globalMessageService.showMessage(this.tradMap.get("Error sending reset link") || "Error sending reset link", false);
       }
     });

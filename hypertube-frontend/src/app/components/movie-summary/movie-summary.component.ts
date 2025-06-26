@@ -111,7 +111,7 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
             setTimeout(() => this.updateVisibleCount(), 0);
         },
         error: (e) => {
-          console.error('Error fetching movie data:', e);
+          console.log('Error fetching movie data:', e);
         },
         complete: () => {
         }});
@@ -199,7 +199,6 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private getPrivacyEnhancedUrl(url: string): string {
-    // Convert regular YouTube URLs to privacy-enhanced embed URLs
     if (url.includes('youtube.com/embed/')) {
       return url.replace('youtube.com', 'youtube-nocookie.com');
     }

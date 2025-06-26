@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
@@ -14,7 +14,7 @@ import {UserService} from "../../services/user.service";
 import {TranslateService} from "../../services/translate.service";
 import {TranslateModel} from "../../models/translate.model";
 import {UserModel} from "../../models/user.model";
-import {filter, interval, map, switchMap, take} from "rxjs";
+import {takeUntil, Subject} from "rxjs";
 
 @Component({
   selector: 'app-header',
@@ -24,9 +24,10 @@ import {filter, interval, map, switchMap, take} from "rxjs";
   styleUrl: './header.component.css',
 })
 
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   languages: TranslateModel[] = [];
   userInfos!: UserModel;
+  private destroy$ = new Subject<void>();
 
   tradMap = new Map<string, string>([
     ["Languages", "Languages"],
@@ -51,14 +52,25 @@ export class HeaderComponent implements OnInit {
 	  this.translateService.autoTranslateTexts(this.tradMap);
 	  this.translateService.initializeLanguageListener(this.tradMap);
 
-	  interval(100)
-		  .pipe(map(() => this.authService.getCurrentUserId()),
-			  filter((id): id is string => id != null),
-			  take(1),
-			  switchMap(id => this.userService.getUser(id)))
-		  .subscribe((data: UserModel) => {
-			  this.userInfos = data;
+	  // Load initial user data if logged in and not already loaded
+	  const userId = this.authService.getCurrentUserId();
+	  if (userId && !this.userService.getCurrentUser()) {
+		  this.userService.getUser(userId).subscribe();
+	  }
+
+	  // Subscribe to user changes
+	  this.userService.currentUser$
+		  .pipe(takeUntil(this.destroy$))
+		  .subscribe((user: UserModel | null) => {
+			  if (user) {
+				  this.userInfos = user;
+			  }
 		  });
+	}
+
+	ngOnDestroy(): void {
+		this.destroy$.next();
+		this.destroy$.complete();
 	}
 
 	toHomepage():void{
@@ -70,7 +82,7 @@ export class HeaderComponent implements OnInit {
 	}
 
 	logout(): void {
-	  this.authService.logout();
+	  this.authService.logout(); // This will now also clear the user service
 	  this.router.navigate(['/']).then();
 	}
 
@@ -93,8 +105,8 @@ export class HeaderComponent implements OnInit {
   updateCurrentLanguage(language: TranslateModel) {
     this.userInfos.language = language.iso_639_1;
     this.userService.updateUser(this.userInfos).subscribe((data) => {
-    	this.userInfos.language = data.language
-    	this.translateService.updateLanguage(this.userInfos.language)
+    	// The user service will automatically update the BehaviorSubject
+    	this.translateService.updateLanguage(data.language)
     });
   }
 }

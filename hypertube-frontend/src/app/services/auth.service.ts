@@ -1,7 +1,8 @@
-import {Injectable} from "@angular/core";
+import {Injectable, Injector} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, map, Observable} from "rxjs";
+import {BehaviorSubject, map, Observable, switchMap} from "rxjs";
 import {UserModel} from "../models/user.model";
+import {UserService} from "./user.service";
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,17 @@ import {UserModel} from "../models/user.model";
 export class AuthService {
   private apiUrlAuth = 'http://localhost:8080/auth';
   private currentUserSubject: BehaviorSubject<string | null>;
+  private userService: UserService | null = null;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private injector: Injector) {
     this.currentUserSubject = new BehaviorSubject<string | null>(sessionStorage.getItem('token'))
+  }
+
+  private getUserService(): UserService {
+    if (!this.userService) {
+      this.userService = this.injector.get(UserService);
+    }
+    return this.userService;
   }
 
   register(user: UserModel): Observable<any> {
@@ -26,7 +35,14 @@ export class AuthService {
         this.currentUserSubject.next(response.id);
         this.currentUserSubject.next(response.token);
         return response;
-      }));
+      }),
+      switchMap(response => {
+        // Load user data after successful login to update header immediately
+        return this.getUserService().getUser(response.id).pipe(
+          map(() => response) // Return the original login response
+        );
+      })
+    );
   }
 
   loginViaOmniAuth(code: String, path: String): Observable<any> {
@@ -37,6 +53,12 @@ export class AuthService {
         this.currentUserSubject.next(response.id);
         this.currentUserSubject.next(response.token)
         return response;
+      }),
+      switchMap(response => {
+        // Load user data after successful OAuth login to update header immediately
+        return this.getUserService().getUser(response.id).pipe(
+          map(() => response) // Return the original login response
+        );
       })
     )
   }
@@ -48,7 +70,9 @@ export class AuthService {
   logout(): void {
     sessionStorage.removeItem(`id`);
     sessionStorage.removeItem(`token`);
-    sessionStorage.setItem(`language`, "en")
+    sessionStorage.setItem(`language`, "en");
+    // Clear user data from UserService
+    this.getUserService().clearCurrentUser();
   }
 
   getCurrentUserId(): string | null {
@@ -74,7 +98,8 @@ export class AuthService {
   verifyCurrentPassword(password: string): Observable<boolean> {
     const token = this.getToken();
     const headers = { Authorization: `Bearer ${token}` };
-    return this.http.post<{ response: string }>(`${this.apiUrlAuth}/old-password-verify`, password, {  headers  }).pipe
+    const body = { "oldPassword": password };
+    return this.http.post<{ response: string }>(`${this.apiUrlAuth}/old-password-verify`, body, {headers}).pipe
       (map((response: any) => {
         return response.response === "true" || response.response === true;
   }));
