@@ -26,6 +26,7 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
   torrents!: Torrent[];
   magnet!: string;
   trailerUrl!: SafeResourceUrl;
+  showTrailer: boolean = false;
   loadingTorrents: boolean = false;
   castIndex = 0;
   crewIndex = 0;
@@ -80,7 +81,8 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
             this.loadMovie();
             this.movieService.getMovieTrailer(this.movieId).subscribe({
                 next: (url: string) => {
-                  this.trailerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+                  const privacyUrl = this.getPrivacyEnhancedUrl(url);
+                  this.trailerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(privacyUrl);
                 },
                 error: (e) => {
                 },
@@ -113,6 +115,10 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         complete: () => {
         }});
+  }
+
+  loadTrailer(): void {
+    this.showTrailer = true;
   }
 
   getMovieRuntime(): string {
@@ -190,5 +196,13 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
       const count = Math.floor(containerWidth / cardWidth);
       this.visibleCount = Math.max(1, count);
     });
+  }
+
+  private getPrivacyEnhancedUrl(url: string): string {
+    // Convert regular YouTube URLs to privacy-enhanced embed URLs
+    if (url.includes('youtube.com/embed/')) {
+      return url.replace('youtube.com', 'youtube-nocookie.com');
+    }
+    return url;
   }
 }
