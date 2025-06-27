@@ -172,6 +172,21 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
         video.play().catch(err => console.warn('Autoplay failed:', err));
       });
 
+      let seekingTimeout: number;
+    
+      video.addEventListener('seeking', () => {
+        clearTimeout(seekingTimeout);
+      });
+
+      video.addEventListener('seeked', () => {
+        // Small delay to ensure HLS has time to load new segments
+        seekingTimeout = window.setTimeout(() => {
+          if (video.paused) {
+            video.play().catch(err => console.warn('Play after seek failed:', err));
+          }
+        }, 100);
+      });
+
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = videoUrl;
       video.addEventListener('loadedmetadata', () => {
