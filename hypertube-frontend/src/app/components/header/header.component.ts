@@ -15,6 +15,7 @@ import {TranslateService} from "../../services/translate.service";
 import {TranslateModel} from "../../models/translate.model";
 import {UserModel} from "../../models/user.model";
 import {filter, interval, map, switchMap, take} from "rxjs";
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-header',
@@ -40,7 +41,8 @@ export class HeaderComponent implements OnInit {
   constructor(private authService: AuthService,
               private router: Router,
               private userService: UserService,
-              private translateService: TranslateService
+              private translateService: TranslateService,
+			  public themeService: ThemeService
   ) {}
 
 	ngOnInit(): void {
@@ -97,5 +99,63 @@ export class HeaderComponent implements OnInit {
     	this.translateService.updateLanguage(this.userInfos.language)
     });
   }
-}
 
+    toggleTheme() {
+        this.themeService.toggleTheme();
+        const newTheme = this.themeService.isLightMode() ? 'light' : 'dark';
+
+        if (newTheme === 'dark') {
+            document.documentElement.style.setProperty('--background-color-darkgreen', '#153f2f');
+            document.documentElement.style.setProperty('--background-color-lightgreen', '#AFBB80');
+            document.documentElement.style.setProperty('--color-black', '#1a1a1a');
+            document.documentElement.style.setProperty('--background-boxes', '#20242a');
+            document.documentElement.style.setProperty('--color-text-comment', '#222');
+            document.documentElement.style.setProperty('--background-comment-content', '#2a2f37');
+            document.documentElement.style.setProperty('--color-text-edit-area', '#333');
+            document.documentElement.style.setProperty('--color-text-author', '#555');
+            document.documentElement.style.setProperty('--color-text-comment-content', '#555c76');
+            document.documentElement.style.setProperty('--color-text-lightgrey', '#888');
+            document.documentElement.style.setProperty('--border-color-textarea', '#ccc');
+            document.documentElement.style.setProperty('--background-comment', '#f5f5f5');
+            document.documentElement.style.setProperty('--color-text-whitesmoke', 'whitesmoke');
+
+            document.documentElement.style.setProperty('--background-button', '#007bff');
+            document.documentElement.style.setProperty('--background-button-disabled', '#a0c5f7');
+            document.documentElement.style.setProperty('--background-button-hover', '#0056b3');
+            document.documentElement.style.setProperty('--color-text-link', '#007bff');
+            document.documentElement.style.setProperty('--border-color-edit-area', '#4A90E2');
+            document.documentElement.style.setProperty('--color-text-like', '#b22222');
+            document.documentElement.style.setProperty('--color-text-hover', '#f5a5a8');
+            document.documentElement.style.setProperty('--border-color-container', '#eac29f');
+            document.documentElement.style.setProperty('--stars', '#d4af37');
+            document.documentElement.style.setProperty('--background-search-bar', '#AFBB80');
+        } 
+        else {
+            document.documentElement.style.setProperty('--background-color-darkgreen', '#b7d8b5');
+            document.documentElement.style.setProperty('--background-color-lightgreen', '#153f2f');
+            document.documentElement.style.setProperty('--color-black', '#2c2c2c');
+            document.documentElement.style.setProperty('--background-boxes', '#cfd8f0');
+            document.documentElement.style.setProperty('--color-text-comment', '#4a4a4a');
+            document.documentElement.style.setProperty('--background-comment-content', '#f9f9fb');
+            document.documentElement.style.setProperty('--color-text-edit-area', '#5a5a5a');
+            document.documentElement.style.setProperty('--color-text-author', '#6b6b6b');
+            document.documentElement.style.setProperty('--color-text-comment-content', '#7a7f99');
+            document.documentElement.style.setProperty('--color-text-lightgrey', '#a5a5a5');               
+            document.documentElement.style.setProperty('--border-color-textarea', '#dcdcdc');
+            document.documentElement.style.setProperty('--background-comment', '#ffffff');
+            document.documentElement.style.setProperty('--color-text-whitesmoke', '#2c2c2c');
+
+            document.documentElement.style.setProperty('--background-button', '#007bff');
+            document.documentElement.style.setProperty('--background-button-disabled', '#a0c5f7');
+            document.documentElement.style.setProperty('--background-button-hover', '#0056b3');
+            document.documentElement.style.setProperty('--color-text-link', '#007bff');
+            document.documentElement.style.setProperty('--border-color-edit-area', '#4A90E2');
+            document.documentElement.style.setProperty('--color-text-like', '#b22222');
+            document.documentElement.style.setProperty('--color-text-hover', '#f5a5a8');
+            document.documentElement.style.setProperty('--border-color-container', '#dfa490');
+            document.documentElement.style.setProperty('--stars', '#f7dc6f');
+            document.documentElement.style.setProperty('--background-search-bar', '#8b7ca8');
+
+        }
+	}
+}

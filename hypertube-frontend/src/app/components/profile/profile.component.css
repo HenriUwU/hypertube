@@ -1,4 +1,3 @@
-/* General Body and Wrapper Styles */
 .wrapper {
   display: flex;
   justify-content: center;
@@ -8,17 +7,16 @@
   box-sizing: border-box;
 }
 
-/* Main Profile Container */
 .profile-container {
-    background-color: #1e1e1e;
-    color: white;
+    background-color: var(--background-boxes);
+    color: var(--color-text-whitesmoke);
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     width: 100%;
-    max-width: 1200px; /* Max width for large screens */
+    max-width: 1200px;
     font-size: 1rem;
     box-sizing: border-box;
-    overflow: hidden; /* Ensures child elements respect the border radius */
+    overflow: hidden;
 }
 
 .profile-title {
@@ -32,29 +30,27 @@
     font-size: 2em;
 }
 
-/* Form Layout */
 .form-container {
     padding: 0 2em 2em;
 }
 
 .form-boxes {
     display: flex;
-    gap: 4em; /* Modern way to space flex items */
+    gap: 4em;
 }
 
 .left-column, .right-column {
-    flex: 1; /* Each column takes up equal space */
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.5em; /* Space between label and input */
+    gap: 0.5em;
 }
 
 .left-column label, .right-column label {
-    color: #afbb80;
+    color: var(--background-color-lightgreen);
     margin-bottom: 0.2em;
 }
 
-/* Profile Picture Section */
 .pp-container {
     display: flex;
     flex-direction: column;
@@ -69,7 +65,7 @@
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
-    border: 3px solid #afbb80;
+    border: 3px solid var(--background-color-lightgreen);
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
@@ -82,13 +78,12 @@
     display: none;
 }
 
-/* Inputs and Select Styling */
 .profile-container input,
 .profile-container select {
     width: 100%;
-    background-color: #20242a;
+    background-color: var(--background-boxes);
     color: #b3b3b3;
-    border: 1px solid #afbb80;
+    border: 1px solid var(--background-color-lightgreen);
     border-radius: 5px;
     padding: 0.8em 1em;
     box-sizing: border-box;
@@ -99,7 +94,7 @@
 .profile-container select:focus {
     outline: none;
     border-color: #c3d191;
-    box-shadow: 0 0 5px #afbb80;
+    box-shadow: 0 0 5px var(--background-color-lightgreen);
 }
 
 .profile-container input[readonly] {
@@ -107,15 +102,13 @@
     cursor: not-allowed;
 }
 
-/* Language Display */
 #language-display {
-    background-color: #20242a;
+    background-color: var(--background-boxes);
     padding: 0.8em 1em;
     border-radius: 5px;
     border: 1px solid #444;
 }
 
-/* Buttons */
 .form-button {
     display: flex;
     justify-content: center;
@@ -123,8 +116,8 @@
 }
 
 #submitButton {
-    color: black;
-    background-color: #afbb80;
+    color: var(--color-black);
+    background-color: var(--background-search-bar);
     border: none;
     border-radius: 5px;
     padding: 1em 4em;
@@ -149,8 +142,7 @@
     margin-top: 1em;
 }
 
-
-.modify-password-container{
+.modify-password-container {
     display: flex;
     justify-content: center;
     margin-top: 2em;
@@ -163,8 +155,8 @@
 }
 
 #deleteButton {
-    color: black;
-    background-color: #afbb80;
+    color: var(--color-black);
+    background-color: var(--background-search-bar);
     border: none;
     border-radius: 5px;
     padding: 1em 4em;
@@ -185,7 +177,6 @@
     cursor: not-allowed;
 }
 
-/* --- Responsive Design --- */
 @media (max-width: 1024px) {
     .wrapper {
         padding: 1em;
@@ -197,22 +188,19 @@
 
     .form-container {
         display: grid;
-        /* Define the layout areas for a logical flow */
         grid-template-areas:
             "pic"
             "inputs"
             "change-pwd"
             "delete-acc"
             "save";
-        gap: 2em; /* Spacing between elements */
+        gap: 2em;
     }
 
-    /* Make children of these elements part of the parent grid */
     .form-boxes, .right-column {
         display: contents;
     }
 
-    /* Assign each part of the form to its designated area */
     .pp-container {
         grid-area: pic;
     }
@@ -223,21 +211,20 @@
 
     .modify-password-container {
         grid-area: change-pwd;
-        margin-top: 0; /* Reset margin for grid layout */
+        margin-top: 0;
     }
 
     .delete-account-container {
         grid-area: delete-acc;
-        margin-top: 0; /* Reset margin for grid layout */
+        margin-top: 0;
     }
 
     .form-button {
         grid-area: save;
-        margin-top: 0; /* Reset margin for grid layout */
+        margin-top: 0;
     }
 }
 
-/* Mobile View Specifics */
 @media (max-width: 600px) {
     .wrapper {
         padding: 0;
@@ -261,7 +248,7 @@
 
     .form-container {
         padding: 0 1.5em 1.5em;
-        gap: 1.5em; /* Tighter spacing for mobile */
+        gap: 1.5em;
     }
 
     #profile-picture {

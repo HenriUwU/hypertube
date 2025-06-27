@@ -1,11 +1,11 @@
 .mat-divider {
-    border-top-color: #AFBB80;
+    border-top-color: var(--background-color-lightgreen);
     padding: 0.2rem;
 }
 
 .footer {
-    background-color: #1a4734;
-    color: white;
+    background-color: var(--background-color-darkgreen);
+    color: var(--color-text-whitesmoke);
     position: sticky;
     top: 100vh;
 }
@@ -26,14 +26,14 @@
 
 .footer-text a,
 .copyright a {
-    color: white;
+    color: var(--color-text-whitesmoke);
     text-decoration: none;
     transition: text-shadow 0.3s ease-in-out;
 }
 
 .footer-text a:hover,
 .copyright a:hover {
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 12px rgba(175, 187, 128, 0.7);
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 12px var(--background-color-lightgreen);
 }
 
 @media (max-width: 768px) {

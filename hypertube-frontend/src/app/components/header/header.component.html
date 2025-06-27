@@ -5,9 +5,11 @@
         </div>
     </div>
     <div class="header-right">
-
+        <button (click)="toggleTheme()" class="theme-button">
+            <mat-icon >{{ themeService.isLightMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        </button>
         <button *ngIf="isLog()" mat-button [matMenuTriggerFor]="languageMenu" color="basic" class="menu-density">
-            <mat-icon>language</mat-icon>
+            <mat-icon style="color: var(--color-text-whitesmoke);">language</mat-icon>
             {{ tradMap.get('Languages') }}
             <mat-menu #languageMenu="matMenu">
                 <button mat-menu-item *ngFor="let language of languages" (click)="updateCurrentLanguage(language)">
@@ -24,14 +26,14 @@
         </button>
 
         <button *ngIf="isLog() && userInfos" mat-button [matMenuTriggerFor]="userMenu" color="basic" class="menu-density">
-            <mat-icon>account_circle</mat-icon> {{ userInfos.username }}
+            <mat-icon style="color: var(--color-text-whitesmoke);">account_circle</mat-icon> {{ userInfos.username }}
             <mat-menu #userMenu="matMenu">
                 <button mat-menu-item (click)="toProfile()">
-                    <mat-icon>settings</mat-icon>
+                    <mat-icon style="color: var(--color-text-whitesmoke);">settings</mat-icon>
                     {{ tradMap.get('Edit Profile') }}
                 </button>
                 <button mat-menu-item (click)="toUsers()">
-                    <mat-icon>person</mat-icon>
+                    <mat-icon style="color: var(--color-text-whitesmoke);">person</mat-icon>
                     {{ tradMap.get('Users') }}
                 </button>
                 <button mat-menu-item (click)="logout()">
