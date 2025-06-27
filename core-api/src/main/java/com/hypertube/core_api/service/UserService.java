@@ -38,7 +38,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.Blob;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -342,18 +341,24 @@ public class UserService implements UserDetailsService {
         mailSender.send(message);
     }
 
-    public ResponseEntity<String> forgotPassword(String email) {
-        UserEntity user = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("No account with this email: " + email));
-        String token = UUID.randomUUID().toString();
-        TokenEntity tokenEntity = new TokenEntity();
-        tokenEntity.setToken(token);
-        tokenEntity.setUser(user);
-        tokenEntity.setExpiryDate(LocalDateTime.now().plusMinutes(30));
-        tokenEntity.setType(TokenType.PASSWORD_RESET);
-        tokenRepository.save(tokenEntity);
+    public ResponseEntity<Map<String, String>> forgotPassword(String email) {
+        Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
 
-        sendResetPasswordEmail(email, token);
-        return ResponseEntity.ok("Si ce compte existe, un email de réinitialisation a été envoyé.");
+        if (optionalUser.isPresent()) {
+            UserEntity user = optionalUser.get();
+            String token = UUID.randomUUID().toString();
+            TokenEntity tokenEntity = new TokenEntity();
+            tokenEntity.setToken(token);
+            tokenEntity.setUser(user);
+            tokenEntity.setExpiryDate(LocalDateTime.now().plusMinutes(30));
+            tokenEntity.setType(TokenType.PASSWORD_RESET);
+            tokenRepository.save(tokenEntity);
+
+            sendResetPasswordEmail(email, token);
+        }
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "If this account exists, an email to reset your password was sent.");
+        return ResponseEntity.ok(response);
     }
 
     private void sendResetPasswordEmail(String toEmail, String resetToken) {
