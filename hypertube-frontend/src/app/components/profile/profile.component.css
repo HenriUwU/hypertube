@@ -98,7 +98,7 @@
 }
 
 .profile-container input[readonly] {
-    background-color: #2a2e34;
+    background-color: var(--background-boxes);
     cursor: not-allowed;
 }
 
