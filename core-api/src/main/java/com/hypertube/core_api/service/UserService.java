@@ -217,6 +217,7 @@ public class UserService implements UserDetailsService {
             String email = jsonNode.get("email").asText();
             String firstName = jsonNode.get("global_name").asText();
             String lastName = jsonNode.get("global_name").asText();
+            String picture = "https://cdn.discordapp.com/avatars/" + jsonNode.get("id").asText() + "/" + jsonNode.get("avatar").asText() + ".png";
 
             user.setUsername(username);
             user.setEmail(email);
@@ -225,6 +226,7 @@ public class UserService implements UserDetailsService {
             user.setPassword(token);
             user.setDiscordEid(eidDiscord);
             user.setEmailVerify(true);
+            saveImageFromInternetLink(picture, user);
             userRepository.save(user);
 
             jwt.put("id", user.getId().toString());

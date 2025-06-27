@@ -74,7 +74,10 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.yearControl = new FormControl('');
+
     this.searchSourceControl = new FormControl({ value: 'tmdb', disabled: true });
+
     this.searchSourceControl.valueChanges.subscribe((val: 'omdb' | 'tmdb') => {
       this.onSearchSourceChange(val);
     });
@@ -138,34 +141,28 @@ export class HomePageComponent implements OnInit {
   }
 
   onSearchInputFromEvent(event: Event): void {
-    const target = event.target as HTMLInputElement | null;
-    const value = target?.value || '';
-    this.searchTerm$.next(value);
+    const input = event.target as HTMLInputElement | null;
+    const value = input?.value || '';
+    this.onSearchInput(value);
   }
 
   onSearchInput(value: string) {
     this.searchTerm = value.trim();
     this.movies = [];
     this.currentPage = 1;
-    this.loadMovies();
+    const shouldEnableSearchSource = this.searchTerm.length > 0;
 
-    const shouldEnable = !!this.searchTerm;
-
-    if (shouldEnable) {
-      if (this.yearControl.disabled) {
-        this.yearControl.enable({ emitEvent: false });
-      }
+    if (shouldEnableSearchSource) {
       if (this.searchSourceControl.disabled) {
         this.searchSourceControl.enable({ emitEvent: false });
       }
     } else {
-      if (!this.yearControl.disabled) {
-        this.yearControl.disable({ emitEvent: false });
-      }
       if (!this.searchSourceControl.disabled) {
         this.searchSourceControl.disable({ emitEvent: false });
       }
     }
+
+    this.loadMovies();
   }
 
   setMinStars(n: number) {
