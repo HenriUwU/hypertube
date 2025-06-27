@@ -1,6 +1,6 @@
 import {Injectable, Injector} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, map, Observable, switchMap} from "rxjs";
+import {BehaviorSubject, map, Observable, of, switchMap} from "rxjs";
 import {UserModel} from "../models/user.model";
 import {UserService} from "./user.service";
 
@@ -28,19 +28,24 @@ export class AuthService {
   }
 
   login(user: UserModel): Observable<any> {
-    return this.http.post<{ token: string, id: string }>(`${this.apiUrlAuth}/login`, user).pipe(
+    return this.http.post<{ token?: string, id?: string, success: string, message?: string }>(`${this.apiUrlAuth}/login`, user).pipe(
       map(response => {
-        sessionStorage.setItem(`id`, response.id);
-        sessionStorage.setItem(`token`, response.token);
-        this.currentUserSubject.next(response.id);
-        this.currentUserSubject.next(response.token);
+        if (response.success === "true" && response.token && response.id) {
+          sessionStorage.setItem(`id`, response.id);
+          sessionStorage.setItem(`token`, response.token);
+          this.currentUserSubject.next(response.id);
+          this.currentUserSubject.next(response.token);
+        }
         return response;
       }),
       switchMap(response => {
-        // Load user data after successful login to update header immediately
-        return this.getUserService().getUser(response.id).pipe(
-          map(() => response) // Return the original login response
-        );
+        if (response.success === "true" && response.id) {
+          return this.getUserService().getUser(response.id).pipe(
+            map(() => response)
+          );
+        } else {
+          return of(response);
+        }
       })
     );
   }

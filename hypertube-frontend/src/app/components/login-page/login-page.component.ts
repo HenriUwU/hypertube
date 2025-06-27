@@ -1,16 +1,22 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors} from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators
+} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import {GlobalMessageService} from "../../services/global.message.service";
 import {animate, style, transition, trigger} from "@angular/animations";
-import {NgOptimizedImage} from "@angular/common";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
-import {MatDialogModule, MatDialog} from '@angular/material/dialog';
-import { ForgotPasswordPopupComponent } from '../forgot-password-popup/forgot-password-popup.component';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {ForgotPasswordPopupComponent} from '../forgot-password-popup/forgot-password-popup.component';
 
 
 @Component({
@@ -19,7 +25,6 @@ import { ForgotPasswordPopupComponent } from '../forgot-password-popup/forgot-pa
   imports: [
     RouterLink,
     ReactiveFormsModule,
-    NgOptimizedImage,
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
@@ -63,7 +68,7 @@ export class LoginPageComponent implements OnInit {
 
   passwordValidator(control: AbstractControl): ValidationErrors | null {
     const password = control.value;
-    
+
     if (!password) {
       return null;
     }
@@ -72,22 +77,22 @@ export class LoginPageComponent implements OnInit {
     if (password.length < 6 || password.length > 40) {
       return { passwordLength: true };
     }
-    
+
     // Check if there is at least one uppercase letter
     if (!/[A-Z]/.test(password)) {
       return { passwordNoUppercase: true };
     }
-    
+
     // Check if there is at least one lowercase letter
     if (!/[a-z]/.test(password)) {
       return { passwordNoLowercase: true };
     }
-    
+
     // Check if there is at least one number
     if (!/\d/.test(password)) {
       return { passwordNoNumber: true };
     }
-    
+
     // Check if there is at least one special character
     if (!/[!@#$%^&*]/.test(password)) {
       return { passwordNoSpecialChar: true };
@@ -99,9 +104,13 @@ export class LoginPageComponent implements OnInit {
   login(): void {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
-        next: () => {
-          sessionStorage.setItem('language', 'en');
-          this.router.navigate(['']).then()
+        next: (res: any) => {
+          if (res.success == 'true') {
+            sessionStorage.setItem('language', 'en');
+            this.router.navigate(['']).then()
+          } else if (res.success == 'false') {
+            this.globalMessageService.showMessage("Invalid username or password. Please try again.", false);
+          }
         },
         error: () => {
           this.globalMessageService.showMessage("Invalid username or password. Please try again.", false);
