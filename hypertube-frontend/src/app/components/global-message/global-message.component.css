@@ -8,7 +8,7 @@
   text-align: center;
   padding: 10px;
   font-size: 16px;
-  color: white;
+  color: var(--color-text-whitesmoke);
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 1000;
   opacity: 0;
@@ -24,7 +24,7 @@
 .global-message.success {
   font-size: 20px;
   background-color: #69f0ae;
-  color: black;
+  color: var(--color-black);
   border: 1px solid rgba(60, 140, 60, 0.8);
   border-radius: 5px;
   padding: 10px;
@@ -33,7 +33,7 @@
 .global-message.error {
   font-size: 20px;
   background-color: #F44336;
-  color: black;
+  color: var(--color-black);
   border: 1px solid rgba(180, 40, 50, 0.8);
   border-radius: 5px;
   padding: 10px;

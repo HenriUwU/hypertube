@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   standalone: true,
   selector: 'app-forgot-password-popup',
-  imports: [FormsModule], 
+  imports: [FormsModule],
   templateUrl: './forgot-password-popup.component.html',
   styleUrl: './forgot-password-popup.component.css'
 })
@@ -44,11 +44,9 @@ export class ForgotPasswordPopupComponent {
     }
     console.log("Sending reset link to:", this.email);
     this.authService.forgotPassword(this.email).subscribe({
-      next: (response) => {
-        // this.handleSuccess();
+      next: () => {
       },
-      error: (error) => {
-        console.log("Error sending reset link:", error);
+      error: () => {
         this.globalMessageService.showMessage(this.tradMap.get("Error sending reset link") || "Error sending reset link", false);
       }
     });

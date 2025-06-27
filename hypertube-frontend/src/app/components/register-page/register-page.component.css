@@ -7,7 +7,7 @@
 }
 
 .register-box {
-  background-color: #1a1a1a;
+  background-color: var(--color-black);
   border-radius: 2px;
   padding: 2rem;
   width: 100%;
@@ -18,7 +18,7 @@
 
 .register-box h2 {
   font-family: "Borel Regular", serif;
-  color: whitesmoke;
+  color: var(--color-text-whitesmoke);
   font-size: 2rem;
   margin-bottom: 1.5rem;
   text-align: left;
@@ -29,17 +29,17 @@ label {
   display: block;
   margin: 0.5rem 0 0.2rem;
   font-weight: bold;
-  color: #AFBB80;
+  color: var(--background-color-lightgreen);
 }
 
 mat-form-field {
   width: 100%;
-  color: #AFBB80;
+  color: var(--background-color-lightgreen);
 }
 
 .register-btn {
-  background-color: #AFBB80 !important;
-  color: #1a1a1a !important;
+  background-color: var(--background-color-lightgreen) !important;
+  color: var(--color-black) !important;
   margin-top: 1rem;
   width: 100%;
   font-weight: bold;
@@ -51,28 +51,28 @@ mat-form-field {
   font-family: "Open Sans", serif;
   text-align: center;
   margin: 1.5rem 0 0.5rem;
-  color: #888;
+  color: var(--color-text-lightgrey);
   font-size: 0.9rem;
 }
 
 .omniauth-buttons {
-	display: flex;
-	flex-direction: row;
-	gap: 0.5rem;
-	width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  width: 100%;
 }
 
 .omniauth-btn {
-	background-color: #AFBB80;
-	color: #1a1a1a;
-	text-align: center;
-	padding: 0.5rem;
-	border-radius: 4px;
-	cursor: pointer;
-	width: 100%;
-	max-width: 140px;
-	margin: 0 auto;
-	box-sizing: border-box;
+  background-color: var(--background-color-lightgreen);
+  color: var(--color-black);
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 140px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .logo-box {
@@ -90,13 +90,13 @@ mat-form-field {
   font-family: "Open Sans", serif;
   font-size: 0.85rem;
   margin-top: 1rem;
-  color: #888;
+  color: var(--color-text-lightgrey);
   text-align: center;
 }
 
 .sign-in-text a {
   font-family: "Open Sans", serif;
-  color: #AFBB80;
+  color: var(--background-color-lightgreen);
 }
 
 .sign-in-text span {

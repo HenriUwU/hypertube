@@ -52,7 +52,7 @@ public class AuthController {
     }
 
     @GetMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+    public ResponseEntity<Map<String, String>> forgotPassword(@RequestParam String email) {
         return this.userService.forgotPassword(email);
     }
 

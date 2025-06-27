@@ -1,10 +1,10 @@
-.comments-container .mat-divider {
-  border-top-color: #2a2f37;
+.comments-container {
+  border-top-color: var(--background-comment-content);
   width: 100%;
 }
 
 h3 {
-  color: whitesmoke;
+  color: var(--color-text-whitesmoke);
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 0.2rem;
@@ -18,17 +18,17 @@ h3 {
   max-width: 1000px;
   margin: 0 auto 45px auto;
   padding: 20px;
-  border: 10px solid #eac29f;
+  border: 10px solid var(--border-color-container);
   border-radius: 8px;
-  background-color: #20242a;
-  color: #f0f0f0;
+  background-color: var(--background-boxes);
+  color: var(--color-text-whitesmoke);
   font-size: 1rem;
   font-family: "Open Sans", serif;
 }
 
 .char-count {
   font-size: 0.9rem;
-  color: #888;
+  color: var(--color-text-lightgrey);
   text-align: right;
   margin-top: -10px;
   margin-bottom: 10px;
@@ -53,29 +53,29 @@ h3 {
   font-size: 1rem;
   resize: vertical;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color-textarea);
   font-family: inherit;
-  color: #222;
-  background-color: #fff;
+  color: var(--color-text-comment);
+  background-color: var(--background-comment);
 }
 
 .edit-area {
   min-height: 80px;
   max-height: 150px;
-  border: 2px solid #4A90E2;
+  border: 2px solid var(--border-color-edit-area);
   box-shadow: 0 2px 6px rgba(74, 144, 226, 0.3);
   transition: border-color 0.3s, box-shadow 0.3s;
-  color: #333;
-  background-color: #f9faff;
+  color: var(--color-text-edit-area);
+  background-color: var(--background-comment-content);
 }
 
 .comment-form button,
 .edit-actions button {
   align-self: flex-end;
-  background-color: #007bff;
+  background-color: var(--background-button);
   border: none;
   padding: 0.5rem 1.25rem;
-  color: white;
+  color: var(--color-text-whitesmoke);
   font-weight: 600;
   border-radius: 6px;
   cursor: pointer;
@@ -89,18 +89,18 @@ h3 {
 
 .comment-form button:disabled,
 .edit-actions button:disabled {
-  background-color: #a0c5f7;
+  background-color: var(--background-button-disabled);
   cursor: not-allowed;
 }
 
 .comment-form button:hover:not(:disabled),
 .edit-actions button:hover:not(:disabled) {
-  background-color: #0056b3;
+  background-color: var(--background-button-hover);
 }
 
 .comment {
-  background-color: #f5f5f5;
-  color: #222;
+  background-color: var(--background-comment);
+  color: var(--color-text-comment);
   padding: 1rem 1.25rem;
   margin-bottom: 1rem;
   border-radius: 8px;
@@ -117,12 +117,12 @@ h3 {
   align-items: center;
   font-weight: 600;
   font-size: 0.95rem;
-  color: #555;
+  color: var(--color-text-author);
 }
 
 .comment-header .author-link,
 .author-link {
-  color: #007bff;
+  color: var(--color-text-link);
   text-decoration: none;
   font-weight: 700;
   font-size: 0.95rem;
@@ -135,10 +135,10 @@ h3 {
 
 .comment-content {
   margin: 10px 0;
-  color: #555c76;
+  color: var(--color-text-comment-content);
   font-size: 1rem;
   line-height: 1.4;
-  background-color: #2a2f37;
+  background-color: var(--background-comment-content);
   padding: 12px;
   border-radius: 6px;
 }
@@ -165,12 +165,12 @@ h3 {
 
 .comment-like {
   font-size: 1.3rem;
-  color: #b22222;
+  color: var(--color-text-like);
 }
 
 .edit-button {
   font-size: 0.95rem;
-  color: #007bff;
+  color: var(--color-text-link);
 }
 
 .edit-button:focus {
@@ -189,7 +189,7 @@ h3 {
 .comment-actions button:hover,
 .comment-like:hover,
 .edit-button:hover {
-  color: #f5a5a8;
+  color: var(--color-text-hover);
 }
 
 .user-profile {

@@ -38,7 +38,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.Blob;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -128,23 +127,38 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<Map<String, String>> login(UserEntity user) {
-        UserEntity dbUser = userRepository.findByUsername(user.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
+        Map<String, String> response = new HashMap<>();
 
-        if (!dbUser.isEmailVerify())
-            throw new RuntimeException("Email verify failed");
+        Optional<UserEntity> optionalDbUser = userRepository.findByUsername(user.getUsername());
 
-        if (passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
-            String token = jwtTokenUtil.generateToken(user.getUsername());
-
-            Map<String, String> map = new HashMap<>();
-            map.put("token", token);
-            map.put("id", dbUser.getId().toString());
-            return ResponseEntity.ok(map);
-        } else {
-            throw new RuntimeException("Wrong password");
+        if (optionalDbUser.isEmpty()) {
+            response.put("success", "false");
+            response.put("message", "Invalid credentials.");
+            return ResponseEntity.ok(response);
         }
+
+        UserEntity dbUser = optionalDbUser.get();
+
+        if (!dbUser.isEmailVerify()) {
+            response.put("success", "false");
+            response.put("message", "Your email is not verified.");
+            return ResponseEntity.ok(response);
+        }
+
+        if (!passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
+            response.put("success", "false");
+            response.put("message", "Invalid credentials.");
+            return ResponseEntity.ok(response);
+        }
+
+        String token = jwtTokenUtil.generateToken(user.getUsername());
+        response.put("success", "true");
+        response.put("token", token);
+        response.put("id", dbUser.getId().toString());
+
+        return ResponseEntity.ok(response);
     }
+
 
     @Transactional
     public UserDTO updateUser(UserDTO user) {
@@ -342,18 +356,24 @@ public class UserService implements UserDetailsService {
         mailSender.send(message);
     }
 
-    public ResponseEntity<String> forgotPassword(String email) {
-        UserEntity user = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("No account with this email: " + email));
-        String token = UUID.randomUUID().toString();
-        TokenEntity tokenEntity = new TokenEntity();
-        tokenEntity.setToken(token);
-        tokenEntity.setUser(user);
-        tokenEntity.setExpiryDate(LocalDateTime.now().plusMinutes(30));
-        tokenEntity.setType(TokenType.PASSWORD_RESET);
-        tokenRepository.save(tokenEntity);
+    public ResponseEntity<Map<String, String>> forgotPassword(String email) {
+        Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
 
-        sendResetPasswordEmail(email, token);
-        return ResponseEntity.ok("Si ce compte existe, un email de réinitialisation a été envoyé.");
+        if (optionalUser.isPresent()) {
+            UserEntity user = optionalUser.get();
+            String token = UUID.randomUUID().toString();
+            TokenEntity tokenEntity = new TokenEntity();
+            tokenEntity.setToken(token);
+            tokenEntity.setUser(user);
+            tokenEntity.setExpiryDate(LocalDateTime.now().plusMinutes(30));
+            tokenEntity.setType(TokenType.PASSWORD_RESET);
+            tokenRepository.save(tokenEntity);
+
+            sendResetPasswordEmail(email, token);
+        }
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "If this account exists, an email to reset your password was sent.");
+        return ResponseEntity.ok(response);
     }
 
     private void sendResetPasswordEmail(String toEmail, String resetToken) {

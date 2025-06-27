@@ -10,8 +10,8 @@
   min-width: 200px;
   min-height: 400px;
 
-  border: 1vh solid #eac29f;
-  background-color: #20242a;
+  border: 1vh solid var(--border-color-container);
+  background-color: var(--background-boxes);
 
   border-radius: 5%;
   margin: 0.5vw;
@@ -26,7 +26,7 @@
 .thumbnail-container:hover {
   box-shadow: 0 8px 25px rgba(234, 194, 159, 0.6);
   transform: scale(1.05);
-  border-color: #f5d4a9;
+  border-color: var(--border-color-container);
 }
 
 .thumbnail-image {
@@ -34,8 +34,8 @@
   max-height: 100%;
   object-fit: contain;
   border-radius: 5%;
-  border: solid black;
-  
+  border: solid var(--color-black);
+
   transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
 }
 
@@ -45,27 +45,26 @@
 }
 
 .thumbnail-image-container {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    width: 100%;
-    margin-bottom: 0;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: 0;
 }
 
-
 .thumbnail-title {
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-align: center;
-    color: white;
-    height: 12%;
-    width: 100%;
-    padding: 0 5%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  color: var(--color-text-whitesmoke);
+  height: 12%;
+  width: 100%;
+  padding: 0 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
     overflow: hidden;
     word-wrap: break-word;
@@ -80,25 +79,26 @@
 }
 
 .thumbnail-container:hover .thumbnail-title {
-    color: #eac29f;
-    font-size: 0.95rem;
+  color: var(--border-color-container);
+  font-size: 0.95rem;
 }
 
 .mat-mdc-progress-bar {
-    --mdc-linear-progress-active-indicator-color: red;
-    --mdc-linear-progress-track-color: grey;
-    
-    transition: opacity 0.3s ease-in-out;
+  --mdc-linear-progress-active-indicator-color: var(--color-text-like);
+  --mdc-linear-progress-track-color: grey;
+
+  transition: opacity 0.3s ease-in-out;
 }
 
 .thumbnail-container:hover .mat-mdc-progress-bar {
-    opacity: 0.8;
+  opacity: 0.8;
 }
 
 .thumbnail-quick-info {
     font-size: 0.6rem;
     text-align: center;
-    color: white;
+    color: var(--color-text-whitesmoke);
+
     height: 10%;
     display: flex;
     flex-direction: column;
@@ -108,7 +108,10 @@
     padding: 0 5%;
 
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     
+    /* Animation pour les infos rapides */
     transition: color 0.3s ease-in-out;
 }
 
@@ -120,36 +123,35 @@
 }
 
 .thumbnail-container:hover .thumbnail-quick-info {
-    color: #eac29f;
+  color: var(--border-color-container);
 }
 
 .image-container-box {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 75%;
-    margin-top: 2%;
-    margin-bottom: 1%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 75%;
+  margin-top: 2%;
+  margin-bottom: 1%;
 }
 
-
 .thumbnail-watched {
-    width: 100%;
-    height: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(234, 194, 159, 0.1);
-    border-radius: 0 0 3px 3px;
-    margin: 0;
-    padding: 0;
-    
-    transition: background-color 0.3s ease-in-out;
+  width: 100%;
+  height: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(234, 194, 159, 0.1);
+  border-radius: 0 0 3px 3px;
+  margin: 0;
+  padding: 0;
+
+  transition: background-color 0.3s ease-in-out;
 }
 
 .thumbnail-container:hover .thumbnail-watched {
-    background-color: rgba(234, 194, 159, 0.2);
+  background-color: rgba(234, 194, 159, 0.2);
 }
 
 @media (max-width: 768px) {
@@ -161,7 +163,7 @@
     border-width: 0.5vh;
     margin: 0.3vw;
   }
-  
+
   .thumbnail-title {
     font-size: 0.75rem;
     height: 20%;
@@ -175,24 +177,24 @@
     -webkit-box-orient: vertical;
     padding: 0 4%;
   }
-  
+
   .thumbnail-container:hover .thumbnail-title {
     font-size: 0.8rem;
   }
-  
+
   .thumbnail-quick-info {
     font-size: 0.55rem;
     height: 10%;
   }
-  
+
   .thumbnail-image-container {
     height: 70%;
   }
-  
+
   .thumbnail-container:hover {
     transform: scale(1.02);
   }
-  
+
   .thumbnail-container:hover .thumbnail-image {
     transform: scale(1.05);
   }
@@ -207,7 +209,7 @@
     border-width: 2px;
     margin: 0.5vw;
   }
-  
+
   .thumbnail-title {
     font-size: 0.65rem;
     height: 25%;
@@ -222,27 +224,27 @@
     padding: 2% 2%;
     text-align: center;
   }
-  
+
   .thumbnail-container:hover .thumbnail-title {
     font-size: 0.7rem;
   }
-  
+
   .thumbnail-quick-info {
     font-size: 0.45rem;
     height: 12%;
     margin-bottom: 0.5vh;
   }
-  
+
   .thumbnail-image-container {
     height: 63%;
     margin-top: 1%;
     margin-bottom: 0%;
   }
-  
+
   .thumbnail-container:hover {
     transform: scale(1.01);
   }
-  
+
   .thumbnail-container:hover .thumbnail-image {
     transform: scale(1.02);
   }
