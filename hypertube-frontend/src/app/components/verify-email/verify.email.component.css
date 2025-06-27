@@ -18,11 +18,11 @@
   width: 60%;
   height: 60%;
 
-  border-bottom: 2vh solid #eac29f;
-  border-top: 2vh solid #eac29f;
-  border-left: 1vw solid #eac29f;
-  border-right: 1vw solid #eac29f;
-  background-color: #20242a;
+  border-bottom: 2vh solid var(--border-color-container);
+  border-top: 2vh solid var(--border-color-container);
+  border-left: 1vw solid var(--border-color-container);
+  border-right: 1vw solid var(--border-color-container);
+  background-color: var(--background-boxes);
 
   justify-content: space-between;
   border-radius: 5%;
@@ -30,7 +30,6 @@
   padding: 5%;
   margin-top: 0;
 }
-
 
 .success {
   color: green;
@@ -45,9 +44,6 @@
 }
 
 .message {
-  /* font-size: 16px; */
-  /* margin-top: 10px; */
-  color: white;
+  color: var(--color-text-whitesmoke);
   font-size: 1.5em;
-
 }

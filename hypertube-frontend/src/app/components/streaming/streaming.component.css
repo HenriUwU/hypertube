@@ -12,7 +12,7 @@
 .video-player {
 	width: 100vw;
 	height: calc(100vh - 105px);
-	background-color: black;
+	background-color: var(--color-black);
 	object-fit: contain;
 }
 
@@ -25,7 +25,7 @@
 .loading-message {
   margin-top: 12px;
   font-size: 16px;
-  color: #ffffff;
+  color: var(--color-text-whitesmoke);
   text-align: center;
   animation: pulse 1.5s infinite;
 }
@@ -37,7 +37,7 @@
 }
 
 .loading-spinner {
-    --mdc-circular-progress-active-indicator-color: #AFBB80;
+    --mdc-circular-progress-active-indicator-color: var(--background-color-lightgreen);
 }
 
 @media (max-width: 768px) {

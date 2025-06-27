@@ -6,9 +6,9 @@
   max-width: 1000px;
   margin: 40px auto;
   padding: 20px;
-  border: 10px solid #eac29f;
+  border: 10px solid var(--border-color-container);
   border-radius: 8px;
-  background-color: #20242a;
+  background-color: var(--background-boxes);
 }
 
 .poster img {
@@ -16,14 +16,14 @@
   max-width: 100%;
   height: auto;
   border-radius: 6px;
-  border: 3px solid black;
+  border: 3px solid var(--color-black);
   object-fit: cover;
   flex-shrink: 0;
 }
 
 .title {
   margin-top: 1%;
-  color: whitesmoke;
+  color: var(--color-text-whitesmoke);
   font-weight: bold;
   display: flex;
   justify-content: space-between;
@@ -38,10 +38,10 @@
 .movie-note {
   margin-top: 1%;
   font-family: Arial, sans-serif;
-  color: #20242a;
+  color: var(--background-boxes);
   text-align: center;
   display: inline-block;
-  background-color: whitesmoke;
+  background-color: var(--color-text-whitesmoke);
   padding: 7px 6px;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -61,13 +61,13 @@
   font-size: 0.8rem;
   display: flex;
   justify-content: space-between;
-  color: grey;
+  color: var(--color-text-lightgrey);
   margin-bottom: 1px;
 }
 
 .credits {
   font-family: "Open Sans", serif;
-  color: whitesmoke;
+  color: var(--color-text-whitesmoke);
   font-size: 0.8rem;
   width: 100%;
 }
@@ -77,21 +77,21 @@
   font-size: 0.8rem;
   display: flex;
   justify-content: space-between;
-  color: whitesmoke;
+  color: var(--color-text-whitesmoke);
   margin-bottom: 15px;
 }
 
 .movie-info .synopsis {
   font-family: "Open Sans", serif;
   text-align: justify;
-  color: whitesmoke;
+  color: var(--color-text-whitesmoke);
   font-size: 0.9rem;
 }
 
 .movie-info .people {
   font-family: "Open Sans", serif;
   text-align: justify;
-  color: whitesmoke;
+  color: var(--color-text-whitesmoke);
   font-size: 0.8rem;
   margin-top: 3%;
 }
@@ -121,8 +121,8 @@
 }
 
 .scroll-btn {
-  background-color: #333;
-  color: white;
+  background-color: var(--color-text-edit-area);
+  color: var(--color-text-whitesmoke);
   border: none;
   font-size: 20px;
   padding: 6px 10px;
@@ -174,7 +174,7 @@
 .role {
   font-style: italic;
   font-size: 0.85em;
-  color: #666666;
+  color: var(--color-text-comment-content);
   margin-top: 4px;
 }
 
@@ -201,7 +201,7 @@
   height: 300px;
   border: none;
   border-radius: 8px;
-  background-color: black;
+  background-color: var(--color-black);
 }
 
 .right-side {
@@ -215,46 +215,44 @@
   flex: 1 1 70%;
   max-width: 70%;
   min-width: 280px;
-  color: white;
+  color: var(--color-text-whitesmoke);
 }
 
 .torrent-list {
   flex: 0.6 0.6 100%;
   max-height: 270px;
   overflow-y: auto;
-  border: 2px solid black;
+  border: 2px solid var(--color-black);
   padding: 0.5rem 1rem;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0,0,0,0.4);
-  background-color: #20242a;
+  background-color: var(--background-boxes);
 }
 
 .spinner {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
-	flex: 0.6 0.6 100%;
-	max-height: 270px;
-	overflow-y: auto;
-	border: 2px solid black;
-	padding: 0.5rem 1rem;
-	border-radius: 12px;
-	box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-	background-color: #20242a;
-
-	.loading-spinner {
-		--mdc-circular-progress-active-indicator-color: #AFBB80;
-	}
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0.6 0.6 100%;
+  max-height: 270px;
+  overflow-y: auto;
+  border: 2px solid var(--color-black);
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  background-color: var(--background-boxes);
 }
 
+.spinner .loading-spinner {
+  --mdc-circular-progress-active-indicator-color: var(--background-color-lightgreen);
+}
 
 .torrent-item {
   padding: 0.75rem 1rem;
   cursor: pointer;
-  border: 1px solid #eac29f;
-  background: #eac29f;
-  color: #20242a;
+  border: 1px solid var(--border-color-container);
+  background: var(--border-color-container);
+  color: var(--background-boxes);
   border-radius: 8px;
   font-family: monospace;
   line-height: 1.5;
@@ -272,14 +270,14 @@
 }
 
 .torrent-item:hover {
-  background-color: #fff3e0;
+  background-color: var(--color-text-whitesmoke);
   transform: scale(1.01);
 }
 
 .torrent-item.selected {
-  background-color: #AFBB80;
-  border-color: #153f2f;
-  color: #153f2f;
+  background-color: var(--background-color-lightgreen);
+  border-color: var(--background-color-darkgreen);
+  color: var(--background-color-darkgreen);
 }
 
 .torrent-item:active {
@@ -288,7 +286,7 @@
 }
 
 .torrent-item:focus {
-  outline: 3px solid #3399ff;
+  outline: 3px solid var(--background-button);
   outline-offset: 2px;
 }
 
@@ -298,10 +296,10 @@
 }
 
 .play-btn {
-  background-color: #20242a !important;
-  color: whitesmoke !important;
+  background-color: var(--background-boxes) !important;
+  color: var(--color-text-whitesmoke) !important;
   margin-top: 0.2rem;
-  border-color: #AFBB80;
+  border-color: var(--background-color-lightgreen);
   border-radius: 8px;
   font-weight: bold;
   padding: 0.5rem;
@@ -319,7 +317,7 @@
   padding: 20px;
   text-align: center;
   font-style: italic;
-  color: #888;
+  color: var(--color-text-lightgrey);
 }
 
 @media (max-width: 768px) {
@@ -382,4 +380,3 @@
     font-size: 0.75rem;
   }
 }
-

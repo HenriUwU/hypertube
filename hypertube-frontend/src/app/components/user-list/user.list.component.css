@@ -12,20 +12,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+
   width: 12vw;
   height: 35vh;
   min-width: 180px;
   min-height: 280px;
-  
-  border: 1vh solid #eac29f;
-  background-color: #20242a;
+
+  border: 1vh solid var(--border-color-container);
+  background-color: var(--background-boxes);
   border-radius: 5%;
   margin: 0.5vw;
   padding: 2vh;
   overflow: hidden;
-  
-  /* Animations */
+
   transition: all 0.3s ease-in-out;
   transform: scale(1);
   cursor: pointer;
@@ -35,68 +34,65 @@
 .user-item:hover {
   box-shadow: 0 8px 25px rgba(234, 194, 159, 0.6);
   transform: scale(1.05);
-  border-color: #f5d4a9;
+  border-color: var(--border-color-container);
 }
 
 .user-avatar {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  border: 3px solid #eac29f;
+  border: 3px solid var(--border-color-container);
   object-fit: cover;
   margin-bottom: 2vh;
-  
-  /* Animation pour l'avatar */
+
   transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out, border-color 0.3s ease-in-out;
 }
 
 .user-item:hover .user-avatar {
   transform: scale(1.1);
   filter: brightness(1.1);
-  border-color: #f5d4a9;
+  border-color: var(--border-color-container);
 }
 
 .user-name {
   font-size: 1rem;
   font-weight: 500;
   text-align: center;
-  color: white;
+  color: var(--color-text-whitesmoke);
   margin-bottom: 2vh;
   padding: 0 1vh;
-  
+
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
-  
-  /* Animation pour le nom */
+
   transition: color 0.3s ease-in-out, font-size 0.3s ease-in-out;
 }
 
 .user-item:hover .user-name {
-  color: #eac29f;
+  color: var(--border-color-container);
   font-size: 1.05rem;
 }
 
 button[mat-button] {
-  background-color: #20242a;
-  color: #eac29f;
-  border: 2px solid #eac29f;
+  background-color: var(--background-boxes);
+  color: var(--border-color-container);
+  border: 2px solid var(--border-color-container);
   font-family: 'Courier New', monospace;
   padding: 10px 20px;
   border-radius: 25px;
   cursor: pointer;
   font-weight: 500;
   font-size: 0.9rem;
-  
-  /* Animations */
+
   transition: all 0.3s ease-in-out;
   transform: scale(1);
 }
 
 button[mat-button]:hover {
-  background-color: #eac29f;
-  color: #20242a;
+  background-color: var(--border-color-container);
+  color: var(--background-boxes);
   transform: scale(1.05);
   box-shadow: 0 4px 15px rgba(234, 194, 159, 0.4);
 }
@@ -105,7 +101,6 @@ button[mat-button]:active {
   transform: scale(0.98);
 }
 
-/* Animations keyframes */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -117,13 +112,12 @@ button[mat-button]:active {
   }
 }
 
-/* Media queries pour mobile */
 @media (max-width: 768px) {
   .user-list-container {
     gap: 0.5vw;
     padding: 1vh;
   }
-  
+
   .user-item {
     width: 40vw;
     height: 30vh;
@@ -133,32 +127,31 @@ button[mat-button]:active {
     margin: 0.3vw;
     padding: 1.5vh;
   }
-  
+
   .user-avatar {
     width: 60px;
     height: 60px;
     margin-bottom: 1.5vh;
   }
-  
+
   .user-name {
     font-size: 0.85rem;
     margin-bottom: 1.5vh;
   }
-  
+
   .user-item:hover .user-name {
     font-size: 0.9rem;
   }
-  
+
   button[mat-button] {
     padding: 8px 16px;
     font-size: 0.8rem;
   }
-  
-  /* Réduire les animations sur mobile */
+
   .user-item:hover {
     transform: scale(1.02);
   }
-  
+
   .user-item:hover .user-avatar {
     transform: scale(1.05);
   }
@@ -174,32 +167,31 @@ button[mat-button]:active {
     margin: 0.5vw;
     padding: 1vh;
   }
-  
+
   .user-avatar {
     width: 50px;
     height: 50px;
     margin-bottom: 1vh;
   }
-  
+
   .user-name {
     font-size: 0.75rem;
     margin-bottom: 1vh;
   }
-  
+
   .user-item:hover .user-name {
     font-size: 0.8rem;
   }
-  
+
   button[mat-button] {
     padding: 6px 12px;
     font-size: 0.7rem;
   }
-  
-  /* Animations minimes sur très petits écrans */
+
   .user-item:hover {
     transform: scale(1.01);
   }
-  
+
   .user-item:hover .user-avatar {
     transform: scale(1.02);
   }
