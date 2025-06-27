@@ -47,12 +47,12 @@ public class AuthController {
     }
 
     @GetMapping("/verify-email")
-    public ResponseEntity<String> verifyEmail(@RequestParam String token) {
+    public ResponseEntity<Map<String, String>> verifyEmail(@RequestParam String token) {
         return this.userService.verifyEmail(token);
     }
 
     @GetMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+    public ResponseEntity<Map<String, String>> forgotPassword(@RequestParam String email) {
         return this.userService.forgotPassword(email);
     }
 

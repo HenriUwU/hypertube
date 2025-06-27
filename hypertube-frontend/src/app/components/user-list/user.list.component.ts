@@ -37,7 +37,7 @@ export class UserListComponent implements OnInit {
         this.users = users;
       },
       error: (err) => {
-        console.error('Error fetching users:', err);
+        console.log('Error fetching users:', err);
       }
     });
   }

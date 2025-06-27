@@ -313,6 +313,7 @@ public class MovieService {
                                 .ifPresent(movie::setStoppedAt);
                     }
                 })
+                .sorted(Comparator.comparing(MovieModel::getTitle))
                 .collect(Collectors.toList());
     }
 

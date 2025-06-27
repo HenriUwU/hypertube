@@ -86,7 +86,7 @@ export class ThumbnailComponent implements OnInit {
           this.initialized = true;
         },
         error: (e) => {
-          console.error('Error fetching movie data:', e);
+          console.log('Error fetching movie data:', e);
           this.initialized = false;
         },
         complete: () => {

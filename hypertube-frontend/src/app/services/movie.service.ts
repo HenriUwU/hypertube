@@ -54,7 +54,6 @@ export class MovieService {
       minStars: minStars,
       productionYear: productionYear
     };
-    console.log(body)
     return this.http.post<Movie[]>(`${this.apiUrlMovies}/omdb-search`, body).pipe(
       map((response: any) => response)
     );

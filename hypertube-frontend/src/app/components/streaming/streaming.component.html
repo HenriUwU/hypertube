@@ -7,7 +7,8 @@
   </div>
 
   <div [style.display]="loading ? 'none' : 'block'">
-    <video width="320" height="180" class="video-player" #videoPlayer controls preload="auto" autoplay muted>
+    <!-- <video width="320" height="180" class="video-player" #videoPlayer controls preload="auto" autoplay muted> -->
+    <video width="320" height="180" class="video-player" #videoPlayer controls preload="auto">
       <source [src]="videoUrl" type="application/vnd.apple.mpegurl">
       {{tradMap.get("Your browser does not support the video tag.")}}
     </video>

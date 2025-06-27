@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import {GlobalMessageService} from "../../services/global.message.service";
 import {animate, style, transition, trigger} from "@angular/animations";
@@ -57,8 +57,43 @@ export class LoginPageComponent implements OnInit {
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', [Validators.required, this.passwordValidator]]
     });
+  }
+
+  passwordValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.value;
+    
+    if (!password) {
+      return null;
+    }
+
+    // Check password length
+    if (password.length < 6 || password.length > 40) {
+      return { passwordLength: true };
+    }
+    
+    // Check if there is at least one uppercase letter
+    if (!/[A-Z]/.test(password)) {
+      return { passwordNoUppercase: true };
+    }
+    
+    // Check if there is at least one lowercase letter
+    if (!/[a-z]/.test(password)) {
+      return { passwordNoLowercase: true };
+    }
+    
+    // Check if there is at least one number
+    if (!/\d/.test(password)) {
+      return { passwordNoNumber: true };
+    }
+    
+    // Check if there is at least one special character
+    if (!/[!@#$%^&*]/.test(password)) {
+      return { passwordNoSpecialChar: true };
+    }
+
+    return null;
   }
 
   login(): void {
@@ -73,7 +108,25 @@ export class LoginPageComponent implements OnInit {
         }
       });
     } else {
-      this.globalMessageService.showMessage('Please fill out all required fields.', false);
+      // Check for specific password validation errors
+      const passwordControl = this.loginForm.get('password');
+      if (passwordControl?.errors) {
+        if (passwordControl.errors['passwordLength']) {
+          this.globalMessageService.showMessage('Password must be between 6 and 40 characters.', false);
+        } else if (passwordControl.errors['passwordNoUppercase']) {
+          this.globalMessageService.showMessage('Password must contain at least one uppercase letter.', false);
+        } else if (passwordControl.errors['passwordNoLowercase']) {
+          this.globalMessageService.showMessage('Password must contain at least one lowercase letter.', false);
+        } else if (passwordControl.errors['passwordNoNumber']) {
+          this.globalMessageService.showMessage('Password must contain at least one number.', false);
+        } else if (passwordControl.errors['passwordNoSpecialChar']) {
+          this.globalMessageService.showMessage('Password must contain at least one special character (!@#$%^&*).', false);
+        } else if (passwordControl.errors['required']) {
+          this.globalMessageService.showMessage('Password is required.', false);
+        }
+      } else {
+        this.globalMessageService.showMessage('Please fill out all required fields.', false);
+      }
     }
   }
 

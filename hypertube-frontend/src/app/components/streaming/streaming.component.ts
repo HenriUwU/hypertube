@@ -66,7 +66,7 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
       const stoppedAt = new Date(currentTime * 1000).toISOString().substr(11, 8);
       this.movieService.saveWatched(this.movieId, stoppedAt).subscribe({
         next: () => console.log('Watched time updated successfully'),
-        error: (error) => console.error('Error updating watched time:', error)
+        error: (error) => console.log('Error updating watched time:', error)
       });
     }
   }
@@ -77,8 +77,8 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
     const videoEl: HTMLVideoElement = this.videoPlayer.nativeElement;
     Array.from(videoEl.querySelectorAll('track')).forEach(track => track.remove());
 
-    this.movieService.getSubtitles(this.imdbId).subscribe(
-      (response: Subtitles[]) => {
+    this.movieService.getSubtitles(this.imdbId).subscribe({
+      next: (response: Subtitles[]) => {
         if (response.length > 0) {
           response.forEach((sub) => {
             if (sub.url) {
@@ -100,26 +100,30 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
           }, 500);
         }
       },
-      (error) => {
+      error: (error) => {
         console.log('Subtitle fetch error:', error);
       }
+    }
     );
 
-    this.torrentService.isTorrentStarted(this.magnet).subscribe(
-      (response: string) => {
+    this.torrentService.isTorrentStarted(this.magnet).subscribe({
+      next: (response: string) => {
         this.hash = response;
         if (this.hash) {
           this.launchStreaming();
         } else {
           this.startTorrent();
-		}},
-      (error) => {
+        }
+      },
+      error: (error) => {
         if (error.status === 403 || error.error === null) {
           console.log('Torrent not started, starting torrent...');
           this.startTorrent();
         } else {
           console.warn('Handled error while checking if torrent is started:', error.message || error);
-        }});
+        }
+      }
+    });
   }
 
   startTorrent() {
@@ -131,7 +135,7 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   launchStreaming() {
     if (!this.hash) {
-      console.error('Error: hash is not defined');
+      console.log('Error: hash is not defined');
       return;
     }
     this.torrentService.getTorrentPath(this.hash).subscribe((response: string) => {
@@ -142,10 +146,10 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
         const video = this.videoPlayer.nativeElement;
         this.hlsConversion(this.videoUrl, video);
       } else {
-        console.error('Error: videoUrl is empty');
+        console.log('Error: videoUrl is empty');
       }
     }, (error) => {
-      console.error('Error fetching torrent path:', error);
+      console.log('Error fetching torrent path:', error);
     });
   }
 
@@ -166,6 +170,21 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         video.currentTime = 0; // force début
         video.play().catch(err => console.warn('Autoplay failed:', err));
+      });
+
+      let seekingTimeout: number;
+    
+      video.addEventListener('seeking', () => {
+        clearTimeout(seekingTimeout);
+      });
+
+      video.addEventListener('seeked', () => {
+        // Small delay to ensure HLS has time to load new segments
+        seekingTimeout = window.setTimeout(() => {
+          if (video.paused) {
+            video.play().catch(err => console.warn('Play after seek failed:', err));
+          }
+        }, 100);
       });
 
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {

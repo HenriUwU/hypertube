@@ -38,7 +38,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.Blob;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -124,15 +123,15 @@ public class UserService implements UserDetailsService {
         tokenEntity.setExpiryDate(LocalDateTime.now().plusDays(1));
         tokenEntity.setType(TokenType.EMAIL_VERIFICATION);
         tokenRepository.save(tokenEntity);
-//        sendVerificationEmail(user.getEmail(), token);
+        sendVerificationEmail(user.getEmail(), token);
     }
 
     public ResponseEntity<Map<String, String>> login(UserEntity user) {
         UserEntity dbUser = userRepository.findByUsername(user.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
 
-//        if (!dbUser.isEmailVerify())
-//            throw new RuntimeException("Email verify failed");
+        if (!dbUser.isEmailVerify())
+            throw new RuntimeException("Email verify failed");
 
         if (passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
             String token = jwtTokenUtil.generateToken(user.getUsername());
@@ -217,6 +216,7 @@ public class UserService implements UserDetailsService {
             String email = jsonNode.get("email").asText();
             String firstName = jsonNode.get("global_name").asText();
             String lastName = jsonNode.get("global_name").asText();
+            String picture = "https://cdn.discordapp.com/avatars/" + jsonNode.get("id").asText() + "/" + jsonNode.get("avatar").asText() + ".png";
 
             user.setUsername(username);
             user.setEmail(email);
@@ -225,6 +225,7 @@ public class UserService implements UserDetailsService {
             user.setPassword(token);
             user.setDiscordEid(eidDiscord);
             user.setEmailVerify(true);
+            saveImageFromInternetLink(picture, user);
             userRepository.save(user);
 
             jwt.put("id", user.getId().toString());
@@ -307,17 +308,20 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(userId);
     }
 
-    public ResponseEntity<String> verifyEmail(String token) {
+    public ResponseEntity<Map<String, String>> verifyEmail(String token) {
         TokenEntity tokenEntity = tokenRepository.findByToken(token);
+        Map<String, String> map = new HashMap<>();
         if (tokenEntity == null || tokenEntity.getExpiryDate().isBefore(LocalDateTime.now())) {
-            return ResponseEntity.badRequest().body("Invalid or expired token");
+            map.put("response", "Invalid or expired token");
+            return ResponseEntity.badRequest().body(map);
         }
 
         UserEntity user = tokenEntity.getUser();
         user.setEmailVerify(true);
         userRepository.save(user);
         tokenRepository.delete(tokenEntity);
-        return ResponseEntity.ok("Email verified successfully");
+        map.put("response", "Email verified successfully");
+        return ResponseEntity.ok(map);
     }
 
     private void sendVerificationEmail(String toEmail, String verificationToken) {
@@ -337,18 +341,24 @@ public class UserService implements UserDetailsService {
         mailSender.send(message);
     }
 
-    public ResponseEntity<String> forgotPassword(String email) {
-        UserEntity user = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("No account with this email: " + email));
-        String token = UUID.randomUUID().toString();
-        TokenEntity tokenEntity = new TokenEntity();
-        tokenEntity.setToken(token);
-        tokenEntity.setUser(user);
-        tokenEntity.setExpiryDate(LocalDateTime.now().plusMinutes(30));
-        tokenEntity.setType(TokenType.PASSWORD_RESET);
-        tokenRepository.save(tokenEntity);
+    public ResponseEntity<Map<String, String>> forgotPassword(String email) {
+        Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
 
-        sendResetPasswordEmail(email, token);
-        return ResponseEntity.ok("Si ce compte existe, un email de réinitialisation a été envoyé.");
+        if (optionalUser.isPresent()) {
+            UserEntity user = optionalUser.get();
+            String token = UUID.randomUUID().toString();
+            TokenEntity tokenEntity = new TokenEntity();
+            tokenEntity.setToken(token);
+            tokenEntity.setUser(user);
+            tokenEntity.setExpiryDate(LocalDateTime.now().plusMinutes(30));
+            tokenEntity.setType(TokenType.PASSWORD_RESET);
+            tokenRepository.save(tokenEntity);
+
+            sendResetPasswordEmail(email, token);
+        }
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "If this account exists, an email to reset your password was sent.");
+        return ResponseEntity.ok(response);
     }
 
     private void sendResetPasswordEmail(String toEmail, String resetToken) {
