@@ -46,7 +46,7 @@ mat-form-field {
 }
 
 .login-btn {
-  background-color: var(--background-search-bar) !important;
+  background-color: var(--button) !important;
   color: var(--color-text-edit-area) !important;
   margin-top: 1rem;
   width: 100%;
@@ -71,7 +71,7 @@ mat-form-field {
 }
 
 .omniauth-btn {
-	background-color: var(--background-search-bar);
+	background-color: var(--button);
 	color: var(--color-text-edit-area);
 	text-align: center;
 	padding: 0.5rem;

@@ -61,13 +61,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	  this.translateService.autoTranslateTexts(this.tradMap);
 	  this.translateService.initializeLanguageListener(this.tradMap);
 
-	  // Load initial user data if logged in and not already loaded
 	  const userId = this.authService.getCurrentUserId();
 	  if (userId && !this.userService.getCurrentUser()) {
 		  this.userService.getUser(userId).subscribe();
 	  }
 
-	  // Subscribe to user changes
 	  this.userService.currentUser$
 		  .pipe(takeUntil(this.destroy$))
 		  .subscribe((user: UserModel | null) => {
@@ -91,7 +89,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	}
 
 	logout(): void {
-	  this.authService.logout(); // This will now also clear the user service
+	  this.authService.logout();
 	  this.router.navigate(['/']).then();
 	}
 
@@ -114,7 +112,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   updateCurrentLanguage(language: TranslateModel) {
     this.userInfos.language = language.iso_639_1;
     this.userService.updateUser(this.userInfos).subscribe((data) => {
-    	// The user service will automatically update the BehaviorSubject
     	this.translateService.updateLanguage(data.language)
     });
   }
@@ -148,6 +145,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             document.documentElement.style.setProperty('--border-color-container', '#eac29f');
             document.documentElement.style.setProperty('--stars', '#d4af37');
             document.documentElement.style.setProperty('--background-search-bar', '#AFBB80');
+            document.documentElement.style.setProperty('--button', '#AFBB80');
         } 
         else {
             document.documentElement.style.setProperty('--background-color-darkgreen', '#b7d8b5');
@@ -174,7 +172,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             document.documentElement.style.setProperty('--border-color-container', '#dfa490');
             document.documentElement.style.setProperty('--stars', '#f7dc6f');
             document.documentElement.style.setProperty('--background-search-bar', '#8b7ca8');
-
+            document.documentElement.style.setProperty('--button', '#8b7ca8');
         }
 	}
 }

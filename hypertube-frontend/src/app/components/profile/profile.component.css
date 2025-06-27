@@ -82,7 +82,7 @@
 .profile-container select {
     width: 100%;
     background-color: var(--background-boxes);
-    color: #b3b3b3;
+    color: var(--color-text-whitesmoke);
     border: 1px solid var(--background-color-lightgreen);
     border-radius: 5px;
     padding: 0.8em 1em;
