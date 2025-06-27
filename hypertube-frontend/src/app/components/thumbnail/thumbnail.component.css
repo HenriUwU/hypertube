@@ -17,7 +17,6 @@
   margin: 0.5vw;
   overflow: hidden;
   
-  /* Animations */
   transition: all 0.3s ease-in-out;
   transform: scale(1);
   cursor: pointer;
@@ -37,7 +36,6 @@
   border-radius: 5%;
   border: solid black;
   
-  /* Animation pour l'image */
   transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
 }
 
@@ -70,10 +68,14 @@
     justify-content: center;
 
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+    line-height: 1.2;
     
-    /* Animation pour le titre */
+    min-width: 0;
+    box-sizing: border-box;
+    
     transition: color 0.3s ease-in-out, font-size 0.3s ease-in-out;
 }
 
@@ -86,7 +88,6 @@
     --mdc-linear-progress-active-indicator-color: red;
     --mdc-linear-progress-track-color: grey;
     
-    /* Animation pour la barre de progression */
     transition: opacity 0.3s ease-in-out;
 }
 
@@ -99,17 +100,23 @@
     text-align: center;
     color: white;
     height: 10%;
-    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
     margin-bottom: 1vh;
     padding: 0 5%;
 
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     
-    /* Animation pour les infos rapides */
     transition: color 0.3s ease-in-out;
+}
+
+.info-line {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
 }
 
 .thumbnail-container:hover .thumbnail-quick-info {
@@ -145,7 +152,6 @@
     background-color: rgba(234, 194, 159, 0.2);
 }
 
-/* Media queries pour mobile */
 @media (max-width: 768px) {
   .thumbnail-container {
     width: 40vw;
@@ -183,7 +189,6 @@
     height: 70%;
   }
   
-  /* Réduire les animations sur mobile pour de meilleures performances */
   .thumbnail-container:hover {
     transform: scale(1.02);
   }
@@ -234,7 +239,6 @@
     margin-bottom: 0%;
   }
   
-  /* Désactiver certaines animations sur très petits écrans */
   .thumbnail-container:hover {
     transform: scale(1.01);
   }
