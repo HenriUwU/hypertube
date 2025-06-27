@@ -127,23 +127,38 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<Map<String, String>> login(UserEntity user) {
-        UserEntity dbUser = userRepository.findByUsername(user.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
+        Map<String, String> response = new HashMap<>();
 
-        if (!dbUser.isEmailVerify())
-            throw new RuntimeException("Email verify failed");
+        Optional<UserEntity> optionalDbUser = userRepository.findByUsername(user.getUsername());
 
-        if (passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
-            String token = jwtTokenUtil.generateToken(user.getUsername());
-
-            Map<String, String> map = new HashMap<>();
-            map.put("token", token);
-            map.put("id", dbUser.getId().toString());
-            return ResponseEntity.ok(map);
-        } else {
-            throw new RuntimeException("Wrong password");
+        if (optionalDbUser.isEmpty()) {
+            response.put("success", "false");
+            response.put("message", "Invalid credentials.");
+            return ResponseEntity.ok(response);
         }
+
+        UserEntity dbUser = optionalDbUser.get();
+
+        if (!dbUser.isEmailVerify()) {
+            response.put("success", "false");
+            response.put("message", "Your email is not verified.");
+            return ResponseEntity.ok(response);
+        }
+
+        if (!passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
+            response.put("success", "false");
+            response.put("message", "Invalid credentials.");
+            return ResponseEntity.ok(response);
+        }
+
+        String token = jwtTokenUtil.generateToken(user.getUsername());
+        response.put("success", "true");
+        response.put("token", token);
+        response.put("id", dbUser.getId().toString());
+
+        return ResponseEntity.ok(response);
     }
+
 
     @Transactional
     public UserDTO updateUser(UserDTO user) {

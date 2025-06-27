@@ -14,18 +14,21 @@
         </div>
     </div>
 
-    <div class=" thumbnail-quick-info">
-        <span class="thumbnail-release-date">
-            {{ movieThumbnail.release_date }}
-        </span>
-        ‧
-        <span class="thumbnail-genre">
-            {{ getGenreString() }}
-        </span>
-        <br />
-        <span class="thumbnail-duration">
-            {{ getLength() }} ‧
-            {{ movieThumbnail.vote_average.toPrecision(2) }}/10★
-        </span>
+    <div class="thumbnail-quick-info">
+        <div class="info-line">
+            <span class="thumbnail-release-date">
+                {{ movieThumbnail.release_date }}
+            </span>
+            ‧
+            <span class="thumbnail-genre">
+                {{ getGenreString() }}
+            </span>
+        </div>
+        <div class="info-line">
+            <span class="thumbnail-duration">
+                {{ getLength() }} ‧
+                {{ movieThumbnail.vote_average.toPrecision(2) }}/10★
+            </span>
+        </div>
     </div>
 </div>
