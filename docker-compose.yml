@@ -76,7 +76,7 @@ services:
     networks:
       - docker-network
   libretranslate:
-    image: libretranslate/libretranslate
+    image: libretranslate/libretranslate:v1.7.2
     container_name: libretranslate
     ports:
       - "5000:5000"
