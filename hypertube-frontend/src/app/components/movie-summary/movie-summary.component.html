@@ -94,15 +94,15 @@
       <div class="spinner" *ngIf="!torrents && loadingTorrents">
         <mat-spinner class="loading-spinner"></mat-spinner>
       </div>
-      <div class="torrent-list" *ngIf="!loadingTorrents && !torrents">
-
-      </div>
-      <div class="torrent-list" *ngIf="torrents">
+      <div class="torrent-list" *ngIf="torrents && !noTorrent">
         <div class="torrent-item" *ngFor="let torrent of torrents" (click)="selectTorrent(torrent.Magnet)" [class.selected]="torrent.Magnet === magnet">
           {{torrent.Name}}
           <br/>
           Seeders: {{torrent.Seeders}} | Size: {{torrent.Size}}
         </div>
+      </div>
+      <div class="torrent-list no-torrent-message" *ngIf="noTorrent">
+        {{ tradMap.get('No torrent available.') || 'No torrent available.' }}
       </div>
       <div class="play">
         <button mat-flat-button class="play-btn" type="submit" (click)="stream()" [disabled]="!magnet">

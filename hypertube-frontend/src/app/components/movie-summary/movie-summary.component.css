@@ -380,3 +380,19 @@
     font-size: 0.75rem;
   }
 }
+
+.no-torrent-message {
+  width: 100%;
+  text-align: center;
+  color: var(--background-color-lightgreen);
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  font-style: italic;
+  margin: 16px 0;
+  user-select: none;
+  background-color: var(--background-boxes);
+  border: 1px solid var(--background-color-lightgreen);
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-sizing: border-box;
+}

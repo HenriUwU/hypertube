@@ -28,12 +28,14 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
   trailerUrl!: SafeResourceUrl;
   showTrailer: boolean = false;
   loadingTorrents: boolean = false;
+  noTorrent: boolean = false;
   castIndex = 0;
   crewIndex = 0;
   visibleCount = 8;
   tradMap = new Map<string, string>([
     ["Play", "Play"],
-    ["The trailer is not available for this movie.", "The trailer is not available for this movie."]
+    ["The trailer is not available for this movie.", "The trailer is not available for this movie."],
+    ["No torrent available.", "No torrent available."]
   ])
 
   constructor(
@@ -104,6 +106,8 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
             {next: (data: Torrent[]) => {
               this.torrents = data;
 			        this.loadingTorrents = false;
+              if (this.torrents.length <= 0)
+                this.noTorrent = true;
             },
             error: (e) => {
 				this.loadingTorrents = false;

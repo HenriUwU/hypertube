@@ -72,6 +72,8 @@ public class TorrentService {
 			return Integer.compare(seedersB, seedersA);
 		});
 
+		combinedResults.removeIf(result -> result.getMagnet() == null);
+
 		return combinedResults;
 	}
 
