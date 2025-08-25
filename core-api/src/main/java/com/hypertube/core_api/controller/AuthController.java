@@ -3,6 +3,7 @@ package com.hypertube.core_api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hypertube.core_api.entity.UserEntity;
 import com.hypertube.core_api.service.UserService;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +53,7 @@ public class AuthController {
     }
 
     @GetMapping("/forgot-password")
-    public ResponseEntity<Map<String, String>> forgotPassword(@RequestParam String email) {
+    public ResponseEntity<Map<String, String>> forgotPassword(@RequestParam String email) throws BadRequestException {
         return this.userService.forgotPassword(email);
     }
 
