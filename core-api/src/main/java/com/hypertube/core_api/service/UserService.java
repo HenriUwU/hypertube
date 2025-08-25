@@ -159,8 +159,6 @@ public class UserService implements UserDetailsService {
         return ResponseEntity.ok(response);
     }
 
-
-    @Transactional
     public UserDTO updateUser(UserDTO user) {
         if (user.getId() == null) {
             throw new RuntimeException("Id can not be null");

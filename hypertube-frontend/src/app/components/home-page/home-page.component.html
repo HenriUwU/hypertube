@@ -2,7 +2,7 @@
   <div class="search-and-year">
     <mat-form-field appearance="fill" class="search-field transparent-form-field">
       <mat-label>{{tradMap.get('Search')}}</mat-label>
-      <input matInput (input)="onSearchInputFromEvent($event)" [value]="searchTerm" placeholder="Search movies..." />
+      <input matInput [(ngModel)]="searchTerm" (input)="onSearchInputFromEvent(searchTerm)" (keyup.enter)="onSearchInputFromEvent(searchTerm)" placeholder="Search movies..." />
       <button *ngIf="searchTerm" matSuffix mat-icon-button aria-label="Clear" (click)="onSearchInput('')">
         <mat-icon>close</mat-icon>
       </button>

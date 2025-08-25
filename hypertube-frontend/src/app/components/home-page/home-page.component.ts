@@ -118,7 +118,7 @@ export class HomePageComponent implements OnInit {
     });
 
     this.searchTerm$
-      .pipe(debounceTime(300))
+      .pipe(debounceTime(600))
       .subscribe((search: string) => {
         this.searchTerm = search.trim();
         this.currentPage = 1;
@@ -140,10 +140,9 @@ export class HomePageComponent implements OnInit {
     this.loadMovies();
   }
 
-  onSearchInputFromEvent(event: Event): void {
-    const input = event.target as HTMLInputElement | null;
-    const value = input?.value || '';
-    this.onSearchInput(value);
+  onSearchInputFromEvent(term: string): void {
+    this.searchTerm = term;
+    this.onSearchInput(this.searchTerm);
   }
 
   onSearchInput(value: string) {
