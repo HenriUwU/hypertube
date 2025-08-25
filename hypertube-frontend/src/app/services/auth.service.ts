@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, map, Observable, of, switchMap} from "rxjs";
 import {UserModel} from "../models/user.model";
 import {UserService} from "./user.service";
+import { TranslateService } from "./translate.service";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class AuthService {
   private apiUrlAuth = 'http://localhost:8080/auth';
   private currentUserSubject: BehaviorSubject<string | null>;
   private userService: UserService | null = null;
+  private translateService: TranslateService | null = null;
 
   constructor(private http: HttpClient, private injector: Injector) {
     this.currentUserSubject = new BehaviorSubject<string | null>(sessionStorage.getItem('token'))
@@ -21,6 +23,13 @@ export class AuthService {
       this.userService = this.injector.get(UserService);
     }
     return this.userService;
+  }
+
+  private getTranslateService(): any {
+    if (!this.translateService) {
+      this.translateService = this.injector.get(TranslateService);
+    }
+    return this.translateService;
   }
 
   register(user: UserModel): Observable<any> {
@@ -35,13 +44,21 @@ export class AuthService {
           sessionStorage.setItem(`token`, response.token);
           this.currentUserSubject.next(response.id);
           this.currentUserSubject.next(response.token);
+          // get the language
+          this.getUserService().getUser(response.id).subscribe((user: UserModel) => {
+            this.getTranslateService().updateLanguage(user.language);
+          });
         }
         return response;
       }),
       switchMap(response => {
         if (response.success === "true" && response.id) {
+          // same but with language update
           return this.getUserService().getUser(response.id).pipe(
-            map(() => response)
+            map((user: UserModel) => {
+              this.getTranslateService().updateLanguage(user.language);
+              return response;
+            })
           );
         } else {
           return of(response);
@@ -56,13 +73,23 @@ export class AuthService {
         sessionStorage.setItem(`id`, response.id);
         sessionStorage.setItem(`token`, response.token);
         this.currentUserSubject.next(response.id);
-        this.currentUserSubject.next(response.token)
+        this.currentUserSubject.next(response.token);
+        // get the language
+        this.getUserService().getUser(response.id).pipe(
+          map((user: UserModel) => {
+            this.getTranslateService().updateLanguage(user.language);
+            return user.language;
+          })
+        ).subscribe();
         return response;
       }),
       switchMap(response => {
         // Load user data after successful OAuth login to update header immediately
         return this.getUserService().getUser(response.id).pipe(
-          map(() => response) // Return the original login response
+          map((user: UserModel) => {
+            this.getTranslateService().updateLanguage(user.language);
+            return response;
+          })
         );
       })
     )
