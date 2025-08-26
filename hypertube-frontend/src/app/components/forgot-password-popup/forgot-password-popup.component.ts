@@ -42,14 +42,13 @@ export class ForgotPasswordPopupComponent {
       this.globalMessageService.showMessage(this.tradMap.get("Please enter a valid email address") || "Please enter a valid email address", false);
       return;
     }
-    console.log("Sending reset link to:", this.email);
     this.authService.forgotPassword(this.email).subscribe({
       next: () => {
+        this.globalMessageService.showMessage(this.tradMap.get("Reset link sent successfully, check your emails.") || "Reset link sent successfully, check your emails.", true);
       },
       error: () => {
         this.globalMessageService.showMessage(this.tradMap.get("Error sending reset link") || "Error sending reset link", false);
       }
     });
-    this.globalMessageService.showMessage(this.tradMap.get("Reset link sent successfully, check your emails.") || "Reset link sent successfully, check your emails.", true);
   }
 }

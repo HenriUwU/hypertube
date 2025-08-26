@@ -16,6 +16,8 @@ import com.hypertube.core_api.repository.UserRepository;
 import com.hypertube.core_api.security.JwtTokenUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.apache.coyote.BadRequestException;
+import org.apache.tika.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -354,8 +356,9 @@ public class UserService implements UserDetailsService {
         mailSender.send(message);
     }
 
-    public ResponseEntity<Map<String, String>> forgotPassword(String email) {
+    public ResponseEntity<Map<String, String>> forgotPassword(String email) throws BadRequestException {
         Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
+        Map<String, String> response = new HashMap<>();
 
         if (optionalUser.isPresent()) {
             UserEntity user = optionalUser.get();
@@ -367,9 +370,12 @@ public class UserService implements UserDetailsService {
             tokenEntity.setType(TokenType.PASSWORD_RESET);
             tokenRepository.save(tokenEntity);
 
+            if (!StringUtils.isEmpty(user.getDiscordEid()) || !StringUtils.isEmpty(user.getFortyTwoEid()) || !StringUtils.isEmpty(user.getGoogleEid())) {
+                response.put("message", "Can't  reset password when registered through Omniauth.");
+                return ResponseEntity.badRequest().body(response);
+            }
             sendResetPasswordEmail(email, token);
         }
-        Map<String, String> response = new HashMap<>();
         response.put("message", "If this account exists, an email to reset your password was sent.");
         return ResponseEntity.ok(response);
     }
