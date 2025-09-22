@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
+import java.io.IOException;
 
 @Service
 public class TorrentService {
@@ -108,6 +110,7 @@ public class TorrentService {
 
 	public String waitForPlaylist(String hash, Duration timeout) {
 		Path playlistPath = Paths.get("/torrents/", hash, "hls", "playlist.m3u8");
+		Path hlsPath =  Paths.get("/torrents/", hash, "hls");
 		long startTime = System.currentTimeMillis();
 		long timeoutMs = timeout.toMillis();
 
@@ -121,6 +124,28 @@ public class TorrentService {
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 				throw new RuntimeException("Interrupted while waiting for playlist", e);
+			}
+		}
+
+		while (true) {
+			try (Stream<Path> files = Files.list(hlsPath)) {
+				long tsCount = files.filter(p -> p.toString().endsWith(".ts")).count();
+				if (tsCount >= 10) {
+					break;
+				}
+			} catch (IOException e) {
+				throw new RuntimeException("Failed to list HLS directory", e);
+			}
+
+			if (System.currentTimeMillis() - startTime > timeoutMs) {
+				throw new RuntimeException("Timeout waiting for enough .ts files");
+			}
+
+			try {
+				Thread.sleep(4000);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				throw new RuntimeException("Interrupted while waiting for .ts files", e);
 			}
 		}
 
