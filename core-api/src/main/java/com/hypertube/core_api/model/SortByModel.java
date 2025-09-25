@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class SortByModel {
-	private SortBy sortBy;
+	private String sortBy;
 	private List<Integer> genresIds;
 	private Integer page;
 	private Integer minStars;
@@ -28,11 +28,11 @@ public class SortByModel {
 		this.page = page;
 	}
 
-	public SortBy getSortBy() {
+	public String getSortBy() {
 		return sortBy;
 	}
 
-	public void setSortBy(SortBy sortBy) {
+	public void setSortBy(String sortBy) {
 		this.sortBy = sortBy;
 	}
 

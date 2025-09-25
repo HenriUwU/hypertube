@@ -43,6 +43,20 @@
   gap: 16px;
 }
 
+.genre-filter-menu .selected-option {
+  background-color: rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+}
+
+.genre-filter-menu .mat-menu-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.sort-button {
+  display: flex;
+  flex-direction: row;
+}
+
 mat-tab-group .mat-tab-label-container {
   justify-content: flex-end !important;
   padding-right: 8px;
@@ -199,7 +213,7 @@ input[type='number']::-webkit-inner-spin-button {
   box-sizing: border-box;
 }
 
-@media (max-width: 1520px) {
+@media (max-width: 1300px) {
   .homepage-controls {
     flex-direction: column;
     align-items: stretch;

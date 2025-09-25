@@ -36,9 +36,24 @@
 
   <div class="spacer"></div>
 
-  <mat-tab-group class="sort-tab-group" (selectedIndexChange)="onSortChangeIndex($event)">
-    <mat-tab *ngFor="let opt of sortingOptions" [label]="tradMap.get(formatLabel(opt)) ?? formatLabel(opt)"></mat-tab>
-  </mat-tab-group>
+  <button mat-button [matMenuTriggerFor]="sortMenu">
+    {{ tradMap.get(selectSortingOpt ? sortingOptions.get(selectSortingOpt) || '' : 'Sort By') }}
+    <i class="fas fa-sort"></i>
+  </button>
+
+  <mat-menu #sortMenu="matMenu" class="genre-filter-menu">
+    <button mat-menu-item *ngFor="let opt of sortingOptions | keyvalue"
+            (click)="onSortOptionChange(opt.key)"
+            [class.selected-option]="opt.key === selectSortingOpt">
+      {{ tradMap.get(opt.value) }}
+    </button>
+  </mat-menu>
+
+  <button mat-icon-button (click)="toggleSortDirection()">
+    <i class="fas" [ngClass]="sortDirection === 'asc' ? 'fa-arrow-up-short-wide' : 'fa-arrow-down-wide-short'"></i>
+  </button>
+
+  <mat-divider></mat-divider>
 
   <div class="star-rating-filter">
     <label>{{tradMap.get('Min. stars')}}</label>
@@ -54,6 +69,8 @@
     >
     </div>
   </div>
+
+  <mat-divider></mat-divider>
 
   <button mat-button [matMenuTriggerFor]="filterMenu">
     {{tradMap.get('Genres')}}

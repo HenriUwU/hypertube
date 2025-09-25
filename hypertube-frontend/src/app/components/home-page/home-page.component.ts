@@ -1,23 +1,23 @@
 import {Component, HostListener, OnInit, ViewEncapsulation} from '@angular/core';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MovieService} from '../../services/movie.service';
-import {AsyncPipe, NgFor, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, KeyValuePipe, NgClass, NgFor, NgForOf, NgIf} from '@angular/common';
 import {ThumbnailComponent} from '../thumbnail/thumbnail.component';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDivider} from '@angular/material/divider';
-import {catchError, debounceTime, firstValueFrom, map, Observable, of, startWith, Subject} from 'rxjs';
+import {catchError, debounceTime, firstValueFrom, isEmpty, map, Observable, of, startWith, Subject} from 'rxjs';
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatButtonModule} from "@angular/material/button";
 import {GenreModel} from "../../models/movie.model";
-import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {TranslateService} from "../../services/translate.service";
 import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
 import {AuthService} from "../../services/auth.service";
+import {MatButtonToggle} from "@angular/material/button-toggle";
 
 
 @Component({
@@ -25,7 +25,7 @@ import {AuthService} from "../../services/auth.service";
   standalone: true,
   imports: [
     MatMenuModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatProgressSpinnerModule, MatFormFieldModule,
-    NgFor, NgForOf, ThumbnailComponent, MatFormFieldModule, MatSelectModule, MatInputModule, FormsModule, MatDivider, MatTab, MatTabGroup, NgIf, MatAutocomplete, ReactiveFormsModule, MatAutocompleteTrigger, AsyncPipe
+    NgFor, NgForOf, ThumbnailComponent, MatFormFieldModule, MatSelectModule, MatInputModule, FormsModule, MatDivider, NgIf, MatAutocomplete, ReactiveFormsModule, MatAutocompleteTrigger, AsyncPipe, KeyValuePipe, MatButtonToggle, NgClass
   ],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css'],
@@ -34,10 +34,20 @@ import {AuthService} from "../../services/auth.service";
 
 export class HomePageComponent implements OnInit {
   movies: any[] = [];
-  sortingOptions: string[] = ['popular', 'top_rated', 'now_playing', 'upcoming'];
+  sortingOptions = new Map<string, string>([
+    ['', 'None'],
+    ['original_title', 'Original title'],
+    ['popularity', 'Popularity'],
+    ['revenue', 'Revenue'],
+    ['primary_release_date', 'Release date'],
+    ['title', 'Title'],
+    ['vote_average', 'Vote average'],
+    ['vote_count', 'Vote count'],
+  ])
+  sortDirection: string = "asc";
   currentPage: number = 1;
   isLoading: boolean = false;
-  selectSortingOpt: string = 'popular';
+  selectSortingOpt: string = '';
   genres: GenreModel[] = [];
   selectedGenreIds = new Set<number>();
   minStars = 0;
@@ -55,10 +65,6 @@ export class HomePageComponent implements OnInit {
   searchSource: 'omdb' | 'tmdb' = 'tmdb';
 
   tradMap = new Map<string, string>([
-    ["popular", "popular"],
-    ["top rated", "top rated"],
-    ["now playing", "now playing"],
-    ["upcoming", "upcoming"],
     ["Genres", "Genres"],
     ["Min. stars", "Min. stars"],
     ["Search", "Search"],
@@ -66,9 +72,17 @@ export class HomePageComponent implements OnInit {
     ["All", "All"],
     ["e.g. 2022", "e.g. 2022"],
     ["No more movies to load.", "No more movies to load."],
-    ["Source", "Source"]
+    ["Source", "Source"],
+    ['Original title', 'Original title'],
+    ['Popularity', 'Popularity'],
+    ['Revenue', 'Revenue'],
+    ['Release date', 'Release date'],
+    ['Title', 'Title'],
+    ['Vote average', 'Vote average'],
+    ['Vote count', 'Vote count'],
+    ['Sort By', 'Sort By'],
+    ['None', 'None']
   ])
-
 
   constructor(private movieService: MovieService, private translateService: TranslateService, private authService: AuthService) {
   }
@@ -85,7 +99,7 @@ export class HomePageComponent implements OnInit {
     this.yearControl = new FormControl('');
     this.translateService.autoTranslateTexts(this.tradMap);
     this.translateService.initializeLanguageListener(this.tradMap);
-    this.movieService.sortBy('popular', 1, [], 0, "").subscribe((data: any) => {
+    this.movieService.sortBy('', 1, [], 0, "").subscribe((data: any) => {
       this.movies = data;
     });
     this.movieService.getGenres().subscribe((genres: GenreModel[]) => {
@@ -164,6 +178,24 @@ export class HomePageComponent implements OnInit {
     this.loadMovies();
   }
 
+  onSortOptionChange(value: string) {
+    this.selectSortingOpt = value;
+    console.log(this.selectSortingOpt)
+    this.currentPage = 1;
+    this.movies = [];
+    this.loadMovies();
+  }
+
+  toggleSortDirection() {
+    if (this.sortDirection == 'asc') {
+      this.sortDirection = 'desc'
+    }
+    else {
+      this.sortDirection = 'asc'
+    }
+    this.onSortOptionChange(this.selectSortingOpt)
+  }
+
   setMinStars(n: number) {
     this.minStars = n;
     this.movies = [];
@@ -231,7 +263,7 @@ export class HomePageComponent implements OnInit {
           throw new Error('Invalid search source');
         }
       } else {
-        source$ = this.movieService.sortBy(this.selectSortingOpt, this.currentPage, Array.from(this.selectedGenreIds), this.minStars, this.filterYear).pipe(
+        source$ = this.movieService.sortBy(this.selectSortingOpt + "." + this.sortDirection, this.currentPage, Array.from(this.selectedGenreIds), this.minStars, this.filterYear).pipe(
           catchError((error) => {
             // console.log('Error loading movies:', error);
             return of([]);
@@ -251,17 +283,6 @@ export class HomePageComponent implements OnInit {
     } finally {
       this.isLoading = false;
     }
-  }
-
-  onSortChangeIndex(index: number) {
-    this.selectSortingOpt = this.sortingOptions[index];
-    this.movies = [];
-    this.currentPage = 1;
-    this.loadMovies();
-  }
-
-  formatLabel(opt: string): string {
-    return opt.replace(/_/g, ' ');
   }
 
   @HostListener('window:scroll', [])

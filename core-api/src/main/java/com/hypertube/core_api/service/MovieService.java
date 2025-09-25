@@ -178,8 +178,18 @@ public class MovieService {
         headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + this.tmdbToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
+        String test = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=" + language
+                + "&page=" + sortByModel.getPage()
+                + "&primary_release_year=" + sortByModel.getProductionYear()
+                + "&sort_by=" + sortByModel.getSortBy()
+                + "&vote_average.gte=" + sortByModel.getMinStars()
+                + "&with_genres=" + ((sortByModel.getGenresIds() == null || sortByModel.getGenresIds().isEmpty())
+                ? ""
+                : sortByModel.getGenresIds().stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining("|")));
 
-        ResponseEntity<String> response = restTemplate.exchange("https://api.themoviedb.org/3/movie/" + sortByModel.getSortBy() + "?language=" + language + "&page=" + sortByModel.getPage(),
+        ResponseEntity<String> response = restTemplate.exchange(test,
                 HttpMethod.GET,
                 entity,
                 String.class);
@@ -189,7 +199,7 @@ public class MovieService {
         JsonNode resultsNode = rootNode.path("results");
         List<MovieModel> movies = objectMapper.convertValue(resultsNode, new TypeReference<>() {});
 
-        return sortMovieByGenre(movies, sortByModel.getGenresIds(), sortByModel.getMinStars(), sortByModel.getProductionYear(), token);
+        return sortMovieByGenre(movies, token);
     }
 
     public List<GenreModel> getGenres(String token) throws JsonProcessingException {
@@ -211,7 +221,6 @@ public class MovieService {
         );
         return response.getBody().getGenres();
     }
-
 
     public List<MovieModel> searchTMDbMovies(SearchModel searchModel, String token) throws JsonProcessingException {
         checkSearchDTO(searchModel);
@@ -235,7 +244,14 @@ public class MovieService {
         JsonNode resultsNode = rootNode.path("results");
         List<MovieModel> movies = objectMapper.convertValue(resultsNode, new TypeReference<>() {});
 
-        return sortMovieByGenre(movies, searchModel.getGenresIds(), searchModel.getMinStars(), searchModel.getProductionYear(), token);
+        movies = movies.stream()
+                .filter(movie -> searchModel.getGenresIds().isEmpty()
+                        || (movie.getGenreIds() != null && !Collections.disjoint(movie.getGenreIds(), searchModel.getGenresIds())))
+                .filter(movie -> movie.getVoteAverage() != null && movie.getVoteAverage() >= searchModel.getMinStars())
+                .filter(movie -> StringUtil.isNullOrEmpty(searchModel.getProductionYear()) || searchModel.getProductionYear().equals(movie.getReleaseDate()))
+                .sorted(Comparator.comparing(MovieModel::getTitle))
+                .collect(Collectors.toList());
+        return sortMovieByGenre(movies, token);
     }
 
     public List<MovieModel> searchOMDbMovies(SearchModel searchModel, String token) throws JsonProcessingException {
@@ -264,7 +280,14 @@ public class MovieService {
         } else {
             return movieResults;
         }
-        return sortMovieByGenre(movieResults, searchModel.getGenresIds(), searchModel.getMinStars(), searchModel.getProductionYear(), token);
+        movieResults = movieResults.stream()
+                .filter(movie -> searchModel.getGenresIds().isEmpty()
+                || (movie.getGenreIds() != null && !Collections.disjoint(movie.getGenreIds(), searchModel.getGenresIds())))
+                .filter(movie -> movie.getVoteAverage() != null && movie.getVoteAverage() >= searchModel.getMinStars())
+                .filter(movie -> StringUtil.isNullOrEmpty(searchModel.getProductionYear()) || searchModel.getProductionYear().equals(movie.getReleaseDate()))
+                .sorted(Comparator.comparing(MovieModel::getTitle))
+                .collect(Collectors.toList());
+        return sortMovieByGenre(movieResults, token);
     }
 
     private List<MovieModel> getTmdbMovieByImdbId(String imdbId) throws JsonProcessingException {
@@ -285,7 +308,7 @@ public class MovieService {
         return objectMapper.convertValue(resultsNode, new TypeReference<ArrayList<MovieModel>>() {});
     }
 
-    private List<MovieModel> sortMovieByGenre(List<MovieModel> movies, List<Integer> selectedGenreIds, Integer minStars, String productionYear, String token) throws JsonProcessingException {
+    private List<MovieModel> sortMovieByGenre(List<MovieModel> movies, String token) throws JsonProcessingException {
         UserEntity userEntity = null;
 
         if (!StringUtil.isNullOrEmpty(token)) {
@@ -296,16 +319,12 @@ public class MovieService {
         final UserEntity finalUserEntity = userEntity;
 
         return movies.stream()
-                .filter(movie -> selectedGenreIds.isEmpty()
-                        || (movie.getGenreIds() != null && !Collections.disjoint(movie.getGenreIds(), selectedGenreIds)))
-                .filter(movie -> movie.getVoteAverage() != null && movie.getVoteAverage() >= minStars)
                 .peek(movie -> movie.setThumbnail("https://image.tmdb.org/t/p/original" + movie.getThumbnail()))
                 .peek(movie -> movie.setReleaseDate(
                         (movie.getReleaseDate() != null && movie.getReleaseDate().length() >= 4)
                                 ? movie.getReleaseDate().substring(0, 4)
                                 : ""
                 ))
-                .filter(movie -> StringUtil.isNullOrEmpty(productionYear) || productionYear.equals(movie.getReleaseDate()))
                 .peek(movie -> {
                     if (finalUserEntity != null) {
                         Optional.ofNullable(watchedMoviesRepository.getWatchedMoviesEntityByUserAndMovieId(finalUserEntity, movie.getId()))
@@ -313,7 +332,6 @@ public class MovieService {
                                 .ifPresent(movie::setStoppedAt);
                     }
                 })
-                .sorted(Comparator.comparing(MovieModel::getTitle))
                 .collect(Collectors.toList());
     }
 
