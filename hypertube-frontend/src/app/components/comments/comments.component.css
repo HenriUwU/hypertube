@@ -141,6 +141,10 @@ h3 {
   background-color: var(--background-comment-content);
   padding: 12px;
   border-radius: 6px;
+  word-break: break-word;
+  white-space: pre-wrap;
+  max-height: 10em;
+  overflow-y: auto;
 }
 
 .comment-actions {
