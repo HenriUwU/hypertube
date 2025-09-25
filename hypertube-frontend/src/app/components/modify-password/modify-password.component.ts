@@ -156,7 +156,11 @@ verifyCurrentPassword(currentPassword: string): Promise<boolean> {
           next: () => {
             this.globalMessageService.showMessage(this.tradMap.get("Password updated successfully!") || "Password updated successfully!", true);
             this.successMessage = true;
-            this.router.navigate(['/auth/login']).then();
+            if (this.forgotPassword == true) {
+              this.router.navigate(['/auth/login']).then();
+            } else {
+              this.router.navigate(['/']).then();
+            }
           },
           error: () => {
             this.errorMessage = 'Error updating password.';
@@ -168,7 +172,12 @@ verifyCurrentPassword(currentPassword: string): Promise<boolean> {
           next: () => {
             this.globalMessageService.showMessage(this.tradMap.get("Password updated successfully!") || "Password updated successfully!", true);
             this.successMessage = true;
-            this.router.navigate(['/auth/login']).then();
+            if (this.forgotPassword == true) {
+              this.router.navigate(['/auth/login']).then();
+            }
+            else {
+              this.router.navigate(['/']).then();
+            }
           },
           error: () => {
             this.errorMessage = 'Error updating password.';
