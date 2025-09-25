@@ -34,7 +34,7 @@ export class VerifyEmailComponent implements OnInit {
 
     const token = this.route.snapshot.queryParamMap.get('token');
 
-    console.log(token)
+    // console.log(token)
     if (token) {
       this.isLoading = true;
       this.authService.verifyEmail(token).subscribe({

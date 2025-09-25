@@ -15,7 +15,7 @@ export class TranslateService {
     return this.http.get(`${this.apiUrlAuth}/lang`).pipe(
       map((response: any) => response),
       catchError((error) => {
-        // console.log('Error fetching available languages:', error);
+        // // console.log('Error fetching available languages:', error);
         return of([
           { iso_639_1: 'en', flag: 'https://flagcdn.com/w80/us.png', english_name: 'English' },
         ]);
@@ -32,7 +32,7 @@ export class TranslateService {
     return this.http.post<any>(`${this.apiUrlAuth}`, body).pipe(
       map((response: any) => response.translations),
       catchError((error) => {
-        // console.log('Error translating strings:', error);
+        // // console.log('Error translating strings:', error);
         return of(text);
       })
     );
@@ -54,7 +54,7 @@ export class TranslateService {
         });
       },
       error: (error) => {
-        // console.log('Error in autoTranslateTexts:', error);
+        // // console.log('Error in autoTranslateTexts:', error);
       }
     });
   }
@@ -85,7 +85,7 @@ export class TranslateService {
             });
           },
           error: (error) => {
-            // console.log('Error in language listener translation:', error);
+            // // console.log('Error in language listener translation:', error);
           }
         });
       }

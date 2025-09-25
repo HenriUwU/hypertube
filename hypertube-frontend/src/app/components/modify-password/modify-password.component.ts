@@ -57,7 +57,7 @@ export class ModifyPasswordComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.log("Error checking omniauth session:", error);
+          // console.log("Error checking omniauth session:", error);
         }
       });
     }
@@ -116,7 +116,7 @@ verifyCurrentPassword(currentPassword: string): Promise<boolean> {
             this.globalMessageService.showMessage(this.tradMap.get("Current password is incorrect.") || "Current password is incorrect.", false);
             resolve(false);
           } else {
-            console.log("Current password is correct.");
+            // console.log("Current password is correct.");
             resolve(true);
           }
         },

@@ -135,7 +135,7 @@ public class UserService implements UserDetailsService {
 
         if (optionalDbUser.isEmpty()) {
             response.put("success", "false");
-            response.put("message", "Invalid credentials.");
+            response.put("message", "Invalid username or password. Please try again.");
             return ResponseEntity.ok(response);
         }
 
@@ -149,7 +149,7 @@ public class UserService implements UserDetailsService {
 
         if (!passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
             response.put("success", "false");
-            response.put("message", "Invalid credentials.");
+            response.put("message", "Invalid username or password. Please try again.");
             return ResponseEntity.ok(response);
         }
 

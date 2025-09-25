@@ -115,7 +115,7 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
             setTimeout(() => this.updateVisibleCount(), 0);
         },
         error: (e) => {
-          console.log('Error fetching movie data:', e);
+          // console.log('Error fetching movie data:', e);
         },
         complete: () => {
         }});

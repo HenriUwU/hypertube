@@ -65,8 +65,8 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
       const currentTime = videoElem.currentTime;
       const stoppedAt = new Date(currentTime * 1000).toISOString().substr(11, 8);
       this.movieService.saveWatched(this.movieId, stoppedAt).subscribe({
-        next: () => console.log('Watched time updated successfully'),
-        error: (error) => console.log('Error updating watched time:', error)
+        next: () => {}, // console.log('Watched time updated successfully'),
+        error: (error) => {} // console.log('Error updating watched time:', error)
       });
     }
   }
@@ -101,7 +101,7 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       error: (error) => {
-        console.log('Subtitle fetch error:', error);
+        // console.log('Subtitle fetch error:', error);
       }
     }
     );
@@ -117,7 +117,7 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: (error) => {
         if (error.status === 403 || error.error === null) {
-          console.log('Torrent not started, starting torrent...');
+          // console.log('Torrent not started, starting torrent...');
           this.startTorrent();
         } else {
           console.warn('Handled error while checking if torrent is started:', error.message || error);
@@ -135,21 +135,21 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   launchStreaming() {
     if (!this.hash) {
-      console.log('Error: hash is not defined');
+      // console.log('Error: hash is not defined');
       return;
     }
     this.torrentService.getTorrentPath(this.hash).subscribe((response: string) => {
       this.videoUrl = response;
-      console.log(this.videoUrl);
+      // console.log(this.videoUrl);
       if (this.videoUrl) {
         this.loading = false;
         const video = this.videoPlayer.nativeElement;
         this.hlsConversion(this.videoUrl, video);
       } else {
-        console.log('Error: videoUrl is empty');
+        // console.log('Error: videoUrl is empty');
       }
     }, (error) => {
-      console.log('Error fetching torrent path:', error);
+      // console.log('Error fetching torrent path:', error);
     });
   }
 

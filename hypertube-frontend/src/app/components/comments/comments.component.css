@@ -65,7 +65,7 @@ h3 {
   border: 2px solid var(--border-color-edit-area);
   box-shadow: 0 2px 6px rgba(74, 144, 226, 0.3);
   transition: border-color 0.3s, box-shadow 0.3s;
-  color: var(--color-text-edit-area);
+  color: var(--color-text-whitesmoke);
   background-color: var(--background-comment-content);
 }
 
@@ -135,7 +135,7 @@ h3 {
 
 .comment-content {
   margin: 10px 0;
-  color: var(--color-text-comment-content);
+  color: var(--color-text-whitesmoke);
   font-size: 1rem;
   line-height: 1.4;
   background-color: var(--background-comment-content);

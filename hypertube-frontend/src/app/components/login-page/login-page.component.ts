@@ -105,11 +105,12 @@ export class LoginPageComponent implements OnInit {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
         next: (res: any) => {
+          // console.log(res)
           if (res.success == 'true') {
             sessionStorage.setItem('language', 'en');
             this.router.navigate(['']).then()
           } else if (res.success == 'false') {
-            this.globalMessageService.showMessage("Invalid username or password. Please try again.", false);
+            this.globalMessageService.showMessage(res.message, false);
           }
         },
         error: () => {

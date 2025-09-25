@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import {map, min, Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {map, Observable} from 'rxjs';
 import {GenreModel, Movie, Subtitles} from '../models/movie.model';
-import { CommentDTO } from '../models/comment.model';
+import {CommentDTO} from '../models/comment.model';
 
 @Injectable({
   providedIn: 'root'

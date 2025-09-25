@@ -96,7 +96,7 @@ public class MovieService {
         if (movie != null && !StringUtils.isBlank(movie.getTitle())) {
             movie.setEnglishTitle(movie.getTitle());
         }
-        if (movie != null && (movie.getOverview() == null || movie.getOverview().trim().isEmpty()) && !language.equals("en")) {
+        if (movie != null && !language.equals("en")) {
             ResponseEntity<MovieModel> fallbackResponse = restTemplate.exchange(
                     "https://api.themoviedb.org/3/movie/" + movieId + "?language=en",
                     HttpMethod.GET,
@@ -104,7 +104,7 @@ public class MovieService {
                     MovieModel.class
             );
             MovieModel fallbackMovie = fallbackResponse.getBody();
-            if (fallbackMovie != null && fallbackMovie.getOverview() != null) {
+            if (movie.getOverview() == null && fallbackMovie != null && fallbackMovie.getOverview() != null) {
                 movie.setOverview(fallbackMovie.getOverview());
             }
             if (fallbackMovie != null && !StringUtils.isBlank(fallbackMovie.getTitle())) {
@@ -365,9 +365,15 @@ public class MovieService {
 
         String baseUrl = "https://yts-subs.com";
         String url = baseUrl + "/movie-imdb/" + imdbId;
-        Document doc = Jsoup.connect(url).timeout(10000).userAgent("Mozilla/5.0").get();
-        Elements rows = doc.select("table.other-subs tbody tr");
 
+        Document doc;
+        try {
+            doc = Jsoup.connect(url).timeout(10000).userAgent("Mozilla/5.0").get();
+        } catch (org.jsoup.HttpStatusException e) {
+            return subtitles;
+        }
+
+        Elements rows = doc.select("table.other-subs tbody tr");
         Map<String, Integer> langCounter = new HashMap<>();
         langCounter.put(userLang, 0);
         langCounter.put("english", 0);

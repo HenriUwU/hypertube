@@ -56,7 +56,7 @@ export class CommentsComponent implements OnInit {
         this.loadComments();
       },
       error: (err) => {
-        console.log('Error fetching user:', err);
+        // console.log('Error fetching user:', err);
       }
     });
   }
