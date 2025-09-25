@@ -42,10 +42,6 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.translationService.autoTranslateTexts(this.tradMap);
-    this.translationService.initializeLanguageListener(this.tradMap);
-    this.loading = true;
-
     this.route.queryParams.subscribe(params => {
       this.magnet = params['magnet'];
       this.movieId = params['movieId'];
@@ -53,10 +49,22 @@ export class StreamingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.imdbId = params['imdbId'];
       this.filmStoppedAt = params['filmStoppedAt']
     });
+    this.translationService.autoTranslateTexts(this.tradMap);
+    this.translationService.initializeLanguageListener(this.tradMap);
+    this.loading = true;
+
   }
 
   ngAfterViewInit() {
     this.startStreaming();
+
+    if (this.filmStoppedAt) {
+      const timeParts = this.filmStoppedAt.split(':');
+      const stoppedAt = (+timeParts[0]) * 3600 + (+timeParts[1]) * 60 + (+timeParts[2]);
+      this.videoPlayer.nativeElement.addEventListener('loadedmetadata', () => {
+        this.videoPlayer.nativeElement.currentTime = stoppedAt;
+      });
+    }
   }
 
   ngOnDestroy() {

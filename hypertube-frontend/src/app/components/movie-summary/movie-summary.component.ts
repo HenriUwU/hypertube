@@ -184,7 +184,8 @@ export class MovieSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
 			  magnet: this.magnet,
         movieId: this.movie.id,
         backdropPath: this.movie.backdrop_path,
-        imdbId: this.movie.imdb_id
+        imdbId: this.movie.imdb_id,
+        filmStoppedAt: this.movie.stoppedAt
 		  }
 	  }).then();
   }
